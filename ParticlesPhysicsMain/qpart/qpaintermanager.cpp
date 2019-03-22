@@ -128,8 +128,8 @@ void QPainterManager::paintConstraintArrows()
 
 void QPainterManager::paintPlaneDivider()
 {
-    painter.setPen(QColor(10, 150, 250));
-    painter.setBrush(QColor(10, 150, 250));
+    painter.setPen(cPlaneBorder);
+    painter.setBrush(cPlaneBorder);
     painter.drawRect( planeArea->getPlainDivider().getUpperRect().first.x+planeBorderWidth, planeArea->getPlainDivider().getUpperRect().first.y+planeBorderWidth, planeArea->getPlainDivider().getUpperRect().second.x, planeArea->getPlainDivider().getUpperRect().second.y );
     painter.drawRect( planeArea->getPlainDivider().getLowerRect().first.x+planeBorderWidth, planeArea->getPlainDivider().getLowerRect().first.y+planeBorderWidth, planeArea->getPlainDivider().getLowerRect().second.x, planeArea->getPlainDivider().getLowerRect().second.y );
 }
