@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="graphics.qrc">
-    <normaloff>:/new/icons/images/information-icon-transparent-16.jpg.png</normaloff>:/new/icons/images/information-icon-transparent-16.jpg.png</iconset>
+    <normaloff>:/new/icons/images/info.png</normaloff>:/new/icons/images/info.png</iconset>
   </property>
   <property name="modal">
    <bool>true</bool>

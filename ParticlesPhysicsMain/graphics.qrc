@@ -6,12 +6,12 @@
         <file>images/tracking_off.png</file>
         <file>images/tracking_on.png</file>
         <file>images/molecule.png</file>
-        <file>images/information-icon-transparent-16.jpg.png</file>
         <file>images/science.jpg</file>
         <file>images/reset.png</file>
         <file>images/run.png</file>
         <file>images/start.png</file>
         <file>images/random.png</file>
+        <file>images/info.png</file>
     </qresource>
     <qresource prefix="/css">
         <file>css/darkorange.qss</file>
