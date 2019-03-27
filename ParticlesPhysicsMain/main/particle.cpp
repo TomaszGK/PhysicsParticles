@@ -6,7 +6,11 @@ Particle::Particle( ParticleType _particleType, VisualizationType _visualization
 {
     radius = static_cast<double>(size)*0.5;
     setParticleMassInPercent(100);
-    calculateColor();
+    if( _particleType == ParticleType::MACROSCOPIC )
+    {
+        isTracking = isMacroscopic = true;
+    }
+    calculateParticleColor();
 }
 
 void Particle::setParticleSize( int newSize )
@@ -21,18 +25,19 @@ void Particle::setParticleMassInPercent( int percent )
     mass = (4/3*3.141592*size*size*size*0.001)*percent*0.01;
 }
 
-void Particle::calculateColor()
+void Particle::calculateParticleColor()
 {
     if( visualizationType == VisualizationType::VELOCITY ) updateParticleColor();
     else
     {
-        if( particleType == ParticleType::BLUE )        color = {0,0,255};
-        else if( particleType == ParticleType::RED    ) color = {255,0,0};
-        else if( particleType == ParticleType::NORMAL ) color = {255,0,255};
-        else if( particleType == ParticleType::GAS1   ) color = {255,0,0};
-        else if( particleType == ParticleType::GAS2   ) color = {0,85,80};
-        else if( particleType == ParticleType::GAS3   ) color = {0,0,255};
-        else if( particleType == ParticleType::MINI   ) color = {50,10,255};
+        if( particleType == ParticleType::BLUE             ) color = {0,0,255};
+        else if( particleType == ParticleType::RED         ) color = {255,0,0};
+        else if( particleType == ParticleType::NORMAL      ) color = {255,0,255};
+        else if( particleType == ParticleType::GAS1        ) color = {255,0,0};
+        else if( particleType == ParticleType::GAS2        ) color = {0,85,80};
+        else if( particleType == ParticleType::GAS3        ) color = {0,0,255};
+        else if( particleType == ParticleType::MINI        ) color = {50,10,255};
+        else if( particleType == ParticleType::MACROSCOPIC ) color = {50,10,95};
     }
 }
 

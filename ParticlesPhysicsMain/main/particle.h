@@ -6,11 +6,9 @@
 class Particle
 {    
 
-    bool isMacroscopic {false}; // true if is macroscopic - may have large size
-
 public:
 
-    Particle( ParticleType,VisualizationType,vect2D,vect2D,double,int,iterCluster );
+    Particle( ParticleType _particleType, VisualizationType _visualizationType, vect2D _position, vect2D _velocity, double _maxRapidity, int _size, iterCluster _cluster );
     Particle( const Particle& ) = default;
     Particle( Particle&& ) = default;
 
@@ -23,7 +21,11 @@ public:
 
     void setParticleMassInPercent( int percent );
 
-    void calculateColor();
+    void calculateParticleColor();
+
+    void updateParticleColor();
+
+    void savePosition();
 
     void moveToNextPosition( const double& time = 1.0 )
     {
@@ -36,9 +38,7 @@ public:
         }
     }
 
-    void updateParticleColor();
-
-    void savePosition();
+    inline int getCurrentVelocityPercent() const { return static_cast<int>(100*velocity()/maxRapidity); }
 
     // stores last positions of particle
     std::list<vect2D> particlePositionsTracking;
@@ -49,27 +49,17 @@ public:
     ParticleType      particleType {ParticleType::NORMAL};
     VisualizationType visualizationType {VisualizationType::VELOCITY};
 
-    vect2D       position {0.0,0.0};
-    vect2D       velocity {0.0,0.0};
-    double       mass {0};
-    double       maxRapidity {1};
-    int          size {0};
-    double       radius {0};
-    colorRGB     color;
-    iterCluster  cluster;
+    vect2D      position {0.0,0.0};
+    vect2D      velocity {0.0,0.0};
+    double      mass {0};
+    double      maxRapidity {1.0};
+    int         size {0};
+    double      radius {0};
+    colorRGB    color;
+    iterCluster cluster;
 
     bool modifiedVelocity {false};
-    bool isTracking {false}; // true if position of particle is tracking
-
-    inline int getCurrentVelocityPercent() const { return static_cast<int>(100*velocity()/maxRapidity); }
-
-    inline bool IsMacroscopic() const noexcept { return isMacroscopic; }
-
-    void setMacroscopic( bool flag )
-    {
-        isMacroscopic = flag;
-        if( flag ) color = {50,10,95};
-        else calculateColor();
-    }
+    bool isTracking       {false}; // true if position of particle is tracking
+    bool isMacroscopic    {false}; // true if particle is macroscopic
 
 };

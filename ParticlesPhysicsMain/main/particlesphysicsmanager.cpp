@@ -83,14 +83,8 @@ void ParticlesPhysicsManager::createParticles()
     {
         prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
         visualizationType = VisualizationType::PARTICLE;
-        physicsInfo.temperature = 1.0;
-
-        vect2D position {static_cast<double>(planeArea->getWidth()/2),static_cast<double>(planeArea->getHeight()/2)};
-        auto iterCluster = clusterIters[static_cast<size_t>(position.x)][static_cast<size_t>(position.y)];
-        particles->push_back(Particle(ParticleType::MINI,visualizationType,position,{0.0,0.0},physicsInfo.maxRapidity,40,iterCluster));
-        particles->begin()->setMacroscopic(true);
-        particles->begin()->isTracking = true;
-
+        physicsInfo.temperature = 1.0;        
+        addParticles(ParticleType::MACROSCOPIC,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MACROSCOPIC],simulationInfo.particleSizeInit[ParticleType::MACROSCOPIC]);
         addParticles(ParticleType::MINI,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MINI]-1,simulationInfo.particleSizeInit[ParticleType::MINI]);
         planeArea->getPlainDivider().setDividerGap(100);        
     }
@@ -113,7 +107,7 @@ void ParticlesPhysicsManager::setVisualizationType( VisualizationType type )
      for( auto iter=particles->begin() ; iter!=particles->end() ; ++iter )
      {
          iter->visualizationType = type;
-         iter->calculateColor();
+         iter->calculateParticleColor();
      }
 
     if( !pauseByUserFlag ) run();
@@ -127,54 +121,56 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
     vect2D position,velocity;
     double temperatureMax {0};
     double temperatureMin {0};
-    double minX {0};
-    double maxX {0};
-    int   size {0};
+    int minX {particleSize+5};
+    int maxX {planeArea->getWidth()-particleSize-5};
+    int minY {particleSize+5};
+    int maxY {planeArea->getHeight()-particleSize-5};
 
     if( particleType == ParticleType::NORMAL ||
         particleType == ParticleType::GAS1   ||
         particleType == ParticleType::GAS2   ||
         particleType == ParticleType::GAS3      )
     {
-        temperatureMax = physicsInfo.temperature;
-        minX = particleSize+5;
-        maxX = planeArea->getWidth()-particleSize-5;
+        temperatureMax = physicsInfo.temperature;      
     }
     else if( particleType == ParticleType::BLUE )
     {
-        temperatureMax = physicsInfo.temperatureLeft;
-        minX = particleSize+5;
+        temperatureMax = physicsInfo.temperatureLeft;        
         maxX = planeArea->getPlainDivider().getUpperRect().first.x-5;
     }
     else if( particleType == ParticleType::RED )
     {
         temperatureMax = physicsInfo.temperatureRight;
-        minX = planeArea->getPlainDivider().getUpperRect().first.x+planeArea->getPlainDivider().getUpperRect().second.x+5;
-        maxX = planeArea->getWidth()-particleSize-5;
+        minX = planeArea->getPlainDivider().getUpperRect().first.x+planeArea->getPlainDivider().getUpperRect().second.x+5;        
     }    
     else if( particleType == ParticleType::MINI )
     {
         temperatureMax = physicsInfo.temperature;
-        temperatureMin = physicsInfo.temperature*0.9;
-        minX = particleSize+5;
-        maxX = planeArea->getWidth()-particleSize-5;
+        temperatureMin = physicsInfo.temperature*0.9;        
+    }
+    else if( particleType == ParticleType::MACROSCOPIC )
+    {
+        temperatureMax = 0;
+        temperatureMin = 0;
+        minX = planeArea->getWidth()/2 - 2*particleSize;
+        maxX = planeArea->getWidth()/2 + 2*particleSize;
+        minY = planeArea->getHeight()/2 - 2*particleSize;
+        maxY = planeArea->getHeight()/2 + 2*particleSize;
     }
 
     if( !pauseByUserFlag ) pause();
 
     for( int index=0 ; index<quantity ; ++index )
     {
-        position = getDisjointRandomParticlePosition(minX,maxX,particleSize+5,planeArea->getHeight()-particleSize-5,particleSize/2);
+        position = getDisjointRandomParticlePosition(minX,maxX,minY,maxY,particleSize/2);
 
         velocity.x = Random::get<double>(temperatureMin,temperatureMax);
         velocity.y = Random::get<double>(temperatureMin,sqrt(temperatureMax*temperatureMax-velocity.x*velocity.x));
         velocity.x *= Random::get<bool>() ? 1.0 : -1.0;
         velocity.y *= Random::get<bool>() ? 1.0 : -1.0;
 
-        size = particleSize;//Random::get<int>(5,particleSize);
-
         auto iterCluster = clusterIters[static_cast<size_t>(position.x)][static_cast<size_t>(position.y)];
-        particles->push_back(Particle(particleType,visualizationType,position,velocity,physicsInfo.maxRapidity,size,iterCluster));
+        particles->push_back(Particle(particleType,visualizationType,position,velocity,physicsInfo.maxRapidity,particleSize,iterCluster));
         iterCluster->addParticle( std::prev(particles->end()) );
     }
 
@@ -720,7 +716,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( iterP
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::LEFT];
         particle->position.x = particle->radius + planeArea->getXConstraint();
         kineticEnergy = abs(particle->velocity.x);
-        particle->velocity.x = particle->IsMacroscopic()?(-1.0)*particle->velocity.x:temperature;
+        particle->velocity.x = particle->isMacroscopic?(-1.0)*particle->velocity.x:temperature;
         particle->modifiedVelocity = true;
         return kineticEnergy;
     }
@@ -729,7 +725,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( iterP
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::RIGHT];
         particle->position.x = static_cast<double>(planeArea->getWidth()) - particle->radius - planeArea->getXConstraint();
         kineticEnergy = abs(particle->velocity.x);
-        particle->velocity.x = (-1.0)*(particle->IsMacroscopic()?particle->velocity.x:temperature);
+        particle->velocity.x = (-1.0)*(particle->isMacroscopic?particle->velocity.x:temperature);
         particle->modifiedVelocity = true;
         return kineticEnergy;
     }
@@ -739,7 +735,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( iterP
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::UP];
         particle->position.y = particle->radius;
         kineticEnergy = abs(particle->velocity.y);
-        particle->velocity.y = particle->IsMacroscopic()?(-1.0)*particle->velocity.y:temperature;
+        particle->velocity.y = particle->isMacroscopic?(-1.0)*particle->velocity.y:temperature;
         particle->modifiedVelocity = true;
         return kineticEnergy;
     }
@@ -748,7 +744,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( iterP
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::DOWN];
         particle->position.y = static_cast<double>(planeArea->getHeight()) - particle->radius;
         kineticEnergy = abs(particle->velocity.y);
-        particle->velocity.y = (-1.0)*(particle->IsMacroscopic()?particle->velocity.y:temperature);
+        particle->velocity.y = (-1.0)*(particle->isMacroscopic?particle->velocity.y:temperature);
         particle->modifiedVelocity = true;
         return kineticEnergy;
     }

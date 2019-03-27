@@ -19,7 +19,7 @@ enum class ThreadCalculationState { RUNNING , PAUSE , END  };
 
 enum class SimulationType { BASIC , DIFFUSION , BROWNIAN_MOTION , SANDBOX };
 
-enum class ParticleType { BLUE , RED , NORMAL , GAS1 , GAS2 , GAS3 , MINI };
+enum class ParticleType { BLUE , RED , NORMAL , GAS1 , GAS2 , GAS3 , MINI , MACROSCOPIC };
 
 enum class PlaneSide { UP , DOWN , RIGHT , LEFT };
 
@@ -99,7 +99,8 @@ struct SimulationInfo
                                               {ParticleType::GAS1,10},
                                               {ParticleType::GAS2,20},
                                               {ParticleType::GAS3,30},
-                                              {ParticleType::MINI,5}
+                                              {ParticleType::MINI,5},
+                                              {ParticleType::MACROSCOPIC,40}
                                             };
 
     std::map<ParticleType,int> numberOfParticles {
@@ -109,7 +110,8 @@ struct SimulationInfo
                                                    {ParticleType::GAS1,0},
                                                    {ParticleType::GAS2,0},
                                                    {ParticleType::GAS3,0},
-                                                   {ParticleType::MINI,0}
+                                                   {ParticleType::MINI,0},
+                                                   {ParticleType::MACROSCOPIC,0}
                                                  };
 
     std::map<ParticleType,const int> numberOfParticlesInit {
@@ -119,7 +121,8 @@ struct SimulationInfo
                                                              {ParticleType::GAS1,50},
                                                              {ParticleType::GAS2,50},
                                                              {ParticleType::GAS3,50},
-                                                             {ParticleType::MINI,1000}
+                                                             {ParticleType::MINI,1000},
+                                                             {ParticleType::MACROSCOPIC,1}
                                                            };
 
     std::map<ParticleType,const int> particleSizeInit  {
@@ -129,7 +132,8 @@ struct SimulationInfo
                                                          {ParticleType::GAS1,20},
                                                          {ParticleType::GAS2,20},
                                                          {ParticleType::GAS3,30},
-                                                         {ParticleType::MINI,5}
+                                                         {ParticleType::MINI,5},
+                                                         {ParticleType::MACROSCOPIC,40}
                                                        };
 
     std::map<SimulationType,int> planeBorderSize {
