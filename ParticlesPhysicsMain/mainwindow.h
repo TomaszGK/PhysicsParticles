@@ -2,6 +2,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QTranslator>
 #include <dialogabout.h>
 #include <qparticlesphysicsmanager.h>
 
@@ -34,6 +35,8 @@ private slots:
     void about_action();    
 
     void load_scheme();
+
+    void change_language();
 
     void on_numberOfParticlesSliderTab0_valueChanged(int value);
 
@@ -129,7 +132,7 @@ private:
     QTimer updateTimer;
     QTimer animationTimer;
 
-    QAction* menuItemPreviousCheck {nullptr};
+    QTranslator qtLanguageTranslator;
 
     size_t currentIndex {0};
     double dividerGapPosition {0};
@@ -137,5 +140,7 @@ private:
     bool   dividerGapAnimationStart {false};
 
     std::thread calculationThread;
+
+    bool checkActionItem( QAction* menuItem , QMenu *menu );
 
 };

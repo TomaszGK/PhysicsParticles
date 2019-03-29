@@ -9,9 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     paintTimer(this), updateTimer(this), animationTimer(this)
 {
     ui->setupUi(this);
-    setWindowState(Qt::WindowMaximized);
-
-    menuItemPreviousCheck = ui->actionScheme1;
+    setWindowState(Qt::WindowMaximized);    
 
     physicsSimulation.resize( static_cast<size_t>(ui->tabWidget->count()) );
 
@@ -67,10 +65,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->greenParticlesSizeSliderTab2->setValue(physicsSimulation[3]->getSizeOfParticleInPercent(ParticleType::GAS3));
 
     // connect menu actions
-    connect( ui->actionAbout_3, &QAction::triggered, this, &MainWindow::about_action );
+    connect( ui->actionAbout, &QAction::triggered, this, &MainWindow::about_action );
     connect( ui->actionScheme1, &QAction::triggered, this, &MainWindow::load_scheme );
     connect( ui->actionScheme2, &QAction::triggered, this, &MainWindow::load_scheme );
     connect( ui->actionScheme3, &QAction::triggered, this, &MainWindow::load_scheme );
+    connect( ui->actionSetPolish, &QAction::triggered, this, &MainWindow::change_language );
+    connect( ui->actionSetEnglish, &QAction::triggered, this, &MainWindow::change_language );
 
     // connect main timers
     connect(&paintTimer, &QTimer::timeout, this, &MainWindow::paint);
@@ -124,31 +124,55 @@ void MainWindow::about_action()
     dialogAboutWindow.show();
 }
 
-void MainWindow::load_scheme()
+bool MainWindow::checkActionItem( QAction *menuItem , QMenu *menu )
 {
+    bool hasChecked {false};
+
+    if( menuItem == nullptr ) return false;
+
+    for( QAction *action : menu->actions() )
+    {
+       if( action->isChecked() )
+       {
+           hasChecked = true;
+           action->setChecked(false);
+       }
+    }
+    menuItem->setChecked(true);
+
+    return hasChecked;
+}
+
+void MainWindow::load_scheme()
+{   
     QAction* menuItem = qobject_cast<QAction*>( sender() );
     QString fileName {""};
 
-    if( menuItem != nullptr )
+    if( !checkActionItem(menuItem,ui->menuAbout) ) return;
+
+    if( menuItem->text() == "Orange" ) fileName = "darkorange.qss";
+    else if( menuItem->text() == "Blue" ) fileName = "styleblue.qss";
+
+    if( fileName != "" )
     {
-        if( menuItem->text() == "Orange" ) fileName = "darkorange.qss";
-        else if( menuItem->text() == "Blue" ) fileName = "styleblue.qss";
-
-        if( menuItemPreviousCheck != nullptr ) menuItemPreviousCheck->setChecked(false);
-        menuItemPreviousCheck = menuItem;
-
-        if( fileName != "" )
-        {
-            //QFile File(":/css/css/"+fileName);
-            //File.open(QFile::ReadOnly);
-            //qApp->setStyleSheet(QLatin1String(File.readAll()));
-        }
-        else
-        {
-            qApp->setStyleSheet("");
-        }
+        //QFile File(":/css/css/"+fileName);
+        //File.open(QFile::ReadOnly);
+        //qApp->setStyleSheet(QLatin1String(File.readAll()));
     }
+    else
+    {
+        qApp->setStyleSheet("");
+    }
+}
 
+void MainWindow::change_language()
+{
+    QAction* menuItem = qobject_cast<QAction*>( sender() );
+
+    if( !checkActionItem(menuItem,ui->menuLanguage) ) return;
+
+    //if( menuItem->objectName() == "actionSetPolish" ) qtLanguageTranslator.load("ParticlesPhysics_pl");
+    //if( menuItem->objectName() == "actionSetEnglish" )
 }
 
 void MainWindow::on_temperatureDialTab0_valueChanged( int value )
@@ -463,3 +487,4 @@ void MainWindow::on_randomPushButton_tab2_clicked()
      ui->temperatureLeftSliderTab2->setValue(QRandomGenerator::global()->bounded(100));
      ui->temperatureRightSliderTab2->setValue(QRandomGenerator::global()->bounded(100));
 }
+

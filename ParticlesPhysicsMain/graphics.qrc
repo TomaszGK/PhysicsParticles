@@ -12,6 +12,8 @@
         <file>images/start.png</file>
         <file>images/random.png</file>
         <file>images/info.png</file>
+        <file>images/flag_Poland.png</file>
+        <file>images/flag_UnitedStates.png</file>
     </qresource>
     <qresource prefix="/css">
         <file>css/darkorange.qss</file>

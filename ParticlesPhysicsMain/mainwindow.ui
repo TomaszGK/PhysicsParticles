@@ -2601,6 +2601,9 @@ Trace</string>
       <pointsize>12</pointsize>
      </font>
     </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
     <property name="tearOffEnabled">
      <bool>false</bool>
     </property>
@@ -2620,7 +2623,7 @@ Trace</string>
     <property name="title">
      <string>Info</string>
     </property>
-    <addaction name="actionAbout_3"/>
+    <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menu">
     <property name="enabled">
@@ -2642,9 +2645,20 @@ Trace</string>
       <normaloff>:/new/icons/images/run.png</normaloff>:/new/icons/images/run.png</iconset>
     </property>
    </widget>
+   <widget class="QMenu" name="menuLanguage">
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="title">
+     <string>Language</string>
+    </property>
+    <addaction name="actionSetEnglish"/>
+    <addaction name="actionSetPolish"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menuInfo"/>
    <addaction name="menuAbout"/>
+   <addaction name="menuLanguage"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOrange">
@@ -2656,12 +2670,7 @@ Trace</string>
    <property name="text">
     <string>Blue</string>
    </property>
-  </action>
-  <action name="actionAbout">
-   <property name="text">
-    <string>About</string>
-   </property>
-  </action>
+  </action> 
   <action name="actionScheme1">
    <property name="checkable">
     <bool>true</bool>
@@ -2709,20 +2718,50 @@ Trace</string>
      <pointsize>12</pointsize>
     </font>
    </property>
-  </action>
-  <action name="actionAbout_2">
+  </action> 
+  <action name="actionAbout">
    <property name="text">
     <string>About</string>
    </property>
    <property name="font">
     <font>
-     <pointsize>8</pointsize>
+     <pointsize>12</pointsize>
     </font>
    </property>
   </action>
-  <action name="actionAbout_3">
+  <action name="actionSetEnglish">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="graphics.qrc">
+     <normaloff>:/new/icons/images/flag_UnitedStates.png</normaloff>:/new/icons/images/flag_UnitedStates.png</iconset>
+   </property>
    <property name="text">
-    <string>About</string>
+    <string>English</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionSetPolish">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="graphics.qrc">
+     <normaloff>:/new/icons/images/flag_Poland.png</normaloff>:/new/icons/images/flag_Poland.png</iconset>
+   </property>
+   <property name="text">
+    <string>Polish</string>
    </property>
    <property name="font">
     <font>

@@ -24,6 +24,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++14
 
+TRANSLATIONS = lang/ParticlesPhysics_pl.ts
+
 INCLUDEPATH += \
                extern \
                main \
