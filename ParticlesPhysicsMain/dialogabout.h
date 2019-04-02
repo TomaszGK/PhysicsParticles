@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QPropertyAnimation>
 #include "qtextanimation.h"
+#include "qinteractivelabel.h"
 
 namespace Ui {
 class DialogAbout;
@@ -35,6 +36,8 @@ private:
 
     std::map<QString,std::unique_ptr<QTextAnimation>> animatedText;
     std::map<QString,QLabel*> labels;
+
+    QInteractiveLabel labelPicture;
 
 };
 

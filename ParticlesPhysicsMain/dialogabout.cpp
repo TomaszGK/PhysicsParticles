@@ -23,6 +23,9 @@ DialogAbout::DialogAbout(QWidget *parent) :
 
     for( auto it = labels.begin(); it != labels.end(); it++ ){ it->second->setText( animatedText[it->first]->getCurrentText()  ); }
 
+    ui->layoutPicture->addWidget(&labelPicture);
+    labelPicture.setPicture("science.jpg");
+
     connect(&updateTimer, &QTimer::timeout, this, &DialogAbout::update);
 }
 

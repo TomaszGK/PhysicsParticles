@@ -142,30 +142,16 @@
     <string>by</string>
    </property>
   </widget>
-  <widget class="QLabel" name="labelPic">
+  <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>150</y>
-     <width>171</width>
-     <height>151</height>
+     <x>90</x>
+     <y>140</y>
+     <width>151</width>
+     <height>161</height>
     </rect>
    </property>
-   <property name="frameShape">
-    <enum>QFrame::Panel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Sunken</enum>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="graphics.qrc">:/new/icons/images/science.jpg</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
+   <layout class="QHBoxLayout" name="layoutPicture"/>
   </widget>
  </widget>
  <resources>

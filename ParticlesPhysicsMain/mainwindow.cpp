@@ -167,12 +167,26 @@ void MainWindow::load_scheme()
 
 void MainWindow::change_language()
 {
-    QAction* menuItem = qobject_cast<QAction*>( sender() );
+    QAction* menuItem = qobject_cast<QAction*>( sender() );  
 
     if( !checkActionItem(menuItem,ui->menuLanguage) ) return;
 
-    //if( menuItem->objectName() == "actionSetPolish" ) qtLanguageTranslator.load("ParticlesPhysics_pl");
-    //if( menuItem->objectName() == "actionSetEnglish" )
+    if( menuItem->objectName() == "actionSetPolish" )
+    {
+        qApp->removeTranslator(&qtLanguageTranslator);
+
+        if( qtLanguageTranslator.load( QApplication::applicationDirPath()+"/ParticlesPhysics_pl.qm") )
+        {
+            qApp->installTranslator(&qtLanguageTranslator);
+        }
+
+    }
+    else if( menuItem->objectName() == "actionSetEnglish" )
+    {
+        qApp->removeTranslator(&qtLanguageTranslator);
+    }
+
+    ui->retranslateUi(this);
 }
 
 void MainWindow::on_temperatureDialTab0_valueChanged( int value )

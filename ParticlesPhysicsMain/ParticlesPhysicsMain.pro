@@ -44,6 +44,7 @@ SOURCES += \
     qpart/qboxpainter.cpp \
     qpart/qtextanimation.cpp \
     qpart/qtrackingplot2d.cpp \
+    qpart/qinteractivelabel.cpp \
     main/particlesphysicsmanager.cpp \
     main/particle.cpp \
     main/cluster.cpp \
@@ -53,7 +54,6 @@ SOURCES += \
     main/bardisplay.cpp \     
     main/planearea.cpp \
     dialogabout.cpp
-
 
    
 
@@ -70,6 +70,7 @@ HEADERS += \
     qpart/qboxpainter.h \
     qpart/qtextanimation.h \
     qpart/qtrackingplot2d.h \
+    qpart/qinteractivelabel.h \
     main/definitions.h \
     main/particlesphysicsmanager.h \    
     main/vector2d.h \
