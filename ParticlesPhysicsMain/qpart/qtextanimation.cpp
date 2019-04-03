@@ -2,7 +2,7 @@
 #include <QRandomGenerator>
 
 QTextAnimation::QTextAnimation( QString _text )
-: text {_text}
+: text {std::move(_text)}
 {
     cycleToLetterAppear.resize(static_cast<size_t>(text.size()));
     cycleSpeed.resize(static_cast<size_t>(text.size()));

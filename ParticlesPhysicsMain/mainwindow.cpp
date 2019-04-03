@@ -145,7 +145,7 @@ bool MainWindow::checkActionItem( QAction *menuItem , QMenu *menu )
 
 void MainWindow::load_scheme()
 {   
-    QAction* menuItem = qobject_cast<QAction*>( sender() );
+    auto menuItem = qobject_cast<QAction*>( sender() );
     QString fileName {""};
 
     if( !checkActionItem(menuItem,ui->menuAbout) ) return;
@@ -167,7 +167,7 @@ void MainWindow::load_scheme()
 
 void MainWindow::change_language()
 {
-    QAction* menuItem = qobject_cast<QAction*>( sender() );  
+    auto menuItem = qobject_cast<QAction*>( sender() );
 
     if( !checkActionItem(menuItem,ui->menuLanguage) ) return;
 

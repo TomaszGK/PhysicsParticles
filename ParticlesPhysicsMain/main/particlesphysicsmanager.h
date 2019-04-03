@@ -17,7 +17,7 @@ protected:
     SimulationType simulationType;
 
     // particle visualzation type
-    VisualizationType visualizationType;
+    VisualizationType visualizationType {VisualizationType::VELOCITY};
 
     // contains main simulation parameters
     SimulationInfo simulationInfo;
@@ -38,10 +38,10 @@ protected:
     HRClock::time_point time, calculationStart;
 
     // calculation time for calculateNextPosition
-    double calculationPeriod;
+    double calculationPeriod {0.0};
 
     // time contribution in calculating the next particle position
-    double timeContribution;
+    double timeContribution {0.0};
 
     // map contains bar charts
     std::map<std::string,ptrBarChart> barCharts;
@@ -77,7 +77,7 @@ protected:
     std::atomic<ThreadCalculationState> calculationState { ThreadCalculationState::END };
 
     // pointer to calculation function assigned to simulation state
-    void (ParticlesPhysicsManager::*prtCalculateNextPositions)();
+    void (ParticlesPhysicsManager::*prtCalculateNextPositions)() {nullptr};
 
     // caluclate next particles positions
     void calculateNextPositions();

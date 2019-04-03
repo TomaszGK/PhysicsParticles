@@ -20,16 +20,7 @@ PlaneDivider::PlaneDivider( int _dividerPosX, int _dividerWidth, int _dividerHei
 
 int PlaneDivider::minDistance( const double& d1, const double& d2, const double& d3) const
 {
-    if( d1<=d2 )
-    {
-        if( d1<=d3 ) return 1;
-        else return 3;
-    }
-    else
-    {
-        if( d2<=d3 ) return 2;
-        else return 3;
-    }
+    return ( d1<=d2 ) ? ( ( d1<=d3 ) ? 1 : 3 ) : ( ( d2<=d3 ) ? 2 : 3 );
 }
 
 void PlaneDivider::setDividerGap( int gap )

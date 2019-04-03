@@ -1,5 +1,4 @@
 #include "qinteractivelabel.h"
-#include <QDebug>
 
 QInteractiveLabel::QInteractiveLabel( QWidget *parent )
 : QLabel(parent)

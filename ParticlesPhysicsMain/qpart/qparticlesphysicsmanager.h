@@ -30,12 +30,12 @@ public:
     QParticlesPhysicsManager& operator=( const QParticlesPhysicsManager& ) = delete;
     QParticlesPhysicsManager& operator=( QParticlesPhysicsManager&& ) = delete;
 
-    void addQBarChart( std::string name, QHBoxLayout* layout, std::pair<bool,bool> scalability = {true,true} );
-    void addQBarDisplay( std::string name, QHBoxLayout* layout );
-    void addQHistogram1D( std::string name, QHBoxLayout* layout );
-    void addQInfoDisplay( std::string name, QHBoxLayout* layout );
-    void addQGauge( std::string name, QHBoxLayout* layout );
-    void addQTrackingPlot2D( std::string name, QHBoxLayout* layout );
+    void addQBarChart( const std::string& name, QHBoxLayout* layout, std::pair<bool,bool> scalability = {true,true} );
+    void addQBarDisplay( const std::string& name, QHBoxLayout* layout );
+    void addQHistogram1D( const std::string& name, QHBoxLayout* layout );
+    void addQInfoDisplay( const std::string& name, QHBoxLayout* layout );
+    void addQGauge( const std::string& name, QHBoxLayout* layout );
+    void addQTrackingPlot2D( const std::string& name, QHBoxLayout* layout );
 
     void setDisplay( std::string displayName, PlaneSide side, int value )
     {

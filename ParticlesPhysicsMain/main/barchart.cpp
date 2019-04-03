@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <numeric>
 
-BarChart::BarChart( size_t size , std::string _label )
-: label {_label}
+BarChart::BarChart( size_t size , std::string label )
+: label {std::move(label)}
 {
     bins.resize(size,0);
 }
@@ -24,6 +24,5 @@ void BarChart::add( double value )
 
 double BarChart::getAvg() const
 {
-    if( bins.size()>0 ) return std::accumulate(bins.begin(), bins.end(), 0.0)/static_cast<double>(bins.size());
-    else return 0;
+    return bins.empty() ? 0.0 : std::accumulate(bins.begin(), bins.end(), 0.0)/static_cast<double>(bins.size());
 }

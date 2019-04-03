@@ -16,13 +16,13 @@ Particle::Particle( ParticleType _particleType, VisualizationType _visualization
 void Particle::setParticleSize( int newSize )
 {
     size = newSize;
-    mass = 4/3*3.141592*newSize*newSize*newSize*0.001;
+    mass = 4.0/3.0*3.141592*newSize*newSize*newSize*0.001;
     radius = static_cast<double>(newSize)*0.5;
 }
 
 void Particle::setParticleMassInPercent( int percent )
 {
-    mass = (4/3*3.141592*size*size*size*0.001)*percent*0.01;
+    mass = (4.0/3.0*3.141592*size*size*size*0.001)*percent*0.01;
 }
 
 void Particle::calculateParticleColor()
@@ -53,12 +53,10 @@ void Particle::updateParticleColor()
 void Particle::savePosition()
 {
     if( particlePositionsTracking.size()>maxPositionsInTracking ) particlePositionsTracking.pop_front();
-    if( particlePositionsTracking.size()>0 )
+    if( !particlePositionsTracking.empty() )
     {
-        if( (*prev(particlePositionsTracking.end())-position)()>radius ) particlePositionsTracking.push_back(position);
+        if( (*prev(particlePositionsTracking.end())-position)()<=radius ) return;
     }
-    else
-    {
-        particlePositionsTracking.push_back(position);
-    }
+
+    particlePositionsTracking.push_back(position);
 }

@@ -7,7 +7,7 @@ QParticlesPhysicsManager::QParticlesPhysicsManager( SimulationType type, QHBoxLa
     layout->addWidget( particlesPaintManager.get() );
 }
 
-void QParticlesPhysicsManager::addQBarChart( std::string name, QHBoxLayout* layout, std::pair<bool,bool> scalability )
+void QParticlesPhysicsManager::addQBarChart( const std::string& name, QHBoxLayout* layout, std::pair<bool,bool> scalability )
 {
     if( barCharts.count(name) != 0 )
     {       
@@ -16,7 +16,7 @@ void QParticlesPhysicsManager::addQBarChart( std::string name, QHBoxLayout* layo
     }
 }
 
-void QParticlesPhysicsManager::addQBarDisplay( std::string name, QHBoxLayout* layout )
+void QParticlesPhysicsManager::addQBarDisplay( const std::string& name, QHBoxLayout* layout )
 {
     if( barDisplays.count(name) != 0 )
     {        
@@ -25,7 +25,7 @@ void QParticlesPhysicsManager::addQBarDisplay( std::string name, QHBoxLayout* la
     }
 }
 
-void QParticlesPhysicsManager::addQHistogram1D( std::string name, QHBoxLayout* layout )
+void QParticlesPhysicsManager::addQHistogram1D( const std::string& name, QHBoxLayout* layout )
 {
     if( histograms1D.count(name) != 0 )
     {       
@@ -34,13 +34,13 @@ void QParticlesPhysicsManager::addQHistogram1D( std::string name, QHBoxLayout* l
     }
 }
 
-void QParticlesPhysicsManager::addQInfoDisplay(  std::string name, QHBoxLayout* layout  )
+void QParticlesPhysicsManager::addQInfoDisplay(  const std::string& name, QHBoxLayout* layout  )
 {    
     qBoxPainters[name] = std::make_unique<QInfoDisplay>();
     layout->addWidget( qBoxPainters[name].get() );
 }
 
-void QParticlesPhysicsManager::addQGauge( std::string name, QHBoxLayout* layout )
+void QParticlesPhysicsManager::addQGauge( const std::string& name, QHBoxLayout* layout )
 {
     qGauges[name] = { nullptr , nullptr };
 
@@ -62,7 +62,7 @@ void QParticlesPhysicsManager::addQGauge( std::string name, QHBoxLayout* layout 
     layout->addWidget( qGauges[name].first.get() );
 }
 
-void QParticlesPhysicsManager::addQTrackingPlot2D( std::string name, QHBoxLayout *layout )
+void QParticlesPhysicsManager::addQTrackingPlot2D( const std::string& name, QHBoxLayout *layout )
 {
     qBoxPainters[name] = std::make_unique<QTrackingPlot2D>(particles,layout->parentWidget());
     layout->addWidget( qBoxPainters[name].get() );
@@ -81,6 +81,6 @@ void QParticlesPhysicsManager::paintParticlesFrame()
 void QParticlesPhysicsManager::paintFrames()
 {
     updateBars();    
-    for( auto it = qBoxPainters.begin(); it != qBoxPainters.end(); it++ ){ it->second->update(); }
-    for( auto it = qGauges.begin(); it != qGauges.end(); it++ ){ it->second.second->setCurrentValue( getPressureInPercent() ); }    
+    for( auto &painter : qBoxPainters ){ painter.second->update(); }
+    for( auto &gauge : qGauges ){ gauge.second.second->setCurrentValue( getPressureInPercent() ); }
 }

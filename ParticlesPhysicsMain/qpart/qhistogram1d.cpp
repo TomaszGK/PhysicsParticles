@@ -1,7 +1,7 @@
 #include "qhistogram1d.h"
 
 QHistogram1D::QHistogram1D( double max, ptrHistogram1D ptr, QWidget* parent )
-: QBoxPainter { parent }, histogram1D { ptr }
+: QBoxPainter { parent }, histogram1D { std::move(ptr) }
 {
     setMaxOY(max);
 
@@ -38,7 +38,7 @@ void QHistogram1D::init()
             }
         }
 
-        barWidth = (width-(marginLeft+marginRight))/size;
+        barWidth = (static_cast<double>(width)-(marginLeft+marginRight))/static_cast<double>(size);
         labelPosition = marginLeft + (width-(marginLeft+marginRight)-pixelsWide)/2;
     }
 }

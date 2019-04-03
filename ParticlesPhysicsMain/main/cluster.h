@@ -19,10 +19,10 @@ public:
     Cluster( int,coord2D );
     Cluster( int,int,int );
     Cluster( const Cluster& );
-    Cluster( Cluster&& );
+    Cluster( Cluster&& ) noexcept;
 
     Cluster& operator=( const Cluster& );
-    Cluster& operator=( Cluster&& );
+    Cluster& operator=( Cluster&& ) noexcept;
 
     inline void addParticle( iterParticle particle ) { particlesInCluster->push_back(std::move(particle)); }
     inline ptrVectorClusterIters& getAdjoinClusters() noexcept { return adjoinClusters; }

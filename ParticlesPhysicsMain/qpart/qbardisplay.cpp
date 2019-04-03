@@ -1,7 +1,7 @@
 #include "qbardisplay.h"
 
-QBarDisplay::QBarDisplay( int _max, ptrBarDisplay ptr, QWidget* parentWidget )
-    : QBoxPainter { parentWidget }, barDisplay { ptr }, max { _max }
+QBarDisplay::QBarDisplay( int max, ptrBarDisplay ptr, QWidget* parentWidget )
+    : QBoxPainter { parentWidget }, barDisplay { std::move(ptr) }, max { max }
 {
     background = QBrush(QColor(145, 215, 215));
     setAutoFillBackground(false);

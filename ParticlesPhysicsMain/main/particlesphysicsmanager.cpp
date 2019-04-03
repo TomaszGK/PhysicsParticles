@@ -2,10 +2,10 @@
 #include "particlesmath.h"
 #include <cmath>
 
-ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int _planeWidth, int _planeHeight )
+ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int planeWidth, int planeHeight )
 : simulationType {type}
 {
-    planeArea = std::make_shared<PlaneArea>(_planeWidth,_planeHeight,simulationInfo.planeBorderSize[type]);
+    planeArea = std::make_shared<PlaneArea>(planeWidth,planeHeight,simulationInfo.planeBorderSize[type]);
 
     calculationStart = time = HRClock::now();
 
@@ -14,7 +14,7 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int _plan
     particles = std::make_shared<std::vector<Particle>>();
     clusters = std::make_unique<std::vector<Cluster>>();
     particles->reserve(static_cast<size_t>(simulationInfo.maxParticles[type]));
-    clusters->reserve(static_cast<size_t>((_planeWidth*_planeHeight)/(clustersInfo.clusterSize*clustersInfo.clusterSize)+10));
+    clusters->reserve(static_cast<size_t>((planeWidth*planeHeight)/(clustersInfo.clusterSize*clustersInfo.clusterSize)+10));
 
     createClusters();
 
@@ -100,15 +100,16 @@ void ParticlesPhysicsManager::createParticles()
 }
 
 void ParticlesPhysicsManager::setVisualizationType( VisualizationType type )
-{
+{    
     if( !pauseByUserFlag ) pause();
 
-     visualizationType = type;
-     for( auto iter=particles->begin() ; iter!=particles->end() ; ++iter )
-     {
-         iter->visualizationType = type;
-         iter->calculateParticleColor();
-     }
+    visualizationType = type;
+
+    for( auto &particle : *particles )
+    {
+        particle.visualizationType = type;
+        particle.calculateParticleColor();
+    }
 
     if( !pauseByUserFlag ) run();
 }
@@ -251,8 +252,7 @@ bool ParticlesPhysicsManager::setParticlesInPlane( ParticleType particleType, in
 
     int diff = std::abs( quantity - simulationInfo.numberOfParticles[particleType] );
 
-    if( simulationInfo.numberOfParticles[particleType] < quantity ) return addParticles( particleType, visualizationType, diff, simulationInfo.particleSize[particleType] );
-    else return removeParticles( particleType , diff );
+    return ( simulationInfo.numberOfParticles[particleType] < quantity ) ? addParticles( particleType, visualizationType, diff, simulationInfo.particleSize[particleType] ) : removeParticles( particleType , diff );
 }
 
 void ParticlesPhysicsManager::setSizeOfParticlesInPercent( ParticleType type, int quantity )
@@ -524,16 +524,16 @@ void ParticlesPhysicsManager::updateParticlesLocationInPlane()
     physicsInfo.numBlueParticlesRight = physicsInfo.numBlueParticlesLeft = 0;
     physicsInfo.numRedParticlesRight = physicsInfo.numRedParticlesLeft = 0;
 
-    for( auto particle=particles->begin() ; particle!=particles->end() ; ++particle )
+    for( auto &particle : *particles )
     {
-        if( particle->particleType == ParticleType::BLUE )
+        if( particle.particleType == ParticleType::BLUE )
         {
-            if( particle->position.x>planeArea->getPlainDivider().getDividerPosX() ) physicsInfo.numBlueParticlesRight++;
+            if( particle.position.x>planeArea->getPlainDivider().getDividerPosX() ) physicsInfo.numBlueParticlesRight++;
             else physicsInfo.numBlueParticlesLeft++;
         }
-        else if( particle->particleType == ParticleType::RED )
+        else if( particle.particleType == ParticleType::RED )
         {
-            if( particle->position.x>planeArea->getPlainDivider().getDividerPosX() ) physicsInfo.numRedParticlesRight++;
+            if( particle.position.x>planeArea->getPlainDivider().getDividerPosX() ) physicsInfo.numRedParticlesRight++;
             else physicsInfo.numRedParticlesLeft++;
         }
     }
@@ -720,7 +720,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( iterP
         particle->modifiedVelocity = true;
         return kineticEnergy;
     }
-    else if( newPosition.x + particle->radius >= planeArea->getWidth() - planeArea->getXConstraint() )
+    if( newPosition.x + particle->radius >= planeArea->getWidth() - planeArea->getXConstraint() )
     {
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::RIGHT];
         particle->position.x = static_cast<double>(planeArea->getWidth()) - particle->radius - planeArea->getXConstraint();
@@ -739,7 +739,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( iterP
         particle->modifiedVelocity = true;
         return kineticEnergy;
     }
-    else if( newPosition.y + particle->radius >= planeArea->getHeight() )
+    if( newPosition.y + particle->radius >= planeArea->getHeight() )
     {
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::DOWN];
         particle->position.y = static_cast<double>(planeArea->getHeight()) - particle->radius;

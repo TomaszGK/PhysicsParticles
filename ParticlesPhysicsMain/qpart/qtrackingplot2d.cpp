@@ -1,7 +1,7 @@
 #include "qtrackingplot2d.h"
 
 QTrackingPlot2D::QTrackingPlot2D( cptrParticlesContainer ptr, QWidget *parent )
-: QBoxPainter { parent }, particles { ptr }
+: QBoxPainter { parent }, particles { std::move(ptr) }
 {
     trackingParticle = particles->begin();
     marginTop = marginBottom = marginLeft = marginRight = static_cast<int>(trackingParticle->radius);

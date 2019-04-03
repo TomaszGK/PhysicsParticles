@@ -9,7 +9,7 @@ class QBarDisplay : public QBoxPainter
     Q_OBJECT
 
 public:
-    explicit QBarDisplay( int _max = 100, ptrBarDisplay ptr = nullptr, QWidget* parentWidget = nullptr );
+    explicit QBarDisplay( int max = 100, ptrBarDisplay ptr = nullptr, QWidget* parentWidget = nullptr );
 
     QBarDisplay( const QBarDisplay& ) = default;
     QBarDisplay( QBarDisplay&& ) = default;

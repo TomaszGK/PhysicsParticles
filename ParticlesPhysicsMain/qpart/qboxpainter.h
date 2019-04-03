@@ -41,9 +41,9 @@ protected:
     void paintEvent(QPaintEvent *event) override;
     void paintAxes();
     void paintPlaneBorder();
-    void paintArrow( const vect2D& position, const vect2D& direction, qreal arrowSize, int arrowThick, QColor arrowColor );
-    void paintTriangle( const vect2D& a, const vect2D& b, const vect2D& c, QColor color );
-    int  getStringWidthInPixels( QString name );
+    void paintArrow( const vect2D& position, const vect2D& direction, const qreal& arrowSize, int arrowThick, const QColor& arrowColor );
+    void paintTriangle( const vect2D& a, const vect2D& b, const vect2D& c, const QColor& color );
+    int  getStringWidthInPixels( const QString& name );
 
 private:
 

@@ -24,7 +24,7 @@ class Histogram1D
 public:
 
     Histogram1D() = default; // for use in std::map -> operator []
-    Histogram1D( size_t size, double _begin, double _end, std::string _label = "" );
+    Histogram1D( size_t size, double begin, double end, std::string label = "" );
 
     Histogram1D( const Histogram1D& ) = default;
     Histogram1D( Histogram1D&& ) = default;

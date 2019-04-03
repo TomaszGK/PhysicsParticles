@@ -4,7 +4,7 @@
 #include "particle.h"
 
 QPainterManager::QPainterManager( cptrParticlesContainer ptr, std::shared_ptr<const PlaneArea> ptrArea, QWidget* parent )
-: QBoxPainter { parent }, planeArea { ptrArea }
+: QBoxPainter { parent }, particles { std::move(ptr) }, planeArea { std::move(ptrArea) }
 {
     background = QBrush(QColor(235, 235, 235));
     particlePen = QPen(Qt::NoPen);
@@ -13,7 +13,6 @@ QPainterManager::QPainterManager( cptrParticlesContainer ptr, std::shared_ptr<co
     textFont.setPixelSize(50);    
     displayVelocityVector.first = false;    
 
-    setParticlesContainer(ptr);    
     setAutoFillBackground(false);
 
     init();

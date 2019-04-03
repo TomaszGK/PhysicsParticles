@@ -1,7 +1,7 @@
 #include "qbarchart.h"
 
 QBarChart::QBarChart( double max, std::pair<bool,bool> scalability, ptrBarChart ptr, QWidget* parent )
-: QBoxPainter { parent }, barChart { ptr }
+: QBoxPainter { parent }, barChart { std::move(ptr) }
 {
     setMaxOY(max);    
     isScalableUp = scalability.first;
@@ -86,10 +86,10 @@ void QBarChart::paint()
 
         double scaleFactor = (height()-(marginLeft+marginRight))/maxValue;
 
-        for( auto ptr = barChart->getBins().begin() ; ptr!=barChart->getBins().end() ; ++ptr )
+        for( const auto &barChartBin : barChart->getBins() )
         {
-            value = static_cast<int>(*ptr*scaleFactor);
-            intensity = static_cast<int>(255.0*(*ptr)/maxValue);
+            value = static_cast<int>(barChartBin*scaleFactor);
+            intensity = static_cast<int>(255.0*(barChartBin)/maxValue);
             if( intensity>255 ) intensity = 255;
             painter.setBrush(QBrush(QColor(intensity, 0, 255-intensity)));
             painter.setPen(QPen(QColor(intensity, 0, 255-intensity)));
@@ -131,7 +131,7 @@ void QBarChart::drawChartName()
 
 void QBarChart::onButtonClick()
 {
-    QPushButton* clickedButton = qobject_cast<QPushButton*>( sender() );
+    auto clickedButton = qobject_cast<QPushButton*>( sender() );
     if( clickedButton != nullptr )
     {
       buttons[dataVisulization]->setStyleSheet(buttonStyleUnselected.arg(cButton.name()));

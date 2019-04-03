@@ -47,7 +47,7 @@ void QBoxPainter::paintAxes()
     }
 }
 
-void QBoxPainter::paintArrow( const vect2D& position, const vect2D& direction, qreal arrowSize, int arrowThick, QColor arrowColor )
+void QBoxPainter::paintArrow( const vect2D& position, const vect2D& direction, const qreal& arrowSize, int arrowThick, const QColor& arrowColor )
 {
     QPolygonF arrowHead;
 
@@ -70,7 +70,7 @@ void QBoxPainter::paintArrow( const vect2D& position, const vect2D& direction, q
     painter.drawPolygon(arrowHead);
 }
 
-void QBoxPainter::paintTriangle( const vect2D &a, const vect2D &b, const vect2D &c, QColor color )
+void QBoxPainter::paintTriangle( const vect2D &a, const vect2D &b, const vect2D &c, const QColor& color )
 {
     QPainterPath path;
     path.moveTo(a.x,a.y);
@@ -81,7 +81,7 @@ void QBoxPainter::paintTriangle( const vect2D &a, const vect2D &b, const vect2D 
     painter.fillPath(path, QBrush(color));
 }
 
-int QBoxPainter::getStringWidthInPixels(QString name)
+int QBoxPainter::getStringWidthInPixels( const QString& name )
 {
     QFontMetrics fm(parentWidget()->font());
     return fm.width(name);

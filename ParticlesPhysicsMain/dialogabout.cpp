@@ -21,7 +21,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
     animatedText["Copyright"] = std::make_unique<QTextAnimation>("2019 © All rights reserved");
     labels["Copyright"] = ui->labelCopyright;
 
-    for( auto it = labels.begin(); it != labels.end(); it++ ){ it->second->setText( animatedText[it->first]->getCurrentText()  ); }
+    for( auto &label : labels ){ label.second->setText( animatedText[label.first]->getCurrentText()  ); }
 
     ui->layoutPicture->addWidget(&labelPicture);
     labelPicture.setPicture("science.jpg");
@@ -38,13 +38,13 @@ void DialogAbout::update()
 {
     int ends {0};
 
-    for( auto it = animatedText.begin(); it != animatedText.end(); it++ )
+    for( auto &text : animatedText )
     {
-        if( !it->second->update() ) ends++;
+        if( !text.second->update() ) ends++;
     }
-    for( auto it = labels.begin(); it != labels.end(); it++ )
+    for( auto &label : labels )
     {
-        it->second->setText( animatedText[it->first]->getCurrentText()  );
+        label.second->setText( animatedText[label.first]->getCurrentText()  );
     }
 
     if( static_cast<size_t>(ends) == animatedText.size() ) updateTimer.stop();
@@ -53,7 +53,7 @@ void DialogAbout::update()
 void DialogAbout::setFadeAnimation( int duration )
 {
     updateTimer.start(10);
-    for( auto it = animatedText.begin(); it != animatedText.end(); it++ ){ it->second->reset(); }
+    for( auto &text : animatedText ){ text.second->reset(); }
     propertyAnimation->setDuration(duration);
     propertyAnimation->setStartValue(0.0);
     propertyAnimation->setEndValue(1.0);

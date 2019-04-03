@@ -17,17 +17,17 @@ Cluster::Cluster( const Cluster &cluster )
     coordinates = cluster.coordinates;
     id = cluster.id;
 
-    particlesInCluster.reset(new ListParticleIters(*cluster.particlesInCluster));
-    adjoinClusters.reset(new VectorClusterIters(*cluster.adjoinClusters));
+    particlesInCluster = std::make_unique<ListParticleIters>(*cluster.particlesInCluster);
+    adjoinClusters = std::make_unique<VectorClusterIters>(*cluster.adjoinClusters);
 }
 
-Cluster::Cluster( Cluster &&cluster )
+Cluster::Cluster( Cluster &&cluster ) noexcept
 {
     coordinates = cluster.coordinates;
     id = cluster.id;
 
-    particlesInCluster.reset(cluster.particlesInCluster.release());
-    adjoinClusters.reset(cluster.adjoinClusters.release());
+    particlesInCluster = std::move(cluster.particlesInCluster);
+    adjoinClusters = std::move(cluster.adjoinClusters);
 }
 
 Cluster &Cluster::operator=( const Cluster &cluster )
@@ -37,19 +37,19 @@ Cluster &Cluster::operator=( const Cluster &cluster )
     coordinates = cluster.coordinates;
     id = cluster.id;
 
-    particlesInCluster.reset(new ListParticleIters(*cluster.particlesInCluster));
-    adjoinClusters.reset(new VectorClusterIters(*cluster.adjoinClusters));
+    particlesInCluster = std::make_unique<ListParticleIters>(*cluster.particlesInCluster);
+    adjoinClusters = std::make_unique<VectorClusterIters>(*cluster.adjoinClusters);
 
     return *this;
 }
 
-Cluster &Cluster::operator=( Cluster &&cluster )
+Cluster &Cluster::operator=( Cluster &&cluster ) noexcept
 {
     coordinates = cluster.coordinates;
     id = cluster.id;
 
-    particlesInCluster.reset(cluster.particlesInCluster.release());
-    adjoinClusters.reset(cluster.adjoinClusters.release());
+    particlesInCluster = std::move(cluster.particlesInCluster);
+    adjoinClusters = std::move(cluster.adjoinClusters);
 
     return *this;
 }

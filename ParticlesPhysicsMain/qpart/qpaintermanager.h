@@ -17,7 +17,7 @@ public:
     QPainterManager& operator=( const QPainterManager& ) = default;
     QPainterManager& operator=( QPainterManager&& ) = default;
 
-    void setParticlesContainer( cptrParticlesContainer _particles ) { particles = _particles; }
+    void setParticlesContainer( const cptrParticlesContainer& _particles ) { particles = _particles; }
     void setVectorPaint( bool _toVectorPaint ) noexcept { toVectorPaint = _toVectorPaint; }
     void setTrackingPaint( bool _toTrackingPaint ) noexcept { toTrackingPaint = _toTrackingPaint; }    
     void setPlaneHitsPaint( bool _toHandlePlaneHits ) noexcept { toHandlePlaneHits = _toHandlePlaneHits; }

@@ -29,7 +29,7 @@ public:
       \param size bins size
       \param _label bar chart name
     */
-    BarChart( size_t size , std::string _label = "" );
+    BarChart( size_t size , std::string label = "" );
 
     //! Default copy constructor
     BarChart( const BarChart& ) = default;
