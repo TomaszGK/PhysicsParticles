@@ -2061,7 +2061,7 @@ Trace</string>
         <rect>
          <x>120</x>
          <y>186</y>
-         <width>61</width>
+         <width>91</width>
          <height>31</height>
         </rect>
        </property>
@@ -2670,7 +2670,7 @@ Trace</string>
    <property name="text">
     <string>Blue</string>
    </property>
-  </action> 
+  </action>
   <action name="actionScheme1">
    <property name="checkable">
     <bool>true</bool>
@@ -2718,7 +2718,7 @@ Trace</string>
      <pointsize>12</pointsize>
     </font>
    </property>
-  </action> 
+  </action>
   <action name="actionAbout">
    <property name="text">
     <string>About</string>

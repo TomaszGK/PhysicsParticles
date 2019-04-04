@@ -11,10 +11,10 @@
 class BarChart
 {
 
-    std::list<double> bins;    /*!< contains bar values */
-    double            max {0}; /*!< maximum value inside bins */
-    double            min {0}; /*!< minimum value inside bins */
-    std::string       label;   /*!< bar chart name */
+    std::list<double> bins    ; /*!< contains bar values */
+    double            max {0} ; /*!< maximum value inside bins */
+    double            min {0} ; /*!< minimum value inside bins */
+    std::string       label   ; /*!< bar chart name */
 
 public:
 
@@ -24,10 +24,10 @@ public:
     */
     BarChart() = default;
 
-    //! Constructor
+    //! BarChart constructor
     /*!
       \param size bins size
-      \param _label bar chart name
+      \param label bar chart name
     */
     BarChart( size_t size , std::string label = "" );
 

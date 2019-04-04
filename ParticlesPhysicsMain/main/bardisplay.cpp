@@ -1,23 +1,23 @@
 #include "bardisplay.h"
 
-BarDisplay::BarDisplay( size_t size )
+BarDisplay::BarDisplay( size_t size, std::string label )
+: label {std::move(label)}
 {
-    upperBox.resize(size,0);
-    lowerBox.resize(size,0);
+    bins.resize(size,{0,0});
 }
 
 void BarDisplay::setUpperBox( size_t index, int value )
 {
-    if( index<upperBox.size() )
+    if( index<bins.size() )
     {
-        upperBox[index] = value;
+        bins[index].first = value;
     }
 }
 
 void BarDisplay::setLowerBox( size_t index, int value )
 {
-    if( index<lowerBox.size() )
+    if( index<bins.size() )
     {
-        lowerBox[index] = value;
+        bins[index].second = value;
     }
 }
