@@ -1,3 +1,4 @@
+#include <QtGlobal>
 #include "particlesphysicsmanager.h"
 #include "particlesmath.h"
 #include <cmath>
@@ -170,7 +171,7 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
         velocity.x *= Random::get<bool>() ? 1.0 : -1.0;
         velocity.y *= Random::get<bool>() ? 1.0 : -1.0;
 
-        auto iterCluster = clusterIters[static_cast<size_t>(position.x)][static_cast<size_t>(position.y)];
+        auto iterCluster = getClusterIter(static_cast<size_t>(position.x),static_cast<size_t>(position.y));
         particles->push_back(Particle(particleType,visualizationType,position,velocity,physicsInfo.maxRapidity,particleSize,iterCluster));
         iterCluster->addParticle( std::prev(particles->end()) );
     }
@@ -365,10 +366,19 @@ void ParticlesPhysicsManager::recalculateParticlesInClusters()
 
     for( auto particle=particles->begin() ; particle!=particles->end() ; ++particle )
     {
-        auto iterCurrent = clusterIters[static_cast<size_t>(particle->position.x)][static_cast<size_t>(particle->position.y)];
+        auto iterCurrent = getClusterIter(static_cast<size_t>(particle->position.x),static_cast<size_t>(particle->position.y));
         iterCurrent->addParticle( particle );
         particle->cluster = iterCurrent;
     }
+}
+
+iterCluster ParticlesPhysicsManager::getClusterIter( const size_t& posx, const size_t& posy )
+{
+#ifdef QT_DEBUG
+    return clusterIters.at(posx).at(posy);
+#else
+    return clusterIters[posx][posy];
+#endif
 }
 
 void ParticlesPhysicsManager::calculateNextPositions()
@@ -480,10 +490,17 @@ void ParticlesPhysicsManager::calculateNextPositionsLoop()
                 (this->*prtCalculateNextPositions)();
                 calculateNextPositionFlag.store(false);
             }
+            catch( const std::exception& ex )
+            {
+                std::cout << ex.what() << "\n";
+            }
+            catch( const std::string& ex )
+            {
+                std::cout << ex << "\n";
+            }
             catch(...)
             {
-                //std::current_exception();
-                std::cout << "Caught something .. \n";
+                std::cout << "Cought undefined exception \n";
             }
 
         }
@@ -563,7 +580,7 @@ vect2D ParticlesPhysicsManager::getDisjointRandomParticlePosition( double minx, 
 
 void ParticlesPhysicsManager::handleParticleClusterTransition( iterParticle& particle )
 {
-    auto iterCurrent = clusterIters[static_cast<size_t>(particle->position.x)][static_cast<size_t>(particle->position.y)];
+    auto iterCurrent = getClusterIter(static_cast<size_t>(particle->position.x),static_cast<size_t>(particle->position.y));
     if( iterCurrent != particle->cluster )
     {
         iterCurrent->addParticle( particle );
@@ -756,7 +773,7 @@ bool ParticlesPhysicsManager::isParticlesOverlap( const vect2D& particlePosition
 {    
     double distance {0};
 
-    auto iterCluster = clusterIters[static_cast<size_t>(particlePosition.x)][static_cast<size_t>(particlePosition.y)];
+    auto iterCluster = getClusterIter(static_cast<size_t>(particlePosition.x),static_cast<size_t>(particlePosition.y));
     for( auto &cluster : *iterCluster->getAdjoinClusters() )
     {
         for( auto &particle : *cluster->getParticlesInCluster() )
@@ -841,9 +858,9 @@ void ParticlesPhysicsManager::createClusters()
     // tag clusters close to plane divider
     for( int y=0 ; y<planeArea->getHeight() ; y+=clustersInfo.clusterSize )
     {
-        clusterIters[static_cast<size_t>(planeArea->getPlainDivider().getDividerPosX())][static_cast<size_t>(y)]->PLANE_DIVIDER = true;
-        clusterIters[static_cast<size_t>(planeArea->getPlainDivider().getDividerPosX()-clustersInfo.clusterSize+1)][static_cast<size_t>(y)]->PLANE_DIVIDER = true;
-        clusterIters[static_cast<size_t>(planeArea->getPlainDivider().getDividerPosX()+clustersInfo.clusterSize-1)][static_cast<size_t>(y)]->PLANE_DIVIDER = true;
+        clusterIters.at(static_cast<size_t>(planeArea->getPlainDivider().getDividerPosX())).at(static_cast<size_t>(y))->PLANE_DIVIDER = true;
+        clusterIters.at(static_cast<size_t>(planeArea->getPlainDivider().getDividerPosX()-clustersInfo.clusterSize+1)).at(static_cast<size_t>(y))->PLANE_DIVIDER = true;
+        clusterIters.at(static_cast<size_t>(planeArea->getPlainDivider().getDividerPosX()+clustersInfo.clusterSize-1)).at(static_cast<size_t>(y))->PLANE_DIVIDER = true;
     }
 
     clustersInfo.numberOfClusters = static_cast<int>(clusters->size());
@@ -855,7 +872,7 @@ void ParticlesPhysicsManager::populateClusterID( int xstart, int ystart, int xle
     {
         for( int y=ystart ; y<ystart+ylength ; ++y)
         {
-            clusterIters[static_cast<size_t>(x)][static_cast<size_t>(y)] = cluster;
+            clusterIters.at(static_cast<size_t>(x)).at(static_cast<size_t>(y)) = cluster;
         }
     }
 }

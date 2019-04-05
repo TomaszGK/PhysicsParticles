@@ -79,6 +79,9 @@ protected:
     // pointer to calculation function assigned to simulation state
     void (ParticlesPhysicsManager::*prtCalculateNextPositions)() {nullptr};
 
+    // get cluster iter or throw exception
+    iterCluster getClusterIter( const size_t& posx , const size_t& posy );
+
     // caluclate next particles positions
     void calculateNextPositions();
 

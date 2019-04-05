@@ -35,7 +35,7 @@ public:
         if( isTracking )
         {
             savePosition();
-        }
+        }      
     }
 
     inline int getCurrentVelocityPercent() const { return static_cast<int>(100*velocity()/maxRapidity); }
