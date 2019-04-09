@@ -30,10 +30,11 @@ public:
     vector2D<T> operator-( const vector2D<T>& v ) const { return vector2D<T>(x-v.x,y-v.y); }
     bool operator<( const vector2D<T>& v ) const { return this->getHashNumber()<v.getHashNumber(); }
 
-    int getHashNumber() const { return x*10000+y; }
-    void set( T newX , T newY ) noexcept { x=newX; y=newY; }    
-    vector2D<T> setLength( T newLength ) { if( x!=0 || y!=0 ){ *this *= (newLength/(*this)()); } return *this; }
+    int getHashNumber() const { return x*10000+y; }    
     vector2D<T> getVectorOfLength( T length ) const { vector2D<T> newVector(*this); newVector.setLength(length); return newVector; }
+    inline bool isZero() const noexcept { return (x==0.0 && y==0.0); }
+    void set( T newX , T newY ) noexcept { x=newX; y=newY; }
+    vector2D<T> setLength( T newLength ) { if( x!=0 || y!=0 ){ *this *= (newLength/(*this)()); } return *this; }
 
     T x {0};
     T y {0};

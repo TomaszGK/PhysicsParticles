@@ -31,7 +31,7 @@ private:
     QPen     textPen;   
     QColor   particleColor;
 
-    QPoint mousePos;
+    QPoint   mousePos;
 
     bool toVectorPaint {false};
     bool toTrackingPaint {false};

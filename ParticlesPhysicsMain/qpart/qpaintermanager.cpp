@@ -171,6 +171,7 @@ void QPainterManager::handleCursorPosition()
     vect2D position;
 
     displayVelocityVector.first = false;
+
     for( auto particle = particles->begin() ; particle !=  particles->end() ; ++particle )
     {
         position = particle->position + vect2D(planeBorderWidth,planeBorderWidth);

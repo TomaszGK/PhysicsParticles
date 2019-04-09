@@ -45,6 +45,7 @@ SOURCES += \
     qpart/qtextanimation.cpp \
     qpart/qtrackingplot2d.cpp \
     qpart/qinteractivelabel.cpp \
+    qpart/qcirclecontrol.cpp \
     main/particlesphysicsmanager.cpp \
     main/particle.cpp \
     main/cluster.cpp \
@@ -56,7 +57,6 @@ SOURCES += \
     dialogabout.cpp
 
    
-
 HEADERS += \
         mainwindow.h \
     extern/random.hpp \
@@ -71,6 +71,7 @@ HEADERS += \
     qpart/qtextanimation.h \
     qpart/qtrackingplot2d.h \
     qpart/qinteractivelabel.h \
+    qpart/qcirclecontrol.h \
     main/definitions.h \
     main/particlesphysicsmanager.h \    
     main/vector2d.h \
@@ -84,7 +85,6 @@ HEADERS += \
     main/bardisplay.h \  
     main/planearea.h \
     dialogabout.h
-
     
     
 FORMS += \

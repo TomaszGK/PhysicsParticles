@@ -8,6 +8,7 @@
 #include "qinfodisplay.h"
 #include "qcgaugewidget.h"
 #include "qtrackingplot2d.h"
+#include "qcirclecontrol.h"
 #include "particlesphysicsmanager.h"
 
 class QParticlesPhysicsManager : public ParticlesPhysicsManager
@@ -31,6 +32,7 @@ public:
     QParticlesPhysicsManager& operator=( QParticlesPhysicsManager&& ) = delete;
 
     void addQBarChart( const std::string& name, QHBoxLayout* layout, std::pair<bool,bool> scalability = {true,true} );
+    void addQCircleControl( const std::string& name, QHBoxLayout* layout );
     void addQBarDisplay( const std::string& name, QHBoxLayout* layout );
     void addQHistogram1D( const std::string& name, QHBoxLayout* layout );
     void addQInfoDisplay( const std::string& name, QHBoxLayout* layout );

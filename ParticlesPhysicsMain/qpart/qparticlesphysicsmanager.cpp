@@ -16,6 +16,12 @@ void QParticlesPhysicsManager::addQBarChart( const std::string& name, QHBoxLayou
     }
 }
 
+void QParticlesPhysicsManager::addQCircleControl( const std::string& name, QHBoxLayout* layout )
+{
+    qBoxPainters[name] = std::make_unique<QCircleControl>(layout->parentWidget());
+    layout->addWidget( qBoxPainters[name].get() );
+}
+
 void QParticlesPhysicsManager::addQBarDisplay( const std::string& name, QHBoxLayout* layout )
 {
     if( barDisplays.count(name) != 0 )

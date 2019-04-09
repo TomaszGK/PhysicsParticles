@@ -209,13 +209,13 @@ public:
     inline double getSideTemperature( PlaneSide side ) const noexcept { return physicsInfo.planeSideTemperature.at(side); }
     inline int getSideTemperatureInPercent( PlaneSide side ) const noexcept { return static_cast<int>(physicsInfo.planeSideTemperature.at(side)*100/physicsInfo.maxRapidity); }
 
-    void setHorizontalForceInPercent( int force ){ physicsInfo.horizontalForce = 0.01*force*physicsInfo.maxSideForce; }
-    inline double getHorizontalForce() const noexcept { return physicsInfo.horizontalForce; }
-    inline int getHorizontalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.horizontalForce*100/physicsInfo.maxSideForce); }
+    void setHorizontalForceInPercent( int force ){ physicsInfo.pushForce.x = 0.01*force*physicsInfo.maxSideForce; }
+    inline double getHorizontalForce() const noexcept { return physicsInfo.pushForce.x; }
+    inline int getHorizontalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.pushForce.x*100/physicsInfo.maxSideForce); }
 
-    void setVerticalForceInPercent( int force ){ physicsInfo.verticalForce = 0.01*force*physicsInfo.maxSideForce; }
-    inline double getVerticalForce() const noexcept { return physicsInfo.verticalForce; }
-    inline int getVerticalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.verticalForce*100/physicsInfo.maxSideForce); }
+    void setVerticalForceInPercent( int force ){ physicsInfo.pushForce.y = 0.01*force*physicsInfo.maxSideForce; }
+    inline double getVerticalForce() const noexcept { return physicsInfo.pushForce.y; }
+    inline int getVerticalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.pushForce.y*100/physicsInfo.maxSideForce); }
 
     void setAverageDiffisionTemperature()
     {

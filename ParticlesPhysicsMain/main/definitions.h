@@ -152,10 +152,9 @@ struct PhysicsInfo
     double       temperature           {0.1}; // boundries temperature in the particles plane - basic and entropy mode
     double       temperatureLeft       {0.1}; // boundries temperature in the left part of particles plane - diffusion mode
     double       temperatureRight      {0.6}; // boundries temperature in the right part of particles plane - diffusion mode
-    double       horizontalForce       {0.0}; // horizontal force attracted by all particles
     double       attractionForce       {0.0}; // attraction force between particles
-    double       maxAttractionForce  {0.001}; // maximum of attraction force between particles
-    double       verticalForce         {0.0}; // vertical force attracted by all particles
+    vect2D       pushForce         {0.0,0.0}; // push force attracted by all particles - may simulate gravity
+    double       maxAttractionForce  {0.001}; // maximum of attraction force between particles  
     double       avgVelocityRed        {0.0}; // average velocity of red particles - diffusion mode
     double       avgVelocityBlue       {0.0}; // average velocity of blue particles - diffusion mode
     double       avgVelocity           {0.0}; // average velocity of all particles

@@ -1382,6 +1382,9 @@
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
      <attribute name="title">
       <string>Brownian Motion</string>
      </attribute>
@@ -1582,8 +1585,8 @@
      <widget class="QPushButton" name="stopMoleculePushButtonTab4">
       <property name="geometry">
        <rect>
-        <x>580</x>
-        <y>670</y>
+        <x>570</x>
+        <y>720</y>
         <width>101</width>
         <height>71</height>
        </rect>
@@ -1610,8 +1613,8 @@
      <widget class="QPushButton" name="clearTrackMoleculePushButtonTab4">
       <property name="geometry">
        <rect>
-        <x>580</x>
-        <y>760</y>
+        <x>570</x>
+        <y>830</y>
         <width>101</width>
         <height>71</height>
        </rect>
@@ -1623,6 +1626,17 @@
        <string>CLEAR 
 Trace</string>
       </property>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_17">
+      <property name="geometry">
+       <rect>
+        <x>700</x>
+        <y>720</y>
+        <width>211</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="circleControlLayoutTab4"/>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">

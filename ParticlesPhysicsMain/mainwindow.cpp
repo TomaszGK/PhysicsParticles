@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     physicsSimulation[2] = std::make_unique<QParticlesPhysicsManager>(SimulationType::BROWNIAN_MOTION,ui->particlesFrameTab4);
     physicsSimulation[2]->addQTrackingPlot2D("trackingPlot",ui->trackingFrameTab4);
     physicsSimulation[2]->addQHistogram1D("velocityDistribution",ui->velocityDistributionLayoutTab4);
-
+    physicsSimulation[2]->addQCircleControl("pushForceCircleControl",ui->circleControlLayoutTab4);
 
     // create SANDBOX simulation
     physicsSimulation[3] = std::make_unique<QParticlesPhysicsManager>(SimulationType::SANDBOX,ui->particlesFrameTab2);
