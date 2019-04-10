@@ -18,7 +18,7 @@ public:
     QCircleControl& operator=( QCircleControl&& ) = default;
 
     void init();
-    QPoint getIndicator() const noexcept
+    inline QPoint getIndicator() const noexcept
     {
         return indicatorPos-origin;
     }
