@@ -11,11 +11,14 @@
 #include "qcirclecontrol.h"
 #include "particlesphysicsmanager.h"
 
+enum class ControlType { CIRCLE_CONTROL , NO_CONTROL };
+
 class QParticlesPhysicsManager : public ParticlesPhysicsManager
 {
 
     std::unique_ptr<QPainterManager>                     particlesPaintManager;    
     std::map<std::string,std::unique_ptr<QBoxPainter>>   qBoxPainters;
+    std::map<std::string,ControlType>                    controlBoxType;
 
     std::map<std::string,std::pair<std::unique_ptr<QcGaugeWidget>,std::unique_ptr<QcNeedleItem>>> qGauges;
 
@@ -54,6 +57,7 @@ public:
 
     void paintParticlesFrame();
     void paintFrames();
+    void handleControls();
 
     void pause( bool userCall = false )
     {

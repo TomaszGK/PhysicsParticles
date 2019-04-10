@@ -217,6 +217,8 @@ public:
     inline double getVerticalForce() const noexcept { return physicsInfo.pushForce.y; }
     inline int getVerticalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.pushForce.y*100/physicsInfo.maxSideForce); }
 
+    void setPushForce( vect2D force ){ physicsInfo.pushForce = force; }
+
     void setAverageDiffisionTemperature()
     {
         physicsInfo.temperatureRight = physicsInfo.temperatureLeft = (physicsInfo.temperatureRight + physicsInfo.temperatureLeft)/2;

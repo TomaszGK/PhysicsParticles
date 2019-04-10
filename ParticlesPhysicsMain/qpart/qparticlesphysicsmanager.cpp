@@ -11,7 +11,7 @@ void QParticlesPhysicsManager::addQBarChart( const std::string& name, QHBoxLayou
 {
     if( barCharts.count(name) != 0 )
     {       
-        qBoxPainters[name] = std::make_unique<QBarChart>(sqrt(physicsInfo.maxRapidity*2)/2,scalability,barCharts[name],layout->parentWidget());
+        qBoxPainters[name] = std::make_unique<QBarChart>(sqrt(physicsInfo.maxRapidity*2)/2,scalability,barCharts[name],layout->parentWidget());        
         layout->addWidget( qBoxPainters[name].get() );        
     }
 }
@@ -19,6 +19,7 @@ void QParticlesPhysicsManager::addQBarChart( const std::string& name, QHBoxLayou
 void QParticlesPhysicsManager::addQCircleControl( const std::string& name, QHBoxLayout* layout )
 {
     qBoxPainters[name] = std::make_unique<QCircleControl>(layout->parentWidget());
+    controlBoxType[name] = ControlType::CIRCLE_CONTROL;
     layout->addWidget( qBoxPainters[name].get() );
 }
 
@@ -26,7 +27,7 @@ void QParticlesPhysicsManager::addQBarDisplay( const std::string& name, QHBoxLay
 {
     if( barDisplays.count(name) != 0 )
     {        
-        qBoxPainters[name] = std::make_unique<QBarDisplay>(simulationInfo.numberOfParticlesInit[ParticleType::RED],barDisplays[name],layout->parentWidget());
+        qBoxPainters[name] = std::make_unique<QBarDisplay>(simulationInfo.numberOfParticlesInit[ParticleType::RED],barDisplays[name],layout->parentWidget());        
         layout->addWidget( qBoxPainters[name].get() );        
     }
 }
@@ -35,14 +36,14 @@ void QParticlesPhysicsManager::addQHistogram1D( const std::string& name, QHBoxLa
 {
     if( histograms1D.count(name) != 0 )
     {       
-        qBoxPainters[name] = std::make_unique<QHistogram1D>(100,histograms1D[name],layout->parentWidget());
+        qBoxPainters[name] = std::make_unique<QHistogram1D>(100,histograms1D[name],layout->parentWidget());        
         layout->addWidget( qBoxPainters[name].get() );        
     }
 }
 
 void QParticlesPhysicsManager::addQInfoDisplay(  const std::string& name, QHBoxLayout* layout  )
 {    
-    qBoxPainters[name] = std::make_unique<QInfoDisplay>();
+    qBoxPainters[name] = std::make_unique<QInfoDisplay>();    
     layout->addWidget( qBoxPainters[name].get() );
 }
 
@@ -70,7 +71,7 @@ void QParticlesPhysicsManager::addQGauge( const std::string& name, QHBoxLayout* 
 
 void QParticlesPhysicsManager::addQTrackingPlot2D( const std::string& name, QHBoxLayout *layout )
 {
-    qBoxPainters[name] = std::make_unique<QTrackingPlot2D>(particles,layout->parentWidget());
+    qBoxPainters[name] = std::make_unique<QTrackingPlot2D>(particles,layout->parentWidget());    
     layout->addWidget( qBoxPainters[name].get() );
 }
 
@@ -89,4 +90,17 @@ void QParticlesPhysicsManager::paintFrames()
     updateBars();    
     for( auto &painter : qBoxPainters ){ painter.second->update(); }
     for( auto &gauge : qGauges ){ gauge.second.second->setCurrentValue( getPressureInPercent() ); }
+}
+
+void QParticlesPhysicsManager::handleControls()
+{
+    for( auto &control : controlBoxType )
+    {
+        if( control.second == ControlType::CIRCLE_CONTROL )
+        {
+            QPoint forceOut = dynamic_cast<QCircleControl*>(qBoxPainters[control.first].get())->getIndicator();
+            vect2D forceIn(0.00001*forceOut.x(),0.00001*forceOut.y());
+            setPushForce(forceIn);
+        }
+    }
 }

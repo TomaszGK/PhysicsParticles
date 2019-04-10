@@ -400,9 +400,9 @@ void ParticlesPhysicsManager::calculateNextPositions()
     for( auto particle=particles->begin() ; particle!=particles->end() ; ++particle )
     {
 
-        if( simulationType == SimulationType::SANDBOX && !physicsInfo.pushForce.isZero() )
+        if( !physicsInfo.pushForce.isZero() )
         {
-            particle->velocity += physicsInfo.pushForce*calculationPeriod;
+            if( !particle->isMacroscopic ) particle->velocity += physicsInfo.pushForce*calculationPeriod;
         }
 
         handleParticleCollisions(particle);

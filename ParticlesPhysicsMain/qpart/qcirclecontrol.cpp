@@ -3,7 +3,7 @@
 
 QCircleControl::QCircleControl( QWidget* parentWidget )
 : QBoxPainter { parentWidget }
-{
+{    
     init();
 }
 
@@ -24,13 +24,19 @@ void QCircleControl::init()
 void QCircleControl::paint()
 {
     QPoint cursorPos = mapFromGlobal(QCursor::pos());
+    QColor currentSmallCircleColor {smallCircleColor};
+
+    if( smallCircleHooked || smallCircleHovered ) currentSmallCircleColor = smallCircleHookedColor;
 
     painter.setBrush(Qt::NoBrush);
-    painter.setPen(QPen(bigCirclePenColor));
+    painter.setPen(QPen(QBrush(bigCirclePenColor),2,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
     painter.drawEllipse( origin, bigCircleSize, bigCircleSize );
 
-    painter.setBrush(QBrush(smallCircleBrushColor));
-    painter.setPen(QPen(smallCirclePenColor));
+    paintMarks();
+
+    painter.setBrush(QBrush(currentSmallCircleColor));
+    painter.setPen(QPen(bigCirclePenColor));
+    painter.drawLine(origin.x(),origin.y(),indicatorPos.x(),indicatorPos.y());
     painter.drawEllipse( indicatorPos, smallCircleSize, smallCircleSize );
 
     if( isCursorHookToSmallCircle(cursorPos) )
@@ -42,21 +48,31 @@ void QCircleControl::paint()
     if( !smallCircleHooked && indicatorPos!=origin )
     {
         indicatorPos = origin;
+        smallCircleHovered = false;
     }
+}
+
+void QCircleControl::paintMarks()
+{
+    painter.setPen(QPen(QBrush(QColor(80,80,90)),2,Qt::DashDotLine,Qt::RoundCap,Qt::RoundJoin));
+    painter.drawLine(origin.x()-bigCircleSize,origin.y(),origin.x()+bigCircleSize,origin.y());
+    painter.drawLine(origin.x(),origin.y()-bigCircleSize,origin.x(),origin.y()+bigCircleSize);
 }
 
 bool QCircleControl::isCursorHookToSmallCircle( const QPoint& cursorPos )
 {
+    if( smallCircleHooked && QApplication::mouseButtons() == Qt::LeftButton ) return true;
 
-     if( QApplication::mouseButtons() != Qt::LeftButton )
-     {
-         smallCircleHooked = false;
-         return false;
-     }
-     if( smallCircleHooked ) return true;
-     if( cursorPos.x()>(indicatorPos.x()+smallCircleSize) || cursorPos.x()<(indicatorPos.x()-smallCircleSize) ) return false;
-     if( cursorPos.y()>(indicatorPos.y()+smallCircleSize) || cursorPos.y()<(indicatorPos.y()-smallCircleSize) ) return false;
+    smallCircleHooked = smallCircleHovered = false;
 
-     smallCircleHooked = true;
-     return true;
+    if( cursorPos.x()>(indicatorPos.x()+smallCircleSize) || cursorPos.x()<(indicatorPos.x()-smallCircleSize) ) return false;
+    if( cursorPos.y()>(indicatorPos.y()+smallCircleSize) || cursorPos.y()<(indicatorPos.y()-smallCircleSize) ) return false;
+
+    smallCircleHovered = true;
+
+    if( QApplication::mouseButtons() != Qt::LeftButton ) return false;
+
+    smallCircleHooked = true;
+
+    return true;
 }

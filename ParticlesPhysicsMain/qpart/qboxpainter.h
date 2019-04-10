@@ -30,13 +30,13 @@ protected:
 
     QColor cPlaneBorder {120,120,120};
 
-    int marginLeft             {20};
-    int marginRight            {20};
-    int marginTop              {20};
-    int marginBottom           {20};
-    int numberOfHorizontalAxes {5};
-    int numberOfVerticalAxes   {5};
-    int planeBorderWidth       {1};
+    int  marginLeft             {20};
+    int  marginRight            {20};
+    int  marginTop              {20};
+    int  marginBottom           {20};
+    int  numberOfHorizontalAxes {5};
+    int  numberOfVerticalAxes   {5};
+    int  planeBorderWidth       {1};
 
     void paintEvent(QPaintEvent *event) override;
     void paintAxes();

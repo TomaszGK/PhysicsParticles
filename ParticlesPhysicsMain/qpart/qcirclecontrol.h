@@ -8,6 +8,7 @@ class QCircleControl : public QBoxPainter
     Q_OBJECT
 
 public:
+
     explicit QCircleControl( QWidget* parentWidget = nullptr );
 
     QCircleControl( const QCircleControl& ) = default;
@@ -17,14 +18,19 @@ public:
     QCircleControl& operator=( QCircleControl&& ) = default;
 
     void init();
+    QPoint getIndicator() const noexcept
+    {
+        return indicatorPos-origin;
+    }
 
 private:
 
-    QColor bigCirclePenColor {55,55,55};
-    QColor smallCirclePenColor {55,55,55};
-    QColor smallCircleBrushColor {155,155,155};
+    QColor bigCirclePenColor       {80,80,90};
+    QColor smallCircleColor        {155,155,155};
+    QColor smallCircleHookedColor  {100,100,255};
 
     void paint();
+    void paintMarks();
     bool isCursorHookToSmallCircle( const QPoint& cursorPos );
 
     QPoint indicatorPos {0,0}; // small circle position
@@ -32,7 +38,8 @@ private:
     int    bigCircleSize {50};
     int  smallCircleSize {15};
 
-    bool smallCircleHooked {false};
+    bool smallCircleHooked  {false};
+    bool smallCircleHovered {false};
 
 };
 
