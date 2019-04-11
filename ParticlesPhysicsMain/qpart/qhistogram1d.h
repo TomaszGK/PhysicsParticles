@@ -18,8 +18,7 @@ public:
     QHistogram1D& operator=( const QHistogram1D& ) = default;
     QHistogram1D& operator=( QHistogram1D&& ) = default;
 
-    void setMaxOY( double max ) { maxValue = max*1.6; }   
-    void init();
+    void setMaxOY( double max ) { maxValue = max*1.6; }       
 
 private:
 
@@ -32,7 +31,9 @@ private:
     double maxValue      {100}; // maximum OY axis
     int    labelPosition {0};
 
-    void paint();
+    void paint() override;
+    void init() override;
+
     void drawHistogramName();
     void drawMarking();
 

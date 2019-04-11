@@ -2,7 +2,7 @@
 #include <QApplication>
 
 QCircleControl::QCircleControl( QWidget* parentWidget )
-: QBoxPainter { parentWidget }
+: QBoxPainter {parentWidget}
 {    
     init();
 }

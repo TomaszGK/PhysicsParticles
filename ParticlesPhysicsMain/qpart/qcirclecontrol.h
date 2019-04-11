@@ -17,7 +17,7 @@ public:
     QCircleControl& operator=( const QCircleControl& ) = default;
     QCircleControl& operator=( QCircleControl&& ) = default;
 
-    void init();
+    void init() override;
     inline QPoint getIndicator() const noexcept
     {
         return indicatorPos-origin;
@@ -25,11 +25,11 @@ public:
 
 private:
 
-    QColor bigCirclePenColor       {80,80,90};
-    QColor smallCircleColor        {155,155,155};
-    QColor smallCircleHookedColor  {100,100,255};
+    QColor bigCirclePenColor      {80,80,90};
+    QColor smallCircleColor       {155,155,155};
+    QColor smallCircleHookedColor {100,100,255};
 
-    void paint();
+    void paint() override;
     void paintMarks();
     bool isCursorHookToSmallCircle( const QPoint& cursorPos );
 

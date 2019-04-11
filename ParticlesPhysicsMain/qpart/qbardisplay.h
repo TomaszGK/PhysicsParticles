@@ -15,9 +15,7 @@ public:
     QBarDisplay( QBarDisplay&& ) = default;
 
     QBarDisplay& operator=( const QBarDisplay& ) = default;
-    QBarDisplay& operator=( QBarDisplay&& ) = default;   
-
-    void init();
+    QBarDisplay& operator=( QBarDisplay&& ) = default;       
 
 private:    
 
@@ -31,6 +29,8 @@ private:
     QColor upper {0,0,255};
     QColor lower {255,0,0};
 
-    void paint();
+    void paint() override;
+    void init() override;
+
     int  getNumberXPosition( const int& number );
 };

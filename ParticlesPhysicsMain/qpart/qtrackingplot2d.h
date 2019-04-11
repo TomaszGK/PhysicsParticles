@@ -17,8 +17,6 @@ public:
     QTrackingPlot2D& operator=( const QTrackingPlot2D& ) = default;
     QTrackingPlot2D& operator=( QTrackingPlot2D&& ) = default;
 
-    void init();
-
 private:
 
     QFont    textFont;
@@ -29,6 +27,7 @@ private:
     cptrParticlesContainer particles;
     citerParticle trackingParticle;
 
-    void paint();
+    void paint() override;
+    void init() override;
 
 };

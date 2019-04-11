@@ -17,7 +17,6 @@ public:
     QInfoDisplay& operator=( const QInfoDisplay& ) = default;
     QInfoDisplay& operator=( QInfoDisplay&& ) = default;
 
-    void init();
     void setDisplay( PlaneSide side, int _value );
 
 private:    
@@ -28,6 +27,7 @@ private:
     // string text width in pixels
     std::map<PlaneSide,int> textWidth { {PlaneSide::UP,0},{PlaneSide::DOWN,0},{PlaneSide::RIGHT,0},{PlaneSide::LEFT,0} };
 
-    void paint();
+    void paint() override;
+    void init() override;
 
 };

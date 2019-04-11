@@ -22,8 +22,6 @@ public:
     void setTrackingPaint( bool _toTrackingPaint ) noexcept { toTrackingPaint = _toTrackingPaint; }    
     void setPlaneHitsPaint( bool _toHandlePlaneHits ) noexcept { toHandlePlaneHits = _toHandlePlaneHits; }
 
-    void init();
-
 private:
 
     QFont    textFont;
@@ -44,7 +42,9 @@ private:
     cptrParticlesContainer particles;
     std::shared_ptr<const PlaneArea> planeArea;   
 
-    void paint();    
+    void paint() override;
+    void init() override;
+
     void paintPlaneConstraintWalls();
     void paintConstraintArrows();
     void paintPlaneDivider();

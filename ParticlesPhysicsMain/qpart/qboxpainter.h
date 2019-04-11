@@ -18,10 +18,10 @@ public:
     QBoxPainter( QBoxPainter&& ) = delete;
 
     QBoxPainter& operator=( const QBoxPainter& ) = delete;
-    QBoxPainter& operator=( QBoxPainter&& ) = delete;
+    QBoxPainter& operator=( QBoxPainter&& ) = delete;    
 
-    virtual void setDisplay( PlaneSide, int ){}
-    virtual void init() = 0; // do all necessary calulations after QBoxPainter is added to layout and parentWidget != nullptr    
+    QString getLabel() const noexcept { return label; }
+    void setLabel( const QString& newLabel ) { label = newLabel; }
 
 protected:
 
@@ -38,15 +38,16 @@ protected:
     int  numberOfVerticalAxes   {5};
     int  planeBorderWidth       {1};
 
+    QString label;
+
+    virtual void init()  = 0; // do all necessary calulations after QBoxPainter is added to layout and parentWidget != nullptr
+    virtual void paint() = 0;
+
     void paintEvent(QPaintEvent *event) override;
     void paintAxes();
     void paintPlaneBorder();
     void paintArrow( const vect2D& position, const vect2D& direction, const qreal& arrowSize, int arrowThick, const QColor& arrowColor );
     void paintTriangle( const vect2D& a, const vect2D& b, const vect2D& c, const QColor& color );
     int  getStringWidthInPixels( const QString& name );
-
-private:
-
-    virtual void paint() = 0;
 
 };

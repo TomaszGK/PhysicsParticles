@@ -21,7 +21,6 @@ public:
     QBarChart& operator=( const QBarChart& ) = default;
     QBarChart& operator=( QBarChart&& ) = default;
 
-    void init();
     void setMaxOY( double max ) { maxValue = max*1.6; }
     void setScalabality( bool _isScalableUp , bool _isScalableDown ) { isScalableUp = _isScalableUp ; isScalableDown = _isScalableDown; }
 
@@ -47,7 +46,9 @@ private:
 
     DataVisualization dataVisulization { DataVisualization::BARS };
 
-    void paint();
+    void paint() override;
+    void init() override;
+
     void drawCurrentValue();
     void drawChartName();
 

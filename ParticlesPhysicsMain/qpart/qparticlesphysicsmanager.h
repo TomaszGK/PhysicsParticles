@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QHBoxLayout>
+#include <type_traits>
 #include "qpaintermanager.h"
 #include "qbarchart.h"
 #include "qbardisplay.h"
@@ -46,7 +47,10 @@ public:
     {
         if( qBoxPainters.count(displayName) != 0 )
         {
-            qBoxPainters[displayName]->setDisplay(side,value);
+            if( dynamic_cast<QInfoDisplay*>(qBoxPainters[displayName].get()) != nullptr )
+            {
+                dynamic_cast<QInfoDisplay*>(qBoxPainters[displayName].get())->setDisplay(side,value);
+            }
         }
     }
 

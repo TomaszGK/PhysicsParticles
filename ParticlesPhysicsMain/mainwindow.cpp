@@ -452,7 +452,7 @@ void MainWindow::on_massMoleculeSliderTab4_valueChanged( int value )
 
 void MainWindow::on_stopMoleculePushButtonTab4_clicked()
 {
-    physicsSimulation[2]->stopMolecule();
+    physicsSimulation[2]->stopMolecule();    
 }
 
 void MainWindow::on_clearTrackMoleculePushButtonTab4_clicked()

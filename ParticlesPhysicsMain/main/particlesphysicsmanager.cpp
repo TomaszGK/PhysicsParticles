@@ -317,6 +317,22 @@ bool ParticlesPhysicsManager::disjoint( iterParticle& particle )
     return false;
 }
 
+void ParticlesPhysicsManager::correctParticlesInvalidParameters()
+{
+    for( auto particle=particles->begin() ; particle!=particles->end() ; ++particle )
+    {
+        if( particle->position.x - particle->radius <= planeArea->getXConstraint() ||
+            particle->position.x + particle->radius >= planeArea->getWidth() - planeArea->getXConstraint() ||
+            particle->position.y - particle->radius <= 0 ||
+            particle->position.y + particle->radius >= planeArea->getHeight() )
+        {
+           particle->position = getDisjointRandomParticlePosition(particle->radius,planeArea->getWidth()-particle->radius,particle->radius,planeArea->getHeight()-particle->radius,particle->radius);
+           particle->velocity.set(0.0,0.0);
+           handleParticleClusterTransition(particle);
+        }
+    }
+}
+
 void ParticlesPhysicsManager::disjointPositions( double impactFactor )
 {
     for( auto particle=particles->begin() ; particle!=particles->end() ; ++particle )
@@ -374,11 +390,8 @@ void ParticlesPhysicsManager::recalculateParticlesInClusters()
 
 iterCluster ParticlesPhysicsManager::getClusterIter( const size_t& posx, const size_t& posy )
 {
-#ifdef QT_DEBUG
+    // if position out of range then throw exception
     return clusterIters.at(posx).at(posy);
-#else
-    return clusterIters[posx][posy];
-#endif
 }
 
 void ParticlesPhysicsManager::calculateNextPositions()
@@ -490,16 +503,17 @@ void ParticlesPhysicsManager::calculateNextPositionsLoop()
                 calculateNextPositionFlag.store(false);
             }
             catch( const std::exception& ex )
-            {
-                std::cout << ex.what() << "\n";
+            {                
+                std::cout << "1: " << ex.what() << "\n";
+                correctParticlesInvalidParameters();
             }
             catch( const std::string& ex )
             {
-                std::cout << ex << "\n";
+                std::cout << "2: " << ex << "\n";
             }
             catch(...)
             {
-                std::cout << "Cought undefined exception \n";
+                std::cout << "3: Cought undefined exception \n";
             }
 
         }
@@ -589,7 +603,7 @@ void ParticlesPhysicsManager::handleParticleClusterTransition( iterParticle& par
 }
 
 void ParticlesPhysicsManager::handleParticleCollisions( iterParticle& particle )
-{       
+{
 
     double dotProductV1V2 {0};
     double dotProductV2V1 {0};

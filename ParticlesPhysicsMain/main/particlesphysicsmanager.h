@@ -137,6 +137,9 @@ protected:
     // disjoint a given particle (if is too close to other) by removing it and place somewhere else inside the particle plane
     bool disjoint( iterParticle& );
 
+    // correct particles parameters ( positions and velocities ) if they are invalid ( out of range )
+    void correctParticlesInvalidParameters();
+
     // disjoint overlap particles
     // impactFactor - value from 0 to 1 range using in overlap detection, "if( distance < impactFactor*(particle1->radius + particle2->radius) )"
     void disjointPositions( double impactFactor );
@@ -150,9 +153,14 @@ protected:
     // recalculate particles in clusters
     void recalculateParticlesInClusters();
 
+    // connect clusters
     void connectClusters();
+
+    // create clusters
     void createClusters();
-    void populateClusterID(int,int,int,int,iterCluster);
+
+    // populate given rectangle of clusterIters with a given cluster
+    void populateClusterID( int xstart, int ystart, int xlength, int ylength, iterCluster cluster );
 
 public:
 

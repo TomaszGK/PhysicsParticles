@@ -12,6 +12,7 @@ QBarChart::QBarChart( double max, std::pair<bool,bool> scalability, ptrBarChart 
     marginRight = 30;
     buttonStyleSelected = "QPushButton {""background-color: %1"";font-size: 16px;font: bold}";
     buttonStyleUnselected = "QPushButton {""background-color: %1"";font-size: 16px;}";
+    label = QString::fromStdString(barChart->getLabel());
 
     init();
 }
@@ -126,7 +127,7 @@ void QBarChart::drawCurrentValue()
 void QBarChart::drawChartName()
 {
     painter.setPen(QPen(cValue));
-    painter.drawText(labelPosition,marginTop-7, QString::fromStdString(barChart->getLabel()));
+    painter.drawText(labelPosition,marginTop-7,label);
 }
 
 void QBarChart::onButtonClick()

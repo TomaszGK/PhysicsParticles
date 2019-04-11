@@ -9,6 +9,7 @@ QHistogram1D::QHistogram1D( double max, ptrHistogram1D ptr, QWidget* parent )
     setAutoFillBackground(false);    
     background = cBackground;
     marginTop = 30;
+    label = QString::fromStdString(histogram1D->getLabel());
 
     init();
 }
@@ -81,7 +82,7 @@ void QHistogram1D::paint()
 void QHistogram1D::drawHistogramName()
 {
     painter.setPen(QPen(cValue));
-    painter.drawText(labelPosition,marginTop-7, QString::fromStdString(histogram1D->getLabel()));
+    painter.drawText(labelPosition,marginTop-7,label);
 }
 
 void QHistogram1D::drawMarking()
