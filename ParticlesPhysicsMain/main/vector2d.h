@@ -32,9 +32,9 @@ public:
 
     int getHashNumber() const { return x*10000+y; }    
     vector2D<T> getVectorOfLength( T length ) const { vector2D<T> newVector(*this); newVector.setLength(length); return newVector; }
-    inline bool isZero() const noexcept { return (x==0.0 && y==0.0); }
+    inline bool isZero() const noexcept { return (x==T{} && y==T{}); }
     void set( T newX , T newY ) noexcept { x=newX; y=newY; }
-    vector2D<T> setLength( T newLength ) { if( x!=0 || y!=0 ){ *this *= (newLength/(*this)()); } return *this; }
+    vector2D<T> setLength( T newLength ) { if( x!=T{} || y!=T{} ){ *this *= (newLength/(*this)()); } return *this; }
 
     T x {0};
     T y {0};

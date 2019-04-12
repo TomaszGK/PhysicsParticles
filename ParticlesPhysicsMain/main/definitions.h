@@ -51,9 +51,9 @@ using table2D = std::vector<std::vector<iterCluster>>;
 
 struct colorRGB
 {
-    int R {0};
-    int G {0};
-    int B {0};
+    unsigned char R {0};
+    unsigned char G {0};
+    unsigned char B {0};
 };
 
 struct SimulationInfo

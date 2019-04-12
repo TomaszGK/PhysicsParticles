@@ -546,7 +546,9 @@ void ParticlesPhysicsManager::updateBars()
 
 colorRGB ParticlesPhysicsManager::getRandomColor()
 {
-    return {Random::get<int>(0,255),Random::get<int>(0,255),Random::get<int>(0,255)};
+    return { static_cast<unsigned char>(Random::get<int>(0,255)),
+             static_cast<unsigned char>(Random::get<int>(0,255)),
+             static_cast<unsigned char>(Random::get<int>(0,255))   };
 }
 
 void ParticlesPhysicsManager::updateParticlesLocationInPlane()
