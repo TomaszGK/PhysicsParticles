@@ -1,5 +1,8 @@
 #pragma once
 
+#define GSL_THROW_ON_CONTRACT_VIOLATION
+#include <gsl_assert>
+
 #include <vector>
 #include <memory>
 #include <future>

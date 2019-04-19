@@ -18,7 +18,7 @@ QBarChart::QBarChart( double max, std::pair<bool,bool> scalability, ptrBarChart 
 }
 
 void QBarChart::init()
-{
+{    
     if( parentWidget() != nullptr )
     {
         int width = parentWidget()->width();

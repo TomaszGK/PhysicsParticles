@@ -1,5 +1,4 @@
 #include "bardisplay.h"
-#include <gsl_assert>
 
 BarDisplay::BarDisplay( size_t size, std::string label )
 : label {std::move(label)}
