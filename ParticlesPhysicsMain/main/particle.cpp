@@ -43,11 +43,11 @@ void Particle::calculateParticleColor()
 
 void Particle::updateParticleColor()
 {
-    int intensity = static_cast<int>(255.0*velocity()/maxRapidity);
+    auto intensity = 255.0*velocity()/maxRapidity;
     if( intensity>255 ) intensity = 255;
-    color.R = intensity;
+    color.R = static_cast<unsigned char>(intensity);
     color.G = 0;
-    color.B = 255-intensity;
+    color.B = static_cast<unsigned char>(255-intensity);
 }
 
 void Particle::savePosition()
