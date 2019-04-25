@@ -8,12 +8,13 @@
  */
 
 /**
-@brief %BarChart
-Manages bar chart data.
-
-@author Tomasz Gburek
-@date 2019
-*/
+ * @class BarChart
+ * @brief Manages barchart data.
+ *
+ * Handles adding new values to barchart bins, calculate maximum and minimum values in bins.
+ * @author Tomasz Gburek
+ * @date 2019
+ */
 
 class BarChart
 {
@@ -27,6 +28,7 @@ public:
 
     /**
      * @brief Constructor
+     *
      * Note that it was defined as deafult, for the possibility of use operator[] inside std::map container.
      */
     BarChart() = default;
@@ -52,7 +54,7 @@ public:
 
     /**
      * @brief Add new value to bar chart bins
-     * The value is add (push back) as the last element of bins list,
+     * The value is add (push back) in the last element of bins list,
      * while the first element of bins list is removing (pop front).
      * @param value     new value to add
      */

@@ -7,77 +7,90 @@
    Handle upper and lower bar chart data.
 */
 
+/** @file
+ * @brief Class @ref BarDisplay
+ */
+
+/**
+ * @class BarDisplay
+ * @brief Manages upper and lower bardisplay bin data.
+ *
+ * @author Tomasz Gburek
+ * @date 2019
+ */
+
 class BarDisplay
 {
 
-    std::vector<std::pair<int,int>>  bins; /*!< contains upper and lower bar values */
-    std::string                     label; /*!< bar display name */
+    std::vector<std::pair<int,int>>  bins; /**< contains upper and lower bar values */
+    std::string                     label; /**< bar display name */
 
 public:
 
-    //! Deafault constructor
-    /*!
-      for use in std::map -> operator []
-    */
+    /**
+     * @brief Constructor
+     *
+     * Note that it was defined as deafult, for the possibility of use operator[] inside std::map container.
+     */
     BarDisplay() = default;
 
-    //! BarDisplay constructor
-    /*!
-      \param size bins size
-      \param label bar chart name
-    */
+    /**
+     * @brief Constructor
+     * @param size      bins size
+     * @param label     name of bardisplay
+     */
     BarDisplay( size_t size, std::string label = "" );
 
-    //! Default copy constructor
+    /** @brief Copy constructor */
     BarDisplay( const BarDisplay& ) = default;
 
-    //! Default move constructor
+    /** @brief Move constructor */
     BarDisplay( BarDisplay&& ) = default;
 
-    //! Default copy assigment operator
+    /** @brief Copy assigment operator */
     BarDisplay& operator=( const BarDisplay& ) = default;
 
-    //! Default move assigment operator
+    /** @brief Move assigment operator */
     BarDisplay& operator=( BarDisplay&& ) = default;
 
-    //! Set upper box value
-    /*!
-      \param index upper box position
-      \param value new value
-    */
+    /**
+     * @brief Set upper bardisplay box value
+     * @param index     upper box index
+     * @param value     new value
+     */
     void setUpperBox( size_t index , int value );
 
-    //! Set lower box value
-    /*!
-      \param index lower box position
-      \param value new value
-    */
+    /**
+     * @brief Set lower bardisplay box value
+     * @param index     lower box index
+     * @param value     new value
+     */
     void setLowerBox( size_t index , int value );
 
-    //! Get upper box value
-    /*!
-      \param index upper box position
-      \return upper box value
-    */
+    /**
+     * @brief Get upper bardisplay box value
+     * @param index     upper box index
+     * @return upper box value
+     */
     inline int getUpperBox( size_t index ) const noexcept { return index<bins.size()?bins[index].first:0; }
 
-    //! Get lower box value
-    /*!
-      \param index lower box position
-      \return upper box value
-    */
+    /**
+     * @brief Get lower bardisplay box value
+     * @param index     lower box index
+     * @return lower box value
+     */
     inline int getLowerBox( size_t index ) const noexcept { return index<bins.size()?bins[index].second:0; }
 
-    //! Get bar display size
-    /*!
-      \return bar display size
-    */
+    /**
+     * @brief Get number of bardisplay bins
+     * @return number of bardisplay bins
+     */
     inline size_t getSize() const noexcept { return bins.size(); }
 
-    //! Get bar display name
-    /*!
-      \return bar display name
-    */
+    /**
+     * @brief Get name of bardisplay
+     * @return name of bardisplay
+     */
     const std::string& getLabel() const noexcept { return label; }
 
 };
