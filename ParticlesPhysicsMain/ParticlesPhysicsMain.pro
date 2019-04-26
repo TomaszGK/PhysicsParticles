@@ -24,7 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 INCLUDEPATH += C:/Qt/gsl
 
-CONFIG += c++14
+CONFIG += c++17
 
 TRANSLATIONS = lang/ParticlesPhysics_pl.ts
 
@@ -34,7 +34,7 @@ INCLUDEPATH += \
                qpart
 
 SOURCES += \
-        main.cpp \
+        main.cpp \    
         mainwindow.cpp \
     extern/qcgaugewidget.cpp \
     qpart/qpaintermanager.cpp \    
@@ -59,7 +59,7 @@ SOURCES += \
     dialogabout.cpp
 
    
-HEADERS += \
+HEADERS += \    
         mainwindow.h \
     extern/random.hpp \
     extern/qcgaugewidget.h \

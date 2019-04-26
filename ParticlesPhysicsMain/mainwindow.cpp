@@ -81,7 +81,8 @@ MainWindow::MainWindow(QWidget *parent) :
     updateTimer.start(100);
     animationTimer.start(10);
 
-    calculationThread = physicsSimulation[currentIndex]->calculateNextPositionsInThread();   
+    calculationThread = physicsSimulation[currentIndex]->calculateNextPositionsInThread();
+
 }
 
 MainWindow::~MainWindow()

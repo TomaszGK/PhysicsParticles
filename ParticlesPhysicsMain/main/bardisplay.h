@@ -2,11 +2,6 @@
 
 #include "definitions.h"
 
-//!  BarDisplay class
-/*!
-   Handle upper and lower bar chart data.
-*/
-
 /** @file
  * @brief Class @ref BarDisplay
  */

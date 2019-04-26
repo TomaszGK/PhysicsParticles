@@ -1,14 +1,14 @@
 #include "cluster.h"
 
-Cluster::Cluster( int _id , coord2D _coordinates )
-: id {_id}, coordinates {_coordinates}
+Cluster::Cluster( int id , coord2D coordinates )
+: id {id}, coordinates {coordinates}
 {
     particlesInCluster = std::make_unique<ListParticleIters>();
     adjoinClusters = std::make_unique<VectorClusterIters>();
 }
 
-Cluster::Cluster( int _id, int x, int y )
-: Cluster( _id , {x,y} )
+Cluster::Cluster( int id, int x, int y )
+: Cluster( id , {x,y} )
 {    
 }
 
