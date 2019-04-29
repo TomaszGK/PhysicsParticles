@@ -22,7 +22,7 @@ class BarChart
     std::list<double> bins    ; /**< contains bar values */
     double            max {0} ; /**< maximum value inside bins */
     double            min {0} ; /**< minimum value inside bins */
-    std::string       label   ; /**< bar chart name */
+    std::string       label   ; /**< barchart name */
 
 public:
 
@@ -35,7 +35,8 @@ public:
 
     /**
      * @brief Constructor
-     * @param size      bins size
+     *
+     * @param size      number of bins
      * @param label     name of barchart
      */
     BarChart( size_t size , std::string label = "" );
@@ -54,6 +55,7 @@ public:
 
     /**
      * @brief Add new value to bar chart bins
+     *
      * The value is add (push back) in the last element of bins list,
      * while the first element of bins list is removing (pop front).
      * @param value     new value to add
