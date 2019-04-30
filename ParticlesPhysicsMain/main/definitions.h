@@ -12,24 +12,71 @@
 #include "random.hpp"
 #include "vector2d.h"
 
+/** @file
+ * @brief Definitions
+ */
+
 class Cluster;
 class Particle;
 class BarChart;
 class BarDisplay;
 class Histogram1D;
 
-enum class ThreadCalculationState { RUNNING , PAUSE , END  };
+/** @enum ThreadCalculationState
+ *  @brief Representing calculation thread state
+ */
+enum class ThreadCalculationState
+{
+    RUNNING , /**< calculation in thread is running */
+    PAUSE   , /**< calculation in thread is pausing */
+    END       /**< calculation is ended  */
+};
 
-enum class SimulationType { BASIC , DIFFUSION , BROWNIAN_MOTION , SANDBOX };
+/** @enum SimulationType
+ *  @brief Representing simulation type
+ */
+enum class SimulationType
+{
+    BASIC           , /**< basic simulation type */
+    DIFFUSION       , /**< diffiusion simulation type */
+    BROWNIAN_MOTION , /**< brownian motion simulation type */
+    SANDBOX           /**< sandbox simulation type */
+};
 
-enum class ParticleType { BLUE , RED , NORMAL , GAS1 , GAS2 , GAS3 , MINI , MACROSCOPIC };
+/** @enum ParticleType
+ *  @brief Representing the particle type
+ */
+enum class ParticleType
+{
+    BLUE        , /**< used in DIFFUSION type */
+    RED         , /**< used in DIFFUSION type */
+    NORMAL      , /**< used in BASIC type */
+    GAS1        , /**< used in SANDBOX type */
+    GAS2        , /**< used in SANDBOX type */
+    GAS3        , /**< used in SANDBOX type */
+    MINI        , /**< used in BROWNIAN_MOTION type */
+    MACROSCOPIC   /**< used in BROWNIAN_MOTION type */
+};
 
-enum class PlaneSide { UP , DOWN , RIGHT , LEFT };
+/** @enum PlaneSide
+ *  @brief Representing particle plane side
+ */
+enum class PlaneSide
+{
+    UP    , /**< upper particle side */
+    DOWN  , /**< down particle side */
+    RIGHT , /**< right particle side */
+    LEFT    /**< left particle side */
+};
 
-// type of particle visualization
-// VELOCITY - particle color depend on its velocity
-// PARTICLE - particle color depend on its kind
-enum class VisualizationType { VELOCITY , PARTICLE };
+/** @enum VisualizationType
+ *  @brief Representing the particle visualization
+ */
+enum class VisualizationType
+{
+    VELOCITY , /**< particle color depends on particle velocity */
+    PARTICLE   /**< particle color depends on particle type */
+};
 
 using HRClock = std::chrono::high_resolution_clock;
 using Milliseconds = std::chrono::milliseconds;

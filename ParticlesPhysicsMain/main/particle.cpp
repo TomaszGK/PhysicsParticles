@@ -1,12 +1,12 @@
 #include "particle.h"
 
-Particle::Particle( ParticleType _particleType, VisualizationType _visualizationType, vect2D _position, vect2D _velocity, double _maxRapidity, int _size, iterCluster _cluster )
-: particleType {_particleType}, visualizationType {_visualizationType}, position {_position}, velocity {_velocity},
-  maxRapidity {_maxRapidity}, size {_size}, cluster {_cluster}
+Particle::Particle( ParticleType particleType, VisualizationType visualizationType, vect2D position, vect2D velocity, double maxRapidity, int size, iterCluster cluster )
+: particleType {particleType}, visualizationType {visualizationType}, position {position}, velocity {velocity},
+  maxRapidity {maxRapidity}, size {size}, cluster {cluster}
 {
     radius = static_cast<double>(size)*0.5;
     setParticleMassInPercent(100);
-    if( _particleType == ParticleType::MACROSCOPIC )
+    if( particleType == ParticleType::MACROSCOPIC )
     {
         isTracking = isMacroscopic = true;
     }
