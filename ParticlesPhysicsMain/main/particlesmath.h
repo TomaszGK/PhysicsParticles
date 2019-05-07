@@ -2,10 +2,22 @@
 
 #include "definitions.h"
 
+/** @file
+ * @brief Particles mathematics namespace
+ */
+
 namespace ParticlesMath
 {
 
-    // return point projection onto the straight crossing over a,b
+    /**
+     * @brief Calculates point projection
+     *
+     * Calculates point projection onto the straight crossing over a and b.
+     * @param point   start projection point
+     * @param a       defines a in straight {a,*}
+     * @param b       defines b in straight {*,b}
+     * @return end projection point
+     */
     inline vect2D projectionPoint( const vect2D& a , const vect2D& b , const vect2D& point )
     {        
         double denominator = (a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y) ;// + std::numeric_limits<double>::epsilon();
@@ -14,7 +26,15 @@ namespace ParticlesMath
         return b + (a-b)*factor;
     }
 
-    // return vector [point-a] projection onto the straight crossing over a,b
+    /**
+     * @brief Calculates point projection as [point-a]
+     *
+     * Calculates point projection onto the straight crossing over a and b.
+     * @param point   start projection point
+     * @param a       defines a in straight {a,*}
+     * @param b       defines b in straight {*,b}
+     * @return end projection as [point-a]
+     */
     inline vect2D projectionVector( const vect2D& a , const vect2D& b , const vect2D& point )
     {
         double denominator = (a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y) ;//+ std::numeric_limits<double>::epsilon();        
@@ -23,7 +43,14 @@ namespace ParticlesMath
         return (a-b)*factor;
     }
 
-    // return cosinus of angle between vectors a,b
+    /**
+     * @brief Calculates cosinus of angle.
+     *
+     * Calculates cosinus of angle between vectors a and b
+     * @param a       defines vector of a
+     * @param b       defines vector of b
+     * @return cosinus of angle between vectors a and b
+     */
     inline double cosAngle( const vect2D& a , const vect2D& b )
     {
        double denominator = a()*b() ;// + std::numeric_limits<double>::epsilon();
@@ -31,7 +58,14 @@ namespace ParticlesMath
        return ( a.x*b.x + a.y*b.y )/denominator;
     }
 
-    // return dot product of vectors a,b
+    /**
+     * @brief Calculates dot product.
+     *
+     * Calculates dot product of vectors a and b.
+     * @param a       defines vector of a
+     * @param b       defines vector of b
+     * @return dot product of vectors a and b
+     */
     inline double product( const vect2D& a , const vect2D& b )
     {
        return (a.x*b.x + a.y*b.y);

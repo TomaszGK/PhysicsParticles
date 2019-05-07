@@ -106,13 +106,16 @@ struct colorRGB
     unsigned char B {0};
 };
 
+/** @struct SimulationInfo
+ *  @brief Defines main simulation parameters
+ */
 struct SimulationInfo
 {       
-    int    maxPlaneXConstraint {30}; // maximum plane X axis constraint in percent of planeWidth
-    int    calculationCount    {0};
-    int    avgCalculationCount {0};
-    int    minSizeOfParticle   {5};
-    double maxTimeContribution {1.5}; // maximum time contribution in calculating th next particle positions
+    int    maxPlaneXConstraint {30}  ; /**< maximum value of plane X axis constraint (in percent of planeWidth value) */
+    int    calculationCount    {0}   ; /**< current number of calculateNextPositions calls, sets to zero after end of time period */
+    int    avgCalculationCount {0}   ; /**< average number of calculateNextPositions calls in a period of time */
+    int    minSizeOfParticle   {5}   ; /**< minimum size of particle (in pixels) */
+    double maxTimeContribution {1.5} ; /**< maximum time contribution in calculating the next particle positions */
 
     std::map<SimulationType,int> maxSizeOfParticle {
                                                      {SimulationType::BASIC,20},

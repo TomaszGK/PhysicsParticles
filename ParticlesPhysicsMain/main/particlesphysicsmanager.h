@@ -8,18 +8,32 @@
 #include "barchart.h"
 #include "bardisplay.h"  // no playing bard here
 
+/** @file
+ * @brief Class @ref ParticlesPhysicsManager
+ */
+
+/**
+ * @class ParticlesPhysicsManager
+ * @brief Manages particles.
+ *
+ * Creates of clusters and populates them with particles, calculates next particle positions,
+ * handles particle collisions and check particle collisions with plane and divider.
+ * @author Tomasz Gburek
+ * @date 2019
+ */
+
 class ParticlesPhysicsManager
 {
 
 protected:
 
-    // simulation type
+    /** Simulation type */
     SimulationType simulationType;
 
-    // particle visualzation type
+    /** Visualization type */
     VisualizationType visualizationType {VisualizationType::VELOCITY};
 
-    // contains main simulation parameters
+    /** Contains main simulation parameters */
     SimulationInfo simulationInfo;
 
     // contains all important global physics quantities related to particles in the plane
