@@ -99,6 +99,9 @@ using ptrListParticleIters = std::unique_ptr<ListParticleIters>;
 using ptrVectorClusterIters = std::unique_ptr<VectorClusterIters>;
 using table2D = std::vector<std::vector<iterCluster>>;
 
+/** @struct colorRGB
+ *  @brief Defines color Red Green and Blue values (0-255)
+ */
 struct colorRGB
 {
     unsigned char R {0};
@@ -197,35 +200,38 @@ struct SimulationInfo
                                                  };
 };
 
+/** @struct PhysicsInfo
+ *  @brief Defines global physics quantities describes states of particles
+ */
 struct PhysicsInfo
 {
-    double       maxRapidity           {1.0}; // maximum rapidity constrain
-    double       minRapidity           {0.0}; // minimum rapidity constrain
-    double       maxSideForce       {0.0005}; // max absolute value of side force
-    double       temperature           {0.1}; // boundries temperature in the particles plane - basic and entropy mode
-    double       temperatureLeft       {0.1}; // boundries temperature in the left part of particles plane - diffusion mode
-    double       temperatureRight      {0.6}; // boundries temperature in the right part of particles plane - diffusion mode
-    double       attractionForce       {0.0}; // attraction force between particles
-    vect2D       pushForce         {0.0,0.0}; // push force attracted by all particles - may simulate gravity
-    double       maxAttractionForce  {0.001}; // maximum of attraction force between particles  
-    double       avgVelocityRed        {0.0}; // average velocity of red particles - diffusion mode
-    double       avgVelocityBlue       {0.0}; // average velocity of blue particles - diffusion mode
-    double       avgVelocity           {0.0}; // average velocity of all particles
-    double       avgDistance           {0.0}; // average distance between particles
-    int          numOfCollision        {0};   // number of particle collided with the plane
-    int          numOfCollisionTP      {0};   // number of particle collided with the plane in a period of time
-    int          numBlueParticlesLeft  {0};   // number of blue particles in the left part of plane - diffusion mode
-    int          numBlueParticlesRight {0};   // number of blue particles in the right part of plane - diffusion mode
-    int          numRedParticlesLeft   {0};   // number of red particles in the left part of plane - diffusion mode
-    int          numRedParticlesRight  {0};   // number of red particles in the right part of plane - diffusion mode
-    double       kineticEnergySum      {0};   // summed particle kinetic energies transfer to the plane
-    double       kineticEnergySumTP    {0};   // summed particle kinetic energies transfer to the plane in a period of time
-    double       energyFromPlaneSum    {0};   // summed energy transfered from the plane to particles
-    double       energyFromPlaneSumTP  {0};   // summed energy transfered from the plane in a period of time
-    double       collVelocityChange    {0};   // use in testing
-    Milliseconds timePeriod          {200};   // period of time in miliseconds
+    double       maxRapidity           {1.0}; /**< maximum rapidity constrain */
+    double       minRapidity           {0.0}; /**< minimum rapidity constrain */
+    double       maxSideForce       {0.0005}; /**< maximum value of side force */
+    double       temperature           {0.1}; /**< boundries temperature in the particles plane - SimulationType::BASIC and SimulationType::SANDBOX mode */
+    double       temperatureLeft       {0.1}; /**< boundries temperature in the left part of particles plane - SimulationType::DIFFUSION mode */
+    double       temperatureRight      {0.6}; /**< boundries temperature in the right part of particles plane - SimulationType::DIFFUSION mode */
+    double       attractionForce       {0.0}; /**< attraction force between particles */
+    vect2D       pushForce         {0.0,0.0}; /**< push force attracted by all particles - may simulate gravity */
+    double       maxAttractionForce  {0.001}; /**< maximum of attraction force between particles */
+    double       avgVelocityRed        {0.0}; /**< average velocity of red particles - SimulationType::DIFFUSION mode */
+    double       avgVelocityBlue       {0.0}; /**< average velocity of blue particles - SimulationType::DIFFUSION mode */
+    double       avgVelocity           {0.0}; /**< average velocity of all particles */
+    double       avgDistance           {0.0}; /**< average distance between particles */
+    int          numOfCollision        {0};   /**< number of particle collided with the plane */
+    int          numOfCollisionTP      {0};   /**< number of particle collided with the plane in a period of time */
+    int          numBlueParticlesLeft  {0};   /**< number of blue particles in the left part of plane - SimulationType::DIFFUSION mode */
+    int          numBlueParticlesRight {0};   /**< number of blue particles in the right part of plane - SimulationType::DIFFUSION mode */
+    int          numRedParticlesLeft   {0};   /**< number of red particles in the left part of plane - SimulationType::DIFFUSION mode */
+    int          numRedParticlesRight  {0};   /**< number of red particles in the right part of plane - SimulationType::DIFFUSION mode */
+    double       kineticEnergySum      {0};   /**< summed particle kinetic energies transfer to the plane */
+    double       kineticEnergySumTP    {0};   /**< summed particle kinetic energies transfer to the plane in a period of time */
+    double       energyFromPlaneSum    {0};   /**< summed energy transfered from the plane to particles */
+    double       energyFromPlaneSumTP  {0};   /**< summed energy transfered from the plane in a period of time */
+    double       collVelocityChange    {0};   /**< use in testing */
+    Milliseconds timePeriod          {200};   /**< period of time in miliseconds */
 
-    // temperature of a given plane side
+    /**< temperature of a given plane side */
     std::map<PlaneSide,double> planeSideTemperature {
                                                       {PlaneSide::UP,0.1},
                                                       {PlaneSide::DOWN,0.1},
@@ -234,14 +240,17 @@ struct PhysicsInfo
                                                     };
 };
 
+/** @struct ClustersInfo
+ *  @brief Defines common parameters of clusters
+ */
 struct ClustersInfo
 {
-    int clusterRows      {0};
-    int clusterColumns   {0};
-    int clusterSize      {0};
-    int numberOfClusters {0};
-    const int clusterMinSizeX {10};
-    const int clusterMinSizeY {10};
+    int clusterRows            {0}; /**< number of cluster rows */
+    int clusterColumns         {0}; /**< number of cluster columns */
+    int clusterSize            {0}; /**< size of cluster */
+    int numberOfClusters       {0}; /**< number of all clusters */
+    const int clusterMinSizeX {10}; /**< minimum horizontal size of cluster */
+    const int clusterMinSizeY {10}; /**< minimum vertical size of cluster */
 };
 
 // C++14 make_unique

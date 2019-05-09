@@ -36,72 +36,95 @@ protected:
     /** Contains main simulation parameters */
     SimulationInfo simulationInfo;
 
-    // contains all important global physics quantities related to particles in the plane
+    /** Contains global physics quantities describes states of particles */
     PhysicsInfo physicsInfo;
 
-    // initial state of physicsInfo quantities - assigned in definition.h
+    /** Initial state of physicsInfo quantities */
     const PhysicsInfo physicsInfoInitial;
 
-    // plane area - contains plane divider
+    /** Holds PlaneArea object storing basic information about particle plane */
     std::shared_ptr<PlaneArea> planeArea;
 
-    // selected particle for tracking or used in brownian motion as macroscopic sized
+    /** @brief Points out to selected particle.
+     *
+     *  Used in SimulationType::BASIC to select tracking particle
+     *  and in SimulationType::BROWNIAN_MOTION to select particle having macroscopic size.
+     */
     iterParticle selectedParticle;
 
-    // high resolution time points
+    /** High resolution time points */
     HRClock::time_point time, calculationStart;
 
-    // calculation time for calculateNextPosition
+    /** Calculation time period of calculateNextPosition call. */
     double calculationPeriod {0.0};
 
-    // time contribution in calculating the next particle position
+    /** @brief Time contribution in calculation of the next particle position
+     *
+     *  Used as time (t) in equation s_new = s_old + v*t, where
+     *  s_new is new position of particle
+     *  s_old is old position of particle
+     *  v is velocity of particle
+     */
     double timeContribution {0.0};
 
-    // map contains bar charts
+    /** Contains bar charts */
     std::map<std::string,ptrBarChart> barCharts;
 
-    // map contains bar charts
+    /** Contains bar displays */
     std::map<std::string,ptrBarDisplay> barDisplays;
 
-    // map contains 1D histograms
+    /** Contains histograms 1D */
     std::map<std::string,ptrHistogram1D> histograms1D;   
 
-    // flag acts out like mutex
+    /** Atomic flag acts out like simple mutex to prevents particles modification before the end of calculation */
     std::atomic<bool> calculateNextPositionFlag {false};
 
-    // indicate if simulation was paused by user
+    /** Flag indicates if simulation was paused by user */
     bool pauseByUserFlag {false};
 
-    // store cluster`s quantitative basic information
+    /** Stores cluster`s basic information */
     ClustersInfo clustersInfo;
 
-    // store cluster`s id for each point in the plane
+    /** Stores cluster iterators for each point (represented by pixel) located in the plane */
     table2D clusterIters;
 
-    // particles
+    /** Holds vector of particles */
     ptrParticlesContainer particles;
 
-    // clusters
+    /** Holds vector of clusters */
     ptrClustersContainer clusters;
 
-    // coordinates cluster with cluster iterator map
+    /** Maps cluster coordinates with its iterator */
     MapClustersIterCoordinates clusterCoordinatesMap;
 
-    // calculation state
+    /** Calculation state */
     std::atomic<ThreadCalculationState> calculationState { ThreadCalculationState::END };
 
-    // pointer to calculation function assigned to simulation state
+    /** Pointer to calculation function assigned to a given simulation state */
     void (ParticlesPhysicsManager::*prtCalculateNextPositions)() {nullptr};
 
-    // get cluster iter or throw exception
+    /** @brief Gets cluster iterator
+     *
+     * Gets cluster iterator from a given position (x,y).
+     * Throws exception if position is out of the plane.
+     * @param posx   x position of point (x,y)
+     * @param posx   y position of point (x,y)
+     * @return iterator to the cluster
+     */
     iterCluster getClusterIter( const size_t& posx , const size_t& posy );
 
-    // caluclate next particles positions
+    /** Caluclates next particles positions */
     void calculateNextPositions();
 
-    // run calculateNextPositions in while() loop
+    /** Calls calculateNextPositions in while() loop
+     *
+     * The following loop is running in separate thread.
+     */
     void calculateNextPositionsLoop();
 
+    /** Gets random color
+     * @return random RGB color
+     */
     colorRGB getRandomColor();
 
     // update number of red and blue particles inside right and left plane
@@ -341,7 +364,7 @@ public:
         {
             calculationState.store(ThreadCalculationState::PAUSE);
             if( userCall ) pauseByUserFlag = true;
-            while( calculateNextPositionFlag.load() ){}; // wait for the end of caluclation step
+            while( calculateNextPositionFlag.load() ){}; // wait for the end of calculation step
         }
     }
 
