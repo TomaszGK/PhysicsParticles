@@ -18,21 +18,7 @@
 class Cluster
 {
 
-    ptrListParticleIters  particlesInCluster ; /**< unique pointer owns list of iterators to particles inside cluster */
-    ptrVectorClusterIters adjoinClusters     ; /**< unique pointer owns vector of iterators to connected (adjoin) clusters */
-
-    int id {0}; /**< cluster id */
-
-    coord2D coordinates {0,0}; /**< cluster 2D coordinates */
-
 public:
-
-    /**
-     * @brief Constructor
-     *
-     * Note that it was defined as deafult, for the possibility of use operator[] inside std::map container.
-     */
-    Cluster() = default;
 
     /**
      * @brief Constructor
@@ -100,5 +86,14 @@ public:
     bool PLANE_INSIDE  {true}  ;  /**< state if cluster is located inside the particle plane and not connected with a plane boundry */
     bool PLANE_BOUNDRY {false} ;  /**< state if cluster is connected with a plane boundry */
     bool PLANE_DIVIDER {false} ;  /**< state if cluster is connected with the plane divider */
+
+private:
+
+    ptrListParticleIters  particlesInCluster ; /**< unique pointer owns list of iterators to particles inside cluster */
+    ptrVectorClusterIters adjoinClusters     ; /**< unique pointer owns vector of iterators to connected (adjoin) clusters */
+
+    int id {0}; /**< cluster id */
+
+    coord2D coordinates {0,0}; /**< cluster 2D coordinates */
 
 };

@@ -35,18 +35,6 @@ public:
      */
     Particle( ParticleType particleType, VisualizationType visualizationType, vect2D position, vect2D velocity, double maxRapidity, int size, iterCluster cluster );
 
-    /** @brief Copy constructor */
-    Particle( const Particle& ) = default;
-
-    /** @brief Move constructor */
-    Particle( Particle&& ) = default;
-
-    /** @brief Copy assigment operator */
-    Particle& operator=( const Particle& ) = default;
-
-    /** @brief Move assigment operator */
-    Particle& operator=( Particle&& ) = default;
-
     /**
      * @brief Calculates the next particle position.
      *

@@ -19,28 +19,9 @@
  */
 
 class Histogram1D
-{
-
-    std::vector<int>   bins      ; /**< stores histogram values, having form of equal intervals */
-    std::deque<size_t> binsIndex ; /**< contains bin indexes of last added values */
-
-    int         max           {0}      ; /**< maximum value stored in bins */
-    int         min           {0}      ; /**< minimum value stored in bins */
-    size_t      fadeThreshold {300000} ; /**< threshold describes maximum binsIndex size, crossing it means that oldest values are being removed from bins */
-    double      begin         {0.0}    ; /**< begin position of first bin */
-    double      end           {10.0}   ; /**< end position of last bin */
-    double      binsize       {1.0}    ; /**< size of bins (intervals) */
-    int         markingBin    {-1}     ; /**< index of marking (selecting) bin */
-    std::string label                  ; /**< histogram name */
+{  
 
 public:
-
-    /**
-     * @brief Constructor
-     *
-     * Note that it was defined as deafult, for the possibility of use operator[] inside std::map container.
-     */
-    Histogram1D() = default;
 
     /**
      * @brief Constructor
@@ -51,18 +32,6 @@ public:
      * @param label     name of barchart
      */
     Histogram1D( size_t size, double begin, double end, std::string label = "" );
-
-    /** @brief Copy constructor */
-    Histogram1D( const Histogram1D& ) = default;
-
-    /** @brief Move constructor */
-    Histogram1D( Histogram1D&& ) = default;
-
-    /** @brief Copy assigment operator */
-    Histogram1D& operator=( const Histogram1D& ) = default;
-
-    /** @brief Move assigment operator */
-    Histogram1D& operator=( Histogram1D&& ) = default;
 
     /**
      * @brief Adds new value to histograms bins.
@@ -126,5 +95,19 @@ public:
      * @param value     index of marking bin
      */
     void markBin( double value );
+
+private:
+
+    std::vector<int>   bins      ; /**< stores histogram values, having form of equal intervals */
+    std::deque<size_t> binsIndex ; /**< contains bin indexes of last added values */
+
+    int         max           {0}      ; /**< maximum value stored in bins */
+    int         min           {0}      ; /**< minimum value stored in bins */
+    size_t      fadeThreshold {300000} ; /**< threshold describes maximum binsIndex size, crossing it means that oldest values are being removed from bins */
+    double      begin         {0.0}    ; /**< begin position of first bin */
+    double      end           {10.0}   ; /**< end position of last bin */
+    double      binsize       {1.0}    ; /**< size of bins (intervals) */
+    int         markingBin    {-1}     ; /**< index of marking (selecting) bin */
+    std::string label                  ; /**< histogram name */
 
 };

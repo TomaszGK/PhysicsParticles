@@ -17,21 +17,9 @@
  */
 
 class BarChart
-{
-
-    std::list<double> bins    ; /**< contains bar values */
-    double            max {0} ; /**< maximum value inside bins */
-    double            min {0} ; /**< minimum value inside bins */
-    std::string       label   ; /**< barchart name */
+{  
 
 public:
-
-    /**
-     * @brief Constructor
-     *
-     * Note that it was defined as deafult, for the possibility of use operator[] inside std::map container.
-     */
-    BarChart() = default;
 
     /**
      * @brief Constructor
@@ -39,19 +27,7 @@ public:
      * @param size      number of bins
      * @param label     name of barchart
      */
-    BarChart( size_t size , std::string label = "" );
-
-    /** @brief Copy constructor */
-    BarChart( const BarChart& ) = default;
-
-    /** @brief Move constructor */
-    BarChart( BarChart&& ) = default;
-
-    /** @brief Copy assigment operator */
-    BarChart& operator=( const BarChart& ) = default;
-
-    /** @brief Move assigment operator */
-    BarChart& operator=( BarChart&& ) = default;
+    BarChart( size_t size , std::string label = "" );   
 
     /**
      * @brief Add new value to bar chart bins
@@ -91,5 +67,12 @@ public:
      * @return barchart name
      */
     const std::string& getLabel() const noexcept { return label; }
+
+private:
+
+    std::list<double> bins     ; /**< contains bar values */
+    double            max   {0}; /**< maximum value inside bins */
+    double            min   {0}; /**< minimum value inside bins */
+    std::string       label    ; /**< barchart name */
 
 };

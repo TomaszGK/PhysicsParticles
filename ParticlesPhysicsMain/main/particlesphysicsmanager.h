@@ -23,7 +23,230 @@
  */
 
 class ParticlesPhysicsManager
-{
+{   
+
+public:
+
+    /**
+     * @brief Constructor
+     *
+     * @param type                  simulation type
+     * @param planeWidth            plane width
+     * @param planeHeight           plane height
+     */
+    ParticlesPhysicsManager( SimulationType type, int planeWidth, int planeHeight );
+
+    /** @brief Default Constructor */
+    ParticlesPhysicsManager() = delete;
+
+    /** @brief Copy constructor */
+    ParticlesPhysicsManager( const ParticlesPhysicsManager& ) = delete;
+
+    /** @brief Move constructor */
+    ParticlesPhysicsManager( ParticlesPhysicsManager&& ) = delete;    
+
+    /** @brief Copy assigment operator */
+    ParticlesPhysicsManager& operator=( const ParticlesPhysicsManager& ) = delete;
+
+    /** @brief Move assigment operator */
+    ParticlesPhysicsManager& operator=( ParticlesPhysicsManager&& ) = delete;    
+
+    /**
+     * @brief Creates thread where new particle position are calculating in loop.
+     *
+     * Creates thread with function call calculateNextPositionsLoop.
+     * @return created thread
+     */
+    std::thread calculateNextPositionsInThread()
+    {
+        calculationState = ThreadCalculationState::RUNNING;
+        calculationStart = HRClock::now();
+        return std::thread( &ParticlesPhysicsManager::calculateNextPositionsLoop , this );
+    }
+
+    /**
+     * @brief Tries to set a new number of particles in the plane.
+     *
+     * Uses addParticles() or removeParticles() to set correct number of particles in the plane.
+     * @param particleType          particle type
+     * @param quantity              number of particles
+     * @return true if success otherwise false
+     */
+    bool setParticlesInPlane( ParticleType particleType, int quantity );
+
+    /**
+     * @brief Tries to set a new percent value of particles in the plane.
+     *
+     * @param particleType          particle type
+     * @param percent               percent value of particles [0,100]
+     * @return true if success otherwise false
+     */
+    bool setParticlesInPlaneInPercent( ParticleType particleType, int percent )
+    {
+       return setParticlesInPlane( particleType,static_cast<int>(simulationInfo.maxParticles[simulationType]*static_cast<int>(percent)*0.01)  );
+    }
+
+    /** Updates all bar charts and displays, adds new physics values to chart boxes */
+    void updateBars();
+
+    int getDividerGap() const noexcept { return planeArea->getPlainDivider().getDividerGap(); }
+    void setDividerGap( int dividerGap ) noexcept { planeArea->getPlainDivider().setDividerGap(dividerGap); }
+
+    void setTemperatureInPercent( int temperature ) { physicsInfo.temperature = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+    inline double getTemperature() const noexcept { return physicsInfo.temperature; }
+    inline int getTemperatureInPercent() const noexcept { return static_cast<int>(physicsInfo.temperature*100/physicsInfo.maxRapidity); }
+
+    void setTemperatureLeftInPercent( int temperature ) { physicsInfo.temperatureLeft = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+    inline double getTemperatureLeft() const noexcept { return physicsInfo.temperatureLeft; }
+    inline int getTemperatureLeftInPercent() const noexcept { return static_cast<int>(physicsInfo.temperatureLeft*100/physicsInfo.maxRapidity); }
+
+    void setTemperatureRightInPercent( int temperature ) { physicsInfo.temperatureRight = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+    inline double getTemperatureRight() const noexcept { return physicsInfo.temperatureRight; }
+    inline int getTemperatureRightInPercent() const noexcept { return static_cast<int>(physicsInfo.temperatureRight*100/physicsInfo.maxRapidity); }
+
+    void setSideTemperatureInPercent( PlaneSide side, int temperature ){ physicsInfo.planeSideTemperature[side] = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+    inline double getSideTemperature( PlaneSide side ) const noexcept { return physicsInfo.planeSideTemperature.at(side); }
+    inline int getSideTemperatureInPercent( PlaneSide side ) const noexcept { return static_cast<int>(physicsInfo.planeSideTemperature.at(side)*100/physicsInfo.maxRapidity); }
+
+    void setHorizontalForceInPercent( int force ){ physicsInfo.pushForce.x = 0.01*force*physicsInfo.maxSideForce; }
+    inline double getHorizontalForce() const noexcept { return physicsInfo.pushForce.x; }
+    inline int getHorizontalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.pushForce.x*100/physicsInfo.maxSideForce); }
+
+    void setVerticalForceInPercent( int force ){ physicsInfo.pushForce.y = 0.01*force*physicsInfo.maxSideForce; }
+    inline double getVerticalForce() const noexcept { return physicsInfo.pushForce.y; }
+    inline int getVerticalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.pushForce.y*100/physicsInfo.maxSideForce); }
+
+    void setPushForce( vect2D force ){ physicsInfo.pushForce = force; }
+
+    void setAverageDiffisionTemperature()
+    {
+        physicsInfo.temperatureRight = physicsInfo.temperatureLeft = (physicsInfo.temperatureRight + physicsInfo.temperatureLeft)/2;
+    }
+
+    void setMassOfMoleculeInPercent( int percent )
+    {
+        if( simulationType == SimulationType::BROWNIAN_MOTION )
+        {
+            particles->begin()->setParticleMassInPercent(percent);
+        }
+    }
+
+    // clear trace of molecule
+    void clearMoleculeTrace()
+    {
+        if( simulationType == SimulationType::BROWNIAN_MOTION )
+        {
+            particles->begin()->particlePositionsTracking.clear();
+        }
+    }
+
+    // set molecule velocity to zero
+    void stopMolecule()
+    {
+        if( simulationType == SimulationType::BROWNIAN_MOTION )
+        {
+            particles->begin()->velocity.set(0.0,0.0);
+        }
+    }
+
+    // add vector to molecule velocity
+    void pushMolecule( vect2D vector )
+    {
+        if( simulationType == SimulationType::BROWNIAN_MOTION )
+        {
+            particles->begin()->velocity += vector;
+        }
+    }
+
+    double getMoleculeVelocity() const
+    {
+        if( simulationType == SimulationType::BROWNIAN_MOTION )
+        {
+            return particles->begin()->velocity();
+        }
+        else return 0.0;
+    }
+
+    int getPressureInPercent() const
+    {
+        return static_cast<int>((barCharts.at("kinetic")->getAvg()*100)/(sqrt(physicsInfo.maxRapidity*2)/2));
+    }
+
+    inline int getMaxNumberOfParticles() const noexcept { return static_cast<int>( simulationInfo.maxParticles.at(simulationType)); }
+    inline int getNumberOfParticles( ParticleType type ) const noexcept { return static_cast<int>(simulationInfo.numberOfParticles.at(type)); }
+    inline int getNumberOfParticlesInPercent() const noexcept { return static_cast<int>(particles->size())*100/simulationInfo.maxParticles.at(simulationType); }
+
+    int inline getAvgCalculationCount() const noexcept { return simulationInfo.avgCalculationCount; }
+
+    int getSizeOfParticle( ParticleType type=ParticleType::NORMAL ) noexcept
+    {
+        return simulationInfo.particleSize[type];
+    }
+
+    int getSizeOfParticleInPercent( ParticleType type=ParticleType::NORMAL ) noexcept
+    {
+        return static_cast<int>((simulationInfo.particleSize[type]-simulationInfo.minSizeOfParticle)*100/(simulationInfo.maxSizeOfParticle[simulationType]-simulationInfo.minSizeOfParticle));
+    }
+
+    void setAttractionForceInPercent( int quantity );
+
+    void setSizeOfParticlesInPercent( ParticleType type, int quantity );
+
+    void setPlaneWidthInPercent( int quantity );
+
+    const SimulationInfo& getSimulationInfo() const noexcept { return simulationInfo; }
+
+    const ClustersInfo& getClustersInfo() const noexcept { return clustersInfo; }
+
+    const PhysicsInfo& getPhysicsInfo() const noexcept { return physicsInfo; }
+
+    // enable tracking of selected particle
+    void enableTracking();
+
+    // disable tracking of selected particle
+    void disableTracking();
+
+    // reset the simulation to the initial state
+    void reset();
+
+    // chnage particle visualization type
+    void setVisualizationType( VisualizationType type );
+
+    void pause( bool userCall = false )
+    {
+        if( calculationState.load() == ThreadCalculationState::RUNNING )
+        {
+            calculationState.store(ThreadCalculationState::PAUSE);
+            if( userCall ) pauseByUserFlag = true;
+            while( calculateNextPositionFlag.load() ){}; // wait for the end of calculation step
+        }
+    }
+
+    void run( bool userCall = false )
+    {
+        if( calculationState.load() == ThreadCalculationState::PAUSE )
+        {            
+            if( userCall ) pauseByUserFlag = false;
+            calculationStart = HRClock::now();
+            calculationState.store( ThreadCalculationState::RUNNING );
+        }
+    }
+
+    void end()
+    {
+        calculationState = ThreadCalculationState::END;
+    }    
+
+    std::string getCalculationState() const noexcept
+    {
+        if( calculationState.load() == ThreadCalculationState::RUNNING ) return "Running";
+        if( calculationState.load() == ThreadCalculationState::PAUSE   ) return "Pause";
+        if( calculationState.load() == ThreadCalculationState::END     ) return "End";
+
+        return "undefined";
+    }
+
+    bool isPauseByUser() const noexcept { return pauseByUserFlag; }
 
 protected:
 
@@ -74,7 +297,7 @@ protected:
     std::map<std::string,ptrBarDisplay> barDisplays;
 
     /** Contains histograms 1D */
-    std::map<std::string,ptrHistogram1D> histograms1D;   
+    std::map<std::string,ptrHistogram1D> histograms1D;
 
     /** Atomic flag acts out like simple mutex to prevents particles modification before the end of calculation */
     std::atomic<bool> calculateNextPositionFlag {false};
@@ -271,216 +494,5 @@ protected:
      * @param cluster               cluster iterator
      */
     void populateClusterID( int xstart, int ystart, int xlength, int ylength, iterCluster cluster );
-
-public:
-
-    /**
-     * @brief Constructor
-     *
-     * @param type                  simulation type
-     * @param planeWidth            plane width
-     * @param planeHeight           plane height
-     */
-    ParticlesPhysicsManager( SimulationType type, int planeWidth, int planeHeight );
-
-    /** @brief Constructor */
-    ParticlesPhysicsManager() = delete;
-
-    /** @brief Copy constructor */
-    ParticlesPhysicsManager( const ParticlesPhysicsManager& ) = delete;
-
-    /** @brief Move constructor */
-    ParticlesPhysicsManager( ParticlesPhysicsManager&& ) = delete;    
-
-    /** @brief Copy assigment operator */
-    ParticlesPhysicsManager& operator=( const ParticlesPhysicsManager& ) = delete;
-
-    /** @brief Move assigment operator */
-    ParticlesPhysicsManager& operator=( ParticlesPhysicsManager&& ) = delete;    
-
-    std::thread calculateNextPositionsInThread()
-    {
-        calculationState = ThreadCalculationState::RUNNING;
-        calculationStart = HRClock::now();
-        return std::thread( &ParticlesPhysicsManager::calculateNextPositionsLoop , this );
-    }
-
-    // tries to set a new number of particles in plane, return true if success
-    // quantity - number of particles to set
-    bool setParticlesInPlane( ParticleType particleType, int quantity );
-
-    // tries to set a new number of particles in plane, return true if success
-    // percent - percent number of avaiable particles to set
-    bool setParticlesInPlaneInPercent( ParticleType particleType, int percent )
-    {
-       return setParticlesInPlane( particleType,static_cast<int>(simulationInfo.maxParticles[simulationType]*static_cast<int>(percent)*0.01)  );
-    }
-
-    // update all bar charts and displays - add new physics data to chart boxes
-    void updateBars();
-
-    // following getters supplies cluster unit test - to remove in the release version
-    const table2D& getClusterIters() const { return clusterIters; }
-    const ptrClustersContainer&  getClusters() const noexcept { return clusters; }
-    ptrParticlesContainer getParticles() const noexcept { return particles; }
-
-    int getDividerGap() const noexcept { return planeArea->getPlainDivider().getDividerGap(); }
-    void setDividerGap( int dividerGap ) noexcept { planeArea->getPlainDivider().setDividerGap(dividerGap); }
-
-    void setTemperatureInPercent( int temperature ) { physicsInfo.temperature = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
-    inline double getTemperature() const noexcept { return physicsInfo.temperature; }
-    inline int getTemperatureInPercent() const noexcept { return static_cast<int>(physicsInfo.temperature*100/physicsInfo.maxRapidity); }
-
-    void setTemperatureLeftInPercent( int temperature ) { physicsInfo.temperatureLeft = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
-    inline double getTemperatureLeft() const noexcept { return physicsInfo.temperatureLeft; }
-    inline int getTemperatureLeftInPercent() const noexcept { return static_cast<int>(physicsInfo.temperatureLeft*100/physicsInfo.maxRapidity); }
-
-    void setTemperatureRightInPercent( int temperature ) { physicsInfo.temperatureRight = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
-    inline double getTemperatureRight() const noexcept { return physicsInfo.temperatureRight; }
-    inline int getTemperatureRightInPercent() const noexcept { return static_cast<int>(physicsInfo.temperatureRight*100/physicsInfo.maxRapidity); }
-
-    void setSideTemperatureInPercent( PlaneSide side, int temperature ){ physicsInfo.planeSideTemperature[side] = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
-    inline double getSideTemperature( PlaneSide side ) const noexcept { return physicsInfo.planeSideTemperature.at(side); }
-    inline int getSideTemperatureInPercent( PlaneSide side ) const noexcept { return static_cast<int>(physicsInfo.planeSideTemperature.at(side)*100/physicsInfo.maxRapidity); }
-
-    void setHorizontalForceInPercent( int force ){ physicsInfo.pushForce.x = 0.01*force*physicsInfo.maxSideForce; }
-    inline double getHorizontalForce() const noexcept { return physicsInfo.pushForce.x; }
-    inline int getHorizontalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.pushForce.x*100/physicsInfo.maxSideForce); }
-
-    void setVerticalForceInPercent( int force ){ physicsInfo.pushForce.y = 0.01*force*physicsInfo.maxSideForce; }
-    inline double getVerticalForce() const noexcept { return physicsInfo.pushForce.y; }
-    inline int getVerticalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.pushForce.y*100/physicsInfo.maxSideForce); }
-
-    void setPushForce( vect2D force ){ physicsInfo.pushForce = force; }
-
-    void setAverageDiffisionTemperature()
-    {
-        physicsInfo.temperatureRight = physicsInfo.temperatureLeft = (physicsInfo.temperatureRight + physicsInfo.temperatureLeft)/2;
-    }
-
-    void setMassOfMoleculeInPercent( int percent )
-    {
-        if( simulationType == SimulationType::BROWNIAN_MOTION )
-        {
-            particles->begin()->setParticleMassInPercent(percent);
-        }
-    }
-
-    // clear trace of molecule
-    void clearMoleculeTrace()
-    {
-        if( simulationType == SimulationType::BROWNIAN_MOTION )
-        {
-            particles->begin()->particlePositionsTracking.clear();
-        }
-    }
-
-    // set molecule velocity to zero
-    void stopMolecule()
-    {
-        if( simulationType == SimulationType::BROWNIAN_MOTION )
-        {
-            particles->begin()->velocity.set(0.0,0.0);
-        }
-    }
-
-    // add vector to molecule velocity
-    void pushMolecule( vect2D vector )
-    {
-        if( simulationType == SimulationType::BROWNIAN_MOTION )
-        {
-            particles->begin()->velocity += vector;
-        }
-    }
-
-    double getMoleculeVelocity() const
-    {
-        if( simulationType == SimulationType::BROWNIAN_MOTION )
-        {
-            return particles->begin()->velocity();
-        }
-        else return 0.0;
-    }
-
-    int getPressureInPercent() const
-    {
-        return static_cast<int>((barCharts.at("kinetic")->getAvg()*100)/(sqrt(physicsInfo.maxRapidity*2)/2));
-    }
-
-    inline int getMaxNumberOfParticles() const noexcept { return static_cast<int>( simulationInfo.maxParticles.at(simulationType)); }
-    inline int getNumberOfParticles( ParticleType type ) const noexcept { return static_cast<int>(simulationInfo.numberOfParticles.at(type)); }
-    inline int getNumberOfParticlesInPercent() const noexcept { return static_cast<int>(particles->size())*100/simulationInfo.maxParticles.at(simulationType); }
-
-    int inline getAvgCalculationCount() const noexcept { return simulationInfo.avgCalculationCount; }
-
-    int getSizeOfParticle( ParticleType type=ParticleType::NORMAL ) noexcept
-    {
-        return simulationInfo.particleSize[type];
-    }
-
-    int getSizeOfParticleInPercent( ParticleType type=ParticleType::NORMAL ) noexcept
-    {
-        return static_cast<int>((simulationInfo.particleSize[type]-simulationInfo.minSizeOfParticle)*100/(simulationInfo.maxSizeOfParticle[simulationType]-simulationInfo.minSizeOfParticle));
-    }
-
-    void setAttractionForceInPercent( int quantity );
-
-    void setSizeOfParticlesInPercent( ParticleType type, int quantity );
-
-    void setPlaneWidthInPercent( int quantity );
-
-    const SimulationInfo& getSimulationInfo() const noexcept { return simulationInfo; }
-
-    const ClustersInfo& getClustersInfo() const noexcept { return clustersInfo; }
-
-    const PhysicsInfo& getPhysicsInfo() const noexcept { return physicsInfo; }
-
-    // enable tracking of selected particle
-    void enableTracking();
-
-    // disable tracking of selected particle
-    void disableTracking();
-
-    // reset the simulation to the initial state
-    void reset();
-
-    // chnage particle visualization type
-    void setVisualizationType( VisualizationType type );
-
-    void pause( bool userCall = false )
-    {
-        if( calculationState.load() == ThreadCalculationState::RUNNING )
-        {
-            calculationState.store(ThreadCalculationState::PAUSE);
-            if( userCall ) pauseByUserFlag = true;
-            while( calculateNextPositionFlag.load() ){}; // wait for the end of calculation step
-        }
-    }
-
-    void run( bool userCall = false )
-    {
-        if( calculationState.load() == ThreadCalculationState::PAUSE )
-        {            
-            if( userCall ) pauseByUserFlag = false;
-            calculationStart = HRClock::now();
-            calculationState.store( ThreadCalculationState::RUNNING );
-        }
-    }
-
-    void end()
-    {
-        calculationState = ThreadCalculationState::END;
-    }    
-
-    std::string getCalculationState() const noexcept
-    {
-        if( calculationState.load() == ThreadCalculationState::RUNNING ) return "Running";
-        if( calculationState.load() == ThreadCalculationState::PAUSE   ) return "Pause";
-        if( calculationState.load() == ThreadCalculationState::END     ) return "End";
-
-        return "undefined";
-    }
-
-    bool isPauseByUser() const noexcept { return pauseByUserFlag; }
 
 };
