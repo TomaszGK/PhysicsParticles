@@ -107,8 +107,8 @@ protected:
      *
      * Gets cluster iterator from a given position (x,y).
      * Throws exception if position is out of the plane.
-     * @param posx   x position of point (x,y)
-     * @param posx   y position of point (x,y)
+     * @param posx        x position of point (x,y)
+     * @param posx        y position of point (x,y)
      * @return iterator to the cluster
      */
     iterCluster getClusterIter( const size_t& posx , const size_t& posy );
@@ -127,86 +127,175 @@ protected:
      */
     colorRGB getRandomColor();
 
-    // update number of red and blue particles inside right and left plane
+    /** @brief Updates number of ParticleType::RED and ParticleType::BLUE.
+     *
+     * Calculates numbers of ParticleType::RED and ParticleType::BLUE particles
+     * inside right and left rectangle areas splited by plane divider.
+     */
     void updateParticlesLocationInPlane();
 
-    // get random position of particle being disjoint with other particles
-    // minx,maxx,miny,miny : define area where position is getting randomly
-    // radius : particle radius
+    /** @brief Gets uncollided random position of particle in a given area.
+     *
+     * Tries to get random particle position from rectangle (minx,maxx,miny,maxy).
+     * A returned position do not overalap with others. Using to disjoint overlap particles.
+     * @param minx        minimum x in (minx,maxx,miny,maxy) area
+     * @param maxx        maximum x in (minx,maxx,miny,maxy) area
+     * @param miny        minimum y in (minx,maxx,miny,maxy) area
+     * @param maxy        maximum y in (minx,maxx,miny,maxy) area
+     * @param radius      particle radius
+     * @return random position from (minx,maxx,miny,maxy) area
+     */
     vect2D getDisjointRandomParticlePosition( double minx, double maxx, double miny, double maxy, double radius );
 
-    // handle particle transition between clusters
-    void handleParticleClusterTransition(iterParticle&);
+    /** @brief Handles particle transition between clusters.
+     *
+     * Checks if particle have been transfered between clusters,
+     * and then changes appropriate cluster iterator values.
+     * @param particle    iterator to particle
+     */
+    void handleParticleClusterTransition( const iterParticle& particle );
 
-    // handle posible collision of a given particle with other particles
-    void handleParticleCollisions(iterParticle&);
+    /** @brief Handles particle collisions.
+     *
+     * Checks if particle have been collided with other particles in belonging cluster.
+     * All collided particles are recalculated their vector velocities to comply rebound behavior.
+     * @param particle    iterator to particle
+     */
+    void handleParticleCollisions( const iterParticle& particle );
 
-    // handle posible collision of a given particle with other particles using alternative algorithm
-    void handleParticleCollisionsAlternative(iterParticle&);
+    /** @brief Handles particle collisions using alternative algorithm.
+     *
+     * Checks if particle have been collided with other particles in belonging cluster.
+     * All collided particles are recalculated their vector velocities to comply rebound behavior.
+     * @param particle    iterator to particle
+     */
+    void handleParticleCollisionsAlternative( const iterParticle& particle );
 
-    // handle possible collision of a given particle with a plane boundry, return particle kinetic energy that hit the plane or zero if doesn`t
-    double handleParticleCollisionWithPlaneBoundries(iterParticle&);
+    /** @brief Handles particle collisions with a plane boundry.
+     *
+     * Checks if particle have been collided with plane boundry.
+     * All particle collided with plane boundry are recalculated thier vector velocities.
+     * @param particle    iterator to particle
+     * @return particle kinetic energy if collision occured or zero otherwise
+     */
+    double handleParticleCollisionWithPlaneBoundries( const iterParticle& particle );
 
-    // check if the given particle position whith its radius overlap with others
-    bool isParticlesOverlap( const vect2D& , const double& );
+    /** @brief Checks if particle overlaped with others.
+     *
+     * Checks if particle defined by position and radius is overlaped with other particles.
+     * @param particlePosition    position of particle
+     * @param radius              radius of particle
+     * @return true if overlap
+     */
+    bool isParticlesOverlap( const vect2D& particlePosition, double radius );
 
-    // create initial set of particles - using in constructor and reset()
+    /** Creates initial set of particles. */
     void createParticles();
 
-    // tries to add particles into plane, return true if success
-    // particleType - type of particle depends on simulation mode ( e.g. all BLUE particles are located in the left part of particle plane )
-    // visualizationType - particle type visualization
-    // quantity - number of particles to add
-    // particleSize - particles size
+    /** @brief Tries to add particles into plane in random position.
+     *
+     * Type of particle may imply its futher position restriction,
+     * e.g. all ParticleType::BLUE type particles are located in the left part of plane.
+     * @param particleType          particle type
+     * @param visualizationType     visualization type
+     * @param quantity              number of particles to add
+     * @param particleSize          particle size
+     * @return true if success otherwise false
+     */
     bool addParticles( ParticleType particleType, VisualizationType visualizationType, int quantity, int particleSize );
 
-    // tries to remove particles from plane, return true if success
-    // particleType - type of particle to remove
-    // quantity - number of particles to remove
+    /** @brief Tries to remove particles of a given type from plane.
+     *
+     * @param particleType          particle type
+     * @param quantity              number of particles to remove
+     * @return true if success otherwise false
+     */
     bool removeParticles( ParticleType particleType, int quantity );
 
-    // remove all particles
+    /** Remove all particles from plane. */
     void removeAllParticles();
 
-    // random shuffle of particle position inside the plane
-    void shuffleParticle( iterParticle& );
+    /** @brief Shuffles particle position to the random position.
+     *
+     * @param particle    iterator to particle
+     */
+    void shuffleParticle( const iterParticle& particle );
 
-    // disjoint a given particle (if is too close to other) by removing it and place somewhere else inside the particle plane
-    bool disjoint( iterParticle& );
+    /** @brief Tries disjoint particle.
+     *
+     * Disjoints particle if its position is too close to other particles by shuffles it position.
+     * @param particle              iterator to particle
+     * @return true if disjont success otherwise false
+     */
+    bool disjoint( const iterParticle& particle );
 
-    // correct particles parameters ( positions and velocities ) if they are invalid ( out of range )
+    /** @brief Corrects particles invalid parameters.
+     *
+     * Corrects particle position and velocity invalid parameters (e.g. out of range).
+     */
     void correctParticlesInvalidParameters();
 
-    // disjoint overlap particles
-    // impactFactor - value from 0 to 1 range using in overlap detection, "if( distance < impactFactor*(particle1->radius + particle2->radius) )"
+    /** @brief Disjoints all overlap particles.
+     *
+     * Searches for overlap particles and disjoints them by moving away from each other.
+     * @param impactFactor          value from [0,1] using in overlap detection precision
+     */
     void disjointPositions( double impactFactor );
 
-    // preserve particle position inside plane
-    void preserveParticleInPlane( iterParticle& );
+    /** @brief Preserves particle position inside plane.
+     *
+     * Checks if particle position is outside the plane
+     * and modifies its position to fit to plane borders.
+     * @param particle              iterator to particle
+     */
+    void preserveParticleInPlane( const iterParticle& particle );
 
-    // remove all particles from clusters
+    /** Removes all particles from all clusters */
     void removeParticlesFromClusters();
 
-    // recalculate particles in clusters
+    /** Recalculates particle iterators in all clusters and cluster iterator for each particle. */
     void recalculateParticlesInClusters();
 
-    // connect clusters
+    /** Connects clusters */
     void connectClusters();
 
-    // create clusters
+    /** Creates clusters */
     void createClusters();
 
-    // populate given rectangle of clusterIters with a given cluster
+    /** @brief Populates clusterIters in a given rectangle area with cluster iterator.
+     *
+     * @param xstart                rectangle xstart
+     * @param ystart                rectangle ystart
+     * @param xlength               rectangle xlength
+     * @param ylength               rectangle ylength
+     * @param cluster               cluster iterator
+     */
     void populateClusterID( int xstart, int ystart, int xlength, int ylength, iterCluster cluster );
 
 public:
 
+    /**
+     * @brief Constructor
+     *
+     * @param type                  simulation type
+     * @param planeWidth            plane width
+     * @param planeHeight           plane height
+     */
     ParticlesPhysicsManager( SimulationType type, int planeWidth, int planeHeight );
+
+    /** @brief Constructor */
     ParticlesPhysicsManager() = delete;
+
+    /** @brief Copy constructor */
     ParticlesPhysicsManager( const ParticlesPhysicsManager& ) = delete;
+
+    /** @brief Move constructor */
     ParticlesPhysicsManager( ParticlesPhysicsManager&& ) = delete;    
 
+    /** @brief Copy assigment operator */
     ParticlesPhysicsManager& operator=( const ParticlesPhysicsManager& ) = delete;
+
+    /** @brief Move assigment operator */
     ParticlesPhysicsManager& operator=( ParticlesPhysicsManager&& ) = delete;    
 
     std::thread calculateNextPositionsInThread()

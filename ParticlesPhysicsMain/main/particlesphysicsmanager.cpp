@@ -220,7 +220,7 @@ void ParticlesPhysicsManager::removeAllParticles()
     particles->clear();
 }
 
-void ParticlesPhysicsManager::shuffleParticle( iterParticle& particle )
+void ParticlesPhysicsManager::shuffleParticle( const iterParticle& particle )
 {
     double minX {0};
     double maxX {0};
@@ -295,7 +295,7 @@ void ParticlesPhysicsManager::disableTracking()
     selectedParticle->particlePositionsTracking.clear();
 }
 
-bool ParticlesPhysicsManager::disjoint( iterParticle& particle )
+bool ParticlesPhysicsManager::disjoint( const iterParticle& particle )
 {
     double distance {0};
 
@@ -359,7 +359,7 @@ void ParticlesPhysicsManager::disjointPositions( double impactFactor )
     }
 }
 
-void ParticlesPhysicsManager::preserveParticleInPlane( iterParticle& particle )
+void ParticlesPhysicsManager::preserveParticleInPlane( const iterParticle& particle )
 {
     if( particle->position.x-particle->radius<=0 ) particle->position.x = particle->radius+1;
     else if( particle->position.x+particle->radius>=planeArea->getWidth() ) particle->position.x = static_cast<double>(planeArea->getWidth())-particle->radius-1;
@@ -593,7 +593,7 @@ vect2D ParticlesPhysicsManager::getDisjointRandomParticlePosition( double minx, 
     return position;
 }
 
-void ParticlesPhysicsManager::handleParticleClusterTransition( iterParticle& particle )
+void ParticlesPhysicsManager::handleParticleClusterTransition( const iterParticle& particle )
 {
     auto iterCurrent = getClusterIter(static_cast<size_t>(particle->position.x),static_cast<size_t>(particle->position.y));
     if( iterCurrent != particle->cluster )
@@ -604,7 +604,7 @@ void ParticlesPhysicsManager::handleParticleClusterTransition( iterParticle& par
     }
 }
 
-void ParticlesPhysicsManager::handleParticleCollisions( iterParticle& particle )
+void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle& particle )
 {
 
     double dotProductV1V2 {0};
@@ -654,7 +654,7 @@ void ParticlesPhysicsManager::handleParticleCollisions( iterParticle& particle )
 
 }
 
-void ParticlesPhysicsManager::handleParticleCollisionsAlternative( iterParticle& particle )
+void ParticlesPhysicsManager::handleParticleCollisionsAlternative( const iterParticle& particle )
 {
 
     vect2D velocityChangeP1; // velocity change for particle
@@ -722,7 +722,7 @@ void ParticlesPhysicsManager::handleParticleCollisionsAlternative( iterParticle&
 
 }
 
-double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( iterParticle &particle )
+double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const iterParticle &particle )
 {
     vect2D newPosition = particle->calculateNextPosition(timeContribution);
     double kineticEnergy {0};
@@ -784,7 +784,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( iterP
     return 0;
 }
 
-bool ParticlesPhysicsManager::isParticlesOverlap( const vect2D& particlePosition, const double& radius )
+bool ParticlesPhysicsManager::isParticlesOverlap( const vect2D& particlePosition, double radius )
 {    
     double distance {0};
 
