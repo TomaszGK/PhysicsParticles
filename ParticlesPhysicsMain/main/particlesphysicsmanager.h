@@ -89,40 +89,153 @@ public:
     /** Updates all bar charts and displays, adds new physics values to chart boxes */
     void updateBars();
 
+    /**
+     * @brief Gets percent value of gap divider size
+     * @return gap divider value in percent [0,100]
+     */
     int getDividerGap() const noexcept { return planeArea->getPlainDivider().getDividerGap(); }
+
+    /**
+     * @brief Sets size of gap divider in percent.
+     * @param dividerGap            new divider value in percent [0,100]
+     */
     void setDividerGap( int dividerGap ) noexcept { planeArea->getPlainDivider().setDividerGap(dividerGap); }
 
+    /**
+     * @brief Sets percent value of temperature in the particle plane.
+     * @param temperature           new temperature value [0,100]
+     */
     void setTemperatureInPercent( int temperature ) { physicsInfo.temperature = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+
+    /**
+     * @brief Gets value of temperature in the particle plane.
+     * @return temperature value
+     */
     inline double getTemperature() const noexcept { return physicsInfo.temperature; }
+
+    /**
+     * @brief Gets percent value of temperature in the particle plane.
+     * @return temperature value in percent [0,100]
+     */
     inline int getTemperatureInPercent() const noexcept { return static_cast<int>(physicsInfo.temperature*100/physicsInfo.maxRapidity); }
 
+    /**
+     * @brief Sets percent value of temperature in the left side of particle plane.
+     * @param temperature           new temperature value [0,100]
+     */
     void setTemperatureLeftInPercent( int temperature ) { physicsInfo.temperatureLeft = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+
+    /**
+     * @brief Gets value of temperature in the left side of particle plane.
+     * @return temperature value
+     */
     inline double getTemperatureLeft() const noexcept { return physicsInfo.temperatureLeft; }
+
+    /**
+     * @brief Gets percent value of temperature in the left side of particle plane.
+     * @return temperature value in percent [0,100]
+     */
     inline int getTemperatureLeftInPercent() const noexcept { return static_cast<int>(physicsInfo.temperatureLeft*100/physicsInfo.maxRapidity); }
 
+    /**
+     * @brief Sets percent value of temperature in the right side of particle plane.
+     * @param temperature           new temperature value [0,100]
+     */
     void setTemperatureRightInPercent( int temperature ) { physicsInfo.temperatureRight = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+
+    /**
+     * @brief Gets value of temperature in the right side of particle plane.
+     * @return temperature value
+     */
     inline double getTemperatureRight() const noexcept { return physicsInfo.temperatureRight; }
+
+    /**
+     * @brief Gets percent value of temperature in the right side of particle plane.
+     * @return temperature value in percent [0,100]
+     */
     inline int getTemperatureRightInPercent() const noexcept { return static_cast<int>(physicsInfo.temperatureRight*100/physicsInfo.maxRapidity); }
 
+    /**
+     * @brief Sets percent value of temperature in a given side of particle plane.
+     * @param side                  plane side
+     * @param temperature           new temperature value [0,100]
+     */
     void setSideTemperatureInPercent( PlaneSide side, int temperature ){ physicsInfo.planeSideTemperature[side] = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+
+    /**
+     * @brief Gets value of temperature in a given side of particle plane.
+     * @param side                  plane side
+     * @return temperature value
+     */
     inline double getSideTemperature( PlaneSide side ) const noexcept { return physicsInfo.planeSideTemperature.at(side); }
+
+    /**
+     * @brief Gets percentvalue of temperature in a given side of particle plane.
+     * @param side                  plane side
+     * @return temperature value in percent [0,100]
+     */
     inline int getSideTemperatureInPercent( PlaneSide side ) const noexcept { return static_cast<int>(physicsInfo.planeSideTemperature.at(side)*100/physicsInfo.maxRapidity); }
 
+    /**
+     * @brief Sets percent value of horizontal force.
+     * @param force                 new horizontal force [0,100]
+     */
     void setHorizontalForceInPercent( int force ){ physicsInfo.pushForce.x = 0.01*force*physicsInfo.maxSideForce; }
+
+    /**
+     * @brief Gets value of horizontal force.
+     * @return horizontal force value
+     */
     inline double getHorizontalForce() const noexcept { return physicsInfo.pushForce.x; }
+
+    /**
+     * @brief Gets percent value of horizontal force.
+     * @return horizontal force value in percent [0,100]
+     */
     inline int getHorizontalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.pushForce.x*100/physicsInfo.maxSideForce); }
 
+    /**
+     * @brief Sets percent value of vertical force.
+     * @param force                 new vertical force [0,100]
+     */
     void setVerticalForceInPercent( int force ){ physicsInfo.pushForce.y = 0.01*force*physicsInfo.maxSideForce; }
+
+    /**
+     * @brief Gets value of vertical force.
+     * @return vertical force value
+     */
     inline double getVerticalForce() const noexcept { return physicsInfo.pushForce.y; }
+
+    /**
+     * @brief Gets percent value of vertical force.
+     * @return vertical force value in percent [0,100]
+     */
     inline int getVerticalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.pushForce.y*100/physicsInfo.maxSideForce); }
 
+    /**
+     * @brief Sets value of push force.
+     *
+     * Using in SimulationType::BROWNIAN_MOTION
+     * @param force                 new push force
+     */
     void setPushForce( vect2D force ){ physicsInfo.pushForce = force; }
 
-    void setAverageDiffisionTemperature()
+    /**
+     * @brief Sets (calculates) average value of diffiusion temperature.
+     *
+     * Using in SimulationType::DIFFUSION
+     */
+    void setAverageDiffusionTemperature()
     {
         physicsInfo.temperatureRight = physicsInfo.temperatureLeft = (physicsInfo.temperatureRight + physicsInfo.temperatureLeft)/2;
     }
 
+    /**
+     * @brief Sets percent value of the molecule mass.
+     *
+     * Using in SimulationType::BROWNIAN_MOTION
+     * @param percent               new molecule mass in percent [0,100]
+     */
     void setMassOfMoleculeInPercent( int percent )
     {
         if( simulationType == SimulationType::BROWNIAN_MOTION )
@@ -131,7 +244,7 @@ public:
         }
     }
 
-    // clear trace of molecule
+    /** Clears trace of the molecule. */
     void clearMoleculeTrace()
     {
         if( simulationType == SimulationType::BROWNIAN_MOTION )
@@ -140,7 +253,7 @@ public:
         }
     }
 
-    // set molecule velocity to zero
+    /** Changes molecule velocity to zero. */
     void stopMolecule()
     {
         if( simulationType == SimulationType::BROWNIAN_MOTION )
@@ -149,7 +262,10 @@ public:
         }
     }
 
-    // add vector to molecule velocity
+    /**
+     * @brief Adds vector to molecule velocity.
+     * @param vector                adds to molecule velocity
+     */
     void pushMolecule( vect2D vector )
     {
         if( simulationType == SimulationType::BROWNIAN_MOTION )
@@ -158,6 +274,10 @@ public:
         }
     }
 
+    /**
+     * @brief Gets molecule velocity.
+     * @return molecule velocity
+     */
     double getMoleculeVelocity() const
     {
         if( simulationType == SimulationType::BROWNIAN_MOTION )
@@ -167,51 +287,109 @@ public:
         else return 0.0;
     }
 
+    /**
+     * @brief Gets (calculates) percent value of pressure in the particle plane.
+     * @return pressure value in percent [0,100]
+     */
     int getPressureInPercent() const
     {
         return static_cast<int>((barCharts.at("kinetic")->getAvg()*100)/(sqrt(physicsInfo.maxRapidity*2)/2));
     }
 
+    /**
+     * @brief Gets maximum number of particles in the plane.
+     * @return maximum number of particles
+     */
     inline int getMaxNumberOfParticles() const noexcept { return static_cast<int>( simulationInfo.maxParticles.at(simulationType)); }
+
+    /**
+     * @brief Gets number of particles (for a given type) in the plane.
+     * @param type                  particle type
+     * @return number of particles
+     */
     inline int getNumberOfParticles( ParticleType type ) const noexcept { return static_cast<int>(simulationInfo.numberOfParticles.at(type)); }
+
+    /**
+     * @brief Gets percent number of particles in the plane.
+     * @return percent value of particles [0,100]
+     */
     inline int getNumberOfParticlesInPercent() const noexcept { return static_cast<int>(particles->size())*100/simulationInfo.maxParticles.at(simulationType); }
 
+    /**
+     * @brief Gets average number of calulations (next particles position) in the period of time.
+     * @return average calculation time
+     */
     int inline getAvgCalculationCount() const noexcept { return simulationInfo.avgCalculationCount; }
 
+    /**
+     * @brief Gets particle size for a given particle type.
+     * @param type                  particle type
+     * @return particle size
+     */
     int getSizeOfParticle( ParticleType type=ParticleType::NORMAL ) noexcept
     {
         return simulationInfo.particleSize[type];
     }
 
+    /**
+     * @brief Gets percent value of particle size for a given particle type.
+     * @param type                  particle type
+     * @return percent value of particle size
+     */
     int getSizeOfParticleInPercent( ParticleType type=ParticleType::NORMAL ) noexcept
     {
         return static_cast<int>((simulationInfo.particleSize[type]-simulationInfo.minSizeOfParticle)*100/(simulationInfo.maxSizeOfParticle[simulationType]-simulationInfo.minSizeOfParticle));
     }
 
-    void setAttractionForceInPercent( int quantity );
-
+    /**
+     * @brief Sets percent value of particle size for a given particle type.
+     * @param type                  particle type
+     * @param quantity              new percent value of particle size
+     */
     void setSizeOfParticlesInPercent( ParticleType type, int quantity );
 
+    /**
+     * @brief Sets percent value of attraction force.
+     * @param quantity              new percent value of attraction force
+     */
+    void setAttractionForceInPercent( int quantity );
+
+    /**
+     * @brief Sets percent value of plane width.
+     * @param quantity              new percent value of plane width
+     */
     void setPlaneWidthInPercent( int quantity );
 
+    /** Gets simulation information. */
     const SimulationInfo& getSimulationInfo() const noexcept { return simulationInfo; }
 
+    /** Gets clusters information. */
     const ClustersInfo& getClustersInfo() const noexcept { return clustersInfo; }
 
+    /** Gets physics information. */
     const PhysicsInfo& getPhysicsInfo() const noexcept { return physicsInfo; }
 
-    // enable tracking of selected particle
+    /** Enables tracking of selected particle. */
     void enableTracking();
 
-    // disable tracking of selected particle
+    /** Disables tracking of selected particle. */
     void disableTracking();
 
-    // reset the simulation to the initial state
+    /** Resets the simulation to the initial state */
     void reset();
 
-    // chnage particle visualization type
+    /**
+     * @brief Changes particle visualization type.
+     * @param type                  visualization type
+     */
     void setVisualizationType( VisualizationType type );
 
+    /**
+     * @brief Pauses simulation.
+     *
+     * Value userCall have to be true if pause is called from a user action.
+     * @param userCall              use call flag
+     */
     void pause( bool userCall = false )
     {
         if( calculationState.load() == ThreadCalculationState::RUNNING )
@@ -222,6 +400,12 @@ public:
         }
     }
 
+    /**
+     * @brief Runs simulation.
+     *
+     * Value userCall have to be true if run is called from a user action.
+     * @param userCall              use call flag
+     */
     void run( bool userCall = false )
     {
         if( calculationState.load() == ThreadCalculationState::PAUSE )
@@ -232,11 +416,16 @@ public:
         }
     }
 
+    /** Ends simulation by breaking loop in the caluclation thread. */
     void end()
     {
         calculationState = ThreadCalculationState::END;
     }    
 
+    /**
+     * @brief Gets current calculation state.
+     * @return calculation state
+     */
     std::string getCalculationState() const noexcept
     {
         if( calculationState.load() == ThreadCalculationState::RUNNING ) return "Running";
@@ -246,6 +435,10 @@ public:
         return "undefined";
     }
 
+    /**
+     * @brief Gets information if pause was called by user.
+     * @return true if pause was called by user otherwise false
+     */
     bool isPauseByUser() const noexcept { return pauseByUserFlag; }
 
 protected:

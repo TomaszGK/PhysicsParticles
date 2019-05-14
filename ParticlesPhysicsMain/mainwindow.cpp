@@ -282,7 +282,7 @@ void MainWindow::on_startButtonTab1_clicked()
     {        
         ui->startButtonTab1->setText("RESET");
         dividerGapAnimationStart = true;
-        physicsSimulation[1]->setAverageDiffisionTemperature();
+        physicsSimulation[1]->setAverageDiffusionTemperature();
     }
     else if( ui->startButtonTab1->text() == "RESET" )
     {
@@ -330,7 +330,7 @@ void MainWindow::on_gapSizeSliderTab1_valueChanged( int value )
 {
     if( ui->startButtonTab1->text() == "START" && value>0 )
     {
-        physicsSimulation[currentIndex]->setAverageDiffisionTemperature();
+        physicsSimulation[currentIndex]->setAverageDiffusionTemperature();
         ui->startButtonTab1->setText("RESET");
     }
     physicsSimulation[1]->setDividerGap(value);
