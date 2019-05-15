@@ -22,6 +22,7 @@ void Particle::setParticleSize( int newSize )
 
 void Particle::setParticleMassInPercent( int percent )
 {
+    Ensures( percent>=0 );
     mass = (4.0/3.0*3.141592*size*size*size*0.001)*percent*0.01;
 }
 

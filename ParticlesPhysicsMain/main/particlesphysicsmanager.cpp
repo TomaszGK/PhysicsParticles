@@ -258,6 +258,7 @@ bool ParticlesPhysicsManager::setParticlesInPlane( ParticleType particleType, in
 
 void ParticlesPhysicsManager::setSizeOfParticlesInPercent( ParticleType type, int quantity )
 {
+    Ensures( quantity>=0 && quantity<=100 );
     simulationInfo.particleSize[type] = simulationInfo.minSizeOfParticle + static_cast<int>(quantity*0.01*(simulationInfo.maxSizeOfParticle[simulationType]-simulationInfo.minSizeOfParticle));
 
     if( !pauseByUserFlag ) pause();
@@ -276,11 +277,13 @@ void ParticlesPhysicsManager::setSizeOfParticlesInPercent( ParticleType type, in
 
 void ParticlesPhysicsManager::setAttractionForceInPercent( int quantity )
 {
+    Ensures( quantity>=-100 && quantity<=100 );
     physicsInfo.attractionForce = quantity*0.01*physicsInfo.maxAttractionForce;
 }
 
 void ParticlesPhysicsManager::setPlaneWidthInPercent( int quantity )
 {
+    Ensures( quantity>=0 && quantity<=100 );
     planeArea->setXConstraint( static_cast<int>(0.5*0.01*simulationInfo.maxPlaneXConstraint*planeArea->getWidth()*quantity*0.01) );
 }
 
@@ -541,6 +544,56 @@ void ParticlesPhysicsManager::updateBars()
             barDisplays["diffiusion"]->setLowerBox(0,physicsInfo.numRedParticlesLeft);
             barDisplays["diffiusion"]->setLowerBox(1,physicsInfo.numRedParticlesRight);
         }
+    }
+}
+
+void ParticlesPhysicsManager::setDividerGap( int dividerGap )
+{
+    Ensures( dividerGap>=0 && dividerGap<=100 );
+    planeArea->getPlainDivider().setDividerGap(dividerGap);
+}
+
+void ParticlesPhysicsManager::setTemperatureInPercent( int temperature )
+{
+    Ensures( temperature>=0 && temperature<=100 );
+    physicsInfo.temperature = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01;
+}
+
+void ParticlesPhysicsManager::setTemperatureLeftInPercent( int temperature )
+{
+    Ensures( temperature>=0 && temperature<=100 );
+    physicsInfo.temperatureLeft = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01;
+}
+
+void ParticlesPhysicsManager::setTemperatureRightInPercent( int temperature )
+{
+    Ensures( temperature>=0 && temperature<=100 );
+    physicsInfo.temperatureRight = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01;
+}
+
+void ParticlesPhysicsManager::setSideTemperatureInPercent( PlaneSide side, int temperature )
+{
+    Ensures( temperature>=0 && temperature<=100 );
+    physicsInfo.planeSideTemperature[side] = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01;
+}
+
+void ParticlesPhysicsManager::setHorizontalForceInPercent( int force )
+{
+    Ensures( force>=-100 && force<=100 );
+    physicsInfo.pushForce.x = 0.01*force*physicsInfo.maxSideForce;
+}
+
+void ParticlesPhysicsManager::setVerticalForceInPercent( int force )
+{
+    Ensures( force>=-100 && force<=100 );
+    physicsInfo.pushForce.y = 0.01*force*physicsInfo.maxSideForce;
+}
+
+void ParticlesPhysicsManager::setMassOfMoleculeInPercent( int percent )
+{
+    if( simulationType == SimulationType::BROWNIAN_MOTION )
+    {
+        particles->begin()->setParticleMassInPercent(percent);
     }
 }
 

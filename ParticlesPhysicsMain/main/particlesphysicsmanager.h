@@ -54,7 +54,7 @@ public:
     /**
      * @brief Creates thread where new particle position are calculating in loop.
      *
-     * Creates thread with function call calculateNextPositionsLoop.
+     * Creates thread and calling function calculateNextPositionsLoop.
      * @return created thread
      */
     std::thread calculateNextPositionsInThread()
@@ -99,13 +99,13 @@ public:
      * @brief Sets size of gap divider in percent.
      * @param dividerGap            new divider value in percent [0,100]
      */
-    void setDividerGap( int dividerGap ) noexcept { planeArea->getPlainDivider().setDividerGap(dividerGap); }
+    void setDividerGap( int dividerGap );
 
     /**
      * @brief Sets percent value of temperature in the particle plane.
      * @param temperature           new temperature value [0,100]
      */
-    void setTemperatureInPercent( int temperature ) { physicsInfo.temperature = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+    void setTemperatureInPercent( int temperature );
 
     /**
      * @brief Gets value of temperature in the particle plane.
@@ -123,7 +123,7 @@ public:
      * @brief Sets percent value of temperature in the left side of particle plane.
      * @param temperature           new temperature value [0,100]
      */
-    void setTemperatureLeftInPercent( int temperature ) { physicsInfo.temperatureLeft = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+    void setTemperatureLeftInPercent( int temperature );
 
     /**
      * @brief Gets value of temperature in the left side of particle plane.
@@ -141,7 +141,7 @@ public:
      * @brief Sets percent value of temperature in the right side of particle plane.
      * @param temperature           new temperature value [0,100]
      */
-    void setTemperatureRightInPercent( int temperature ) { physicsInfo.temperatureRight = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+    void setTemperatureRightInPercent( int temperature );
 
     /**
      * @brief Gets value of temperature in the right side of particle plane.
@@ -160,7 +160,7 @@ public:
      * @param side                  plane side
      * @param temperature           new temperature value [0,100]
      */
-    void setSideTemperatureInPercent( PlaneSide side, int temperature ){ physicsInfo.planeSideTemperature[side] = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01; }
+    void setSideTemperatureInPercent( PlaneSide side, int temperature );
 
     /**
      * @brief Gets value of temperature in a given side of particle plane.
@@ -178,9 +178,9 @@ public:
 
     /**
      * @brief Sets percent value of horizontal force.
-     * @param force                 new horizontal force [0,100]
+     * @param force                 new horizontal force [-100,100]
      */
-    void setHorizontalForceInPercent( int force ){ physicsInfo.pushForce.x = 0.01*force*physicsInfo.maxSideForce; }
+    void setHorizontalForceInPercent( int force );
 
     /**
      * @brief Gets value of horizontal force.
@@ -196,9 +196,9 @@ public:
 
     /**
      * @brief Sets percent value of vertical force.
-     * @param force                 new vertical force [0,100]
+     * @param force                 new vertical force [-100,100]
      */
-    void setVerticalForceInPercent( int force ){ physicsInfo.pushForce.y = 0.01*force*physicsInfo.maxSideForce; }
+    void setVerticalForceInPercent( int force );
 
     /**
      * @brief Gets value of vertical force.
@@ -236,13 +236,7 @@ public:
      * Using in SimulationType::BROWNIAN_MOTION
      * @param percent               new molecule mass in percent [0,100]
      */
-    void setMassOfMoleculeInPercent( int percent )
-    {
-        if( simulationType == SimulationType::BROWNIAN_MOTION )
-        {
-            particles->begin()->setParticleMassInPercent(percent);
-        }
-    }
+    void setMassOfMoleculeInPercent( int percent );
 
     /** Clears trace of the molecule. */
     void clearMoleculeTrace()
@@ -350,7 +344,7 @@ public:
 
     /**
      * @brief Sets percent value of attraction force.
-     * @param quantity              new percent value of attraction force
+     * @param quantity              new percent value of attraction force [-100,100]
      */
     void setAttractionForceInPercent( int quantity );
 
