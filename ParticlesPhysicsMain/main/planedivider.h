@@ -2,41 +2,107 @@
 
 #include "particle.h"
 
+/** @file
+ * @brief Class @ref PlaneDivider
+ */
+
+/**
+ * @class PlaneDivider
+ * @brief Manages plane divider and handles particle collison with it.
+ *
+ * Defines upper and down rectangles that represent divider state.
+ * The length of gap between them measures opening of divider.
+ * When gap is equal zero upperRect and lowerRect rectangels adjoin to each other.
+ * @author Tomasz Gburek
+ * @date 2019
+ */
+
 class PlaneDivider
-{
-
-    int dividerPosX   ; // plane divider position along X axis
-    int dividerWidth  ; // width of the plane divider - in pixels
-    int dividerHeight ; // height of the plane divider - in pixels
-    int dividerGap    ; // size of gap inside the plane divider - in percent
-
-    // when gap is equal zero upperRect and lowerRect rectangels adjoin to each other
-    std::pair<coord2D,coord2D> upperRect; // upper plane divider rectangle coordinates where first contains upperleft rectangle point and second contains its width and height
-    std::pair<coord2D,coord2D> lowerRect; // lower plane divider rectangle coordinates where first contains upperleft rectangle point and second contains its width and height
-
-    std::pair<coord2D,coord2D> upperRectPoints; // upper plane divider rectangle coordinates where first contains upperleft rectangle point and second contains lowerright point
-    std::pair<coord2D,coord2D> lowerRectPoints; // lower plane divider rectangle coordinates where first contains upperleft rectangle point and second contains lowerright point
-
-    inline int minDistance(const double& ,const double&,const double&) const;
+{   
 
 public:
 
-    PlaneDivider( int _dividerPosX, int _dividerWidth, int _dividerHeight, int _dividerGap );
+    /**
+     * @brief Constructor
+     *
+     * @param dividerPosX           position of divider along X axis
+     * @param dividerWidth          divider width in pixels
+     * @param dividerHeight         divider height in pixels
+     * @param dividerGap            percent value of divider gap
+     */
+    PlaneDivider( int dividerPosX, int dividerWidth, int dividerHeight, int dividerGap );
 
-    PlaneDivider( const PlaneDivider& ) = default;
-    PlaneDivider( PlaneDivider&& ) = default;
-
-    PlaneDivider& operator=( const PlaneDivider& ) = default;
-    PlaneDivider& operator=( PlaneDivider&& ) = default;
-
+    /**
+     * @brief Gets upper rectangle that represents upper part of divider.
+     * @return upper rectangle
+     */
     const std::pair<coord2D,coord2D>& getUpperRect() const noexcept { return upperRect; }
+
+    /**
+     * @brief Gets lower rectangle that represents lower part of divider.
+     * @return lower rectangle
+     */
     const std::pair<coord2D,coord2D>& getLowerRect() const noexcept { return lowerRect; }
+
+    /**
+     * @brief Gets divider position along X axis.
+     * @return divider position in pixels
+     */
     int getDividerPosX() const noexcept { return dividerPosX; }
+
+    /**
+     * @brief Gets divider gap size in percent.
+     * @return divider gap size in percent [0,100]
+     */
     int getDividerGap() const noexcept { return dividerGap; }
+
+    /**
+     * @brief Checks if divider exist in the plane, gap is less then 100.
+     * @return true if divider exist otherwise false
+     */
     bool isDividerInPlane() const noexcept { return dividerGap<100; }
 
+    /**
+     * @brief Sets divider gap.
+     * @param gap                   new divider gap in percent
+     */
     void setDividerGap( int gap );
 
-    void handleParticleCollision( iterParticle& );
+    /**
+     * @brief Handles particle collision whit plane divider.
+     *
+     * Checks if particle was collided with upper or lower rectangle.
+     * Changes particle vector velocity if collision has been detected.
+     * @param particle              iterator to particle
+     */
+    void handleParticleCollision( iterParticle& particle );
+
+private:
+
+    int dividerPosX   ; /**< position of plane divider along X axis */
+    int dividerWidth  ; /**< width of plane divider in pixels */
+    int dividerHeight ; /**< height of plane divider in pixels */
+    int dividerGap    ; /**< size of gap inside the plane divider in percent */
+
+    /**< Upper plane divider rectangle coordinates, first contains upperleft rectangle position and second its width and height */
+    std::pair<coord2D,coord2D> upperRect;
+
+    /**< Lower plane divider rectangle coordinates, first contains upperleft rectangle position and second its width and height */
+    std::pair<coord2D,coord2D> lowerRect;
+
+    /**< Upper plane divider rectangle coordinates, first contains upperleft rectangle position and second its lowerright position */
+    std::pair<coord2D,coord2D> upperRectPoints;
+
+    /**< Lower plane divider rectangle coordinates, first contains upperleft rectangle position and second its lowerright position */
+    std::pair<coord2D,coord2D> lowerRectPoints;
+
+    /**
+     * @brief Calculates minimum value from three values and return its index.
+     * @param d1                    minimum value index 1
+     * @param d2                    minimum value index 2
+     * @param d2                    minimum value index 3
+     * @return index from {1,2,3}
+     */
+    inline int minDistance( const double& d1, const double& d2, const double& d3 ) const;
 
 };

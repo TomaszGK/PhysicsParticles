@@ -1,7 +1,7 @@
 #include "planedivider.h"
 
-PlaneDivider::PlaneDivider( int _dividerPosX, int _dividerWidth, int _dividerHeight, int _dividerGap )
-: dividerPosX {_dividerPosX}, dividerWidth {_dividerWidth}, dividerHeight {_dividerHeight}, dividerGap {_dividerGap}
+PlaneDivider::PlaneDivider( int dividerPosX, int dividerWidth, int dividerHeight, int dividerGap )
+: dividerPosX {dividerPosX}, dividerWidth {dividerWidth}, dividerHeight {dividerHeight}, dividerGap {dividerGap}
 {
     upperRectPoints.first.x  = upperRect.first.x  = static_cast<int>(dividerPosX-dividerWidth/2);
     upperRectPoints.first.y  = upperRect.first.y  = 0;
@@ -18,20 +18,19 @@ PlaneDivider::PlaneDivider( int _dividerPosX, int _dividerWidth, int _dividerHei
     lowerRectPoints.second.y = static_cast<int>(dividerHeight);
 }
 
-int PlaneDivider::minDistance( const double& d1, const double& d2, const double& d3) const
+int PlaneDivider::minDistance( const double& d1, const double& d2, const double& d3 ) const
 {
     return ( d1<=d2 ) ? ( ( d1<=d3 ) ? 1 : 3 ) : ( ( d2<=d3 ) ? 2 : 3 );
 }
 
 void PlaneDivider::setDividerGap( int gap )
 {
-    if( gap<=100 )
-    {
-        dividerGap = gap;
-        upperRectPoints.second.y = upperRect.second.y = static_cast<int>(dividerHeight/2-((dividerHeight/2)*gap)/100);
-        lowerRectPoints.first.y  = lowerRect.first.y  = static_cast<int>(dividerHeight/2+((dividerHeight/2)*gap)/100);
-        lowerRect.second.y  = static_cast<int>(dividerHeight/2-((dividerHeight/2)*gap)/100);
-    }
+    Ensures( gap>=0 && gap<=100 );
+
+    dividerGap = gap;
+    upperRectPoints.second.y = upperRect.second.y = static_cast<int>(dividerHeight/2-((dividerHeight/2)*gap)/100);
+    lowerRectPoints.first.y  = lowerRect.first.y  = static_cast<int>(dividerHeight/2+((dividerHeight/2)*gap)/100);
+    lowerRect.second.y  = static_cast<int>(dividerHeight/2-((dividerHeight/2)*gap)/100);
 }
 
 void PlaneDivider::handleParticleCollision( iterParticle& particle )
