@@ -151,18 +151,16 @@ void QPainterManager::paintTracking( citerParticle particle )
     int size  {8};
     int posx  {0};
     int posy  {0};
-    double alpha {255};
-
-    double step = 255.0/particle->particlePositionsTracking.size();
+    int alpha {255};
 
     for( auto position = --particle->particlePositionsTracking.cend() ; position != particle->particlePositionsTracking.cbegin() ; --position )
     {
         posx = static_cast<int>(position->x+planeBorderWidth);
         posy = static_cast<int>(position->y+planeBorderWidth);
         painter.setBrush(QBrush(QColor(120,120,120,static_cast<int>(alpha))));
-        painter.drawEllipse(posx-size/2,posy-size/2,size,size);
-        alpha -= step;
-    }
+        painter.drawEllipse(posx-size/2,posy-size/2,size,size);                
+        if( --alpha<0 ) alpha = 0;
+    }    
 }
 
 void QPainterManager::handleCursorPosition()

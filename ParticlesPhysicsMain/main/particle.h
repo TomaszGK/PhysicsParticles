@@ -109,7 +109,7 @@ public:
 
     std::list<vect2D> particlePositionsTracking; /**< stores particle saved positions */
 
-    size_t maxPositionsInTracking {200}; /**<  maximum saved positions in particlePositionTracking list */
+    size_t maxPositionsInTracking {200}; /**< maximum saved positions in particlePositionTracking list */
 
     ParticleType      particleType {ParticleType::NORMAL}             ; /**< particle type @ref ParticleType */
     VisualizationType visualizationType {VisualizationType::VELOCITY} ; /**< visualization type @ref VisualizationType */

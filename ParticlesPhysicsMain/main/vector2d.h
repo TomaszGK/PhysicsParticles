@@ -8,13 +8,7 @@ class vector2D
 
 public:
 
-    vector2D() = default;
-    vector2D( T _x , T _y ) : x {_x}, y {_y} {}
-    vector2D( const vector2D& ) = default;
-    vector2D( vector2D&& ) = default;
-
-    vector2D& operator=( const vector2D& ) = default;
-    vector2D& operator=( vector2D&& ) = default;
+    vector2D( T _x = T() , T _y = T() ) : x {_x}, y {_y} {}
 
     inline T operator()() const { return sqrt(x*x+y*y); }
     inline T operator~() const { return (x*x+y*y); }
