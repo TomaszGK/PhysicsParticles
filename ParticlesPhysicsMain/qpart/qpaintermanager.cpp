@@ -35,8 +35,7 @@ void QPainterManager::paint()
         QRadialGradient gradient;
         int size {0};
         int posx {0};
-        int posy {0};
-        double planeHitDiff {2};
+        int posy {0};       
 
         for( auto particle = particles->cend() ; particle-- != particles->cbegin() ; )
         {
@@ -72,29 +71,15 @@ void QPainterManager::paint()
             painter.setPen(particlePen);
             painter.drawEllipse(posx-size/2,posy-size/2,size,size);
 
-            if( toHandlePlaneHits )
-            {
-                /*
-                if( particle->position.y-particle->radius<planeHitDiff )                             planeHits.push_back( {0,{posx,0}} );
-                else if( particle->position.y+particle->radius>planeArea->getHeight()-planeHitDiff ) planeHits.push_back( {0,{posx,height()}} );
-                else if( particle->position.x-particle->radius<planeHitDiff )                        planeHits.push_back( {0,{0,posy}} );
-                else if( particle->position.x+particle->radius>planeArea->getWidth()-planeHitDiff )  planeHits.push_back( {0,{width(),posy}} );
-                handlePlaneHit();
-                */
-
-                if( particle->position.y-particle->radius<planeHitDiff )                             paintPlaneHit( {posx,0} );
-                else if( particle->position.y+particle->radius>planeArea->getHeight()-planeHitDiff ) paintPlaneHit( {posx,height()} );
-                else if( particle->position.x-particle->radius<planeHitDiff )                        paintPlaneHit( {0,posy} );
-                else if( particle->position.x+particle->radius>planeArea->getWidth()-planeHitDiff )  paintPlaneHit( {width(),posy} );
-            }
-        }
-
-        painter.restore();
+            if( toHandlePlaneHits ) paintPlaneHit( particle );
+        }        
 
         if( planeArea->getPlainDivider().isDividerInPlane() ) paintPlaneDivider();
         if( toVectorPaint ) handleCursorPosition();
 
         if( static_cast<int>(planeArea->getXConstraint())>planeBorderWidth ) paintPlaneConstraintWalls();
+
+        painter.restore();
     }
 
 }
@@ -133,33 +118,48 @@ void QPainterManager::paintPlaneDivider()
     painter.drawRect( planeArea->getPlainDivider().getLowerRect().first.x+planeBorderWidth, planeArea->getPlainDivider().getLowerRect().first.y+planeBorderWidth, planeArea->getPlainDivider().getLowerRect().second.x, planeArea->getPlainDivider().getLowerRect().second.y );
 }
 
-void QPainterManager::paintPlaneHit( coord2D position, double timeAfterHit )
+void QPainterManager::paintPlaneHit( citerParticle particle )
 {
-    double alpha = 255*(1-timeAfterHit/maxTimeAfterHit);
-    QColor hitColor(210,50,50,static_cast<int>(alpha));
+    double planeHitDiff {2};
+    int    hitSize {particle->size};
 
-    painter.setPen(hitColor);
-    painter.setBrush(hitColor);
-    if( position.y == 0 ) painter.drawRect( position.x - static_cast<int>(maxTimeAfterHit - timeAfterHit) , position.y , 2*static_cast<int>(maxTimeAfterHit - timeAfterHit) , position.y + planeBorderWidth );
-    else if( position.x == 0 ) painter.drawRect( position.x , position.y - static_cast<int>(maxTimeAfterHit - timeAfterHit) , position.x + planeBorderWidth , 2*static_cast<int>(maxTimeAfterHit - timeAfterHit)  );
-    else if( position.y == height() ) painter.drawRect( position.x - static_cast<int>(maxTimeAfterHit - timeAfterHit) , position.y - planeBorderWidth , 2*static_cast<int>(maxTimeAfterHit - timeAfterHit) , planeBorderWidth );
-    else if( position.x == width()  ) painter.drawRect( position.x - planeBorderWidth , position.y - static_cast<int>(maxTimeAfterHit - timeAfterHit) , planeBorderWidth , 2*static_cast<int>(maxTimeAfterHit - timeAfterHit)  );
+    auto posx = static_cast<int>(particle->position.x)+planeBorderWidth;
+    auto posy = static_cast<int>(particle->position.y)+planeBorderWidth;
+
+    painter.setBrush(QColor(210,50,50));
+
+    if( particle->position.y-particle->radius<planeHitDiff )
+    {
+        painter.drawRect( posx - hitSize , 0 , 2*hitSize , planeBorderWidth );
+    }
+    else if( particle->position.y+particle->radius>planeArea->getHeight()-planeHitDiff )
+    {
+        painter.drawRect( posx - hitSize , height() - planeBorderWidth , 2*hitSize , planeBorderWidth );
+    }
+    else if( particle->position.x-particle->radius<planeHitDiff )
+    {
+        painter.drawRect( 0 , posy - hitSize , planeBorderWidth , 2*hitSize );
+    }
+    else if( particle->position.x+particle->radius>planeArea->getWidth()-planeHitDiff )
+    {
+        painter.drawRect( width() - planeBorderWidth , posy - hitSize , planeBorderWidth , 2*hitSize );
+    }
 }
 
 void QPainterManager::paintTracking( citerParticle particle )
 {
-    int size  {8};
+    int size  {static_cast<int>(particle->radius/2)+1};
     int posx  {0};
     int posy  {0};
-    int alpha {255};
+    int alpha {0};
 
     for( auto position = --particle->particlePositionsTracking.cend() ; position != particle->particlePositionsTracking.cbegin() ; --position )
     {
         posx = static_cast<int>(position->x+planeBorderWidth);
-        posy = static_cast<int>(position->y+planeBorderWidth);
-        painter.setBrush(QBrush(QColor(120,120,120,static_cast<int>(alpha))));
+        posy = static_cast<int>(position->y+planeBorderWidth);        
+        painter.setBrush(QColor(120+alpha,120+alpha,120+alpha));
         painter.drawEllipse(posx-size/2,posy-size/2,size,size);                
-        if( --alpha<0 ) alpha = 0;
+        if( ++alpha>100 ) alpha = 100;
     }    
 }
 
@@ -183,24 +183,4 @@ void QPainterManager::handleCursorPosition()
             painter.drawText(static_cast<int>(position.x-10),static_cast<int>(position.y-particle->radius*1.5-5),QString::number(particle->getCurrentVelocityPercent())+" %");
         }       
     }
-}
-
-void QPainterManager::handlePlaneHit()
-{
-    auto hit = planeHits.begin();
-
-    while( hit != planeHits.end() )
-    {
-        hit->first += 0.002 ;
-        if( hit->first >= maxTimeAfterHit )
-        {
-            hit = planeHits.erase(hit);
-        }
-        else
-        {
-            paintPlaneHit(hit->second,hit->first);
-            ++hit;
-        }
-    }
-
 }

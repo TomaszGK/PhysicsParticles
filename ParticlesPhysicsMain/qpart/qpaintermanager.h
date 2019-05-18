@@ -31,26 +31,23 @@ private:
 
     QPoint   mousePos;
 
-    bool toVectorPaint {false};
-    bool toTrackingPaint {false};
-    bool toHandlePlaneHits {false};
-    int  maxTimeAfterHit {10};
-
-    std::list< std::pair<double,coord2D> > planeHits;
     std::pair<bool,std::vector<Particle>::const_iterator> displayVelocityVector;
 
     cptrParticlesContainer particles;
     std::shared_ptr<const PlaneArea> planeArea;   
+
+    bool toVectorPaint {false};
+    bool toTrackingPaint {false};
+    bool toHandlePlaneHits {false};
 
     void paint() override;
     void init() override;
 
     void paintPlaneConstraintWalls();
     void paintConstraintArrows();
-    void paintPlaneDivider();
-    void paintPlaneHit( coord2D position , double timeAfterHit = 0.0 );
-    void paintTracking( citerParticle );
-    void handleCursorPosition();
-    void handlePlaneHit();
+    void paintPlaneDivider();    
+    void paintPlaneHit( citerParticle particle );
+    void paintTracking( citerParticle particle );
+    void handleCursorPosition();   
 
 };

@@ -53,14 +53,14 @@ void Particle::updateParticleColor()
 
 void Particle::savePosition()
 {
-    if( particlePositionsTracking.size()>maxPositionsInTracking )
-    {
-        particlePositionsTracking.pop_front();
-    }
-
     if( !particlePositionsTracking.empty() )
     {
         if( (*prev(particlePositionsTracking.end())-position)()<=radius ) return;
+    }
+
+    if( particlePositionsTracking.size()>maxPositionsInTracking )
+    {
+        particlePositionsTracking.pop_front();
     }
 
     particlePositionsTracking.push_back(position);
