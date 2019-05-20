@@ -192,6 +192,7 @@ bool ParticlesPhysicsManager::removeParticles( ParticleType particleType, int qu
 
     auto iter = particles->begin();    
     bool erase = false;
+    bool isTrackingFlag = selectedParticle->isTracking;
 
     simulationInfo.numberOfParticles[particleType] -= quantity;
 
@@ -208,7 +209,9 @@ bool ParticlesPhysicsManager::removeParticles( ParticleType particleType, int qu
         else erase = false;
     }
 
-    recalculateParticlesInClusters();    
+    recalculateParticlesInClusters();
+    selectedParticle = particles->begin();
+    selectedParticle->isTracking = isTrackingFlag;
 
     if( !pauseByUserFlag ) run();
 

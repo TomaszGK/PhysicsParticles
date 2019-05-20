@@ -12,7 +12,7 @@
  * @class sline2D
  * @brief Defines two dimensional simply line.
  *
- * Implements basic functions to operate whith projection and intersections.
+ * Implements basic functions to operate with line using projection and intersections.
  * @author Tomasz Gburek
  * @date 2019
  */
@@ -30,7 +30,7 @@ public:
      * @param v1          point v1
      * @param v2          point v2
      */
-    sline2D( vector2D<T> v1 , vector2D<T> v2 ) : v1 {v1}, v2 {v2} { if(v1!=v2) calculateCoeff(); }
+    sline2D( vector2D<T> v1 = T() , vector2D<T> v2 = T() ) : v1 {v1}, v2 {v2} { if(v1!=v2) calculateCoeff(); }
 
     /**
      * @brief Checks if a given line intersect with this line.
