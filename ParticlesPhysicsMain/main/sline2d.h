@@ -24,13 +24,18 @@ class sline2D
 public:
 
     /**
+     * @brief Default constructor
+     */
+    sline2D() = default;
+
+    /**
      * @brief Constructor
      *
      * Constructs 2D line geting across v1 and v2.
      * @param v1          point v1
      * @param v2          point v2
      */
-    sline2D( vector2D<T> v1 = T() , vector2D<T> v2 = T() ) : v1 {v1}, v2 {v2} { if(v1!=v2) calculateCoeff(); }
+    sline2D( vector2D<T> v1 , vector2D<T> v2 ) : v1 {v1}, v2 {v2} { if(v1!=v2) calculateCoeff(); }
 
     /**
      * @brief Checks if a given line intersect with this line.

@@ -24,7 +24,7 @@ public:
      * @param size      bins size
      * @param label     name of bardisplay
      */
-    BarDisplay( size_t size, std::string label = "" );
+    explicit BarDisplay( size_t size, std::string label = "" );
 
     /**
      * @brief Set upper bardisplay box value
@@ -68,7 +68,7 @@ public:
 
 private:
 
-    std::vector<std::pair<int,int>>  bins; /**< contains upper and lower bar values */
-    std::string                     label; /**< bar display name */
+    std::vector<std::pair<int,int>>  bins      ; /**< contains upper and lower bar values */
+    std::string                     label {""} ; /**< bar display name */
 
 };

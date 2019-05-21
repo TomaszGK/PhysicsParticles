@@ -27,7 +27,7 @@ public:
      * @param size      number of bins
      * @param label     name of barchart
      */
-    BarChart( size_t size , std::string label = "" );   
+    explicit BarChart( size_t size , std::string label = "" );
 
     /**
      * @brief Add new value to bar chart bins
@@ -70,9 +70,9 @@ public:
 
 private:
 
-    std::list<double> bins     ; /**< contains bar values */
-    double            max   {0}; /**< maximum value inside bins */
-    double            min   {0}; /**< minimum value inside bins */
-    std::string       label    ; /**< barchart name */
+    std::list<double> bins       ; /**< contains bar values */
+    double            max   {0}  ; /**< maximum value inside bins */
+    double            min   {0}  ; /**< minimum value inside bins */
+    std::string       label {""} ; /**< barchart name */
 
 };

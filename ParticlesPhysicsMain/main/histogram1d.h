@@ -108,6 +108,6 @@ private:
     double      end           {10.0}   ; /**< end position of last bin */
     double      binsize       {1.0}    ; /**< size of bins (intervals) */
     int         markingBin    {-1}     ; /**< index of marking (selecting) bin */
-    std::string label                  ; /**< histogram name */
+    std::string label         {""}     ; /**< histogram name */
 
 };

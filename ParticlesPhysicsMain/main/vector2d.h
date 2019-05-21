@@ -23,13 +23,18 @@ class vector2D
 public:
 
     /**
+     * @brief Default constructor
+     */
+    vector2D() = default;
+
+    /**
      * @brief Constructor
      *
      * Constructs 2D vector [x,y].
      * @param x           x value
      * @param y           y value
      */
-    vector2D( T x = T() , T y = T() ) : x {x}, y {y} {}
+    vector2D( T x , T y ) : x {x}, y {y} {}
 
     /**
      * @brief Calculates the length of vector.
@@ -168,8 +173,8 @@ public:
      */
     vector2D<T> setLength( T newLength ) { if( x!=T{} || y!=T{} ){ *this *= (newLength/(*this)()); } return *this; }
 
-    T x {0}; /**< x vector value */
-    T y {0}; /**< y vector value */
+    T x {}; /**< x vector value */
+    T y {}; /**< y vector value */
 
 };
 

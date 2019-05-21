@@ -79,10 +79,10 @@ public:
 
 private:
 
-    int dividerPosX   ; /**< position of plane divider along X axis */
-    int dividerWidth  ; /**< width of plane divider in pixels */
-    int dividerHeight ; /**< height of plane divider in pixels */
-    int dividerGap    ; /**< size of gap inside the plane divider in percent */
+    int dividerPosX   {0} ; /**< position of plane divider along X axis */
+    int dividerWidth  {0} ; /**< width of plane divider in pixels */
+    int dividerHeight {0} ; /**< height of plane divider in pixels */
+    int dividerGap    {0} ; /**< size of gap inside the plane divider in percent */
 
     /**< Upper plane divider rectangle coordinates, first contains upperleft rectangle position and second its width and height */
     std::pair<coord2D,coord2D> upperRect;

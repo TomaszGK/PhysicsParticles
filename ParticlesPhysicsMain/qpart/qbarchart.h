@@ -4,7 +4,28 @@
 #include "qboxpainter.h"
 #include "barchart.h"
 
-enum class DataVisualization { BARS , POINTS, LINES };
+/** @file
+ * @brief Class @ref QBarChart
+ */
+
+/**
+ * @class QBarChart
+ * @brief Implements visualization of bar charts in QT.
+ *
+ * Paints bar charts using QT framework and BarChart class for datat manimulation.
+ * @author Tomasz Gburek
+ * @date 2019
+ */
+
+/** @enum DataVisualization
+ *  @brief Represents bar chart visualization type.
+ */
+enum class DataVisualization
+{
+    BARS   , /**< painting bars */
+    POINTS , /**< painting points */
+    LINES    /**< painting lines */
+};
 
 class QBarChart : public QBoxPainter
 {
@@ -13,47 +34,82 @@ class QBarChart : public QBoxPainter
 
 public:
 
+    /**
+     * @brief Constructor
+     *
+     * @param max                   maximum bin value
+     * @param scalability           scalability mode
+     * @param ptr                   pointer to BarChart object
+     * @param parent                ponter to parent widget
+     */
     explicit QBarChart( double max = 1, std::pair<bool,bool> scalability = {true,true}, ptrBarChart ptr = nullptr, QWidget* parent = nullptr );
 
-    QBarChart( const QBarChart& ) = default;
-    QBarChart( QBarChart&& ) = default;
-
-    QBarChart& operator=( const QBarChart& ) = default;
-    QBarChart& operator=( QBarChart&& ) = default;
-
+    /**
+     * @brief Sets maximum bin value.
+     *
+     * @param max                   maximum bin value
+     */
     void setMaxOY( double max ) { maxValue = max*1.6; }
+
+    /**
+     * @brief Sets scalability mode.
+     *
+     * @param _isScalableUp         scalable up flag
+     * @param _isScalableDown       scalable down flag
+     */
     void setScalabality( bool _isScalableUp , bool _isScalableDown ) { isScalableUp = _isScalableUp ; isScalableDown = _isScalableDown; }
 
 private:
 
+    /** Holds BarChart object. */
     ptrBarChart barChart;
 
+    /** Maps buttons changing state of data visualization. */
     std::map<DataVisualization,std::unique_ptr<QPushButton>> buttons;
-    QString buttonStyleSelected;
-    QString buttonStyleUnselected;
 
-    QColor cValue        {100,20,20};
-    QColor cBackground   {145,215,215};
-    QColor cButtonActive {145,105,125};
-    QColor cButton       {200,200,200};
-    QColor cButtonLabel  {15,15,15};
-
-    int    barWidth       {0};
-    double maxValue       {1};    // maximum OY axis
-    bool   isScalableUp   {true};
-    bool   isScalableDown {true};
-    int    labelPosition  {0};
-
+    /** Data visuzalization type */
     DataVisualization dataVisulization { DataVisualization::BARS };
 
+    QString buttonStyleSelected   {""}; /** holds QT style sheet for selected button */
+    QString buttonStyleUnselected {""}; /** holds QT style sheet for unselected button */
+
+    QColor cValue        {100,20,20}   ; /** current value color */
+    QColor cBackground   {145,215,215} ; /** background color */
+    QColor cButtonActive {145,105,125} ; /** active button color */
+    QColor cButton       {200,200,200} ; /** button color */
+    QColor cButtonLabel  {15,15,15}    ; /** button label color */
+
+    int    barWidth       {0}    ; /** single bar width */
+    double maxValue       {1}    ; /** maximum bin value */
+    bool   isScalableUp   {true} ; /** scalable up flag - if true then maxValue can increase */
+    bool   isScalableDown {true} ; /** scalable down flag - if true then maxValue can decrease */
+    int    labelPosition  {0}    ; /** label position */
+
+    /**
+     * @brief Paints bar charts.
+     */
     void paint() override;
+
+    /**
+     * @brief Inits and calculates QBarChart state.
+     */
     void init() override;
 
+    /**
+     * @brief Draws current bar value value.
+     */
     void drawCurrentValue();
+
+    /**
+     * @brief Draws QBarChart name.
+     */
     void drawChartName();
 
 private slots:
 
+    /**
+     * @brief Handles button click event.
+     */
     void onButtonClick();
 
 };
