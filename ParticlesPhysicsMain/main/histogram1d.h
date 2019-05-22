@@ -31,7 +31,7 @@ public:
      * @param end       end position of last bin
      * @param label     name of barchart
      */
-    Histogram1D( size_t size, double begin, double end, std::string label = "" );
+    Histogram1D( size_t size, double begin, double end, std::string_view label = "" );
 
     /**
      * @brief Adds new value to histograms bins.

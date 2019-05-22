@@ -27,7 +27,7 @@ public:
      * @param size      number of bins
      * @param label     name of barchart
      */
-    explicit BarChart( size_t size , std::string label = "" );
+    explicit BarChart( size_t size , std::string_view label = "" );
 
     /**
      * @brief Add new value to bar chart bins

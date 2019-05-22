@@ -24,7 +24,7 @@ public:
      * @param size      bins size
      * @param label     name of bardisplay
      */
-    explicit BarDisplay( size_t size, std::string label = "" );
+    explicit BarDisplay( size_t size, std::string_view label = "" );
 
     /**
      * @brief Set upper bardisplay box value

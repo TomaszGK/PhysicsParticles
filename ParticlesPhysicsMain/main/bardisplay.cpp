@@ -1,7 +1,7 @@
 #include "bardisplay.h"
 
-BarDisplay::BarDisplay( size_t size, std::string label )
-: label {std::move(label)}
+BarDisplay::BarDisplay( size_t size, std::string_view label )
+: label {label}
 {
     bins.resize(size,{0,0});
 }

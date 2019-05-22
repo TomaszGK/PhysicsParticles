@@ -3,8 +3,8 @@
 #include <stdexcept>
 #include <algorithm>
 
-Histogram1D::Histogram1D( size_t size, double begin, double end, std::string label )
-: begin {begin}, end {end}, label {std::move(label)}
+Histogram1D::Histogram1D( size_t size, double begin, double end, std::string_view label )
+: begin {begin}, end {end}, label {label}
 {    
     if( size==0 ) throw std::length_error("Histogram1D::Histogram1D : size==0");
     if( end<=begin ) throw std::length_error("Histogram1D::Histogram1D : begin>=end");

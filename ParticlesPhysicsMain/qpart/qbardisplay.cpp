@@ -54,19 +54,19 @@ void QBarDisplay::paint()
             percent =  static_cast<double>(barDisplay->getUpperBox(index))/max;
             value = static_cast<int>((geometry().height()/2.8)*percent);
             if( value>0 ) painter.drawRect(static_cast<int>(marginLeft+posx),height()/2-value,barWidth-1,value);
-            painter.drawText(marginLeft+posx+getNumberXPosition(value),height()/2-value-5,QString::number(barDisplay->getUpperBox(index)));
+            painter.drawText(marginLeft+posx+getCenteredTextPosition(value),height()/2-value-5,QString::number(barDisplay->getUpperBox(index)));
 
             painter.setBrush(QBrush(lower));
             painter.setPen(QPen(lower));
             percent = static_cast<double>(barDisplay->getLowerBox(index))/max;
             value = static_cast<int>((geometry().height()/2.8)*percent);            
             if( value>0 ) painter.drawRect(marginLeft+posx,height()/2,barWidth-1,value);
-            painter.drawText(marginLeft+posx+getNumberXPosition(value),height()/2+value+17,QString::number(barDisplay->getLowerBox(index)));
+            painter.drawText(marginLeft+posx+getCenteredTextPosition(value),height()/2+value+17,QString::number(barDisplay->getLowerBox(index)));
         }
     }
 }
 
-int QBarDisplay::getNumberXPosition( const int &number )
+int QBarDisplay::getCenteredTextPosition( int number )
 {
     QFontMetrics fm(parentWidget()->font());
     int pixelsWide = fm.width(QString::number(number));
