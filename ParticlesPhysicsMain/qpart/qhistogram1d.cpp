@@ -1,10 +1,8 @@
 #include "qhistogram1d.h"
 
-QHistogram1D::QHistogram1D( double max, ptrHistogram1D ptr, QWidget* parent )
-: QBoxPainter { parent }, histogram1D { std::move(ptr) }
+QHistogram1D::QHistogram1D( double maxValue, ptrHistogram1D ptr, QWidget* parent )
+: QBoxPainter { parent }, histogram1D { std::move(ptr) }, maxValue {maxValue}
 {
-    setMaxOY(max);
-
     background = QBrush(QColor(145, 215, 215));
     setAutoFillBackground(false);    
     background = cBackground;
@@ -81,7 +79,7 @@ void QHistogram1D::paint()
 
 void QHistogram1D::drawHistogramName()
 {
-    painter.setPen(QPen(cValue));
+    painter.setPen(QPen(cLabelColor));
     painter.drawText(labelPosition,marginTop-7,label);
 }
 

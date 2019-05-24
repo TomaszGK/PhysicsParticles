@@ -36,7 +36,7 @@ void QParticlesPhysicsManager::addQHistogram1D( const std::string& name, QHBoxLa
 {
     if( histograms1D.count(name) != 0 )
     {       
-        qBoxPainters[name] = std::make_unique<QHistogram1D>(100,histograms1D[name],layout->parentWidget());        
+        qBoxPainters[name] = std::make_unique<QHistogram1D>(160,histograms1D[name],layout->parentWidget());
         layout->addWidget( qBoxPainters[name].get() );        
     }
 }
