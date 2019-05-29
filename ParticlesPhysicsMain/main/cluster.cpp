@@ -45,6 +45,8 @@ Cluster &Cluster::operator=( const Cluster &cluster )
 
 Cluster &Cluster::operator=( Cluster &&cluster ) noexcept
 {
+    if( &cluster == this ) return *this;
+
     coordinates = cluster.coordinates;
     id = cluster.id;
 

@@ -1,7 +1,7 @@
 #include "qinteractivelabel.h"
 
-QInteractiveLabel::QInteractiveLabel( QWidget *parent )
-: QLabel(parent)
+QInteractiveLabel::QInteractiveLabel( const QString& enterPicture, const QString& leavePicture, QWidget *parent )
+:QLabel(parent), enterPicture {enterPicture} , leavePicture {leavePicture}
 {
 
 }
@@ -16,10 +16,10 @@ void QInteractiveLabel::setPicture( const QString& filename )
 
 void QInteractiveLabel::enterEvent( QEvent* )
 {
-    setPicture("Einstein_tongue.jpg");
+    setPicture(enterPicture);
 }
 
 void QInteractiveLabel::leaveEvent( QEvent* )
 {
-    setPicture("science.jpg");
+    setPicture(leavePicture);
 }

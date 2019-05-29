@@ -4,7 +4,8 @@
 DialogAbout::DialogAbout(QWidget *parent) :
     QDialog(parent),    
     ui(new Ui::DialogAbout),
-    updateTimer(this)
+    updateTimer(this),
+    labelPicture {"Einstein_tongue.jpg","science.jpg"}
 {
     ui->setupUi(this);    
     propertyAnimation = std::make_unique<QPropertyAnimation>(this, "windowOpacity");
@@ -44,7 +45,7 @@ void DialogAbout::update()
     }
     for( auto &label : labels )
     {
-        label.second->setText( animatedText[label.first]->getCurrentText()  );
+        label.second->setText( animatedText[label.first]->getCurrentText() );
     }
 
     if( static_cast<size_t>(ends) == animatedText.size() ) updateTimer.stop();
@@ -52,7 +53,7 @@ void DialogAbout::update()
 
 void DialogAbout::setFadeAnimation( int duration )
 {
-    updateTimer.start(10);
+    updateTimer.start(20);
     for( auto &text : animatedText ){ text.second->reset(); }
     propertyAnimation->setDuration(duration);
     propertyAnimation->setStartValue(0.0);

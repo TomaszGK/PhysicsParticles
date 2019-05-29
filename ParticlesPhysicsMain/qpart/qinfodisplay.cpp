@@ -6,18 +6,12 @@ QInfoDisplay::QInfoDisplay( QWidget *parentWidget )
 {
     background = QBrush(QColor(145, 215, 215));
     setAutoFillBackground(false);    
-    marginLeft = marginRight = marginTop = marginBottom = 5;
-    init();
+    marginLeft = marginRight = marginTop = marginBottom = 5; 
 }
 
-void QInfoDisplay::init()
-{
-
-}
-
-void QInfoDisplay::setDisplay( PlaneSide side, int _value )
+void QInfoDisplay::setDisplay( PlaneSide side, int newValue )
 {   
-   value[side] = _value;
+   value[side] = newValue;
    textWidth[side] = getStringWidthInPixels(QString::number(value[side])+" %");
 }
 
