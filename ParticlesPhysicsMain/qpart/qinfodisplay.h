@@ -37,6 +37,8 @@ public:
      */
     void setDisplay( PlaneSide side, int newValue );
 
+private:    
+
     /**
      * @brief Paints display.
      */
@@ -46,9 +48,6 @@ public:
      * @brief Empty init.
      */
     void init() override {}
-
-
-private:    
 
     /** Maps percent values to display. */
     std::map<PlaneSide,int> value { {PlaneSide::UP,0},{PlaneSide::DOWN,0},{PlaneSide::RIGHT,0},{PlaneSide::LEFT,0} };

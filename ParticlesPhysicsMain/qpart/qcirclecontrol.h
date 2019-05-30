@@ -31,16 +31,6 @@ public:
     explicit QCircleControl( QWidget* parentWidget = nullptr );
 
     /**
-     * @brief Inits and calculates QCircleControl state.
-     */
-    void init() override;
-
-    /**
-     * @brief Paints circle control.
-     */
-    void paint() override;
-
-    /**
      * @brief Gets circle control indicator.
      *
      * Gets vector defined by orgin and small circle positions.
@@ -56,6 +46,16 @@ private:
     QColor bigCirclePenColor      {80,80,90}    ; /** big circle border color */
     QColor smallCircleColor       {155,155,155} ; /** small circle color */
     QColor smallCircleHookedColor {100,100,255} ; /** small circle hooked color */
+
+    /**
+     * @brief Inits and calculates QCircleControl state.
+     */
+    void init() override;
+
+    /**
+     * @brief Paints circle control.
+     */
+    void paint() override;
 
     /**
      * @brief Paints vertical and horizontal line.

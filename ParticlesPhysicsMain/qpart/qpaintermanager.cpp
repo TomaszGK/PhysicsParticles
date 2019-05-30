@@ -3,14 +3,12 @@
 #include <QTimer>
 #include "particle.h"
 
-QPainterManager::QPainterManager( cptrParticlesContainer ptr, std::shared_ptr<const PlaneArea> ptrArea, QWidget* parent )
-: QBoxPainter { parent }, particles { std::move(ptr) }, planeArea { std::move(ptrArea) }
+QPainterManager::QPainterManager( cptrParticlesContainer ptrParticles, std::shared_ptr<const PlaneArea> ptrPlaneArea, QWidget* parent )
+: QBoxPainter { parent }, particles { std::move(ptrParticles) }, planeArea { std::move(ptrPlaneArea) }
 {
     background = QBrush(QColor(235, 235, 235));
     particlePen = QPen(Qt::NoPen);
     particlePen.setWidth(1);
-    textPen = QPen(Qt::white);    
-    textFont.setPixelSize(50);    
     displayVelocityVector.first = false;    
 
     setAutoFillBackground(false);

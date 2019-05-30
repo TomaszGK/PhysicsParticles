@@ -32,16 +32,6 @@ public:
      */
     explicit QHistogram1D( double maxValue = 100, ptrHistogram1D ptr = nullptr, QWidget* parent = nullptr );
 
-    /**
-     * @brief Paints histogram.
-     */
-    void paint() override;
-
-    /**
-     * @brief Inits and calculates QHistogram1D state.
-     */
-    void init() override;
-
 private:
 
     /** Holds Histogram1D object. */
@@ -53,6 +43,16 @@ private:
     double barWidth      {0}   ; /** histogram bar width */
     double maxValue      {100} ; /** maximum bin value */
     int    labelPosition {0}   ; /** histogram label position */
+
+    /**
+     * @brief Paints histogram.
+     */
+    void paint() override;
+
+    /**
+     * @brief Inits and calculates QHistogram1D state.
+     */
+    void init() override;
 
     /**
      * @brief Draws histogram name/label.
