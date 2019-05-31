@@ -80,12 +80,12 @@ void QParticlesPhysicsManager::createParticlesPaintManager()
     particlesPaintManager = std::make_unique<QPainterManager>(particles,planeArea);
 }
 
-void QParticlesPhysicsManager::paintParticlesFrame()
+void QParticlesPhysicsManager::paintParticlesPlane()
 {
     particlesPaintManager->update();
 }
 
-void QParticlesPhysicsManager::paintFrames()
+void QParticlesPhysicsManager::paintLayouts()
 {
     updateBars();    
     for( auto &painter : qBoxPainters ){ painter.second->update(); }

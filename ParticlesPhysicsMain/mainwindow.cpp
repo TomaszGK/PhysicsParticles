@@ -94,7 +94,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::update()
 {    
-    physicsSimulation[currentIndex]->paintFrames();
+    physicsSimulation[currentIndex]->paintLayouts();
     physicsSimulation[currentIndex]->handleControls();
     ui->calculationCount->display(static_cast<int>(physicsSimulation[currentIndex]->getAvgCalculationCount()));
 }
@@ -117,7 +117,7 @@ void MainWindow::animate()
 
 void MainWindow::paint()
 {
-    physicsSimulation[currentIndex]->paintParticlesFrame();
+    physicsSimulation[currentIndex]->paintParticlesPlane();
 }
 
 void MainWindow::about_action()

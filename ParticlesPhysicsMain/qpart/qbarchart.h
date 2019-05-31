@@ -10,7 +10,7 @@
 
 /**
  * @class QBarChart
- * @brief Implements visualization of bar charts in QT.
+ * @brief Implements bar charts visualization in QT.
  *
  * Paints bar charts using QT framework and BarChart class for data manimulation.
  * @author Tomasz Gburek

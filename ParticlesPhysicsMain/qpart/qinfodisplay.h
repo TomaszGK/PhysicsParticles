@@ -30,7 +30,7 @@ public:
     explicit QInfoDisplay( QWidget* parentWidget = nullptr );
 
     /**
-     * @brief Sets new value for a given box side.
+     * @brief Sets new value to display for a given box side.
      *
      * @param side                  plane side corresponding to box side
      * @param newValue              new percent value to display
