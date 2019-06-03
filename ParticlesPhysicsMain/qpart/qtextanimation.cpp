@@ -4,21 +4,21 @@
 QTextAnimation::QTextAnimation( QString _text )
 : text {std::move(_text)}
 {
-    cycleToLetterAppear.resize(static_cast<size_t>(text.size()));
-    cycleSpeed.resize(static_cast<size_t>(text.size()));
+    cyclesToLetterAppear.resize(static_cast<size_t>(text.size()));
+    cycleLength.resize(static_cast<size_t>(text.size()));
     cycle.resize(static_cast<size_t>(text.size()));
     mask.resize(static_cast<size_t>(text.size()));
     reset();
 }
 
-void QTextAnimation::reset( int baseCycleTime )
+void QTextAnimation::reset( int baseCyclesToAppear )
 {
-    for( auto &item : cycleToLetterAppear )
+    for( auto &item : cyclesToLetterAppear )
     {
-        item = baseCycleTime + QRandomGenerator::global()->bounded(15);
+        item = baseCyclesToAppear + QRandomGenerator::global()->bounded(15);
     }
 
-    for( auto &item : cycleSpeed )
+    for( auto &item : cycleLength )
     {
         item = 1 + QRandomGenerator::global()->bounded(5);
     }
@@ -39,35 +39,24 @@ void QTextAnimation::reset( int baseCycleTime )
 void QTextAnimation::generateCurrentText()
 {
     QString letter;
-    currentText = "";
+    currentText = "";    
+
     for( size_t index = 0 ; index < static_cast<size_t>(text.size()) ; ++index )
     {
-        int number = getNextNumber(index);
-        if( number != mask[index] )
+
+        if( ++cycle[index] == cycleLength[index] ) cycle[index] = 0;
+
+        if( cycle[index] == 0 )
         {
-            --cycleToLetterAppear[index];
-            mask[index] = number;
+            --cyclesToLetterAppear[index];
+            mask[index] = (mask[index]+1)%9;
         }
 
-        if( cycleToLetterAppear[index]>0 ) letter = QString::number(mask[index]);
+        if( cyclesToLetterAppear[index]>0 ) letter = QString::number(mask[index]);
         else letter = text[static_cast<int>(index)];
 
         currentText += letter ;
     }
-}
-
-int QTextAnimation::getNextNumber( size_t position )
-{
-    int number = mask[position];
-
-    cycle[position]++;
-    if( cycle[position] == cycleSpeed[position] )
-    {
-        cycle[position] = 0;
-        if( ++number>9 ) number=0;
-    }
-
-    return number;
 }
 
 bool QTextAnimation::update()
