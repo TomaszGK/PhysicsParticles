@@ -3,31 +3,52 @@
 #include "qboxpainter.h"
 #include "particle.h"
 
+/** @file
+ * @brief Class @ref QTrackingPlot2D
+ */
+
+/**
+ * @class QTextAnimation
+ * @brief Implements visualization of two dimentional plot in QT.
+ *
+ * Paints 2D plot of tracking particle using QT paint box.
+ * @author Tomasz Gburek
+ * @date 2019
+ */
+
 class QTrackingPlot2D: public QBoxPainter
 {
 
     Q_OBJECT
 
 public:
-    explicit QTrackingPlot2D( cptrParticlesContainer ptr, QWidget *parent = nullptr );
 
-    QTrackingPlot2D( const QTrackingPlot2D& ) = default;
-    QTrackingPlot2D( QTrackingPlot2D&& ) = default;
-
-    QTrackingPlot2D& operator=( const QTrackingPlot2D& ) = default;
-    QTrackingPlot2D& operator=( QTrackingPlot2D&& ) = default;
+    /**
+     * @brief Constructor
+     *
+     * @param ptrParticles          shared pointer to constant vector of Particle objects
+     * @param parent                ponter to parent widget
+     */
+    explicit QTrackingPlot2D( cptrParticlesContainer ptrParticles, QWidget *parent = nullptr );
 
 private:
 
-    QFont    textFont;
-    QPen     plotPen;
-    QPen     textPen;
-    QColor   particleColor;
+    QPen plotPen ; /**< plotting pen */
 
+    /** Holds shared pointer to constant vector of Particle objects. */
     cptrParticlesContainer particles;
+
+    /** Holds constant iterator to tracking particle. */
     citerParticle trackingParticle;
 
+    /**
+     * @brief Paints 2D plot.
+     */
     void paint() override;
+
+    /**
+     * @brief Inits the state of QTrackingPlot2D.
+     */
     void init() override;
 
 };

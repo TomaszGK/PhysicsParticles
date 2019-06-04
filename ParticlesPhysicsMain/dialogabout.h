@@ -9,6 +9,18 @@
 #include "qtextanimation.h"
 #include "qinteractivelabel.h"
 
+/** @file
+ * @brief Class @ref DialogAbout
+ */
+
+/**
+ * @class DialogAbout
+ * @brief Info dialog window QT form definition.
+ *
+ * @author Tomasz Gburek
+ * @date 2019
+ */
+
 namespace Ui {
 class DialogAbout;
 }

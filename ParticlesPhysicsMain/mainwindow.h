@@ -6,6 +6,18 @@
 #include <dialogabout.h>
 #include <qparticlesphysicsmanager.h>
 
+/** @file
+ * @brief Class @ref MainWindow
+ */
+
+/**
+ * @class MainWindow
+ * @brief Main window QT form definition.
+ *
+ * @author Tomasz Gburek
+ * @date 2019
+ */
+
 namespace Ui {
 class MainWindow;
 }
