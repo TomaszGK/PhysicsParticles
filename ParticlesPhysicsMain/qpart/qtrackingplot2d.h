@@ -8,7 +8,7 @@
  */
 
 /**
- * @class QTextAnimation
+ * @class QTrackingPlot2D
  * @brief Implements visualization of two dimentional plot in QT.
  *
  * Paints 2D plot of tracking particle using QT paint box.
