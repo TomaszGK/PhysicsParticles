@@ -544,18 +544,31 @@ protected:
      */
     void updateParticlesLocationInPlane();
 
-    /** @brief Gets uncollided random position of particle in a given area.
+    /** @brief Tries to get uncollided random position of particle in a given area.
      *
      * Tries to get random particle position from rectangle (minx,maxx,miny,maxy).
-     * A returned position do not overalap with others. Using to disjoint overlap particles.
+     * A returned position should do not overalap with others. Using to disjoint overlap particles.
+     * @param minx        minimum x in (minx,maxx,miny,maxy) area
+     * @param maxx        maximum x in (minx,maxx,miny,maxy) area
+     * @param miny        minimum y in (minx,maxx,miny,maxy) area
+     * @param maxy        maximum y in (minx,maxx,miny,maxy) area
+     * @param radius      particle radius     
+     * @return random position from (minx,maxx,miny,maxy) area
+     */
+    vect2D getDisjointRandomParticlePosition( double minx, double maxx, double miny, double maxy, double radius );
+
+    /** @brief Tries to get uncollided random position of particle in a given area.
+     *
+     * Tries to get random particle position from rectangle (minx,maxx,miny,maxy).
      * @param minx        minimum x in (minx,maxx,miny,maxy) area
      * @param maxx        maximum x in (minx,maxx,miny,maxy) area
      * @param miny        minimum y in (minx,maxx,miny,maxy) area
      * @param maxy        maximum y in (minx,maxx,miny,maxy) area
      * @param radius      particle radius
+     * @param tries       number of maximum tries to get not overlap particles
      * @return random position from (minx,maxx,miny,maxy) area
      */
-    vect2D getDisjointRandomParticlePosition( double minx, double maxx, double miny, double maxy, double radius );
+    vect2D getDisjointRandomParticlePositionTries( double minx, double maxx, double miny, double maxy, double radius, int tries );
 
     /** @brief Handles particle transition between clusters.
      *
@@ -598,6 +611,19 @@ protected:
      * @return true if overlap
      */
     bool isParticlesOverlap( const vect2D& particlePosition, double radius );
+
+    /** @brief Checks if particle overlaped with others.
+     *
+     * Checks if particle defined by position and radius is overlaped with other particles.
+     * @param particleType        particle  type
+     * @return true if particle type is gas otherwise is false
+     */
+    bool isParticleTypeGas( ParticleType particleType )
+    {
+        return ( particleType == ParticleType::GAS1   ||
+                 particleType == ParticleType::GAS2   ||
+                 particleType == ParticleType::GAS3      ) ? true:false;
+    }
 
     /** Creates initial set of particles. */
     void createParticles();

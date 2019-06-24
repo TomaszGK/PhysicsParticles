@@ -128,10 +128,7 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
     int minY {particleSize+5};
     int maxY {planeArea->getHeight()-particleSize-5};
 
-    if( particleType == ParticleType::NORMAL ||
-        particleType == ParticleType::GAS1   ||
-        particleType == ParticleType::GAS2   ||
-        particleType == ParticleType::GAS3      )
+    if( particleType == ParticleType::NORMAL || isParticleTypeGas(particleType) )
     {
         temperatureMax = physicsInfo.temperature;      
     }
@@ -164,7 +161,7 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
 
     for( int index=0 ; index<quantity ; ++index )
     {
-        position = getDisjointRandomParticlePosition(minX,maxX,minY,maxY,particleSize/2);
+        position = isParticleTypeGas(particleType) ?  getDisjointRandomParticlePositionTries(minX,maxX,minY,maxY,particleSize/2,50) : getDisjointRandomParticlePosition(minX,maxX,minY,maxY,particleSize/2);
 
         velocity.x = Random::get<double>(temperatureMin,temperatureMax);
         velocity.y = Random::get<double>(temperatureMin,sqrt(temperatureMax*temperatureMax-velocity.x*velocity.x));
@@ -630,7 +627,7 @@ void ParticlesPhysicsManager::updateParticlesLocationInPlane()
 vect2D ParticlesPhysicsManager::getDisjointRandomParticlePosition( double minx, double maxx, double miny, double maxy, double radius )
 {
     vect2D position;
-    int maxTries = static_cast<int>((maxx-minx)*(maxy-miny)/(radius*radius));
+    int maxTries = static_cast<int>((maxx-minx)*(maxy-miny)/(3.14*radius*radius));
 
     position.x = Random::get<double>(minx,maxx);
     position.y = Random::get<double>(miny,maxy);
@@ -644,7 +641,21 @@ vect2D ParticlesPhysicsManager::getDisjointRandomParticlePosition( double minx, 
             position.y += 2*radius;
             if( position.y>maxy ) position.y = miny;
         }
+    }    
+
+    return position;
+}
+
+vect2D ParticlesPhysicsManager::getDisjointRandomParticlePositionTries( double minx, double maxx, double miny, double maxy, double radius, int tries )
+{
+    vect2D position;
+
+    do
+    {
+        position.x = Random::get<double>(minx,maxx);
+        position.y = Random::get<double>(miny,maxy);
     }
+    while( isParticlesOverlap(position,radius) && --tries>0 );
 
     return position;
 }
