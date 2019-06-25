@@ -43,7 +43,10 @@ public:
     ParticlesPhysicsManager( const ParticlesPhysicsManager& ) = delete;
 
     /** @brief Move constructor */
-    ParticlesPhysicsManager( ParticlesPhysicsManager&& ) = delete;    
+    ParticlesPhysicsManager( ParticlesPhysicsManager&& ) = delete;
+
+    /** @brief Virtual empty deconstructor */
+    virtual ~ParticlesPhysicsManager();
 
     /** @brief Copy assigment operator */
     ParticlesPhysicsManager& operator=( const ParticlesPhysicsManager& ) = delete;

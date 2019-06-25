@@ -35,6 +35,11 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
     histograms1D["momentumDistribution"] = std::make_shared<Histogram1D>( 80 , physicsInfo.minRapidity , physicsInfo.maxRapidity*2.0 , "Momentum Distribution" );
 }
 
+ParticlesPhysicsManager::~ParticlesPhysicsManager()
+{
+
+}
+
 void ParticlesPhysicsManager::reset()
 {
     simulationInfo.particleSize[ParticleType::BLUE]   = simulationInfo.particleSizeInit[ParticleType::BLUE];
