@@ -73,6 +73,12 @@ public:
     int getXConstraint() const noexcept { return axisXConstraint; }
 
     /**
+     * @brief Gets plane field.
+     * @return plane field
+     */
+    int getPlaneField() const noexcept { return width*height; }
+
+    /**
      * @brief Sets plane width constraint.
      * @param constraint            width constraint in pixels
      */

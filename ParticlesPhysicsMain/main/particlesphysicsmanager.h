@@ -651,7 +651,7 @@ protected:
      */
     bool removeParticles( ParticleType particleType, int quantity );
 
-    /** Remove all particles from plane. */
+    /** Removes all particles from the plane. */
     void removeAllParticles();
 
     /** @brief Shuffles particle position to the random position.
@@ -659,6 +659,20 @@ protected:
      * @param particle    iterator to particle
      */
     void shuffleParticle( const iterParticle& particle );
+
+    /** @brief Checks if the particle plane is full of particles.
+     *
+     * @return true if the particle plane is full otherwise false
+     */
+    bool isParticlePlaneFull();
+
+    /** @brief Checks if the particle plane will be full of particles for a given new size of particle.
+     *
+     * @param particleType          particle type
+     * @param newSize               new size of particles
+     * @return true if the particle plane is full otherwise false
+     */
+    bool isParticlePlaneFull( ParticleType particleType , int newSize );
 
     /** @brief Tries disjoint particle.
      *

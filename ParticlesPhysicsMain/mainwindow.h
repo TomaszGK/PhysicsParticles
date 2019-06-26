@@ -132,6 +132,8 @@ private slots:
 
     void on_randomPushButton_tab2_clicked();
 
+    void on_resetForcesSandbox_clicked();
+
 private:
 
     Ui::MainWindow *ui;

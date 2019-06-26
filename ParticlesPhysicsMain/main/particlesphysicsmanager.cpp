@@ -166,7 +166,12 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
 
     for( int index=0 ; index<quantity ; ++index )
     {
-        position = isParticleTypeGas(particleType) ?  getDisjointRandomParticlePositionTries(minX,maxX,minY,maxY,particleSize/2,50) : getDisjointRandomParticlePosition(minX,maxX,minY,maxY,particleSize/2);
+        if( isParticlePlaneFull() )
+        {
+            quantity = index;
+            break;
+        }
+        position = isParticleTypeGas(particleType) ? getDisjointRandomParticlePositionTries(minX,maxX,minY,maxY,particleSize/2,50) : getDisjointRandomParticlePosition(minX,maxX,minY,maxY,particleSize/2);
 
         velocity.x = Random::get<double>(temperatureMin,temperatureMax);
         velocity.y = Random::get<double>(temperatureMin,sqrt(temperatureMax*temperatureMax-velocity.x*velocity.x));
@@ -251,6 +256,28 @@ void ParticlesPhysicsManager::shuffleParticle( const iterParticle& particle )
     handleParticleClusterTransition(particle);
 }
 
+bool ParticlesPhysicsManager::isParticlePlaneFull()
+{
+    double particlesVolume {0};
+    for( const auto& particle : *particles )
+    {
+        particlesVolume += 3.1415*particle.radius*particle.radius;
+    }
+
+    return ( planeArea->getPlaneField() < 2.5*particlesVolume ) ? true : false;
+}
+
+bool ParticlesPhysicsManager::isParticlePlaneFull( ParticleType particleType, int newSize )
+{
+    double particlesVolume {0};
+    for( const auto& particle : *particles )
+    {
+        particlesVolume += 3.1415 * ( ( particle.particleType == particleType ) ? newSize*newSize : particle.radius*particle.radius );
+    }
+
+    return ( planeArea->getPlaneField() < 2.5*particlesVolume ) ? true : false;
+}
+
 bool ParticlesPhysicsManager::setParticlesInPlane( ParticleType particleType, int quantity )
 {
     if( simulationInfo.maxParticles[simulationType] < quantity ) return false;
@@ -264,7 +291,11 @@ bool ParticlesPhysicsManager::setParticlesInPlane( ParticleType particleType, in
 void ParticlesPhysicsManager::setSizeOfParticlesInPercent( ParticleType type, int quantity )
 {
     Ensures( quantity>=0 && quantity<=100 );
-    simulationInfo.particleSize[type] = simulationInfo.minSizeOfParticle + static_cast<int>(quantity*0.01*(simulationInfo.maxSizeOfParticle[simulationType]-simulationInfo.minSizeOfParticle));
+    int newSize = simulationInfo.minSizeOfParticle + static_cast<int>(quantity*0.01*(simulationInfo.maxSizeOfParticle[simulationType]-simulationInfo.minSizeOfParticle));
+
+    if( isParticlePlaneFull(type,newSize) ) return;
+
+    simulationInfo.particleSize[type] = newSize;
 
     if( !pauseByUserFlag ) pause();
 

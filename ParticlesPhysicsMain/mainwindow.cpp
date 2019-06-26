@@ -504,3 +504,10 @@ void MainWindow::on_randomPushButton_tab2_clicked()
      ui->temperatureRightSliderTab2->setValue(QRandomGenerator::global()->bounded(100));
 }
 
+
+void MainWindow::on_resetForcesSandbox_clicked()
+{
+    ui->verticalForceTab2->setValue(0);
+    ui->horizontalForceTab2->setValue(0);
+    ui->attractionForceTab2->setValue(0);
+}

@@ -185,7 +185,7 @@ struct SimulationInfo
                                                          {ParticleType::NORMAL,20},
                                                          {ParticleType::BLUE,20},
                                                          {ParticleType::RED,20},
-                                                         {ParticleType::GAS1,20},
+                                                         {ParticleType::GAS1,10},
                                                          {ParticleType::GAS2,20},
                                                          {ParticleType::GAS3,30},
                                                          {ParticleType::MINI,5},
