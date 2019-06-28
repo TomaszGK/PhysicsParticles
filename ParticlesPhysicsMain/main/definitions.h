@@ -114,11 +114,12 @@ struct colorRGB
  */
 struct SimulationInfo
 {       
-    int    maxPlaneXConstraint {30}  ; /**< maximum value of plane X axis constraint (in percent of planeWidth value) */
-    int    calculationCount    {0}   ; /**< current number of calculateNextPositions calls, sets to zero after end of time period */
-    int    avgCalculationCount {0}   ; /**< average number of calculateNextPositions calls in a period of time */
-    int    minSizeOfParticle   {5}   ; /**< minimum size of particle (in pixels) */
-    double maxTimeContribution {1.5} ; /**< maximum time contribution in calculating the next particle positions */
+    int    maxPlaneXConstraint  {30}  ; /**< maximum value of plane X axis constraint (in percent of planeWidth value) */
+    int    calculationCount     {0}   ; /**< current number of calculateNextPositions calls, sets to zero after end of time period */
+    int    avgCalculationCount  {0}   ; /**< average number of calculateNextPositions calls in a period of time */
+    int    minSizeOfParticle    {5}   ; /**< minimum size of particle (in pixels) */
+    double maxTimeContribution  {1.5} ; /**< maximum time contribution in calculating the next particle positions */
+    double planeFillCoefficient {2.5} ; /**< defines a capacity of the particle plane, increase it to reduce plane capacity */
 
     std::map<SimulationType,int> maxSizeOfParticle {
                                                      {SimulationType::BASIC,20},

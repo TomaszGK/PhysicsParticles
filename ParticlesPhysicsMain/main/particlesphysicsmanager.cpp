@@ -89,7 +89,7 @@ void ParticlesPhysicsManager::createParticles()
     {
         prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
         visualizationType = VisualizationType::PARTICLE;
-        physicsInfo.temperature = 1.0;        
+        physicsInfo.temperature = 1.0;
         addParticles(ParticleType::MACROSCOPIC,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MACROSCOPIC],simulationInfo.particleSizeInit[ParticleType::MACROSCOPIC]);
         addParticles(ParticleType::MINI,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MINI]-1,simulationInfo.particleSizeInit[ParticleType::MINI]);
         planeArea->getPlainDivider().setDividerGap(100);        
@@ -171,7 +171,7 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
             quantity = index;
             break;
         }
-        position = isParticleTypeGas(particleType) ? getDisjointRandomParticlePositionTries(minX,maxX,minY,maxY,particleSize/2,50) : getDisjointRandomParticlePosition(minX,maxX,minY,maxY,particleSize/2);
+        position = isParticleTypeGas(particleType) ? getDisjointRandomParticlePositionTries(minX,maxX,minY,maxY,particleSize/2,100) : getDisjointRandomParticlePosition(minX,maxX,minY,maxY,particleSize/2);
 
         velocity.x = Random::get<double>(temperatureMin,temperatureMax);
         velocity.y = Random::get<double>(temperatureMin,sqrt(temperatureMax*temperatureMax-velocity.x*velocity.x));
@@ -264,7 +264,7 @@ bool ParticlesPhysicsManager::isParticlePlaneFull()
         particlesVolume += 3.1415*particle.radius*particle.radius;
     }
 
-    return ( planeArea->getPlaneField() < 2.5*particlesVolume ) ? true : false;
+    return ( planeArea->getPlaneField() < simulationInfo.planeFillCoefficient*particlesVolume ) ? true : false;
 }
 
 bool ParticlesPhysicsManager::isParticlePlaneFull( ParticleType particleType, int newSize )
@@ -272,10 +272,10 @@ bool ParticlesPhysicsManager::isParticlePlaneFull( ParticleType particleType, in
     double particlesVolume {0};
     for( const auto& particle : *particles )
     {
-        particlesVolume += 3.1415 * ( ( particle.particleType == particleType ) ? newSize*newSize : particle.radius*particle.radius );
+        particlesVolume += 3.1415 * ( ( particle.particleType == particleType ) ? newSize*newSize*0.25 : particle.radius*particle.radius );
     }
 
-    return ( planeArea->getPlaneField() < 2.5*particlesVolume ) ? true : false;
+    return ( planeArea->getPlaneField() < simulationInfo.planeFillCoefficient*particlesVolume ) ? true : false;
 }
 
 bool ParticlesPhysicsManager::setParticlesInPlane( ParticleType particleType, int quantity )
@@ -834,11 +834,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     if( simulationType == SimulationType::BASIC )
     {
         temperature = physicsInfo.temperature;
-    }
-    else if( simulationType == SimulationType::BROWNIAN_MOTION )
-    {
-        temperature = physicsInfo.temperature;
-    }
+    }   
     else if( simulationType == SimulationType::DIFFUSION )
     {
         if( newPosition.x < planeArea->getPlainDivider().getDividerPosX() ) temperature = physicsInfo.temperatureLeft;
@@ -850,8 +846,8 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     {
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::LEFT];
         particle->position.x = particle->radius + planeArea->getXConstraint();
-        kineticEnergy = abs(particle->velocity.x);
-        particle->velocity.x = particle->isMacroscopic?(-1.0)*particle->velocity.x:temperature;
+        kineticEnergy = abs(particle->velocity.x);        
+        particle->velocity.x = simulationType == SimulationType::BROWNIAN_MOTION ? (-1.0)*particle->velocity.x : temperature;
         particle->modifiedVelocity = true;
         return kineticEnergy;
     }
@@ -859,8 +855,8 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     {
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::RIGHT];
         particle->position.x = static_cast<double>(planeArea->getWidth()) - particle->radius - planeArea->getXConstraint();
-        kineticEnergy = abs(particle->velocity.x);
-        particle->velocity.x = (-1.0)*(particle->isMacroscopic?particle->velocity.x:temperature);
+        kineticEnergy = abs(particle->velocity.x);        
+        particle->velocity.x = (-1.0)*( simulationType == SimulationType::BROWNIAN_MOTION ? particle->velocity.x : temperature);
         particle->modifiedVelocity = true;
         return kineticEnergy;
     }
@@ -869,8 +865,8 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     {
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::UP];
         particle->position.y = particle->radius;
-        kineticEnergy = abs(particle->velocity.y);
-        particle->velocity.y = particle->isMacroscopic?(-1.0)*particle->velocity.y:temperature;
+        kineticEnergy = abs(particle->velocity.y);        
+        particle->velocity.y = simulationType == SimulationType::BROWNIAN_MOTION ? (-1.0)*particle->velocity.y : temperature;
         particle->modifiedVelocity = true;
         return kineticEnergy;
     }
@@ -878,8 +874,8 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     {
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::DOWN];
         particle->position.y = static_cast<double>(planeArea->getHeight()) - particle->radius;
-        kineticEnergy = abs(particle->velocity.y);
-        particle->velocity.y = (-1.0)*(particle->isMacroscopic?particle->velocity.y:temperature);
+        kineticEnergy = abs(particle->velocity.y);       
+        particle->velocity.y = (-1.0)*( simulationType == SimulationType::BROWNIAN_MOTION ? particle->velocity.y : temperature);
         particle->modifiedVelocity = true;
         return kineticEnergy;
     }

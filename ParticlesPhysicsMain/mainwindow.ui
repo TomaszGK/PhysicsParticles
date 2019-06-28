@@ -495,14 +495,17 @@
       <property name="title">
        <string>Particles</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
       <property name="flat">
        <bool>false</bool>
       </property>
       <widget class="QLabel" name="numberOfParticlesLabelTab0">
        <property name="geometry">
         <rect>
-         <x>280</x>
-         <y>130</y>
+         <x>300</x>
+         <y>190</y>
          <width>41</width>
          <height>21</height>
         </rect>
@@ -523,9 +526,9 @@
       <widget class="QSlider" name="numberOfParticlesSliderTab0">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>140</x>
          <y>160</y>
-         <width>471</width>
+         <width>351</width>
          <height>31</height>
         </rect>
        </property>
@@ -560,10 +563,10 @@
       <widget class="QLabel" name="numberOfParticlesLabelUpperTab0">
        <property name="geometry">
         <rect>
-         <x>200</x>
-         <y>130</y>
-         <width>81</width>
-         <height>21</height>
+         <x>10</x>
+         <y>160</y>
+         <width>111</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="font">
@@ -571,6 +574,15 @@
          <family>Arial</family>
          <pointsize>15</pointsize>
         </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Panel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Sunken</enum>
+       </property>
+       <property name="lineWidth">
+        <number>2</number>
        </property>
        <property name="text">
         <string>Quantity</string>
@@ -579,27 +591,57 @@
       <widget class="QLabel" name="sizeOfParticlesLabelTab0">
        <property name="geometry">
         <rect>
-         <x>220</x>
-         <y>30</y>
-         <width>41</width>
-         <height>21</height>
+         <x>10</x>
+         <y>60</y>
+         <width>111</width>
+         <height>41</height>
         </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <property name="font">
         <font>
          <family>Arial</family>
          <pointsize>15</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Panel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Sunken</enum>
+       </property>
+       <property name="lineWidth">
+        <number>2</number>
        </property>
        <property name="text">
         <string>Size</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::AutoText</enum>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
        </property>
       </widget>
       <widget class="QLabel" name="zero2LabelTab0">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>180</y>
+         <x>140</x>
+         <y>190</y>
          <width>31</width>
          <height>21</height>
         </rect>
@@ -617,8 +659,8 @@
       <widget class="QLabel" name="max2LabelTab0">
        <property name="geometry">
         <rect>
-         <x>470</x>
-         <y>180</y>
+         <x>460</x>
+         <y>190</y>
          <width>41</width>
          <height>21</height>
         </rect>
@@ -636,8 +678,8 @@
       <widget class="QLabel" name="max3LabelTab0">
        <property name="geometry">
         <rect>
-         <x>470</x>
-         <y>80</y>
+         <x>460</x>
+         <y>90</y>
          <width>41</width>
          <height>21</height>
         </rect>
@@ -655,8 +697,8 @@
       <widget class="QLabel" name="min1LabelTab0">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>80</y>
+         <x>140</x>
+         <y>90</y>
          <width>41</width>
          <height>21</height>
         </rect>
@@ -674,11 +716,14 @@
       <widget class="QSlider" name="sizeOfParticleSliderTab0">
        <property name="geometry">
         <rect>
-         <x>20</x>
+         <x>150</x>
          <y>60</y>
-         <width>471</width>
+         <width>341</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
        </property>
        <property name="minimum">
         <number>1</number>
@@ -708,8 +753,8 @@
       <widget class="QLabel" name="sizeOfParticlesInfoLabelTab0">
        <property name="geometry">
         <rect>
-         <x>270</x>
-         <y>30</y>
+         <x>310</x>
+         <y>90</y>
          <width>41</width>
          <height>21</height>
         </rect>
@@ -2334,7 +2379,7 @@ Trace</string>
         <rect>
          <x>210</x>
          <y>20</y>
-         <width>81</width>
+         <width>91</width>
          <height>21</height>
         </rect>
        </property>
@@ -2354,7 +2399,7 @@ Trace</string>
         <rect>
          <x>470</x>
          <y>20</y>
-         <width>51</width>
+         <width>81</width>
          <height>21</height>
         </rect>
        </property>
