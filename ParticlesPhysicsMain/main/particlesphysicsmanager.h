@@ -290,7 +290,7 @@ public:
      */
     int getPressureInPercent() const
     {
-        return static_cast<int>((barCharts.at("collisions")->getAvg()*physicsInfo.averageKineticEnergy*100)/(sqrt(physicsInfo.maxRapidity*2)/2));
+        return static_cast<int>(200000*particles->size()*physicsInfo.averageKineticEnergy/(planeArea->getPlaneFieldConstraint()));
     }
 
     /**

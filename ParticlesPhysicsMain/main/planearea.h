@@ -79,6 +79,12 @@ public:
     int getPlaneField() const noexcept { return width*height; }
 
     /**
+     * @brief Gets plane field with constraint.
+     * @return plane field with constraint
+     */
+    int getPlaneFieldConstraint() const noexcept { return (width-2*axisXConstraint)*height; }
+
+    /**
      * @brief Sets plane width constraint.
      * @param constraint            width constraint in pixels
      */
@@ -86,8 +92,8 @@ public:
 
 private:
 
-    int width  {0}; /**< plane width in pixels : rectangle coordinate */
-    int height {0}; /**< plane height in pixels : rectangle coordinate */
+    int width  {1}; /**< plane width in pixels : rectangle coordinate */
+    int height {1}; /**< plane height in pixels : rectangle coordinate */
 
     vect2D origin    ; /**< plane orgin position : circle coordinate */
     double radius {0}; /**< plane radius in pixels : circle coordinate */
