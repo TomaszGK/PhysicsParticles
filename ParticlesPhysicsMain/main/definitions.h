@@ -220,13 +220,14 @@ struct PhysicsInfo
     double       avgVelocity           {0.0}; /**< average velocity of all particles */
     double       avgDistance           {0.0}; /**< average distance between particles */
     int          numOfCollision        {0};   /**< number of particle collided with the plane */
-    int          numOfCollisionTP      {0};   /**< number of particle collided with the plane in a period of time */
+    double       numOfCollisionTP      {0.0}; /**< number of particle collided with the plane in a period of time */
     int          numBlueParticlesLeft  {0};   /**< number of blue particles in the left part of plane - SimulationType::DIFFUSION mode */
     int          numBlueParticlesRight {0};   /**< number of blue particles in the right part of plane - SimulationType::DIFFUSION mode */
     int          numRedParticlesLeft   {0};   /**< number of red particles in the left part of plane - SimulationType::DIFFUSION mode */
     int          numRedParticlesRight  {0};   /**< number of red particles in the right part of plane - SimulationType::DIFFUSION mode */
     double       kineticEnergySum      {0};   /**< summed particle kinetic energies transfer to the plane */
     double       kineticEnergySumTP    {0};   /**< summed particle kinetic energies transfer to the plane in a period of time */
+    double       averageKineticEnergy  {0};   /**< average kinetic energy of particles */
     double       energyFromPlaneSum    {0};   /**< summed energy transfered from the plane to particles */
     double       energyFromPlaneSumTP  {0};   /**< summed energy transfered from the plane in a period of time */
     double       collVelocityChange    {0};   /**< use in testing */

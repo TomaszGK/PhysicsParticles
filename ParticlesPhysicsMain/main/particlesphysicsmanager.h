@@ -290,7 +290,7 @@ public:
      */
     int getPressureInPercent() const
     {
-        return static_cast<int>((barCharts.at("kinetic")->getAvg()*100)/(sqrt(physicsInfo.maxRapidity*2)/2));
+        return static_cast<int>((barCharts.at("collisions")->getAvg()*physicsInfo.averageKineticEnergy*100)/(sqrt(physicsInfo.maxRapidity*2)/2));
     }
 
     /**
@@ -539,6 +539,11 @@ protected:
      * @return random RGB color
      */
     colorRGB getRandomColor();
+
+    /** Gets average kinetcic energy of particles in the plane.
+     * @return average kinetcic energy
+     */
+    double getAverageKineticEnergyOfParticles();
 
     /** @brief Updates number of ParticleType::RED and ParticleType::BLUE.
      *

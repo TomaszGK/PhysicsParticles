@@ -27,7 +27,7 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
     barCharts["velocityBlue"] = std::make_shared<BarChart>( 100 , "Blue Velocity" );
     barCharts["velocityRed"]  = std::make_shared<BarChart>( 100 , "Red Velocity" );
     barCharts["collisions"]   = std::make_shared<BarChart>( 40  , "Collisions" );
-    barCharts["kinetic"]      = std::make_shared<BarChart>( 40  , "Pressure" );
+    barCharts["kinetic"]      = std::make_shared<BarChart>( 40  , "Plane Energy" );
 
     barDisplays["diffiusion"] = std::make_shared<BarDisplay>( 2 );
 
@@ -447,7 +447,7 @@ void ParticlesPhysicsManager::calculateNextPositions()
     double velocityBlueSum {0};
     double velocityRedSum {0};
 
-    simulationInfo.calculationCount++;
+    simulationInfo.calculationCount++;    
 
     for( auto particle=particles->begin() ; particle!=particles->end() ; ++particle )
     {
@@ -461,12 +461,12 @@ void ParticlesPhysicsManager::calculateNextPositions()
 
         if( particle->cluster->PLANE_BOUNDRY || planeArea->getXConstraint()>0 )
         {
-          kineticEnergy = handleParticleCollisionWithPlaneBoundries(particle);
-          if( kineticEnergy>0 )
-          {
-              ++numOfCollision;
-              physicsInfo.kineticEnergySum += kineticEnergy;
-          }
+            kineticEnergy = handleParticleCollisionWithPlaneBoundries(particle);
+            if( kineticEnergy>0 )
+            {
+                ++numOfCollision;
+                physicsInfo.kineticEnergySum += kineticEnergy;
+            }
         }
 
         if( planeArea->getPlainDivider().isDividerInPlane() && particle->cluster->PLANE_DIVIDER )
@@ -520,11 +520,12 @@ void ParticlesPhysicsManager::calculateNextPositions()
         time = HRClock::now();
         physicsInfo.kineticEnergySumTP = physicsInfo.kineticEnergySum/simulationInfo.calculationCount;
         physicsInfo.kineticEnergySum = 0;
-        physicsInfo.numOfCollisionTP = physicsInfo.numOfCollision/simulationInfo.calculationCount;
+        physicsInfo.numOfCollisionTP = static_cast<double>(physicsInfo.numOfCollision)/static_cast<double>(simulationInfo.calculationCount);
         physicsInfo.numOfCollision = 0;
         simulationInfo.avgCalculationCount = simulationInfo.calculationCount;
         simulationInfo.calculationCount = 0;
         if( simulationInfo.disjointParticles[simulationType] ) disjointPositions(0.9);
+        physicsInfo.averageKineticEnergy = getAverageKineticEnergyOfParticles();
     }
 
 }
@@ -637,7 +638,19 @@ colorRGB ParticlesPhysicsManager::getRandomColor()
 {
     return { static_cast<unsigned char>(Random::get<int>(0,255)),
              static_cast<unsigned char>(Random::get<int>(0,255)),
-             static_cast<unsigned char>(Random::get<int>(0,255))   };
+                static_cast<unsigned char>(Random::get<int>(0,255))   };
+}
+
+double ParticlesPhysicsManager::getAverageKineticEnergyOfParticles()
+{
+    double average {0};
+
+    for( const auto& particle : *particles )
+    {
+        average += 0.5*particle.mass*(~particle.velocity);
+    }
+
+    return average/particles->size();
 }
 
 void ParticlesPhysicsManager::updateParticlesLocationInPlane()
@@ -846,7 +859,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     {
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::LEFT];
         particle->position.x = particle->radius + planeArea->getXConstraint();
-        kineticEnergy = abs(particle->velocity.x);        
+        kineticEnergy = abs(particle->velocity.x)*particle->mass*0.5;
         particle->velocity.x = simulationType == SimulationType::BROWNIAN_MOTION ? (-1.0)*particle->velocity.x : temperature;
         particle->modifiedVelocity = true;
         return kineticEnergy;
@@ -855,7 +868,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     {
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::RIGHT];
         particle->position.x = static_cast<double>(planeArea->getWidth()) - particle->radius - planeArea->getXConstraint();
-        kineticEnergy = abs(particle->velocity.x);        
+        kineticEnergy = abs(particle->velocity.x)*particle->mass*0.5;
         particle->velocity.x = (-1.0)*( simulationType == SimulationType::BROWNIAN_MOTION ? particle->velocity.x : temperature);
         particle->modifiedVelocity = true;
         return kineticEnergy;
@@ -865,7 +878,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     {
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::UP];
         particle->position.y = particle->radius;
-        kineticEnergy = abs(particle->velocity.y);        
+        kineticEnergy = abs(particle->velocity.y)*particle->mass*0.5;
         particle->velocity.y = simulationType == SimulationType::BROWNIAN_MOTION ? (-1.0)*particle->velocity.y : temperature;
         particle->modifiedVelocity = true;
         return kineticEnergy;
@@ -874,7 +887,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     {
         if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::DOWN];
         particle->position.y = static_cast<double>(planeArea->getHeight()) - particle->radius;
-        kineticEnergy = abs(particle->velocity.y);       
+        kineticEnergy = abs(particle->velocity.y)*particle->mass*0.5;
         particle->velocity.y = (-1.0)*( simulationType == SimulationType::BROWNIAN_MOTION ? particle->velocity.y : temperature);
         particle->modifiedVelocity = true;
         return kineticEnergy;
