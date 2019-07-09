@@ -78,6 +78,15 @@ enum class VisualizationType
     PARTICLE   /**< particle color depends on particle type */
 };
 
+/** @enum Language
+ *  @brief Representing application language
+ */
+enum class Language
+{
+    PL  , /**< polish language */
+    ENG   /**< english language */
+};
+
 using HRClock = std::chrono::high_resolution_clock;
 using Milliseconds = std::chrono::milliseconds;
 using ptrBarDisplay = std::shared_ptr<BarDisplay>;

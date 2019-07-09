@@ -2,6 +2,7 @@
 
 #include <list>
 #include <iostream>
+#include "langmanager.h"
 
 /** @file
  * @brief Class @ref BarChart
@@ -66,7 +67,7 @@ public:
      * @brief Get barchart name
      * @return barchart name
      */
-    const std::string& getLabel() const noexcept { return label; }
+    std::string getLabel() const noexcept { return LangManager::translate(label); }
 
 private:
 

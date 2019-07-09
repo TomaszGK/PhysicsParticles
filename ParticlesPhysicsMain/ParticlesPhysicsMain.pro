@@ -34,8 +34,8 @@ INCLUDEPATH += \
                qpart
 
 SOURCES += \
-        main.cpp \    
-        mainwindow.cpp \
+    main.cpp \
+    mainwindow.cpp \
     extern/qcgaugewidget.cpp \
     qpart/qpaintermanager.cpp \    
     qpart/qbarchart.cpp \
@@ -56,11 +56,12 @@ SOURCES += \
     main/planedivider.cpp \
     main/bardisplay.cpp \     
     main/planearea.cpp \
+    main/langmanager.cpp \
     dialogabout.cpp
 
    
-HEADERS += \    
-        mainwindow.h \
+HEADERS += \
+    mainwindow.h \
     extern/random.hpp \
     extern/qcgaugewidget.h \
     qpart/qpaintermanager.h \
@@ -86,6 +87,7 @@ HEADERS += \
     main/planedivider.h \
     main/bardisplay.h \  
     main/planearea.h \
+    main/langmanager.h \
     dialogabout.h
     
     
