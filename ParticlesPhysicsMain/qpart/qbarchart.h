@@ -96,6 +96,11 @@ private:
     void init() override;
 
     /**
+     * @brief Calculates label position.
+     */
+    int calculateLabelPosition();
+
+    /**
      * @brief Draws current bar value value.
      */
     void drawCurrentValue();

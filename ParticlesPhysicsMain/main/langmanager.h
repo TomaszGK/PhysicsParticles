@@ -46,6 +46,8 @@ public:
      */
     static std::string translate( const std::string& text );
 
+    static void setLanguage( Language lang ) { language = lang; }
+
 private:
 
     using TMap = const std::map<Language,std::map<std::string,std::string>>;

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <deque>
+#include "langmanager.h"
 
 /** @file
  * @brief Class @ref Histogram1D
@@ -82,7 +83,7 @@ public:
      * @brief Gets name of histogram.
      * @return name of histogram
      */
-    const std::string& getLabel() const noexcept { return label; }
+    std::string getLabel() const noexcept { return LangManager::translate(label); }
 
     /**
      * @brief Gets index of marking bin.

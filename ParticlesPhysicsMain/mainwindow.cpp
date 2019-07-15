@@ -176,6 +176,7 @@ void MainWindow::change_language()
     if( menuItem->objectName() == "actionSetPolish" )
     {
         qApp->removeTranslator(&qtLanguageTranslator);
+        LangManager::setLanguage(Language::PL);
 
         if( qtLanguageTranslator.load( QApplication::applicationDirPath()+"/ParticlesPhysics_pl.qm") )
         {
@@ -185,6 +186,7 @@ void MainWindow::change_language()
     }
     else if( menuItem->objectName() == "actionSetEnglish" )
     {
+        LangManager::setLanguage(Language::ENG);
         qApp->removeTranslator(&qtLanguageTranslator);
     }
 

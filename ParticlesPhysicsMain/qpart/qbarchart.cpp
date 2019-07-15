@@ -11,8 +11,7 @@ QBarChart::QBarChart( double max, std::pair<bool,bool> scalability, ptrBarChart 
     marginTop = 30;
     marginRight = 30;
     buttonStyleSelected = "QPushButton {""background-color: %1"";font-size: 16px;font: bold}";
-    buttonStyleUnselected = "QPushButton {""background-color: %1"";font-size: 16px;}";
-    label = QString::fromStdString(barChart->getLabel());
+    buttonStyleUnselected = "QPushButton {""background-color: %1"";font-size: 16px;}";    
 
     init();
 }
@@ -24,9 +23,6 @@ void QBarChart::init()
         int width = parentWidget()->width();
         int size = static_cast<int>(barChart->getBins().size());
         int marginAdjustment = (width-(marginLeft+marginRight)) - size*((width-(marginLeft+marginRight))/size);
-
-        QFontMetrics fm(parentWidget()->font());
-        int pixelsWide = fm.width(barChart->getLabel().c_str());
 
         if( marginAdjustment>0 )
         {
@@ -40,10 +36,7 @@ void QBarChart::init()
                 marginLeft += (marginAdjustment-1)/2;
                 marginRight += ((marginAdjustment-1)/2+1);
             }
-        }
-
-        barWidth = (width-(marginLeft+marginRight))/size;
-        labelPosition = marginLeft + (width-(marginLeft+marginRight)-pixelsWide)/2;
+        }       
 
         buttons[DataVisualization::BARS] = std::make_unique<QPushButton>("B",this);
         buttons[DataVisualization::BARS]->resize(25,25);
@@ -65,6 +58,14 @@ void QBarChart::init()
         connect( buttons[DataVisualization::LINES].get()  , &QPushButton::clicked , this, &QBarChart::onButtonClick );
 
     }
+}
+
+int QBarChart::calculateLabelPosition()
+{
+    QFontMetrics fm(parentWidget()->font());
+    int pixelsWide = fm.width(barChart->getLabel().c_str());
+
+    return marginLeft + (parentWidget()->width()-(marginLeft+marginRight)-pixelsWide)/2;
 }
 
 void QBarChart::paint()
@@ -127,7 +128,7 @@ void QBarChart::drawCurrentValue()
 void QBarChart::drawChartName()
 {
     painter.setPen(QPen(cValue));
-    painter.drawText(labelPosition,marginTop-7,label);
+    painter.drawText(calculateLabelPosition(),marginTop-7,QString::fromStdString(barChart->getLabel()));
 }
 
 void QBarChart::onButtonClick()

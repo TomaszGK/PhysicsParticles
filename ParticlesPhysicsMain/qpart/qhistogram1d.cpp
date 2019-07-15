@@ -6,8 +6,7 @@ QHistogram1D::QHistogram1D( double maxValue, ptrHistogram1D ptr, QWidget* parent
     background = QBrush(QColor(145, 215, 215));
     setAutoFillBackground(false);    
     background = cBackground;
-    marginTop = 30;
-    label = QString::fromStdString(histogram1D->getLabel());
+    marginTop = 30;    
 
     init();
 }
@@ -19,9 +18,6 @@ void QHistogram1D::init()
         int width = parentWidget()->width();
         int size = static_cast<int>(histogram1D->getBins().size());
         int marginAdjustment = (width-(marginLeft+marginRight)) - size*((width-(marginLeft+marginRight))/size);
-
-        QFontMetrics fm(parentWidget()->font());
-        int pixelsWide = fm.width(histogram1D->getLabel().c_str());
 
         if( marginAdjustment>0 )
         {
@@ -38,8 +34,15 @@ void QHistogram1D::init()
         }
 
         barWidth = (static_cast<double>(width)-(marginLeft+marginRight))/static_cast<double>(size);
-        labelPosition = marginLeft + (width-(marginLeft+marginRight)-pixelsWide)/2;
     }
+}
+
+int QHistogram1D::calculateLabelPosition()
+{
+    QFontMetrics fm(parentWidget()->font());
+    int pixelsWide = fm.width(histogram1D->getLabel().c_str());
+
+    return marginLeft + (parentWidget()->width()-(marginLeft+marginRight)-pixelsWide)/2;
 }
 
 void QHistogram1D::paint()
@@ -80,7 +83,7 @@ void QHistogram1D::paint()
 void QHistogram1D::drawHistogramName()
 {
     painter.setPen(QPen(cLabelColor));
-    painter.drawText(labelPosition,marginTop-7,label);
+    painter.drawText(calculateLabelPosition(),marginTop-7,QString::fromStdString(histogram1D->getLabel()));
 }
 
 void QHistogram1D::drawMarking()

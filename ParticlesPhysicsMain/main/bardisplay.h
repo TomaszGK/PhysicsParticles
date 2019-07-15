@@ -1,6 +1,7 @@
 #pragma once
 
 #include "definitions.h"
+#include "langmanager.h"
 
 /** @file
  * @brief Class @ref BarDisplay
@@ -64,7 +65,7 @@ public:
      * @brief Get name of bardisplay
      * @return name of bardisplay
      */
-    const std::string& getLabel() const noexcept { return label; }
+    std::string getLabel() const noexcept { return LangManager::translate(label); }
 
 private:
 

@@ -55,6 +55,11 @@ private:
     void init() override;
 
     /**
+     * @brief Calculates label position.
+     */
+    int calculateLabelPosition();
+
+    /**
      * @brief Draws histogram name/label.
      */
     void drawHistogramName();
