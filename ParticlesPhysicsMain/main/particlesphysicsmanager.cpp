@@ -70,39 +70,41 @@ void ParticlesPhysicsManager::reset()
 
 void ParticlesPhysicsManager::createParticles()
 {
-    if( simulationType == SimulationType::BASIC )
+    switch( simulationType )
     {
-        prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
-        visualizationType = VisualizationType::VELOCITY;
-        addParticles(ParticleType::NORMAL,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::NORMAL],simulationInfo.particleSizeInit[ParticleType::NORMAL]);
-        planeArea->getPlainDivider().setDividerGap(100);
+        case SimulationType::BASIC:
+         prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
+         visualizationType = VisualizationType::VELOCITY;
+         addParticles(ParticleType::NORMAL,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::NORMAL],simulationInfo.particleSizeInit[ParticleType::NORMAL]);
+         planeArea->getPlainDivider().setDividerGap(100);
+        break;
+
+        case SimulationType::DIFFUSION:
+         prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
+         visualizationType = VisualizationType::PARTICLE;
+         addParticles(ParticleType::BLUE,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::BLUE],simulationInfo.particleSizeInit[ParticleType::BLUE]);
+         addParticles(ParticleType::RED,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::RED],simulationInfo.particleSizeInit[ParticleType::RED]);
+         planeArea->getPlainDivider().setDividerGap(0);
+        break;
+
+        case SimulationType::BROWNIAN_MOTION:
+         prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
+         visualizationType = VisualizationType::PARTICLE;
+         physicsInfo.temperature = 1.0;
+         addParticles(ParticleType::MACROSCOPIC,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MACROSCOPIC],simulationInfo.particleSizeInit[ParticleType::MACROSCOPIC]);
+         addParticles(ParticleType::MINI,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MINI]-1,simulationInfo.particleSizeInit[ParticleType::MINI]);
+         planeArea->getPlainDivider().setDividerGap(100);
+        break;
+
+        case SimulationType::SANDBOX:
+         prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
+         visualizationType = VisualizationType::PARTICLE;
+         addParticles(ParticleType::GAS1,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::GAS1],simulationInfo.particleSize[ParticleType::GAS1]);
+         addParticles(ParticleType::GAS2,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::GAS2],simulationInfo.particleSize[ParticleType::GAS2]);
+         addParticles(ParticleType::GAS3,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::GAS3],simulationInfo.particleSize[ParticleType::GAS3]);
+         planeArea->getPlainDivider().setDividerGap(100);
+        break;
     }
-    else if( simulationType == SimulationType::DIFFUSION )
-    {        
-        prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
-        visualizationType = VisualizationType::PARTICLE;
-        addParticles(ParticleType::BLUE,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::BLUE],simulationInfo.particleSizeInit[ParticleType::BLUE]);
-        addParticles(ParticleType::RED,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::RED],simulationInfo.particleSizeInit[ParticleType::RED]);
-        planeArea->getPlainDivider().setDividerGap(0);
-    }
-    else if( simulationType == SimulationType::BROWNIAN_MOTION )
-    {
-        prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
-        visualizationType = VisualizationType::PARTICLE;
-        physicsInfo.temperature = 1.0;
-        addParticles(ParticleType::MACROSCOPIC,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MACROSCOPIC],simulationInfo.particleSizeInit[ParticleType::MACROSCOPIC]);
-        addParticles(ParticleType::MINI,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MINI]-1,simulationInfo.particleSizeInit[ParticleType::MINI]);
-        planeArea->getPlainDivider().setDividerGap(100);        
-    }
-    else if( simulationType == SimulationType::SANDBOX )
-    {
-        prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
-        visualizationType = VisualizationType::PARTICLE;
-        addParticles(ParticleType::GAS1,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::GAS1],simulationInfo.particleSize[ParticleType::GAS1]);
-        addParticles(ParticleType::GAS2,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::GAS2],simulationInfo.particleSize[ParticleType::GAS2]);
-        addParticles(ParticleType::GAS3,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::GAS3],simulationInfo.particleSize[ParticleType::GAS3]);
-        planeArea->getPlainDivider().setDividerGap(100);
-    }    
 }
 
 void ParticlesPhysicsManager::setVisualizationType( VisualizationType type )
@@ -133,33 +135,38 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
     int minY {particleSize+5};
     int maxY {planeArea->getHeight()-particleSize-5};
 
-    if( particleType == ParticleType::NORMAL || isParticleTypeGas(particleType) )
+    switch( particleType )
     {
-        temperatureMax = physicsInfo.temperature;      
-    }
-    else if( particleType == ParticleType::BLUE )
-    {
-        temperatureMax = physicsInfo.temperatureLeft;        
-        maxX = planeArea->getPlainDivider().getUpperRect().first.x-5;
-    }
-    else if( particleType == ParticleType::RED )
-    {
-        temperatureMax = physicsInfo.temperatureRight;
-        minX = planeArea->getPlainDivider().getUpperRect().first.x+planeArea->getPlainDivider().getUpperRect().second.x+5;        
-    }    
-    else if( particleType == ParticleType::MINI )
-    {
-        temperatureMax = physicsInfo.temperature;
-        temperatureMin = physicsInfo.temperature*0.9;        
-    }
-    else if( particleType == ParticleType::MACROSCOPIC )
-    {
-        temperatureMax = 0;
-        temperatureMin = 0;
-        minX = planeArea->getWidth()/2 - 2*particleSize;
-        maxX = planeArea->getWidth()/2 + 2*particleSize;
-        minY = planeArea->getHeight()/2 - 2*particleSize;
-        maxY = planeArea->getHeight()/2 + 2*particleSize;
+        case ParticleType::GAS1:
+        case ParticleType::GAS2:
+        case ParticleType::GAS3:
+        case ParticleType::NORMAL:
+         temperatureMax = physicsInfo.temperature;
+        break;
+
+        case ParticleType::BLUE:
+         temperatureMax = physicsInfo.temperatureLeft;
+         maxX = planeArea->getPlainDivider().getUpperRect().first.x-5;
+        break;
+
+        case ParticleType::RED:
+         temperatureMax = physicsInfo.temperatureRight;
+         minX = planeArea->getPlainDivider().getUpperRect().first.x+planeArea->getPlainDivider().getUpperRect().second.x+5;
+        break;
+
+        case ParticleType::MINI:
+         temperatureMax = physicsInfo.temperature;
+         temperatureMin = physicsInfo.temperature*0.9;
+        break;
+
+        case ParticleType::MACROSCOPIC:
+         temperatureMax = 0;
+         temperatureMin = 0;
+         minX = planeArea->getWidth()/2 - 2*particleSize;
+         maxX = planeArea->getWidth()/2 + 2*particleSize;
+         minY = planeArea->getHeight()/2 - 2*particleSize;
+         maxY = planeArea->getHeight()/2 + 2*particleSize;
+        break;
     }
 
     if( !pauseByUserFlag ) pause();

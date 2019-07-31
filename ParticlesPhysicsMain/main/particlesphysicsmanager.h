@@ -620,9 +620,9 @@ protected:
      */
     bool isParticlesOverlap( const vect2D& particlePosition, double radius );
 
-    /** @brief Checks if particle overlaped with others.
+    /** @brief Checks if particle type is gas.
      *
-     * Checks if particle defined by position and radius is overlaped with other particles.
+     * Checks if particle type is GAS1 or GAS2 or GAS3.
      * @param particleType        particle  type
      * @return true if particle type is gas otherwise is false
      */
