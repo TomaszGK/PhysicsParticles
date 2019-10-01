@@ -36,7 +36,9 @@ void QBarChart::init()
                 marginLeft += (marginAdjustment-1)/2;
                 marginRight += ((marginAdjustment-1)/2+1);
             }
-        }       
+        }
+
+        barWidth = (width-(marginLeft+marginRight))/size;
 
         buttons[DataVisualization::BARS] = std::make_unique<QPushButton>("B",this);
         buttons[DataVisualization::BARS]->resize(25,25);
@@ -63,7 +65,7 @@ void QBarChart::init()
 int QBarChart::calculateLabelPosition()
 {
     QFontMetrics fm(parentWidget()->font());
-    int pixelsWide = fm.width(barChart->getLabel().c_str());
+    int pixelsWide = fm.horizontalAdvance(barChart->getLabel().c_str());
 
     return marginLeft + (parentWidget()->width()-(marginLeft+marginRight)-pixelsWide)/2;
 }
@@ -97,7 +99,7 @@ void QBarChart::paint()
             painter.setPen(QPen(QColor(intensity, 0, 255-intensity)));
 
             if( dataVisulization == DataVisualization::BARS )
-            {
+            {               
                 painter.drawRect(marginLeft+index*barWidth,height()-value-marginBottom-2,barWidth-1,value);
             }
             else if( dataVisulization == DataVisualization::POINTS )

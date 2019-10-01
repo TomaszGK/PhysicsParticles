@@ -69,7 +69,7 @@ void QBarDisplay::paint()
 int QBarDisplay::getCenteredTextPosition( int number )
 {
     QFontMetrics fm(parentWidget()->font());
-    int pixelsWide = fm.width(QString::number(number));
+    int pixelsWide = fm.horizontalAdvance(QString::number(number));
 
     return (barWidth - pixelsWide)/2;
 }

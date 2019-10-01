@@ -84,7 +84,7 @@ void QBoxPainter::paintTriangle( const vect2D &a, const vect2D &b, const vect2D 
 int QBoxPainter::getStringWidthInPixels( const QString& name )
 {
     QFontMetrics fm(parentWidget()->font());
-    return fm.width(name);
+    return fm.horizontalAdvance(name);
 }
 
 void QBoxPainter::paintPlaneBorder()

@@ -40,7 +40,7 @@ void QHistogram1D::init()
 int QHistogram1D::calculateLabelPosition()
 {
     QFontMetrics fm(parentWidget()->font());
-    int pixelsWide = fm.width(histogram1D->getLabel().c_str());
+    int pixelsWide = fm.horizontalAdvance(histogram1D->getLabel().c_str());
 
     return marginLeft + (parentWidget()->width()-(marginLeft+marginRight)-pixelsWide)/2;
 }

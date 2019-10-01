@@ -16,7 +16,7 @@ void QCircleControl::init()
 
         bigCircleSize = ( parentWidget()->width() > parentWidget()->height() ) ?  origin.y()-1 :  origin.x()-1 ;
         indicatorPos = origin;
-        background = parentWidget()->palette().background();
+        background = parentWidget()->palette().window();
         cPlaneBorder = background.color();
     }
 }
