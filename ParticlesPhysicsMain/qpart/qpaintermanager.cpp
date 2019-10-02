@@ -7,6 +7,7 @@ QPainterManager::QPainterManager( cptrParticlesContainer ptrParticles, std::shar
 : QBoxPainter { parent }, particles { std::move(ptrParticles) }, planeArea { std::move(ptrPlaneArea) }
 {
     background = QBrush(QColor(235, 235, 235));
+    selectedParticleColor = QColor(32, 165, 56);
     particlePen = QPen(Qt::NoPen);
     particlePen.setWidth(1);
     displayVelocityVector.first = false;    
@@ -30,7 +31,7 @@ void QPainterManager::paint()
     {
         painter.translate(0,0);
         painter.save();       
-        QRadialGradient gradient;
+
         int size {0};
         int posx {0};
         int posy {0};       
@@ -39,35 +40,14 @@ void QPainterManager::paint()
         {
             if( toTrackingPaint && particle->isTracking ) paintTracking(particle);
 
-            size = static_cast<int>(particle->size);
+            size = particle->size;
             posx = static_cast<int>(particle->position.x)+planeBorderWidth;
             posy = static_cast<int>(particle->position.y)+planeBorderWidth;
-
-            gradient.setRadius(size/2);
-
-            gradient.setCenter(posx,posy);
-            gradient.setFocalPoint(posx,posy);
 
             if( toTrackingPaint && !particle->isTracking ) particleColor = QColor(200,200,200);
             else particleColor = QColor(particle->color.R, particle->color.G, particle->color.B);
 
-            if( displayVelocityVector.first )
-            {
-                if( displayVelocityVector.second != particle )
-                {
-                    //particleColor = QColor(190,190,190);
-                }
-                else
-                {
-                    size *= 1.5;
-                }
-            }
-
-            gradient.setColorAt(0, background.color());
-            gradient.setColorAt(1, particleColor);
-            painter.setBrush(QBrush(gradient));
-            painter.setPen(particlePen);
-            painter.drawEllipse(posx-size/2,posy-size/2,size,size);
+            paintParticle(posx,posy,size,particleColor);
 
             if( toHandlePlaneHits ) paintPlaneHit( particle );
         }        
@@ -144,6 +124,21 @@ void QPainterManager::paintPlaneHit( citerParticle particle )
     }
 }
 
+void QPainterManager::paintParticle( int posx , int posy , int size , QColor color )
+{
+    QRadialGradient gradient;
+
+    gradient.setRadius(size/2);
+    gradient.setCenter(posx,posy);
+    gradient.setFocalPoint(posx,posy);
+    gradient.setColorAt(0, background.color());
+    gradient.setColorAt(1, color);
+
+    painter.setBrush(QBrush(gradient));
+    painter.setPen(particlePen);
+    painter.drawEllipse(posx-size/2,posy-size/2,size,size);
+}
+
 void QPainterManager::paintTracking( citerParticle particle )
 {
     int size  {static_cast<int>(particle->radius/2)+1};
@@ -176,9 +171,21 @@ void QPainterManager::handleCursorPosition()
         {           
             displayVelocityVector.first = true;
             displayVelocityVector.second = particle;
-            paintArrow( position + particle->velocity.getVectorOfLength(particle->radius) , particle->velocity.getVectorOfLength(100) , 20 , 3 , QColor(particle->color.R, particle->color.G, particle->color.B) );
-            painter.setPen(QPen(QColor(10,100,10)));
-            painter.drawText(static_cast<int>(position.x-10),static_cast<int>(position.y-particle->radius*1.5-5),QString::number(particle->getCurrentVelocityPercent())+" %");
+
+            int posx   { static_cast<int>(particle->position.x)+planeBorderWidth };
+            int posy   { static_cast<int>(particle->position.y)+planeBorderWidth };
+            int number { particle->getCurrentVelocityPercent() };
+            int shiftx {0};
+
+            paintArrow( position + particle->velocity.getVectorOfLength(particle->radius) , particle->velocity.getVectorOfLength(100) , 25 , 6 , selectedParticleColor );
+            paintParticle(posx,posy,40,selectedParticleColor);
+            painter.setPen(QPen(QColor(10,15,10)));
+
+            if( number<10 ) shiftx = 4;
+            else if( number>9 && number<99 ) shiftx = 9;
+            else shiftx = 13;
+
+            painter.drawText(posx-shiftx,posy+5,QString::number(particle->getCurrentVelocityPercent()));
         }       
     }
 }

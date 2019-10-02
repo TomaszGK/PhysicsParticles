@@ -34,7 +34,7 @@
     <message>
         <location filename="../mainwindow.ui" line="37"/>
         <location filename="../mainwindow.ui" line="496"/>
-        <location filename="../mainwindow.ui" line="2109"/>
+        <location filename="../mainwindow.ui" line="2261"/>
         <source>Particles</source>
         <translation>Cząsteczki gazu</translation>
     </message>
@@ -50,33 +50,33 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="253"/>
-        <location filename="../mainwindow.ui" line="1176"/>
-        <location filename="../mainwindow.ui" line="1379"/>
+        <location filename="../mainwindow.ui" line="1221"/>
+        <location filename="../mainwindow.ui" line="1424"/>
         <source>Temperature [%]</source>
         <translation>Temperatura [%]</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="272"/>
         <location filename="../mainwindow.ui" line="329"/>
-        <location filename="../mainwindow.ui" line="936"/>
-        <location filename="../mainwindow.ui" line="1013"/>
-        <location filename="../mainwindow.ui" line="1051"/>
-        <location filename="../mainwindow.ui" line="1235"/>
-        <location filename="../mainwindow.ui" line="1254"/>
+        <location filename="../mainwindow.ui" line="981"/>
+        <location filename="../mainwindow.ui" line="1058"/>
+        <location filename="../mainwindow.ui" line="1096"/>
+        <location filename="../mainwindow.ui" line="1280"/>
+        <location filename="../mainwindow.ui" line="1299"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="291"/>
         <location filename="../mainwindow.ui" line="348"/>
-        <location filename="../mainwindow.ui" line="955"/>
-        <location filename="../mainwindow.ui" line="1032"/>
-        <location filename="../mainwindow.ui" line="1070"/>
-        <location filename="../mainwindow.ui" line="1216"/>
-        <location filename="../mainwindow.ui" line="1273"/>
-        <location filename="../mainwindow.ui" line="1935"/>
-        <location filename="../mainwindow.ui" line="1954"/>
-        <location filename="../mainwindow.ui" line="1973"/>
+        <location filename="../mainwindow.ui" line="1000"/>
+        <location filename="../mainwindow.ui" line="1077"/>
+        <location filename="../mainwindow.ui" line="1115"/>
+        <location filename="../mainwindow.ui" line="1261"/>
+        <location filename="../mainwindow.ui" line="1318"/>
+        <location filename="../mainwindow.ui" line="1980"/>
+        <location filename="../mainwindow.ui" line="1999"/>
+        <location filename="../mainwindow.ui" line="2018"/>
         <source>100</source>
         <translation>100</translation>
     </message>
@@ -96,254 +96,254 @@
         <translation>Wyłącz śledzenie ruchu cząstki gazu</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="520"/>
+        <location filename="../mainwindow.ui" line="523"/>
         <source>102</source>
         <translatorcomment>102</translatorcomment>
         <translation>102</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="576"/>
+        <location filename="../mainwindow.ui" line="588"/>
         <source>Quantity</source>
         <translation>Ilość</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="595"/>
-        <location filename="../mainwindow.ui" line="2262"/>
+        <location filename="../mainwindow.ui" line="628"/>
+        <location filename="../mainwindow.ui" line="2414"/>
         <source>Size</source>
         <translation>Wielkość</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="614"/>
-        <location filename="../mainwindow.ui" line="671"/>
+        <location filename="../mainwindow.ui" line="656"/>
+        <location filename="../mainwindow.ui" line="713"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="633"/>
-        <location filename="../mainwindow.ui" line="652"/>
+        <location filename="../mainwindow.ui" line="675"/>
+        <location filename="../mainwindow.ui" line="694"/>
         <source>Max</source>
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="726"/>
+        <location filename="../mainwindow.ui" line="771"/>
         <source>20</source>
         <translation>20</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="736"/>
+        <location filename="../mainwindow.ui" line="781"/>
         <source>Diffusion</source>
         <translation>Dyfuzja gazów</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="816"/>
+        <location filename="../mainwindow.ui" line="861"/>
         <source>START</source>
         <translation>START</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="835"/>
-        <location filename="../mainwindow.ui" line="2472"/>
+        <location filename="../mainwindow.ui" line="880"/>
+        <location filename="../mainwindow.ui" line="2624"/>
         <source>Velocity Color</source>
         <translation>Prędkość</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="851"/>
-        <location filename="../mainwindow.ui" line="2456"/>
+        <location filename="../mainwindow.ui" line="896"/>
+        <location filename="../mainwindow.ui" line="2608"/>
         <source>Particle Color</source>
         <translation>Rodzaj</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="974"/>
+        <location filename="../mainwindow.ui" line="1019"/>
         <source>Gap length [%]</source>
         <translation>Szerokość otworu [%]</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="992"/>
+        <location filename="../mainwindow.ui" line="1037"/>
         <source>Blue particles</source>
         <translation>Niebieski cząsteczki</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1157"/>
-        <location filename="../mainwindow.ui" line="1360"/>
+        <location filename="../mainwindow.ui" line="1202"/>
+        <location filename="../mainwindow.ui" line="1405"/>
         <source>Size [%]</source>
         <translation>Wielkość [%]</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1195"/>
+        <location filename="../mainwindow.ui" line="1240"/>
         <source>Red particles</source>
         <translation>Czerwone cząsteczki</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1389"/>
+        <location filename="../mainwindow.ui" line="1434"/>
         <source>Brownian Motion</source>
         <translation>Ruchy Browna</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1525"/>
+        <location filename="../mainwindow.ui" line="1570"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1544"/>
-        <location filename="../mainwindow.ui" line="1563"/>
+        <location filename="../mainwindow.ui" line="1589"/>
+        <location filename="../mainwindow.ui" line="1608"/>
         <source>200</source>
         <translation>200</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1582"/>
+        <location filename="../mainwindow.ui" line="1627"/>
         <source>Molecule mass [%]</source>
         <translation>Masa molekuły [%]</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1595"/>
-        <location filename="../mainwindow.ui" line="1623"/>
+        <location filename="../mainwindow.ui" line="1640"/>
+        <location filename="../mainwindow.ui" line="1668"/>
         <source>Set molecule velocity to zero</source>
         <translation>Wyzeruj masę molekuły</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1598"/>
+        <location filename="../mainwindow.ui" line="1643"/>
         <source>STOP 
  Molecule</source>
         <translation>ZATRZYMAJ 
  Molekułę</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1626"/>
+        <location filename="../mainwindow.ui" line="1671"/>
         <source>CLEAR 
 Trace</source>
         <translation>WYCZYŚĆ 
 Ślad</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1647"/>
+        <location filename="../mainwindow.ui" line="1692"/>
         <source>Sandbox</source>
         <translation>Piaskownica</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1664"/>
+        <location filename="../mainwindow.ui" line="1709"/>
         <source>Temperature</source>
         <translation>Temperatura</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1842"/>
+        <location filename="../mainwindow.ui" line="1887"/>
         <source>Forces [%]</source>
         <translation>Siły [%]</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1992"/>
-        <location filename="../mainwindow.ui" line="2011"/>
-        <location filename="../mainwindow.ui" line="2030"/>
+        <location filename="../mainwindow.ui" line="2037"/>
+        <location filename="../mainwindow.ui" line="2056"/>
+        <location filename="../mainwindow.ui" line="2075"/>
         <source>-100</source>
         <translation>-100</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2050"/>
+        <location filename="../mainwindow.ui" line="2095"/>
         <source>Vertical</source>
         <translation>Pionowe</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2070"/>
+        <location filename="../mainwindow.ui" line="2115"/>
         <source>Horizontal</source>
         <translation>Poziome</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2090"/>
+        <location filename="../mainwindow.ui" line="2135"/>
         <source>Attraction</source>
         <translation>Przyciąganie</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2242"/>
+        <location filename="../mainwindow.ui" line="2394"/>
         <source>Amount</source>
         <translation>ilość</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2282"/>
+        <location filename="../mainwindow.ui" line="2434"/>
         <source>GAS I</source>
         <translation>GAS I</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2302"/>
+        <location filename="../mainwindow.ui" line="2454"/>
         <source>GAS II</source>
         <translation>GAS II</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2322"/>
+        <location filename="../mainwindow.ui" line="2474"/>
         <source>GAS III</source>
         <translation>GAS III</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2342"/>
-        <location filename="../mainwindow.ui" line="2362"/>
-        <location filename="../mainwindow.ui" line="2382"/>
-        <location filename="../mainwindow.ui" line="2402"/>
-        <location filename="../mainwindow.ui" line="2422"/>
-        <location filename="../mainwindow.ui" line="2442"/>
+        <location filename="../mainwindow.ui" line="2494"/>
+        <location filename="../mainwindow.ui" line="2514"/>
+        <location filename="../mainwindow.ui" line="2534"/>
+        <location filename="../mainwindow.ui" line="2554"/>
+        <location filename="../mainwindow.ui" line="2574"/>
+        <location filename="../mainwindow.ui" line="2594"/>
         <source>50</source>
         <translation>50</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2492"/>
+        <location filename="../mainwindow.ui" line="2644"/>
         <source>Velocity</source>
         <translation>Prędkość</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2508"/>
+        <location filename="../mainwindow.ui" line="2660"/>
         <source>Momentum</source>
         <translation>Pęd</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2533"/>
+        <location filename="../mainwindow.ui" line="2685"/>
         <source>RESET</source>
         <translation>RESET</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2625"/>
+        <location filename="../mainwindow.ui" line="2777"/>
         <source>Scheme</source>
         <translation>Wygląd</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2638"/>
+        <location filename="../mainwindow.ui" line="2790"/>
         <source>Info</source>
         <translation>Informacja</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2655"/>
+        <location filename="../mainwindow.ui" line="2807"/>
         <source>.</source>
         <translation>.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2667"/>
+        <location filename="../mainwindow.ui" line="2819"/>
         <source>Language</source>
         <translation>Język</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2680"/>
-        <location filename="../mainwindow.ui" line="2712"/>
+        <location filename="../mainwindow.ui" line="2832"/>
+        <location filename="../mainwindow.ui" line="2864"/>
         <source>Orange</source>
         <translation>Orange</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2685"/>
-        <location filename="../mainwindow.ui" line="2728"/>
+        <location filename="../mainwindow.ui" line="2837"/>
+        <location filename="../mainwindow.ui" line="2880"/>
         <source>Blue</source>
         <translation>Blue</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2738"/>
+        <location filename="../mainwindow.ui" line="2890"/>
         <source>About</source>
         <translation>O programie</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2696"/>
+        <location filename="../mainwindow.ui" line="2848"/>
         <source>Basic</source>
         <translation>Domyślny</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2758"/>
+        <location filename="../mainwindow.ui" line="2910"/>
         <source>English</source>
         <translation>Angielski</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2778"/>
+        <location filename="../mainwindow.ui" line="2930"/>
         <source>Polish</source>
         <translation>Polski</translation>
     </message>

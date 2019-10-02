@@ -63,8 +63,9 @@ public:
 
 private:
 
-    QPen     particlePen   ; /**< particle pen */
-    QColor   particleColor ; /**< particle color */
+    QPen     particlePen           ; /**< particle pen */
+    QColor   particleColor         ; /**< particle color */
+    QColor   selectedParticleColor ; /**< selected particle color */
 
     QPoint   mousePos ; /**< mouse current position */
 
@@ -119,6 +120,16 @@ private:
      * @param particle              a given particle that hits the plane
      */
     void paintPlaneHit( citerParticle particle );
+
+    /**
+     * @brief Paints particle inside the plane
+     *
+     * @param posx                  particle position along X axis
+     * @param posx                  particle position along Y axis
+     * @param size                  particle size
+     * @param color                 particle color
+     */
+    inline void paintParticle( int posx , int posy , int size , QColor color );
 
     /**
      * @brief Paints trace of a given particle.
