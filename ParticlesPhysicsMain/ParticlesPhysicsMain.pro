@@ -4,7 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
+
+QT += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -37,6 +39,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     extern/qcgaugewidget.cpp \
+    qpart/qboxstyle.cpp \
     qpart/qpaintermanager.cpp \    
     qpart/qbarchart.cpp \
     qpart/qhistogram1d.cpp \
@@ -64,6 +67,7 @@ HEADERS += \
     mainwindow.h \
     extern/random.hpp \
     extern/qcgaugewidget.h \
+    qpart/qboxstyle.h \
     qpart/qpaintermanager.h \
     qpart/qbardisplay.h \    
     qpart/qinfodisplay.h \
