@@ -42,7 +42,7 @@ public:
      * @param ptr                   pointer to BarChart object
      * @param parent                ponter to parent widget
      */
-    explicit QBarChart( double max = 1, std::pair<bool,bool> scalability = {true,true}, ptrBarChart ptr = nullptr, QWidget* parent = nullptr );
+    explicit QBarChart( double max = 1, ptrBarChart ptr = nullptr, QWidget* parent = nullptr );
 
     /**
      * @brief Sets maximum bin value.
@@ -57,7 +57,7 @@ public:
      * @param _isScalableUp         scalable up flag
      * @param _isScalableDown       scalable down flag
      */
-    void setScalabality( bool _isScalableUp , bool _isScalableDown ) { isScalableUp = _isScalableUp ; isScalableDown = _isScalableDown; }
+    void setScalabality( bool isScalableUp , bool isScalableDown ) { boxStyle.isScalableUp = isScalableUp ; boxStyle.isScalableDown = isScalableDown; }
 
 private:
 
@@ -70,20 +70,14 @@ private:
     /** Data visuzalization type */
     DataVisualization dataVisulization { DataVisualization::BARS };
 
-    QString buttonStyleSelected   {""}; /** holds QT style sheet for selected button */
-    QString buttonStyleUnselected {""}; /** holds QT style sheet for unselected button */
+    /** single bar width */
+    int barWidth {0};
 
-    QColor cValue        {100,20,20}   ; /** current value color */
-    QColor cBackground   {145,215,215} ; /** background color */
-    QColor cButtonActive {145,105,125} ; /** active button color */
-    QColor cButton       {200,200,200} ; /** button color */
-    QColor cButtonLabel  {15,15,15}    ; /** button label color */
+    /** maximum bin value */
+    double maxValue {1};
 
-    int    barWidth       {0}    ; /** single bar width */
-    double maxValue       {1}    ; /** maximum bin value */
-    bool   isScalableUp   {true} ; /** scalable up flag - if true then maxValue can increase */
-    bool   isScalableDown {true} ; /** scalable down flag - if true then maxValue can decrease */
-    int    labelPosition  {0}    ; /** label position */
+    /** label position */
+    int labelPosition {0};
 
     /**
      * @brief Paints bar charts.

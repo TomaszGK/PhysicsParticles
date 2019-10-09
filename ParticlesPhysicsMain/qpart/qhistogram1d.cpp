@@ -5,8 +5,8 @@ QHistogram1D::QHistogram1D( double maxValue, ptrHistogram1D ptr, QWidget* parent
 {
     background = QBrush(QColor(145, 215, 215));
     setAutoFillBackground(false);    
-    background = cBackground;
-    marginTop = 30;    
+
+    boxStyle.marginTop = 30;
 
     init();
 }
@@ -17,23 +17,23 @@ void QHistogram1D::init()
     {
         int width = parentWidget()->width();
         int size = static_cast<int>(histogram1D->getBins().size());
-        int marginAdjustment = (width-(marginLeft+marginRight)) - size*((width-(marginLeft+marginRight))/size);
+        int marginAdjustment = (width-(boxStyle.marginLeft+boxStyle.marginRight)) - size*((width-(boxStyle.marginLeft+boxStyle.marginRight))/size);
 
         if( marginAdjustment>0 )
         {
             if( marginAdjustment % 2 == 0 )
             {
-                marginLeft += marginAdjustment/2;
-                marginRight += marginAdjustment/2;
+                boxStyle.marginLeft += marginAdjustment/2;
+                boxStyle.marginRight += marginAdjustment/2;
             }
             else
             {
-                marginLeft += (marginAdjustment-1)/2;
-                marginRight += ((marginAdjustment-1)/2+1);
+                boxStyle.marginLeft += (marginAdjustment-1)/2;
+                boxStyle.marginRight += ((marginAdjustment-1)/2+1);
             }
         }
 
-        barWidth = (static_cast<double>(width)-(marginLeft+marginRight))/static_cast<double>(size);
+        barWidth = (static_cast<double>(width)-(boxStyle.marginLeft+boxStyle.marginRight))/static_cast<double>(size);
     }
 }
 
@@ -42,7 +42,7 @@ int QHistogram1D::calculateLabelPosition()
     QFontMetrics fm(parentWidget()->font());
     int pixelsWide = fm.horizontalAdvance(histogram1D->getLabel().c_str());
 
-    return marginLeft + (parentWidget()->width()-(marginLeft+marginRight)-pixelsWide)/2;
+    return boxStyle.marginLeft + (parentWidget()->width()-(boxStyle.marginLeft+boxStyle.marginRight)-pixelsWide)/2;
 }
 
 void QHistogram1D::paint()
@@ -57,7 +57,7 @@ void QHistogram1D::paint()
         paintAxes();
 
         maxValue = 1.5*histogram1D->getMax();
-        double scaleFactor = (height()-(marginTop+marginBottom))/maxValue;
+        double scaleFactor = (height()-(boxStyle.marginTop+boxStyle.marginBottom))/maxValue;
 
         painter.setPen(QPen(QColor(150, 50, 250)));
         painter.setBrush(QBrush(QColor(150, 50, 250)));
@@ -69,7 +69,7 @@ void QHistogram1D::paint()
             if( intensity>255 ) intensity = 255;
             painter.setBrush(QBrush(QColor(intensity, 0, 255-intensity)));
             painter.setPen(QPen(QColor(intensity, 0, 255-intensity)));
-            painter.drawRect(static_cast<int>(marginLeft+index*barWidth),height()-value-marginBottom-2,static_cast<int>(barWidth)-1,value);
+            painter.drawRect(static_cast<int>(boxStyle.marginLeft+index*barWidth),height()-value-boxStyle.marginBottom-2,static_cast<int>(barWidth)-1,value);
 
             ++index;
         }
@@ -82,16 +82,16 @@ void QHistogram1D::paint()
 
 void QHistogram1D::drawHistogramName()
 {
-    painter.setPen(QPen(cLabelColor));
-    painter.drawText(calculateLabelPosition(),marginTop-7,QString::fromStdString(histogram1D->getLabel()));
+    painter.setPen(QPen(boxStyle.cLabelColor));
+    painter.drawText(calculateLabelPosition(),boxStyle.marginTop-7,QString::fromStdString(histogram1D->getLabel()));
 }
 
 void QHistogram1D::drawMarking()
 {
-    int posx = static_cast<int>(marginLeft+histogram1D->getMarkingBin()*barWidth+0.5*barWidth);
+    int posx = static_cast<int>(boxStyle.marginLeft+histogram1D->getMarkingBin()*barWidth+0.5*barWidth);
     QPen pen(QColor(10,155,55));
     pen.setWidth(2);
     painter.setPen(pen);
-    paintTriangle( vect2D(posx-6,marginTop) , vect2D(posx,marginTop+8) , vect2D(posx+6,marginTop) , QColor(10,155,55)  );
-    painter.drawLine(posx,marginTop,posx,height()-marginBottom-1);
+    paintTriangle( vect2D(posx-6,boxStyle.marginTop) , vect2D(posx,boxStyle.marginTop+8) , vect2D(posx+6,boxStyle.marginTop) , QColor(10,155,55)  );
+    painter.drawLine(posx,boxStyle.marginTop,posx,height()-boxStyle.marginBottom-1);
 }

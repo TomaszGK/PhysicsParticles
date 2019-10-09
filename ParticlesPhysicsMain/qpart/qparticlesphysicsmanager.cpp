@@ -7,12 +7,13 @@ QParticlesPhysicsManager::QParticlesPhysicsManager( SimulationType type, QHBoxLa
     layout->addWidget( particlesPaintManager.get() );
 }
 
-void QParticlesPhysicsManager::addQBarChart( const std::string& name, QHBoxLayout* layout, std::pair<bool,bool> scalability )
+void QParticlesPhysicsManager::addQBarChart( const std::string& name, QHBoxLayout* layout, BoxStyles style )
 {
     if( barCharts.count(name) != 0 )
     {       
-        qBoxPainters[name] = std::make_unique<QBarChart>(sqrt(physicsInfo.maxRapidity*2)/2,scalability,barCharts[name],layout->parentWidget());        
-        layout->addWidget( qBoxPainters[name].get() );        
+        qBoxPainters[name] = std::make_unique<QBarChart>(sqrt(physicsInfo.maxRapidity*2)/2,barCharts[name],layout->parentWidget());
+        layout->addWidget( qBoxPainters[name].get() );
+        if( style != BoxStyles::DEFAULT ) qBoxPainters[name]->boxStyle.loadStyle(style);
     }
 }
 

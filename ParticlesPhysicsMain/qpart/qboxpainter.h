@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 
+#include "qboxstyle.h"
 #include "definitions.h"
 
 /** @file
@@ -46,20 +47,14 @@ public:
 
 protected:
 
-    QPainter painter    ; /** QT painter */
-    QBrush   background ; /** backround brush */
+    /** QT painter */
+    QPainter painter;
 
-    QColor cPlaneBorder {120,120,120} ; /** box(plane) border color */
+    /** backround brush */
+    QBrush background;
 
-    int  marginLeft             {20} ; /** box margin left in pixels */
-    int  marginRight            {20} ; /** box margin right in pixels */
-    int  marginTop              {20} ; /** box margin top in pixels */
-    int  marginBottom           {20} ; /** box margin bottom in pixels */
-    int  numberOfHorizontalAxes {5}  ; /** number of horizontal axes in grid */
-    int  numberOfVerticalAxes   {5}  ; /** number of vertical axes in grid */
-    int  planeBorderWidth       {1}  ; /** box(plane) border width */
-
-    QString label {""} ; /** box label */
+    /** box label */
+    QString label {""};
 
     /**
      * @brief Paints specific box.
@@ -120,5 +115,10 @@ protected:
      * @return font length in pixels
      */
     int  getStringWidthInPixels( const QString& name );
+
+public:
+
+    /** box style parameters */
+    QBoxStyle boxStyle;
 
 };

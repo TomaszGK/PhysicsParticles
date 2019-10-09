@@ -37,10 +37,11 @@ private:
     /** Holds BarDisplay object. */
     ptrBarDisplay barDisplay;
 
-    int    barWidth    {0} ; /**< single bar width */
-    int    max       {100} ; /**< maximum bin balue */
-    QColor upper {0,0,255} ; /**< upper bins color */
-    QColor lower {255,0,0} ; /**< lower bins color */
+    /**< single bar width */
+    int barWidth {0};
+
+    /**< maximum bin balue */
+    int max {100};
 
     /**
      * @brief Paints bar charts.

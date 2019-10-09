@@ -1,17 +1,14 @@
 #include "qbarchart.h"
 
-QBarChart::QBarChart( double max, std::pair<bool,bool> scalability, ptrBarChart ptr, QWidget* parent )
+QBarChart::QBarChart( double max,  ptrBarChart ptr, QWidget* parent )
 : QBoxPainter { parent }, barChart { std::move(ptr) }
 {
-    setMaxOY(max);    
-    isScalableUp = scalability.first;
-    isScalableDown = scalability.second;
-    background = cBackground;
+    setMaxOY(max);        
     setAutoFillBackground(false);
-    marginTop = 30;
-    marginRight = 30;
-    buttonStyleSelected = "QPushButton {""background-color: %1"";font-size: 16px;font: bold}";
-    buttonStyleUnselected = "QPushButton {""background-color: %1"";font-size: 16px;}";    
+    boxStyle.marginTop = 30;
+    boxStyle.marginRight = 30;
+    boxStyle.buttonStyleSelected = "QPushButton {""background-color: %1"";font-size: 16px;font: bold}";
+    boxStyle.buttonStyleUnselected = "QPushButton {""background-color: %1"";font-size: 16px;}";
 
     init();
 }
@@ -22,38 +19,38 @@ void QBarChart::init()
     {
         int width = parentWidget()->width();
         int size = static_cast<int>(barChart->getBins().size());
-        int marginAdjustment = (width-(marginLeft+marginRight)) - size*((width-(marginLeft+marginRight))/size);
+        int marginAdjustment = (width-(boxStyle.marginLeft+boxStyle.marginRight)) - size*((width-(boxStyle.marginLeft+boxStyle.marginRight))/size);
 
         if( marginAdjustment>0 )
         {
             if( marginAdjustment % 2 == 0 )
             {
-                marginLeft += marginAdjustment/2;
-                marginRight += marginAdjustment/2;
+                boxStyle.marginLeft += marginAdjustment/2;
+                boxStyle.marginRight += marginAdjustment/2;
             }
             else
             {
-                marginLeft += (marginAdjustment-1)/2;
-                marginRight += ((marginAdjustment-1)/2+1);
+                boxStyle.marginLeft += (marginAdjustment-1)/2;
+                boxStyle.marginRight += ((marginAdjustment-1)/2+1);
             }
         }
 
-        barWidth = (width-(marginLeft+marginRight))/size;
+        barWidth = (width-(boxStyle.marginLeft+boxStyle.marginRight))/size;
 
         buttons[DataVisualization::BARS] = std::make_unique<QPushButton>("B",this);
         buttons[DataVisualization::BARS]->resize(25,25);
-        buttons[DataVisualization::BARS]->move(width-marginRight+(marginRight-25)/2,marginBottom+15);
-        buttons[DataVisualization::BARS]->setStyleSheet(buttonStyleSelected.arg(cButtonActive.name()));
+        buttons[DataVisualization::BARS]->move(width-boxStyle.marginRight+(boxStyle.marginRight-25)/2,boxStyle.marginBottom+15);
+        buttons[DataVisualization::BARS]->setStyleSheet(boxStyle.buttonStyleSelected.arg(boxStyle.cButtonActive.name()));
 
         buttons[DataVisualization::POINTS] = std::make_unique<QPushButton>("P",this);
         buttons[DataVisualization::POINTS]->resize(25,25);
-        buttons[DataVisualization::POINTS]->move(width-marginRight+(marginRight-25)/2,marginBottom+45);
-        buttons[DataVisualization::POINTS]->setStyleSheet(buttonStyleUnselected.arg(cButton.name()));
+        buttons[DataVisualization::POINTS]->move(width-boxStyle.marginRight+(boxStyle.marginRight-25)/2,boxStyle.marginBottom+45);
+        buttons[DataVisualization::POINTS]->setStyleSheet(boxStyle.buttonStyleUnselected.arg(boxStyle.cButton.name()));
 
         buttons[DataVisualization::LINES] = std::make_unique<QPushButton>("L",this);
         buttons[DataVisualization::LINES]->resize(25,25);
-        buttons[DataVisualization::LINES]->move(width-marginRight+(marginRight-25)/2,marginBottom+75);
-        buttons[DataVisualization::LINES]->setStyleSheet(buttonStyleUnselected.arg(cButton.name()));
+        buttons[DataVisualization::LINES]->move(width-boxStyle.marginRight+(boxStyle.marginRight-25)/2,boxStyle.marginBottom+75);
+        buttons[DataVisualization::LINES]->setStyleSheet(boxStyle.buttonStyleUnselected.arg(boxStyle.cButton.name()));
 
         connect( buttons[DataVisualization::BARS].get()   , &QPushButton::clicked , this, &QBarChart::onButtonClick );
         connect( buttons[DataVisualization::POINTS].get() , &QPushButton::clicked , this, &QBarChart::onButtonClick );
@@ -67,7 +64,7 @@ int QBarChart::calculateLabelPosition()
     QFontMetrics fm(parentWidget()->font());
     int pixelsWide = fm.horizontalAdvance(barChart->getLabel().c_str());
 
-    return marginLeft + (parentWidget()->width()-(marginLeft+marginRight)-pixelsWide)/2;
+    return boxStyle.marginLeft + (parentWidget()->width()-(boxStyle.marginLeft+boxStyle.marginRight)-pixelsWide)/2;
 }
 
 void QBarChart::paint()
@@ -83,12 +80,12 @@ void QBarChart::paint()
 
         paintAxes();
 
-        if( (isScalableUp && maxValue<barChart->getMax()) || (isScalableDown && maxValue>2*barChart->getMax()) )
+        if( (boxStyle.isScalableUp && maxValue<barChart->getMax()) || (boxStyle.isScalableDown && maxValue>2*barChart->getMax()) )
         {
             if( barChart->getMax()>0 ) maxValue = 1.5*barChart->getMax();
         }
 
-        double scaleFactor = (height()-(marginLeft+marginRight))/maxValue;
+        double scaleFactor = (height()-(boxStyle.marginLeft+boxStyle.marginRight))/maxValue;
 
         for( const auto &barChartBin : barChart->getBins() )
         {
@@ -100,15 +97,15 @@ void QBarChart::paint()
 
             if( dataVisulization == DataVisualization::BARS )
             {               
-                painter.drawRect(marginLeft+index*barWidth,height()-value-marginBottom-2,barWidth-1,value);
+                painter.drawRect(boxStyle.marginLeft+index*barWidth,height()-value-boxStyle.marginBottom-2,barWidth-1,value);
             }
             else if( dataVisulization == DataVisualization::POINTS )
             {
-                painter.drawEllipse(marginLeft+index*barWidth,height()-value-marginBottom-2-barWidth,barWidth,barWidth);
+                painter.drawEllipse(boxStyle.marginLeft+index*barWidth,height()-value-boxStyle.marginBottom-2-barWidth,barWidth,barWidth);
             }
             else if( dataVisulization == DataVisualization::LINES )
             {
-                if(index>0) painter.drawLine(marginLeft+(index-1)*barWidth,height()-valueLast-marginBottom-2-barWidth,marginLeft+index*barWidth,height()-value-marginBottom-2-barWidth);
+                if(index>0) painter.drawLine(boxStyle.marginLeft+(index-1)*barWidth,height()-valueLast-boxStyle.marginBottom-2-barWidth,boxStyle.marginLeft+index*barWidth,height()-value-boxStyle.marginBottom-2-barWidth);
             }
 
             ++index;
@@ -123,14 +120,14 @@ void QBarChart::paint()
 
 void QBarChart::drawCurrentValue()
 {
-    painter.setPen(QPen(cValue));
-    painter.drawText(marginLeft,marginTop-7,QString::number(100*barChart->getBins().back(),'f',2));
+    painter.setPen(QPen(boxStyle.cValue));
+    painter.drawText(boxStyle.marginLeft,boxStyle.marginTop-7,QString::number(100*barChart->getBins().back(),'f',2));
 }
 
 void QBarChart::drawChartName()
 {
-    painter.setPen(QPen(cValue));
-    painter.drawText(calculateLabelPosition(),marginTop-7,QString::fromStdString(barChart->getLabel()));
+    painter.setPen(QPen(boxStyle.cValue));
+    painter.drawText(calculateLabelPosition(),boxStyle.marginTop-7,QString::fromStdString(barChart->getLabel()));
 }
 
 void QBarChart::onButtonClick()
@@ -138,12 +135,12 @@ void QBarChart::onButtonClick()
     auto clickedButton = qobject_cast<QPushButton*>( sender() );
     if( clickedButton != nullptr )
     {
-      buttons[dataVisulization]->setStyleSheet(buttonStyleUnselected.arg(cButton.name()));
+      buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleUnselected.arg(boxStyle.cButton.name()));
 
       if( clickedButton->text() == "B" ) dataVisulization = DataVisualization::BARS;
       else if( clickedButton->text() == "P" ) dataVisulization = DataVisualization::POINTS;
       else if( clickedButton->text() == "L" ) dataVisulization = DataVisualization::LINES;
 
-      buttons[dataVisulization]->setStyleSheet(buttonStyleSelected.arg(cButtonActive.name()));
+      buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleSelected.arg(boxStyle.cButtonActive.name()));
     }
 }

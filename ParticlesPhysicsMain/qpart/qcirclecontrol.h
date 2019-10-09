@@ -41,11 +41,7 @@ public:
         return indicatorPos-origin;
     }    
 
-private:
-
-    QColor bigCirclePenColor      {80,80,90}    ; /** big circle border color */
-    QColor smallCircleColor       {155,155,155} ; /** small circle color */
-    QColor smallCircleHookedColor {100,100,255} ; /** small circle hooked color */
+private:   
 
     /**
      * @brief Inits and calculates QCircleControl state.

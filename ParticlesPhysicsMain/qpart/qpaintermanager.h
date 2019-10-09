@@ -63,11 +63,17 @@ public:
 
 private:
 
-    QPen     particlePen           ; /**< particle pen */
-    QColor   particleColor         ; /**< particle color */
-    QColor   selectedParticleColor ; /**< selected particle color */
+    /**< particle pen */
+    QPen particlePen;
 
-    QPoint   mousePos ; /**< mouse current position */
+    /**< particle color */
+    QColor particleColor;
+
+    /**< selected particle color */
+    QColor selectedParticleColor;
+
+    /**< mouse current position */
+    QPoint mousePos;
 
     /**
      * Stores constant iterator to particle on which hovering mouse cursor.

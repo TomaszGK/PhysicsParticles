@@ -37,12 +37,14 @@ private:
     /** Holds Histogram1D object. */
     ptrHistogram1D histogram1D;
 
-    QColor cBackground {145,215,215} ; /** histogram background color */
-    QColor cLabelColor {100,20,20}   ; /** histogram label color */
+    /** histogram bar width */
+    double barWidth {0};
 
-    double barWidth      {0}   ; /** histogram bar width */
-    double maxValue      {100} ; /** maximum bin value */
-    int    labelPosition {0}   ; /** histogram label position */
+    /** maximum bin value */
+    double maxValue {100};
+
+    /** histogram label position */
+    int labelPosition {0};
 
     /**
      * @brief Paints histogram.

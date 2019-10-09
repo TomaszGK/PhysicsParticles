@@ -6,7 +6,7 @@ QInfoDisplay::QInfoDisplay( QWidget *parentWidget )
 {
     background = QBrush(QColor(145, 215, 215));
     setAutoFillBackground(false);    
-    marginLeft = marginRight = marginTop = marginBottom = 5; 
+    boxStyle.marginLeft = boxStyle.marginRight = boxStyle.marginTop = boxStyle.marginBottom = 5;
 }
 
 void QInfoDisplay::setDisplay( PlaneSide side, int newValue )
@@ -21,8 +21,8 @@ void QInfoDisplay::paint()
     painter.setPen(QPen(QColor(130, 115, 215)));
 
     //painter.drawText(marginLeft+50,height()/2,"Temperature");
-    painter.drawText(marginLeft,height()/2,QString::number(value[PlaneSide::LEFT])+" %");
-    painter.drawText(width()-marginRight-textWidth[PlaneSide::RIGHT],height()/2,QString::number(value[PlaneSide::RIGHT])+" %");
-    painter.drawText(marginLeft + (width()-(marginLeft+marginRight)-textWidth[PlaneSide::UP])/2,marginTop+20,QString::number(value[PlaneSide::UP])+" %");
-    painter.drawText(marginLeft + (width()-(marginLeft+marginRight)-textWidth[PlaneSide::DOWN])/2,height()-marginBottom-5,QString::number(value[PlaneSide::DOWN])+" %");
+    painter.drawText(boxStyle.marginLeft,height()/2,QString::number(value[PlaneSide::LEFT])+" %");
+    painter.drawText(width()-boxStyle.marginRight-textWidth[PlaneSide::RIGHT],height()/2,QString::number(value[PlaneSide::RIGHT])+" %");
+    painter.drawText(boxStyle.marginLeft + (width()-(boxStyle.marginLeft+boxStyle.marginRight)-textWidth[PlaneSide::UP])/2,boxStyle.marginTop+20,QString::number(value[PlaneSide::UP])+" %");
+    painter.drawText(boxStyle.marginLeft + (width()-(boxStyle.marginLeft+boxStyle.marginRight)-textWidth[PlaneSide::DOWN])/2,height()-boxStyle.marginBottom-5,QString::number(value[PlaneSide::DOWN])+" %");
 }

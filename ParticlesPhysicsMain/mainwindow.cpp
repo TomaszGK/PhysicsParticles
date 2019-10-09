@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create BASIC simulation
     physicsSimulation[0] = std::make_unique<QParticlesPhysicsManager>(SimulationType::BASIC,ui->particlesFrameTab0);
-    physicsSimulation[0]->addQBarChart("velocity",ui->velocityBarChartTab0,{false,false});
+    physicsSimulation[0]->addQBarChart("velocity",ui->velocityBarChartTab0,BoxStyles::BAR_CHART1);
     physicsSimulation[0]->addQBarChart("kinetic",ui->kineticEnergyBarChartTab0);
     physicsSimulation[0]->addQHistogram1D("velocityDistribution",ui->velocityDistributionHistogram1DTab0);
     physicsSimulation[0]->addQGauge("Pressure",ui->pressureGaugeHorizontalLayoutTab0);
@@ -29,8 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create DIFFIUSION simulation
     physicsSimulation[1] = std::make_unique<QParticlesPhysicsManager>(SimulationType::DIFFUSION,ui->particlesFrameTab1);
-    physicsSimulation[1]->addQBarChart("velocityBlue",ui->velocityBlueBarChartTab1,{false,false});
-    physicsSimulation[1]->addQBarChart("velocityRed",ui->velocityRedBarChartTab1,{false,false});
+    physicsSimulation[1]->addQBarChart("velocityBlue",ui->velocityBlueBarChartTab1,BoxStyles::BAR_CHART1);
+    physicsSimulation[1]->addQBarChart("velocityRed",ui->velocityRedBarChartTab1,BoxStyles::BAR_CHART1);
     physicsSimulation[1]->addQBarDisplay("diffiusion",ui->numBlueRedTab1);
 
     ui->temperatureLeftDialTab1->setValue(physicsSimulation[1]->getTemperatureLeftInPercent());

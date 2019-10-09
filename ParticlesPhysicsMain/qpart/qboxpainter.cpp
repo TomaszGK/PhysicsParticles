@@ -3,14 +3,14 @@
 QBoxPainter::QBoxPainter( QWidget* parentWidget )
 : QWidget {parentWidget}
 {
-    background = QBrush(QColor(145, 215, 215));    
+    background = QBrush(boxStyle.cBackground);
 }
 
 void QBoxPainter::paintEvent(QPaintEvent *event)
 {
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.fillRect(event->rect(), background);
+    painter.fillRect( event->rect(), background );
     paintPlaneBorder();
     paint();
     painter.end();
@@ -21,29 +21,29 @@ void QBoxPainter::paintAxes()
     QPen linePen(QColor(100, 100, 100));
     painter.setPen(linePen);
     painter.setBrush(QBrush(Qt::NoBrush));
-    painter.drawRect(marginLeft-1,marginTop-1,width()-(marginLeft+marginRight)+1,height()-(marginTop+marginBottom)+1);
+    painter.drawRect(boxStyle.marginLeft-1,boxStyle.marginTop-1,width()-(boxStyle.marginLeft+boxStyle.marginRight)+1,height()-(boxStyle.marginTop+boxStyle.marginBottom)+1);
 
     linePen.setColor(QColor(120, 120, 120));
     linePen.setStyle(Qt::DashLine);
 
-    double axisDistance = (height()-(marginTop+marginBottom))/static_cast<double>(numberOfHorizontalAxes);
+    double axisDistance = (height()-(boxStyle.marginTop+boxStyle.marginBottom))/static_cast<double>(boxStyle.numberOfHorizontalAxes);
     int pos {0};
 
-    for( int index=1 ; index<numberOfHorizontalAxes ; ++index )
+    for( int index=1 ; index<boxStyle.numberOfHorizontalAxes ; ++index )
     {
         painter.setPen(linePen);
-        pos = marginTop-1+static_cast<int>(index*axisDistance);
-        painter.drawLine(marginLeft+1,pos,width()-marginRight-1,pos);
+        pos = boxStyle.marginTop-1+static_cast<int>(index*axisDistance);
+        painter.drawLine(boxStyle.marginLeft+1,pos,width()-boxStyle.marginRight-1,pos);
     }
 
-    axisDistance = (width()-(marginTop+marginBottom))/static_cast<double>(numberOfVerticalAxes);
+    axisDistance = (width()-(boxStyle.marginTop+boxStyle.marginBottom))/static_cast<double>(boxStyle.numberOfVerticalAxes);
     pos = 0;
 
-    for( int index=1 ; index<numberOfVerticalAxes ; ++index )
+    for( int index=1 ; index<boxStyle.numberOfVerticalAxes ; ++index )
     {
         painter.setPen(linePen);
-        pos = marginLeft-1+static_cast<int>(index*axisDistance);
-        painter.drawLine(pos,marginTop+1,pos,height()-marginBottom-1);
+        pos = boxStyle.marginLeft-1+static_cast<int>(index*axisDistance);
+        painter.drawLine(pos,boxStyle.marginTop+1,pos,height()-boxStyle.marginBottom-1);
     }
 }
 
@@ -89,10 +89,10 @@ int QBoxPainter::getStringWidthInPixels( const QString& name )
 
 void QBoxPainter::paintPlaneBorder()
 {
-    painter.setPen(QColor(cPlaneBorder));
-    painter.setBrush(QBrush(cPlaneBorder));
-    painter.drawRect(0,0,width(),planeBorderWidth);
-    painter.drawRect(0,0,planeBorderWidth,height());
-    painter.drawRect(width()-planeBorderWidth,0,planeBorderWidth,height());
-    painter.drawRect(0,height()-planeBorderWidth,width(),planeBorderWidth);
+    painter.setPen(QColor(boxStyle.cPlaneBorder));
+    painter.setBrush(QBrush(boxStyle.cPlaneBorder));
+    painter.drawRect(0,0,width(),boxStyle.planeBorderWidth);
+    painter.drawRect(0,0,boxStyle.planeBorderWidth,height());
+    painter.drawRect(width()-boxStyle.planeBorderWidth,0,boxStyle.planeBorderWidth,height());
+    painter.drawRect(0,height()-boxStyle.planeBorderWidth,width(),boxStyle.planeBorderWidth);
 }

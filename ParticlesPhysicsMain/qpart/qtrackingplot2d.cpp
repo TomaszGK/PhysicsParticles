@@ -4,7 +4,7 @@ QTrackingPlot2D::QTrackingPlot2D( cptrParticlesContainer ptr, QWidget *parent )
 : QBoxPainter { parent }, particles { std::move(ptr) }
 {
     trackingParticle = particles->begin();
-    marginTop = marginBottom = marginLeft = marginRight = static_cast<int>(trackingParticle->radius);
+    boxStyle.marginTop = boxStyle.marginBottom = boxStyle.marginLeft = boxStyle.marginRight = static_cast<int>(trackingParticle->radius);
     plotPen.setWidth(2);
 }
 
@@ -26,7 +26,7 @@ void QTrackingPlot2D::paint()
 
     for( auto position = --trackingParticle->particlePositionsTracking.cend() ; position != trackingParticle->particlePositionsTracking.cbegin() ; --position )
     {
-        pos1.set(static_cast<int>(position->x+planeBorderWidth),static_cast<int>(position->y+planeBorderWidth));
+        pos1.set(static_cast<int>(position->x+boxStyle.planeBorderWidth),static_cast<int>(position->y+boxStyle.planeBorderWidth));
         if( pos2() )
         {
             plotPen.setColor(QColor(120,120,120,static_cast<int>(alpha)));

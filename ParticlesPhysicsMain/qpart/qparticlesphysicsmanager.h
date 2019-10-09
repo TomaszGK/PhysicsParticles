@@ -73,10 +73,10 @@ public:
      * @brief Adds a new QBarChart for a given layout.
      *
      * @param name                  name of bar chart
-     * @param layout                a given layout for QBarChart
-     * @param scalability           scalability mode
+     * @param layout                a given layout for QBarChart    
+     * @param style                 bar chart style
      */
-    void addQBarChart( const std::string& name, QHBoxLayout* layout, std::pair<bool,bool> scalability = {true,true} );
+    void addQBarChart( const std::string& name, QHBoxLayout* layout, BoxStyles style = BoxStyles::DEFAULT );
 
     /**
      * @brief Adds a new QCircleControl for a given layout.
