@@ -1,0 +1,119 @@
+<style>
+
+ <buttonStyleSelected>  
+  <string>QPushButton {background-color: %1;font-size: 16px;font: bold}</string>
+ </buttonStyleSelected>
+
+ <buttonStyleUnselected>  
+  <string>QPushButton { background-color: %1 ;font-size: 16px;}</string>
+ </buttonStyleUnselected>
+
+ <cPlaneBorder>  
+  <R>120</R>
+  <G>120</G>
+  <B>120</B>
+ </cPlaneBorder>
+
+ <cBackground>  
+  <R>145</R>
+  <G>215</G>
+  <B>215</B>
+ </cBackground>
+
+ <cLabelColor>  
+  <R>100</R>
+  <G>20</G>
+  <B>20</B>
+ </cLabelColor>
+
+ <cValue>  
+  <R>100</R>
+  <G>20</G>
+  <B>20</B>
+ </cValue>
+
+ <cButtonActive>  
+  <R>145</R>
+  <G>105</G>
+  <B>125</B>
+ </cButtonActive>
+
+ <cButton>  
+  <R>200</R>
+  <G>200</G>
+  <B>200</B>
+ </cButton>
+
+ <cButtonLabel>  
+  <R>15</R>
+  <G>15</G>
+  <B>15</B>
+ </cButtonLabel>
+
+ <cUpper>  
+  <R>0</R>
+  <G>0</G>
+  <B>255</B>
+ </cUpper>
+
+ <cLower>  
+  <R>255</R>
+  <G>0</G>
+  <B>0</B>
+ </cLower>
+
+ <cBigCirclePenColor>  
+  <R>80</R>
+  <G>80</G>
+  <B>90</B>
+ </cBigCirclePenColor>
+
+ <cSmallCircleColor> 
+  <R>155</R>
+  <G>155</G>
+  <B>155</B>
+ </cSmallCircleColor>
+
+ <cSmallCircleHookedColor>  
+  <R>100</R>
+  <G>100</G>
+  <B>255</B>
+ </cSmallCircleHookedColor>
+
+ <marginLeft> 
+  <int>20</int>  
+ </marginLeft>
+
+ <marginRight> 
+  <int>30</int>  
+ </marginRight>
+
+ <marginTop>  
+  <int>30</int>  
+ </marginTop>
+
+ <marginBottom>  
+  <int>20</int>  
+ </marginBottom>
+
+ <numberOfHorizontalAxes>  
+  <int>5</int>  
+ </numberOfHorizontalAxes>
+
+ <numberOfVerticalAxes>  
+  <int>5</int>  
+ </numberOfVerticalAxes>
+
+ <planeBorderWidth>  
+  <int>1</int>  
+ </planeBorderWidth>
+
+ <isScalableUp>  
+  <bool>0</bool>  
+ </isScalableUp>
+
+ <isScalableDown>  
+  <bool>0</bool>  
+ </isScalableDown>
+
+</style>
