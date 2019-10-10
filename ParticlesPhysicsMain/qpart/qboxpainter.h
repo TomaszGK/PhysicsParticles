@@ -45,13 +45,20 @@ public:
      */
     void setLabel( const QString& newLabel ) { label = newLabel; }
 
+    /**
+     * @brief Loads style type from xml file and takes action proper to a derived object.
+     *
+     * Loading new parameters (e.g. colors, style sheets) from file corresponding to a given style.
+     * After that some recalculating action ( e.g. margin adjust ) may be perform that depend on derived object.
+     * @param style                 box style
+     * @return true if style has loaded correctly otherwise false
+     */
+    virtual bool loadStyle( BoxStyles style ) = 0;
+
 protected:
 
     /** QT painter */
     QPainter painter;
-
-    /** backround brush */
-    QBrush background;
 
     /** box label */
     QString label {""};
@@ -114,9 +121,7 @@ protected:
      * @param name                  string
      * @return font length in pixels
      */
-    int  getStringWidthInPixels( const QString& name );
-
-public:
+    int getStringWidthInPixels( const QString& name );
 
     /** box style parameters */
     QBoxStyle boxStyle;

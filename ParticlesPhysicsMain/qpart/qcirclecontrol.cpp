@@ -7,6 +7,11 @@ QCircleControl::QCircleControl( QWidget* parentWidget )
     init();
 }
 
+bool QCircleControl::loadStyle(BoxStyles style)
+{
+    return false;
+}
+
 void QCircleControl::init()
 {
     if( parentWidget() != nullptr )
@@ -15,9 +20,8 @@ void QCircleControl::init()
         origin.ry() = parentWidget()->height()/2;
 
         bigCircleSize = ( parentWidget()->width() > parentWidget()->height() ) ?  origin.y()-1 :  origin.x()-1 ;
-        indicatorPos = origin;
-        background = parentWidget()->palette().window();
-        boxStyle.cPlaneBorder = background.color();
+        indicatorPos = origin;        
+        boxStyle.cBackground = boxStyle.cPlaneBorder = parentWidget()->palette().window().color();
     }
 }
 

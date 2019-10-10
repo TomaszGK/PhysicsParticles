@@ -2,15 +2,14 @@
 
 QBoxPainter::QBoxPainter( QWidget* parentWidget )
 : QWidget {parentWidget}
-{
-    background = QBrush(boxStyle.cBackground);
+{ 
 }
 
 void QBoxPainter::paintEvent(QPaintEvent *event)
 {
     painter.begin(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.fillRect( event->rect(), background );
+    painter.setRenderHint(QPainter::Antialiasing);    
+    painter.fillRect( event->rect(), QBrush(boxStyle.cBackground) );
     paintPlaneBorder();
     paint();
     painter.end();

@@ -13,7 +13,7 @@ void QParticlesPhysicsManager::addQBarChart( const std::string& name, QHBoxLayou
     {       
         qBoxPainters[name] = std::make_unique<QBarChart>(sqrt(physicsInfo.maxRapidity*2)/2,barCharts[name],layout->parentWidget());
         layout->addWidget( qBoxPainters[name].get() );
-        if( style != BoxStyles::DEFAULT ) qBoxPainters[name]->boxStyle.loadStyle(style);
+        if( style != BoxStyles::DEFAULT ) qBoxPainters[name]->loadStyle(style);
     }
 }
 

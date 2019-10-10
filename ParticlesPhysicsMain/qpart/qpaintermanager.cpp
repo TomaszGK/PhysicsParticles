@@ -6,7 +6,7 @@
 QPainterManager::QPainterManager( cptrParticlesContainer ptrParticles, std::shared_ptr<const PlaneArea> ptrPlaneArea, QWidget* parent )
 : QBoxPainter { parent }, particles { std::move(ptrParticles) }, planeArea { std::move(ptrPlaneArea) }
 {
-    background = QBrush(QColor(235, 235, 235));
+    boxStyle.cBackground = QColor(235, 235, 235);
     selectedParticleColor = QColor(32, 165, 56);
     particlePen = QPen(Qt::NoPen);
     particlePen.setWidth(1);
@@ -15,6 +15,11 @@ QPainterManager::QPainterManager( cptrParticlesContainer ptrParticles, std::shar
     setAutoFillBackground(false);
 
     init();
+}
+
+bool QPainterManager::loadStyle(BoxStyles style)
+{
+    return false;
 }
 
 void QPainterManager::init()
@@ -131,7 +136,7 @@ void QPainterManager::paintParticle( int posx , int posy , int size , QColor col
     gradient.setRadius(size/2);
     gradient.setCenter(posx,posy);
     gradient.setFocalPoint(posx,posy);
-    gradient.setColorAt(0, background.color());
+    gradient.setColorAt(0, boxStyle.cBackground);
     gradient.setColorAt(1, color);
 
     painter.setBrush(QBrush(gradient));

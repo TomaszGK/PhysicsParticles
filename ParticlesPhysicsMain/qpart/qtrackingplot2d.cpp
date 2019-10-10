@@ -8,6 +8,11 @@ QTrackingPlot2D::QTrackingPlot2D( cptrParticlesContainer ptr, QWidget *parent )
     plotPen.setWidth(2);
 }
 
+bool QTrackingPlot2D::loadStyle(BoxStyles style)
+{
+    return false;
+}
+
 void QTrackingPlot2D::init()
 {
 

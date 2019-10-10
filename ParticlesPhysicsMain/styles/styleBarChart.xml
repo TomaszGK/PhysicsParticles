@@ -9,75 +9,51 @@
  </buttonStyleUnselected>
 
  <cPlaneBorder>  
-  <R>120</R>
-  <G>120</G>
-  <B>120</B>
+  <color>120,120,120</color>  
  </cPlaneBorder>
 
- <cBackground>  
-  <R>145</R>
-  <G>215</G>
-  <B>215</B>
+ <cBackground>
+  <color>155,176,219</color>   
  </cBackground>
 
- <cLabelColor>  
-  <R>100</R>
-  <G>20</G>
-  <B>20</B>
+ <cLabelColor>
+  <color>100,20,20</color>      
  </cLabelColor>
 
- <cValue>  
-  <R>100</R>
-  <G>20</G>
-  <B>20</B>
+ <cValue>
+  <color>100,20,20</color>      
  </cValue>
 
- <cButtonActive>  
-  <R>145</R>
-  <G>105</G>
-  <B>125</B>
+ <cButtonActive>
+  <color>145,105,125</color>      
  </cButtonActive>
 
- <cButton>  
-  <R>200</R>
-  <G>200</G>
-  <B>200</B>
+ <cButton>
+  <color>200,200,200</color>     
  </cButton>
 
- <cButtonLabel>  
-  <R>15</R>
-  <G>15</G>
-  <B>15</B>
+ <cButtonLabel>
+  <color>15,15,15</color>      
  </cButtonLabel>
 
- <cUpper>  
-  <R>0</R>
-  <G>0</G>
-  <B>255</B>
+ <cUpper>
+  <color>0,0,255</color>      
  </cUpper>
 
- <cLower>  
-  <R>255</R>
-  <G>0</G>
-  <B>0</B>
+ <cLower>
+  <color>255,0,0</color>      
  </cLower>
 
- <cBigCirclePenColor>  
-  <R>80</R>
-  <G>80</G>
-  <B>90</B>
+ <cBigCirclePenColor>
+  <color>80,80,90</color>      
  </cBigCirclePenColor>
 
- <cSmallCircleColor> 
-  <R>155</R>
-  <G>155</G>
-  <B>155</B>
+ <cSmallCircleColor>
+  <color>155,155,155</color>     
  </cSmallCircleColor>
 
- <cSmallCircleHookedColor>  
-  <R>100</R>
-  <G>100</G>
-  <B>255</B>
+ <cSmallCircleHookedColor>
+  <color>100,100,255</color>      
  </cSmallCircleHookedColor>
 
  <marginLeft> 

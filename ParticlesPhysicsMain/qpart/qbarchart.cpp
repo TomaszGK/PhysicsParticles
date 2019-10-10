@@ -13,43 +13,39 @@ QBarChart::QBarChart( double max,  ptrBarChart ptr, QWidget* parent )
     init();
 }
 
+bool QBarChart::loadStyle(BoxStyles style)
+{
+    if( boxStyle.loadStyle(style) )
+    {
+        adjustBoxDisplayValues();
+        return true;
+    }
+    else return false;
+}
+
 void QBarChart::init()
 {    
     if( parentWidget() != nullptr )
     {
-        int width = parentWidget()->width();
-        int size = static_cast<int>(barChart->getBins().size());
-        int marginAdjustment = (width-(boxStyle.marginLeft+boxStyle.marginRight)) - size*((width-(boxStyle.marginLeft+boxStyle.marginRight))/size);
+        adjustBoxDisplayValues();
 
-        if( marginAdjustment>0 )
-        {
-            if( marginAdjustment % 2 == 0 )
-            {
-                boxStyle.marginLeft += marginAdjustment/2;
-                boxStyle.marginRight += marginAdjustment/2;
-            }
-            else
-            {
-                boxStyle.marginLeft += (marginAdjustment-1)/2;
-                boxStyle.marginRight += ((marginAdjustment-1)/2+1);
-            }
-        }
-
-        barWidth = (width-(boxStyle.marginLeft+boxStyle.marginRight))/size;
+        int width {parentWidget()->width()};
+        int buttonWidth  {25};
+        int buttonHeight {25};
 
         buttons[DataVisualization::BARS] = std::make_unique<QPushButton>("B",this);
-        buttons[DataVisualization::BARS]->resize(25,25);
-        buttons[DataVisualization::BARS]->move(width-boxStyle.marginRight+(boxStyle.marginRight-25)/2,boxStyle.marginBottom+15);
+        buttons[DataVisualization::BARS]->resize(buttonWidth,buttonHeight);
+        buttons[DataVisualization::BARS]->move(width-buttonWidth-1,1);
         buttons[DataVisualization::BARS]->setStyleSheet(boxStyle.buttonStyleSelected.arg(boxStyle.cButtonActive.name()));
 
         buttons[DataVisualization::POINTS] = std::make_unique<QPushButton>("P",this);
-        buttons[DataVisualization::POINTS]->resize(25,25);
-        buttons[DataVisualization::POINTS]->move(width-boxStyle.marginRight+(boxStyle.marginRight-25)/2,boxStyle.marginBottom+45);
+        buttons[DataVisualization::POINTS]->resize(buttonWidth,buttonHeight);
+        buttons[DataVisualization::POINTS]->move(width-buttonWidth-1,1+buttonHeight+1);
         buttons[DataVisualization::POINTS]->setStyleSheet(boxStyle.buttonStyleUnselected.arg(boxStyle.cButton.name()));
 
         buttons[DataVisualization::LINES] = std::make_unique<QPushButton>("L",this);
-        buttons[DataVisualization::LINES]->resize(25,25);
-        buttons[DataVisualization::LINES]->move(width-boxStyle.marginRight+(boxStyle.marginRight-25)/2,boxStyle.marginBottom+75);
+        buttons[DataVisualization::LINES]->resize(buttonWidth,buttonHeight);
+        buttons[DataVisualization::LINES]->move(width-buttonWidth-1,1+2*(buttonHeight+1));
         buttons[DataVisualization::LINES]->setStyleSheet(boxStyle.buttonStyleUnselected.arg(boxStyle.cButton.name()));
 
         connect( buttons[DataVisualization::BARS].get()   , &QPushButton::clicked , this, &QBarChart::onButtonClick );
@@ -128,6 +124,29 @@ void QBarChart::drawChartName()
 {
     painter.setPen(QPen(boxStyle.cValue));
     painter.drawText(calculateLabelPosition(),boxStyle.marginTop-7,QString::fromStdString(barChart->getLabel()));
+}
+
+void QBarChart::adjustBoxDisplayValues()
+{
+    int width {parentWidget()->width()};
+    int size  {static_cast<int>(barChart->getBins().size())};
+    int marginAdjustment {(width-(boxStyle.marginLeft+boxStyle.marginRight)) - size*((width-(boxStyle.marginLeft+boxStyle.marginRight))/size)};
+
+    if( marginAdjustment>0 )
+    {
+        if( marginAdjustment % 2 == 0 )
+        {
+            boxStyle.marginLeft += marginAdjustment/2;
+            boxStyle.marginRight += marginAdjustment/2;
+        }
+        else
+        {
+            boxStyle.marginLeft += (marginAdjustment-1)/2;
+            boxStyle.marginRight += ((marginAdjustment-1)/2+1);
+        }
+    }
+
+    barWidth = (width-(boxStyle.marginLeft+boxStyle.marginRight))/size;
 }
 
 void QBarChart::onButtonClick()

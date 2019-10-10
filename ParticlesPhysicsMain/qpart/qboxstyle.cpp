@@ -13,7 +13,13 @@ bool QBoxStyle::loadStyle( BoxStyles style )
 
     qDebug() << "loading style from file : " << styleFiles[style] << "\n";
 
-    QFile file { qApp->applicationDirPath()+"//"+styleFiles[style] };
+    QDir pathDir {qApp->applicationDirPath()+"/styles"};
+    QString filepath {};
+
+    filepath = pathDir.exists()?pathDir.path():"D:/Programming/GitHub/Qt/ParticlesPhysics/ParticlesPhysicsMain/styles/";
+    filepath += styleFiles[style];
+
+    QFile file {filepath};
 
     if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {        
@@ -25,7 +31,7 @@ bool QBoxStyle::loadStyle( BoxStyles style )
     {
         qDebug() << "Wrong file content\n";
         return false;
-    }
+    }    
 
     auto docElem = xmlBOM.documentElement();
 
@@ -54,7 +60,7 @@ bool QBoxStyle::loadStyle( BoxStyles style )
     planeBorderWidth = loadInt(docElem,"planeBorderWidth");
 
     isScalableUp = loadBool(docElem,"isScalableUp");
-    isScalableDown = loadBool(docElem,"isScalableDown");
+    isScalableDown = loadBool(docElem,"isScalableDown");    
 
     file.close();
     return true;
@@ -64,15 +70,18 @@ QColor QBoxStyle::loadColor( const QDomElement& element, const QString& tagName 
 {
     QColor color {0,0,0};
 
-    auto findR = element.firstChildElement(tagName).firstChildElement("R");
-    auto findG = element.firstChildElement(tagName).firstChildElement("G");
-    auto findB = element.firstChildElement(tagName).firstChildElement("B");
+    auto findColor = element.firstChildElement(tagName).firstChildElement("color");
 
-    if( !findR.isNull() && !findG.isNull() && !findB.isNull() )
+    if( !findColor.isNull() )
     {
-      color.setRed( findR.text().toInt() );
-      color.setBlue( findG.text().toInt() );
-      color.setGreen( findB.text().toInt() );
+      QStringList colorsRGB = findColor.text().split( "," );
+
+      if( colorsRGB.size() == 3 )
+      {
+          color.setRed( colorsRGB[0].toInt() );
+          color.setGreen( colorsRGB[1].toInt() );
+          color.setBlue( colorsRGB[2].toInt() );
+      }
     }
 
     return color;

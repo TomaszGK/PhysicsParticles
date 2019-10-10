@@ -7,6 +7,11 @@ QBarDisplay::QBarDisplay( int max, ptrBarDisplay ptr, QWidget* parentWidget )
     init();
 }
 
+bool QBarDisplay::loadStyle( BoxStyles style )
+{
+    return false;
+}
+
 void QBarDisplay::init()
 {
     if( parentWidget() != nullptr )

@@ -3,12 +3,17 @@
 QHistogram1D::QHistogram1D( double maxValue, ptrHistogram1D ptr, QWidget* parent )
 : QBoxPainter { parent }, histogram1D { std::move(ptr) }, maxValue {maxValue}
 {
-    background = QBrush(QColor(145, 215, 215));
+    boxStyle.cBackground = QColor(145, 215, 215);
     setAutoFillBackground(false);    
 
     boxStyle.marginTop = 30;
 
     init();
+}
+
+bool QHistogram1D::loadStyle(BoxStyles style)
+{
+    return false;
 }
 
 void QHistogram1D::init()

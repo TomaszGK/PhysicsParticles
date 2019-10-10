@@ -59,6 +59,16 @@ public:
      */
     void setScalabality( bool isScalableUp , bool isScalableDown ) { boxStyle.isScalableUp = isScalableUp ; boxStyle.isScalableDown = isScalableDown; }
 
+    /**
+     * @brief Loads style type from xml file and recalulate box display values.
+     *
+     * Loading new parameters (e.g. colors, style sheets) from file corresponding to a given style.
+     * Recalculate box display values by adjusting marigins and bar width.
+     * @param style                 box style
+     * @return true if style has loaded correctly otherwise false
+     */
+    bool loadStyle( BoxStyles style ) override;
+
 private:
 
     /** Holds BarChart object. */
@@ -103,6 +113,11 @@ private:
      * @brief Draws QBarChart name.
      */
     void drawChartName();
+
+    /**
+     * @brief Adjusting left-right box margins and bar width.
+     */
+    void adjustBoxDisplayValues();
 
 private slots:
 

@@ -4,7 +4,7 @@
 QInfoDisplay::QInfoDisplay( QWidget *parentWidget )
 : QBoxPainter { parentWidget }
 {
-    background = QBrush(QColor(145, 215, 215));
+    boxStyle.cBackground = QColor(145, 215, 215);
     setAutoFillBackground(false);    
     boxStyle.marginLeft = boxStyle.marginRight = boxStyle.marginTop = boxStyle.marginBottom = 5;
 }
@@ -13,6 +13,11 @@ void QInfoDisplay::setDisplay( PlaneSide side, int newValue )
 {   
    value[side] = newValue;
    textWidth[side] = getStringWidthInPixels(QString::number(value[side])+" %");
+}
+
+bool QInfoDisplay::loadStyle(BoxStyles style)
+{
+    return false;
 }
 
 void QInfoDisplay::paint()

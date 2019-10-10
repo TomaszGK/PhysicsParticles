@@ -32,6 +32,15 @@ public:
      */
     explicit QHistogram1D( double maxValue = 100, ptrHistogram1D ptr = nullptr, QWidget* parent = nullptr );
 
+    /**
+     * @brief Loads style type from xml file and /to complete/.
+     *
+     * Loading new parameters (e.g. colors, style sheets) from file corresponding to a given style.
+     * @param style                 box style
+     * @return true if style has loaded correctly otherwise false
+     */
+    bool loadStyle( BoxStyles style ) override;
+
 private:
 
     /** Holds Histogram1D object. */

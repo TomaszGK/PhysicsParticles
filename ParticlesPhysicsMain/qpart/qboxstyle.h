@@ -40,15 +40,6 @@ public:
      */
     QBoxStyle();
 
-    /**
-     * @brief Loads style from file.
-     *
-     * Loading new style parameters (e.g. colors, style sheets) from a given file.
-     * @param name                 file name in xml format
-     * @return true if load style has succeeded otherwise false
-     */
-    bool loadStyle( BoxStyles style );
-
     // sheet styles
 
     /** holds QT style sheet for selected button */
@@ -126,14 +117,23 @@ public:
 
     /** map of location of xml style files */
     std::map<BoxStyles,QString> styleFiles {
-                                            {BoxStyles::BAR_CHART1,"styles/styleBarChart.xml"},
-                                            {BoxStyles::BAR_CHART2,"styles/styleBarChart.xml"},
-                                            {BoxStyles::BAR_CHART3,"styles/styleBarChart.xml"},
-                                            {BoxStyles::HISTOGRAM1,"styles/styleBarChart.xml"},
-                                            {BoxStyles::HISTOGRAM2,"styles/styleBarChart.xml"},
-                                            {BoxStyles::HISTOGRAM3,"styles/styleBarChart.xml"},
+                                            {BoxStyles::BAR_CHART1,"styleBarChart.xml"},
+                                            {BoxStyles::BAR_CHART2,"styleBarChart.xml"},
+                                            {BoxStyles::BAR_CHART3,"styleBarChart.xml"},
+                                            {BoxStyles::HISTOGRAM1,"styleBarChart.xml"},
+                                            {BoxStyles::HISTOGRAM2,"styleBarChart.xml"},
+                                            {BoxStyles::HISTOGRAM3,"styleBarChart.xml"},
                                             {BoxStyles::DEFAULT,""}
                                            };
+
+    /**
+     * @brief Loads style type from xml file.
+     *
+     * Loading new parameters (e.g. colors, style sheets) from file corresponding to a given style.
+     * @param style                 box style
+     * @return true if style has loaded correctly otherwise false
+     */
+    bool loadStyle( BoxStyles style );
 
 private:
 
