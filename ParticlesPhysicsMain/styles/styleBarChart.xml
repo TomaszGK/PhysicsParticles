@@ -92,6 +92,18 @@
   <int>1</int>  
  </planeBorderWidth>
 
+ <buttonWidth>  
+  <int>25</int>  
+ </buttonWidth>
+
+ <buttonHeight>  
+  <int>25</int>  
+ </buttonHeight>
+
+ <buttonIndent>  
+  <int>5</int>  
+ </buttonIndent>
+
  <isScalableUp>  
   <bool>0</bool>  
  </isScalableUp>

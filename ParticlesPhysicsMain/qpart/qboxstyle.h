@@ -115,6 +115,15 @@ public:
     /** box(plane) border width */
     int planeBorderWidth {1};
 
+    /** button width in box chart */
+    int buttonWidth {25};
+
+    /** button height in box chart */
+    int buttonHeight {25};
+
+    /** selected button indent in box chart */
+    int buttonIndent {5};
+
     /** scalable up flag - if true then maxValue can increase , in QBarChart */
     bool isScalableUp {true};
 

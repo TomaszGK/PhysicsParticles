@@ -60,6 +60,9 @@ bool QBoxStyle::loadStyleFromFile( BoxStyles style )
     numberOfHorizontalAxes = loadInt(docElem,"numberOfHorizontalAxes");
     numberOfVerticalAxes = loadInt(docElem,"numberOfVerticalAxes");
     planeBorderWidth = loadInt(docElem,"planeBorderWidth");
+    buttonWidth = loadInt(docElem,"buttonWidth");
+    buttonHeight = loadInt(docElem,"buttonHeight");
+    buttonIndent = loadInt(docElem,"buttonIndent");
 
     isScalableUp = loadBool(docElem,"isScalableUp");
     isScalableDown = loadBool(docElem,"isScalableDown");    
