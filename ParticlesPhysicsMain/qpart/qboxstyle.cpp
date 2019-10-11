@@ -7,7 +7,7 @@ QBoxStyle::QBoxStyle()
 
 }
 
-bool QBoxStyle::loadStyle( BoxStyles style )
+bool QBoxStyle::loadStyleFromFile( BoxStyles style )
 {
     QDomDocument xmlBOM;
 
@@ -40,6 +40,8 @@ bool QBoxStyle::loadStyle( BoxStyles style )
 
     cPlaneBorder = loadColor(docElem,"cPlaneBorder");
     cBackground = loadColor(docElem,"cBackground");
+    cAxesColor = loadColor(docElem,"cAxesColor");
+    cInnerFrameColor = loadColor(docElem,"cInnerFrameColor");
     cLabelColor = loadColor(docElem,"cLabelColor");
     cValue = loadColor(docElem,"cValue");
     cButtonActive = loadColor(docElem,"cButtonActive");

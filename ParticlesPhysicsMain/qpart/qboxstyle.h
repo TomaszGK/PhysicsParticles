@@ -51,10 +51,16 @@ public:
     // colors
 
     /** box(plane) border color */
-    QColor cPlaneBorder {120,120,120} ;
+    QColor cPlaneBorder {120,120,120};
 
     /** background color */
-    QColor cBackground {145,215,215} ;
+    QColor cBackground {145,215,215};
+
+    /** axes color */
+    QColor cAxesColor {120,120,120};
+
+    /** inner frame color */
+    QColor cInnerFrameColor {100,100,100};
 
     /** Label color in QHistogram1D */
     QColor cLabelColor {100,20,20};
@@ -133,7 +139,7 @@ public:
      * @param style                 box style
      * @return true if style has loaded correctly otherwise false
      */
-    bool loadStyle( BoxStyles style );
+    bool loadStyleFromFile( BoxStyles style );
 
 private:
 

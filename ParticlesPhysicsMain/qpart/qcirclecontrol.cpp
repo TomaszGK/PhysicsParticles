@@ -7,9 +7,14 @@ QCircleControl::QCircleControl( QWidget* parentWidget )
     init();
 }
 
-bool QCircleControl::loadStyle(BoxStyles style)
+bool QCircleControl::loadStyle( BoxStyles style )
 {
-    return false;
+    if( boxStyle.loadStyleFromFile(style) )
+    {
+        // to do some needed recalculations
+        return true;
+    }
+    else return false;
 }
 
 void QCircleControl::init()

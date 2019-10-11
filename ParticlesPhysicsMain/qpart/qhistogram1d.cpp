@@ -11,9 +11,14 @@ QHistogram1D::QHistogram1D( double maxValue, ptrHistogram1D ptr, QWidget* parent
     init();
 }
 
-bool QHistogram1D::loadStyle(BoxStyles style)
+bool QHistogram1D::loadStyle( BoxStyles style )
 {
-    return false;
+    if( boxStyle.loadStyleFromFile(style) )
+    {
+        // to do some needed recalculations
+        return true;
+    }
+    else return false;
 }
 
 void QHistogram1D::init()

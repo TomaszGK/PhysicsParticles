@@ -16,6 +16,14 @@
   <color>155,176,219</color>   
  </cBackground>
 
+ <cAxesColor>
+  <color>120,120,120</color>   
+ </cAxesColor>
+
+ <cInnerFrameColor>
+  <color>100,100,100</color>   
+ </cInnerFrameColor>
+
  <cLabelColor>
   <color>100,20,20</color>      
  </cLabelColor>

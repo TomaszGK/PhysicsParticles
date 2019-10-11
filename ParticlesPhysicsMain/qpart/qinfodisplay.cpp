@@ -15,9 +15,14 @@ void QInfoDisplay::setDisplay( PlaneSide side, int newValue )
    textWidth[side] = getStringWidthInPixels(QString::number(value[side])+" %");
 }
 
-bool QInfoDisplay::loadStyle(BoxStyles style)
+bool QInfoDisplay::loadStyle( BoxStyles style )
 {
-    return false;
+    if( boxStyle.loadStyleFromFile(style) )
+    {
+        // to do some needed recalculations
+        return true;
+    }
+    else return false;
 }
 
 void QInfoDisplay::paint()

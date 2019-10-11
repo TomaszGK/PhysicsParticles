@@ -15,7 +15,7 @@ QBarChart::QBarChart( double max,  ptrBarChart ptr, QWidget* parent )
 
 bool QBarChart::loadStyle(BoxStyles style)
 {
-    if( boxStyle.loadStyle(style) )
+    if( boxStyle.loadStyleFromFile(style) )
     {
         adjustBoxDisplayValues();
         return true;

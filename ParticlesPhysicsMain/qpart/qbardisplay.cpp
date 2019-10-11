@@ -9,7 +9,12 @@ QBarDisplay::QBarDisplay( int max, ptrBarDisplay ptr, QWidget* parentWidget )
 
 bool QBarDisplay::loadStyle( BoxStyles style )
 {
-    return false;
+    if( boxStyle.loadStyleFromFile(style) )
+    {
+        // to do some needed recalculations
+        return true;
+    }
+    else return false;
 }
 
 void QBarDisplay::init()

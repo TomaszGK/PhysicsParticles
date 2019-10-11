@@ -17,31 +17,30 @@ void QBoxPainter::paintEvent(QPaintEvent *event)
 
 void QBoxPainter::paintAxes()
 {
-    QPen linePen(QColor(100, 100, 100));
+    QPen linePen(boxStyle.cAxesColor);
     painter.setPen(linePen);
     painter.setBrush(QBrush(Qt::NoBrush));
     painter.drawRect(boxStyle.marginLeft-1,boxStyle.marginTop-1,width()-(boxStyle.marginLeft+boxStyle.marginRight)+1,height()-(boxStyle.marginTop+boxStyle.marginBottom)+1);
 
-    linePen.setColor(QColor(120, 120, 120));
+    linePen.setColor(boxStyle.cInnerFrameColor);
     linePen.setStyle(Qt::DashLine);
+    painter.setPen(linePen);
 
-    double axisDistance = (height()-(boxStyle.marginTop+boxStyle.marginBottom))/static_cast<double>(boxStyle.numberOfHorizontalAxes);
+    double axisDistance { (height()-(boxStyle.marginTop+boxStyle.marginBottom))/static_cast<double>(boxStyle.numberOfHorizontalAxes+1) };
     int pos {0};
 
-    for( int index=1 ; index<boxStyle.numberOfHorizontalAxes ; ++index )
-    {
-        painter.setPen(linePen);
-        pos = boxStyle.marginTop-1+static_cast<int>(index*axisDistance);
+    for( int index=0 ; index<boxStyle.numberOfHorizontalAxes ; ++index )
+    {        
+        pos = boxStyle.marginTop-1+static_cast<int>((index+1)*axisDistance);
         painter.drawLine(boxStyle.marginLeft+1,pos,width()-boxStyle.marginRight-1,pos);
     }
 
-    axisDistance = (width()-(boxStyle.marginTop+boxStyle.marginBottom))/static_cast<double>(boxStyle.numberOfVerticalAxes);
+    axisDistance = (width()-(boxStyle.marginLeft+boxStyle.marginRight))/static_cast<double>(boxStyle.numberOfVerticalAxes+1);
     pos = 0;
 
-    for( int index=1 ; index<boxStyle.numberOfVerticalAxes ; ++index )
-    {
-        painter.setPen(linePen);
-        pos = boxStyle.marginLeft-1+static_cast<int>(index*axisDistance);
+    for( int index=0 ; index<boxStyle.numberOfVerticalAxes ; ++index )
+    {        
+        pos = boxStyle.marginLeft-1+static_cast<int>((index+1)*axisDistance);
         painter.drawLine(pos,boxStyle.marginTop+1,pos,height()-boxStyle.marginBottom-1);
     }
 }
