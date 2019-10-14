@@ -43,10 +43,10 @@ public:
     // sheet styles
 
     /** holds QT style sheet for selected button */
-    QString buttonStyleSelected  { "QPushButton {background-color: %1;font-size: 16px;font: bold}" };
+    QString buttonStyleSelected { "QPushButton {background-color: rgb(145,105,125);font-size: 16px;font: bold}" };
 
     /** holds QT style sheet for unselected button */
-    QString buttonStyleUnselected { "QPushButton {background-color: %1;font-size: 16px;}" };
+    QString buttonStyleUnselected { "QPushButton {background-color: rgb(200,200,200);font-size: 16px;}" };
 
     // colors
 
@@ -67,12 +67,6 @@ public:
 
     /** current value color in QBarChart */
     QColor cValue {100,20,20};
-
-    /** active button color in QBarChart */
-    QColor cButtonActive {145,105,125};
-
-    /** button color in QBarChart */
-    QColor cButton {200,200,200};
 
     /** button label color in QBarChart */
     QColor cButtonLabel {15,15,15};
@@ -153,40 +147,14 @@ public:
 private:
 
     /**
-     * @brief Loads color from a given tag name in QDomDocument.
+     * @brief Loads value (string,color,int or bool) from a given tag name in QDomDocument.
      *
      * @param element                 element of QDomElement from the search for a given tagName start
-     * @param tagName                 name of color tag
-     * @return loaded color or QColor {0,0,0} if such tag does not exits
+     * @param tagName                 name of value tag
+     * @return loaded value
      */
-    QColor loadColor( const QDomElement& element, const QString& tagName );
-
-    /**
-     * @brief Loads string from a given tag name in QDomDocument.
-     *
-     * @param element                 element of QDomElement from the search for a given tagName start
-     * @param tagName                 name of string tag
-     * @return loaded string or empty string if such tag does not exits
-     */
-    QString loadString( const QDomElement& element, const QString& tagName );
-
-    /**
-     * @brief Loads integer number from a given tag name in QDomDocument.
-     *
-     * @param element                 element of QDomElement from the search for a given tagName start
-     * @param tagName                 name of integer tag
-     * @return loaded integer or zero if such tag does not exits
-     */
-    int loadInt( const QDomElement& element, const QString& tagName );
-
-    /**
-     * @brief Loads boolean value from a given tag name in QDomDocument.
-     *
-     * @param element                 element of QDomElement from the search for a given tagName start
-     * @param tagName                 name of boolean value tag
-     * @return loaded boolean value or false if such tag does not exits
-     */
-    bool loadBool( const QDomElement& element, const QString& tagName );
+    template< typename T >
+    T load( const QDomElement& element, const QString& tagName );
 
 };
 

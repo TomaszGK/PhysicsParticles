@@ -7,8 +7,6 @@ QBarChart::QBarChart( double max,  ptrBarChart ptr, QWidget* parent )
     setAutoFillBackground(false);
     boxStyle.marginTop = 30;
     boxStyle.marginRight = 30;
-    boxStyle.buttonStyleSelected = "QPushButton {""background-color: %1"";font-size: 16px;font: bold}";
-    boxStyle.buttonStyleUnselected = "QPushButton {""background-color: %1"";font-size: 16px;}";
 
     init();
 }
@@ -18,6 +16,7 @@ bool QBarChart::loadStyle(BoxStyles style)
     if( boxStyle.loadStyleFromFile(style) )
     {
         adjustBoxDisplayValues();
+        configureButtons();
         return true;
     }
     else return false;
@@ -29,27 +28,15 @@ void QBarChart::init()
     {
         adjustBoxDisplayValues();
 
-        int width {parentWidget()->width()};     
-
-        buttons[DataVisualization::BARS] = std::make_unique<QPushButton>("B",this);
-        buttons[DataVisualization::BARS]->resize(boxStyle.buttonWidth+boxStyle.buttonIndent,boxStyle.buttonHeight);
-        buttons[DataVisualization::BARS]->move(width-boxStyle.buttonWidth-boxStyle.buttonIndent-1,2);
-        buttons[DataVisualization::BARS]->setStyleSheet(boxStyle.buttonStyleSelected.arg(boxStyle.cButtonActive.name()));
-
-        buttons[DataVisualization::POINTS] = std::make_unique<QPushButton>("P",this);
-        buttons[DataVisualization::POINTS]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
-        buttons[DataVisualization::POINTS]->move(width-boxStyle.buttonWidth-1,boxStyle.buttonHeight+2);
-        buttons[DataVisualization::POINTS]->setStyleSheet(boxStyle.buttonStyleUnselected.arg(boxStyle.cButton.name()));
-
+        buttons[DataVisualization::BARS] = std::make_unique<QPushButton>("B",this);        
+        buttons[DataVisualization::POINTS] = std::make_unique<QPushButton>("P",this);        
         buttons[DataVisualization::LINES] = std::make_unique<QPushButton>("L",this);
-        buttons[DataVisualization::LINES]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
-        buttons[DataVisualization::LINES]->move(width-boxStyle.buttonWidth-1,2*boxStyle.buttonHeight+2);
-        buttons[DataVisualization::LINES]->setStyleSheet(boxStyle.buttonStyleUnselected.arg(boxStyle.cButton.name()));
+
+        configureButtons();
 
         connect( buttons[DataVisualization::BARS].get()   , &QPushButton::clicked , this, &QBarChart::onButtonClick );
         connect( buttons[DataVisualization::POINTS].get() , &QPushButton::clicked , this, &QBarChart::onButtonClick );
         connect( buttons[DataVisualization::LINES].get()  , &QPushButton::clicked , this, &QBarChart::onButtonClick );
-
     }
 }
 
@@ -147,12 +134,27 @@ void QBarChart::adjustBoxDisplayValues()
     barWidth = (width-(boxStyle.marginLeft+boxStyle.marginRight))/size;
 }
 
+void QBarChart::configureButtons()
+{
+    buttons[DataVisualization::BARS]->resize(boxStyle.buttonWidth+boxStyle.buttonIndent,boxStyle.buttonHeight);
+    buttons[DataVisualization::BARS]->move(parentWidget()->width()-boxStyle.buttonWidth-boxStyle.buttonIndent-1,2);
+    buttons[DataVisualization::BARS]->setStyleSheet(boxStyle.buttonStyleSelected);
+
+    buttons[DataVisualization::POINTS]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
+    buttons[DataVisualization::POINTS]->move(parentWidget()->width()-boxStyle.buttonWidth-1,boxStyle.buttonHeight+2);
+    buttons[DataVisualization::POINTS]->setStyleSheet(boxStyle.buttonStyleUnselected);
+
+    buttons[DataVisualization::LINES]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
+    buttons[DataVisualization::LINES]->move(parentWidget()->width()-boxStyle.buttonWidth-1,2*boxStyle.buttonHeight+2);
+    buttons[DataVisualization::LINES]->setStyleSheet(boxStyle.buttonStyleUnselected);
+}
+
 void QBarChart::onButtonClick()
 {
     auto clickedButton = qobject_cast<QPushButton*>( sender() );
     if( clickedButton != nullptr )
     {        
-      buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleUnselected.arg(boxStyle.cButton.name()));
+      buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleUnselected);
       buttons[dataVisulization]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
       buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-1,buttons[dataVisulization]->pos().y());
 
@@ -169,7 +171,7 @@ void QBarChart::onButtonClick()
           dataVisulization = DataVisualization::LINES;
       }
 
-      buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleSelected.arg(boxStyle.cButtonActive.name()));
+      buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleSelected);
       buttons[dataVisulization]->resize(boxStyle.buttonWidth+boxStyle.buttonIndent,boxStyle.buttonHeight);
       buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-boxStyle.buttonIndent-1,buttons[dataVisulization]->pos().y());
     }

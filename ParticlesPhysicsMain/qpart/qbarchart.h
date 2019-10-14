@@ -119,6 +119,11 @@ private:
      */
     void adjustBoxDisplayValues();
 
+    /**
+     * @brief Configuring button position, size and style.
+     */
+    void configureButtons();
+
 private slots:
 
     /**

@@ -1,11 +1,18 @@
 <style>
 
  <buttonStyleSelected>  
-  <string>QPushButton {background-color: %1;font-size: 16px;font: bold}</string>
+  <string>QPushButton {background-color:rgb(145,105,125);font-size: 16px;font: bold}</string>
  </buttonStyleSelected>
 
  <buttonStyleUnselected>  
-  <string>QPushButton { background-color: %1 ;font-size: 16px;}</string>
+  <string>
+  	QPushButton 
+  	{ 
+  	 background-color: rgb(200,200,200);
+     border-radius: 10px;     
+     font: bold 14px;          
+    }
+  </string>
  </buttonStyleUnselected>
 
  <cPlaneBorder>  
@@ -31,14 +38,6 @@
  <cValue>
   <color>100,20,20</color>      
  </cValue>
-
- <cButtonActive>
-  <color>145,105,125</color>      
- </cButtonActive>
-
- <cButton>
-  <color>200,200,200</color>     
- </cButton>
 
  <cButtonLabel>
   <color>15,15,15</color>      
