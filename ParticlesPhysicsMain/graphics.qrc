@@ -16,6 +16,9 @@
         <file>images/flag_UnitedStates.png</file>
         <file>images/Einstein_tongue.jpg</file>
         <file>images/reset_forces.png</file>
+        <file>images/bars.png</file>
+        <file>images/lines.png</file>
+        <file>images/points.png</file>
     </qresource>
     <qresource prefix="/css">
         <file>css/darkorange.qss</file>

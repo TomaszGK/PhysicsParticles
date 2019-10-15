@@ -28,9 +28,17 @@ void QBarChart::init()
     {
         adjustBoxDisplayValues();
 
-        buttons[DataVisualization::BARS] = std::make_unique<QPushButton>("B",this);        
-        buttons[DataVisualization::POINTS] = std::make_unique<QPushButton>("P",this);        
-        buttons[DataVisualization::LINES] = std::make_unique<QPushButton>("L",this);
+        buttons[DataVisualization::BARS] = std::make_unique<QPushButton>("",this);
+        buttons[DataVisualization::BARS]->setIcon(QIcon(QPixmap(":/new/icons/images/bars.png")));
+        buttons[DataVisualization::BARS]->setToolTip("Bars display");
+
+        buttons[DataVisualization::POINTS] = std::make_unique<QPushButton>("",this);
+        buttons[DataVisualization::POINTS]->setIcon(QIcon(QPixmap(":/new/icons/images/points.png")));
+        buttons[DataVisualization::POINTS]->setToolTip("Points display");
+
+        buttons[DataVisualization::LINES] = std::make_unique<QPushButton>("",this);
+        buttons[DataVisualization::LINES]->setIcon(QIcon(QPixmap(":/new/icons/images/lines.png")));
+        buttons[DataVisualization::LINES]->setToolTip("Lines display");
 
         configureButtons();
 
@@ -158,15 +166,15 @@ void QBarChart::onButtonClick()
       buttons[dataVisulization]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
       buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-1,buttons[dataVisulization]->pos().y());
 
-      if( clickedButton->text() == "B" )
+      if( clickedButton->toolTip().contains("Bars") )
       {
           dataVisulization = DataVisualization::BARS;
       }
-      else if( clickedButton->text() == "P" )
+      else if( clickedButton->toolTip().contains("Points") )
       {
           dataVisulization = DataVisualization::POINTS;
       }
-      else if( clickedButton->text() == "L" )
+      else if( clickedButton->toolTip().contains("Lines") )
       {
           dataVisulization = DataVisualization::LINES;
       }
