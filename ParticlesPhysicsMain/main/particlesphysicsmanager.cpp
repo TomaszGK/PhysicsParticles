@@ -23,11 +23,11 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
 
     selectedParticle = particles->begin();
 
-    barCharts["velocity"]     = std::make_shared<BarChart>( 100 , "Velocity" );
-    barCharts["velocityBlue"] = std::make_shared<BarChart>( 100 , "Blue Velocity" );
-    barCharts["velocityRed"]  = std::make_shared<BarChart>( 100 , "Red Velocity" );
-    barCharts["collisions"]   = std::make_shared<BarChart>( 40  , "Collisions" );
-    barCharts["kinetic"]      = std::make_shared<BarChart>( 40  , "Plane Energy" );
+    barCharts["velocity"]     = std::make_shared<BarChart>( 80 , "Velocity" );
+    barCharts["velocityBlue"] = std::make_shared<BarChart>( 70 , "Blue Velocity" );
+    barCharts["velocityRed"]  = std::make_shared<BarChart>( 70 , "Red Velocity" );
+    barCharts["collisions"]   = std::make_shared<BarChart>( 40 , "Collisions" );
+    barCharts["kinetic"]      = std::make_shared<BarChart>( 40 , "Plane Energy" );
 
     barDisplays["diffiusion"] = std::make_shared<BarDisplay>( 2 );
 

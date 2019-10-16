@@ -145,15 +145,15 @@ void QBarChart::adjustBoxDisplayValues()
 void QBarChart::configureButtons()
 {
     buttons[DataVisualization::BARS]->resize(boxStyle.buttonWidth+boxStyle.buttonIndent,boxStyle.buttonHeight);
-    buttons[DataVisualization::BARS]->move(parentWidget()->width()-boxStyle.buttonWidth-boxStyle.buttonIndent-1,2);
+    buttons[DataVisualization::BARS]->move(parentWidget()->width()-boxStyle.buttonWidth-boxStyle.buttonIndent-5,5);
     buttons[DataVisualization::BARS]->setStyleSheet(boxStyle.buttonStyleSelected);
 
     buttons[DataVisualization::POINTS]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
-    buttons[DataVisualization::POINTS]->move(parentWidget()->width()-boxStyle.buttonWidth-1,boxStyle.buttonHeight+2);
+    buttons[DataVisualization::POINTS]->move(parentWidget()->width()-boxStyle.buttonWidth-5,boxStyle.buttonHeight+6);
     buttons[DataVisualization::POINTS]->setStyleSheet(boxStyle.buttonStyleUnselected);
 
     buttons[DataVisualization::LINES]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
-    buttons[DataVisualization::LINES]->move(parentWidget()->width()-boxStyle.buttonWidth-1,2*boxStyle.buttonHeight+2);
+    buttons[DataVisualization::LINES]->move(parentWidget()->width()-boxStyle.buttonWidth-5,2*boxStyle.buttonHeight+7);
     buttons[DataVisualization::LINES]->setStyleSheet(boxStyle.buttonStyleUnselected);
 }
 
@@ -164,7 +164,7 @@ void QBarChart::onButtonClick()
     {        
       buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleUnselected);
       buttons[dataVisulization]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
-      buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-1,buttons[dataVisulization]->pos().y());
+      buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-5,buttons[dataVisulization]->pos().y());
 
       if( clickedButton->toolTip().contains("Bars") )
       {
@@ -181,6 +181,6 @@ void QBarChart::onButtonClick()
 
       buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleSelected);
       buttons[dataVisulization]->resize(boxStyle.buttonWidth+boxStyle.buttonIndent,boxStyle.buttonHeight);
-      buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-boxStyle.buttonIndent-1,buttons[dataVisulization]->pos().y());
+      buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-boxStyle.buttonIndent-5,buttons[dataVisulization]->pos().y());
     }
 }
