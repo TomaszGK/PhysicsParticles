@@ -24,7 +24,7 @@ enum class DataVisualization
 {
     BARS   , /**< painting bars */
     POINTS , /**< painting points */
-    LINES    /**< painting lines */
+    LINES  , /**< painting lines */
 };
 
 class QBarChart : public QBoxPainter
@@ -76,6 +76,9 @@ private:
 
     /** Maps buttons changing state of data visualization. */
     std::map<DataVisualization,std::unique_ptr<QPushButton>> buttons;
+
+    /** Resets bar chart bin. */
+    std::unique_ptr<QPushButton> resetButton;
 
     /** Data visuzalization type */
     DataVisualization dataVisulization { DataVisualization::BARS };

@@ -19,6 +19,7 @@
         <file>images/bars.png</file>
         <file>images/lines.png</file>
         <file>images/points.png</file>
+        <file>images/reset_barchart.png</file>
     </qresource>
     <qresource prefix="/css">
         <file>css/darkorange.qss</file>

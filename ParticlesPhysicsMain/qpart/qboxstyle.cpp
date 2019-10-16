@@ -38,6 +38,7 @@ bool QBoxStyle::loadStyleFromFile( BoxStyles style )
 
     buttonStyleSelected = load<QString>(docElem,"buttonStyleSelected");
     buttonStyleUnselected = load<QString>(docElem,"buttonStyleUnselected");
+    buttonStyleReset = load<QString>(docElem,"buttonStyleReset");
 
     cPlaneBorder = load<QColor>(docElem,"cPlaneBorder");
     cBackground = load<QColor>(docElem,"cBackground");

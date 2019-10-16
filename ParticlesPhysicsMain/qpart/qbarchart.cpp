@@ -40,11 +40,16 @@ void QBarChart::init()
         buttons[DataVisualization::LINES]->setIcon(QIcon(QPixmap(":/new/icons/images/lines.png")));
         buttons[DataVisualization::LINES]->setToolTip("Lines display");
 
+        resetButton = std::make_unique<QPushButton>("",this);
+        resetButton->setIcon(QIcon(QPixmap(":/new/icons/images/reset_barchart.png")));
+        resetButton->setToolTip("Reset");
+
         configureButtons();
 
         connect( buttons[DataVisualization::BARS].get()   , &QPushButton::clicked , this, &QBarChart::onButtonClick );
         connect( buttons[DataVisualization::POINTS].get() , &QPushButton::clicked , this, &QBarChart::onButtonClick );
         connect( buttons[DataVisualization::LINES].get()  , &QPushButton::clicked , this, &QBarChart::onButtonClick );
+        connect( resetButton.get()  , &QPushButton::clicked , this, &QBarChart::onButtonClick );
     }
 }
 
@@ -64,7 +69,8 @@ void QBarChart::paint()
 
         int value {0};
         int valueLast {0};
-        int index {0};
+        const int binsSize {static_cast<int>(barChart->getBins().size()-1)};
+        int index {binsSize};
         int intensity {0};
 
         paintAxes();
@@ -94,10 +100,10 @@ void QBarChart::paint()
             }
             else if( dataVisulization == DataVisualization::LINES )
             {
-                if(index>0) painter.drawLine(boxStyle.marginLeft+(index-1)*barWidth,height()-valueLast-boxStyle.marginBottom-2-barWidth,boxStyle.marginLeft+index*barWidth,height()-value-boxStyle.marginBottom-2-barWidth);
+                if(index!=binsSize) painter.drawLine(boxStyle.marginLeft+(index+1)*barWidth,height()-valueLast-boxStyle.marginBottom-2-barWidth,boxStyle.marginLeft+index*barWidth,height()-value-boxStyle.marginBottom-2-barWidth);
             }
 
-            ++index;
+            --index;
             valueLast = value;
         }
 
@@ -155,32 +161,43 @@ void QBarChart::configureButtons()
     buttons[DataVisualization::LINES]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
     buttons[DataVisualization::LINES]->move(parentWidget()->width()-boxStyle.buttonWidth-5,2*boxStyle.buttonHeight+7);
     buttons[DataVisualization::LINES]->setStyleSheet(boxStyle.buttonStyleUnselected);
+
+    resetButton->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
+    resetButton->move(parentWidget()->width()-boxStyle.buttonWidth-5,parentWidget()->height()-boxStyle.buttonHeight-10);
+    resetButton->setStyleSheet(boxStyle.buttonStyleReset);
 }
 
 void QBarChart::onButtonClick()
 {
     auto clickedButton = qobject_cast<QPushButton*>( sender() );
     if( clickedButton != nullptr )
-    {        
-      buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleUnselected);
-      buttons[dataVisulization]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
-      buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-5,buttons[dataVisulization]->pos().y());
+    {
+        if( clickedButton->toolTip().contains("Reset") )
+        {
+            barChart->resetBins();
+        }
+        else
+        {
+            buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleUnselected);
+            buttons[dataVisulization]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
+            buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-5,buttons[dataVisulization]->pos().y());
 
-      if( clickedButton->toolTip().contains("Bars") )
-      {
-          dataVisulization = DataVisualization::BARS;
-      }
-      else if( clickedButton->toolTip().contains("Points") )
-      {
-          dataVisulization = DataVisualization::POINTS;
-      }
-      else if( clickedButton->toolTip().contains("Lines") )
-      {
-          dataVisulization = DataVisualization::LINES;
-      }
+            if( clickedButton->toolTip().contains("Bars") )
+            {
+                dataVisulization = DataVisualization::BARS;
+            }
+            else if( clickedButton->toolTip().contains("Points") )
+            {
+                dataVisulization = DataVisualization::POINTS;
+            }
+            else if( clickedButton->toolTip().contains("Lines") )
+            {
+                dataVisulization = DataVisualization::LINES;
+            }
 
-      buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleSelected);
-      buttons[dataVisulization]->resize(boxStyle.buttonWidth+boxStyle.buttonIndent,boxStyle.buttonHeight);
-      buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-boxStyle.buttonIndent-5,buttons[dataVisulization]->pos().y());
+            buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleSelected);
+            buttons[dataVisulization]->resize(boxStyle.buttonWidth+boxStyle.buttonIndent,boxStyle.buttonHeight);
+            buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-boxStyle.buttonIndent-5,buttons[dataVisulization]->pos().y());
+        }
     }
 }

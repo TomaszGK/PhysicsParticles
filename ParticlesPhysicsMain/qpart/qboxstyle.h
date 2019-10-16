@@ -42,11 +42,14 @@ public:
 
     // sheet styles
 
-    /** holds QT style sheet for selected button */
+    /** holds QT style sheet for selected button in bar chart */
     QString buttonStyleSelected { "QPushButton {background-color: rgb(145,105,125);font-size: 16px;font: bold}" };
 
-    /** holds QT style sheet for unselected button */
+    /** holds QT style sheet for unselected button in bar chart */
     QString buttonStyleUnselected { "QPushButton {background-color: rgb(200,200,200);font-size: 16px;}" };
+
+    /** holds QT style sheet for reset button in bar chart */
+    QString buttonStyleReset { "QPushButton {background-color: rgb(200,200,200);font-size: 16px;}" };
 
     // colors
 

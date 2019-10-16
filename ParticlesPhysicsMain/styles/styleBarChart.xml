@@ -32,6 +32,28 @@
   </string>
  </buttonStyleUnselected>
 
+ <buttonStyleReset>  
+  <string>
+  	QPushButton
+  	{ 
+  	 background-color: rgb(185,185,185);
+     border-style: outset;
+  	 border-radius: 10px;
+  	 border-color: rgb(110,110,110);
+  	 border-width: 1px;
+  	 font: bold 14px;
+  	}
+  	QPushButton:hover
+  	{ 
+  	 background-color: rgb(215,215,215);  
+  	} 
+  	QPushButton:pressed 
+  	{ 
+  	 background-color: red; 
+  	}   
+  </string>
+ </buttonStyleReset>
+
  <cPlaneBorder>  
   <color>120,120,120</color>  
  </cPlaneBorder>

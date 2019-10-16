@@ -64,6 +64,11 @@ public:
     const std::list<double>& getBins() const noexcept { return bins; }   
 
     /**
+     * @brief Resets all bins to zero value.
+     */
+    void resetBins();
+
+    /**
      * @brief Get barchart name
      * @return barchart name
      */
@@ -71,9 +76,9 @@ public:
 
 private:
 
-    std::list<double> bins       ; /**< contains bar values */
-    double            max   {0}  ; /**< maximum value inside bins */
-    double            min   {0}  ; /**< minimum value inside bins */
-    std::string       label {""} ; /**< barchart name */
+    std::list<double> bins      ; /**< contains bar values */
+    double            max   {0} ; /**< maximum value inside bins */
+    double            min   {0} ; /**< minimum value inside bins */
+    std::string       label {""}; /**< barchart name */
 
 };
