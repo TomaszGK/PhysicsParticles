@@ -1,8 +1,10 @@
 #include "langmanager.h"
+#include <QDebug>
 
 Language LangManager::language = Language::ENG;
 
-LangManager::TMap LangManager::translateMap =
+template<>
+const LangManager::TMap<std::string> LangManager::translateMap<std::string> =
 {
    { Language::PL ,
                     {
@@ -22,7 +24,36 @@ LangManager::TMap LangManager::translateMap =
    }
 };
 
-std::string LangManager::translate( const std::string& text )
+template<>
+const LangManager::TMap<QString> LangManager::translateMap<QString> =
+[]()
 {
-    return ( translateMap.at(language).find(text) == translateMap.at(language).end() ) ? text : translateMap.at(language).at(text);
-}
+    LangManager::TMap<QString> qtMap;
+    for( const auto& [lang,translation] : LangManager::translateMap<std::string> )
+    {
+        for( const auto& [from,to] : translation )
+        {
+            qtMap[lang][QString(from.c_str())] = QString(to.c_str());
+        }
+
+    }
+    return qtMap;
+}();
+
+/*
+template<>
+const LangManager::TMap<QStaticText> LangManager::translateMap<QStaticText> =
+[]()
+{
+    LangManager::TMap<QStaticText> qtMap;
+    for( const auto& [lang,translation] : LangManager::translateMap<QString> )
+    {
+        for( const auto& [from,to] : translation )
+        {
+            qtMap[lang][QStaticText(from)] = QStaticText(to);
+        }
+
+    }
+    return qtMap;
+}();*/
+

@@ -1,10 +1,13 @@
 #pragma once
 
+#include <QString>
+#include <QStaticText>
 #include "definitions.h"
 
 /** @file
  * @brief Class @ref LangManager
  */
+
 
 /**
  * @class LangManager
@@ -39,23 +42,27 @@ public:
     /**
      * @brief Translates current text to the actual language.
      *
-     *
      * If text has no valid translation then it does not change.
      * @param text       given text to translate
      * @return translated text
      */
-    static std::string translate( const std::string& text );
+    template< typename T >
+    static const T& translate( const T& text )
+    {
+        return ( translateMap<T>.at(language).find(text) == translateMap<T>.at(language).end() ) ? text : translateMap<T>.at(language).at(text);
+    }
 
     static void setLanguage( Language lang ) { language = lang; }
 
 private:
 
-    using TMap = const std::map<Language,std::map<std::string,std::string>>;
+    template< typename T >
+    using TMap = std::map<Language,std::map<T,T>>;
 
     /** Application language */
     static Language language;
 
-    /** Translation map */
-    static TMap translateMap;
+    template< typename T >
+    static const TMap<T> translateMap;
 
 };

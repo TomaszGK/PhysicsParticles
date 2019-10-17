@@ -92,6 +92,15 @@ private:
     /** label position */
     int labelPosition {0};
 
+    /**< barchart name - Qt version string of label */
+    QString qLabel {""};
+
+    /**< barchart label for axis X - Qt version string of labelX */
+    QString qLabelX {""};
+
+    /**< barchart label for axis Y - Qt version string of labelY */
+    QString qLabelY {""};
+
     /**
      * @brief Paints bar charts.
      */
@@ -103,9 +112,18 @@ private:
     void init() override;
 
     /**
-     * @brief Calculates label position.
+     * @brief Calculates text(label) center position along X axis.
+     * @param text                 text (label)
+     * @return calculated text center position along X axis
      */
-    int calculateLabelPosition();
+    int calculateCenterTextXPosition( const QString& text );
+
+    /**
+     * @brief Calculates text(label) center position along Y axis.
+     * @param text                 text (label)
+     * @return calculated text center position along Y axis
+     */
+    int calculateCenterTextYPosition( const QString& text );
 
     /**
      * @brief Draws current bar value value.
@@ -113,14 +131,14 @@ private:
     void drawCurrentValue();
 
     /**
-     * @brief Draws QBarChart name.
+     * @brief Draws name of QBarChart and X(Y) axis names.
      */
-    void drawChartName();
+    void drawChartLabels();
 
     /**
-     * @brief Adjusting left-right box margins and bar width.
+     * @brief Reconfigurates (adjusts) left-right box margins and bar width.
      */
-    void adjustBoxDisplayValues();
+    void reconfigurateBarChartLayout();
 
     /**
      * @brief Configuring button position, size and style.

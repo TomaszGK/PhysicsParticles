@@ -28,7 +28,7 @@ public:
      * @param size      number of bins
      * @param label     name of barchart
      */
-    explicit BarChart( size_t size , std::string_view label = "" );
+    explicit BarChart( size_t size , std::string_view label = "" , std::string_view labelX = "" , std::string_view labelY = ""  );
 
     /**
      * @brief Add new value to bar chart bins
@@ -74,11 +74,25 @@ public:
      */
     std::string getLabel() const noexcept { return LangManager::translate(label); }
 
+    /**
+     * @brief Get barchart name for X axis
+     * @return axis X name
+     */
+    std::string getLabelX() const noexcept { return LangManager::translate(labelX); }
+
+    /**
+     * @brief Get barchart name for Y axis
+     * @return axis Y name
+     */
+    std::string getLabelY() const noexcept { return LangManager::translate(labelY); }
+
 private:
 
-    std::list<double> bins      ; /**< contains bar values */
-    double            max   {0} ; /**< maximum value inside bins */
-    double            min   {0} ; /**< minimum value inside bins */
-    std::string       label {""}; /**< barchart name */
+    std::list<double> bins       ; /**< contains bar values */
+    double            max    {0} ; /**< maximum value inside bins */
+    double            min    {0} ; /**< minimum value inside bins */
+    std::string       label  {""}; /**< barchart name */
+    std::string       labelX {""}; /**< barchart label for axis X */
+    std::string       labelY {""}; /**< barchart label for axis Y */
 
 };

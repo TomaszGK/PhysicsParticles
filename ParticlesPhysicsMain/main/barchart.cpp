@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <numeric>
 
-BarChart::BarChart( size_t size , std::string_view label )
-: label {label}
+BarChart::BarChart( size_t size , std::string_view label , std::string_view labelX , std::string_view labelY )
+: label {label}, labelX {labelX}, labelY {labelY}
 {
     bins.resize(size,0);
 }

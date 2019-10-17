@@ -8,6 +8,10 @@ QBarChart::QBarChart( double max,  ptrBarChart ptr, QWidget* parent )
     boxStyle.marginTop = 30;
     boxStyle.marginRight = 30;
 
+    qLabel  = barChart->getLabel().c_str();
+    qLabelX = barChart->getLabelX().c_str();
+    qLabelY = barChart->getLabelY().c_str();
+
     init();
 }
 
@@ -15,7 +19,7 @@ bool QBarChart::loadStyle(BoxStyles style)
 {
     if( boxStyle.loadStyleFromFile(style) )
     {
-        adjustBoxDisplayValues();
+        reconfigurateBarChartLayout();
         configureButtons();
         return true;
     }
@@ -26,7 +30,7 @@ void QBarChart::init()
 {    
     if( parentWidget() != nullptr )
     {
-        adjustBoxDisplayValues();
+        reconfigurateBarChartLayout();
 
         buttons[DataVisualization::BARS] = std::make_unique<QPushButton>("",this);
         buttons[DataVisualization::BARS]->setIcon(QIcon(QPixmap(":/new/icons/images/bars.png")));
@@ -53,12 +57,16 @@ void QBarChart::init()
     }
 }
 
-int QBarChart::calculateLabelPosition()
+int QBarChart::calculateCenterTextYPosition(const QString &text)
 {
-    QFontMetrics fm(parentWidget()->font());
-    int pixelsWide = fm.horizontalAdvance(barChart->getLabel().c_str());
+    auto pixelsWide = QFontMetrics(parentWidget()->font()).horizontalAdvance(text);
+    return boxStyle.marginTop + (height()-(boxStyle.marginTop+boxStyle.marginBottom)-pixelsWide)/2;
+}
 
-    return boxStyle.marginLeft + (parentWidget()->width()-(boxStyle.marginLeft+boxStyle.marginRight)-pixelsWide)/2;
+int QBarChart::calculateCenterTextXPosition( const QString& text )
+{
+    auto pixelsWide = QFontMetrics(parentWidget()->font()).horizontalAdvance(text);
+    return boxStyle.marginLeft + (width()-(boxStyle.marginLeft+boxStyle.marginRight)-pixelsWide)/2;
 }
 
 void QBarChart::paint()
@@ -108,7 +116,7 @@ void QBarChart::paint()
         }
 
         drawCurrentValue();
-        drawChartName();
+        drawChartLabels();
     }
 
 }
@@ -119,13 +127,16 @@ void QBarChart::drawCurrentValue()
     painter.drawText(boxStyle.marginLeft,boxStyle.marginTop-7,QString::number(100*barChart->getBins().back(),'f',2));
 }
 
-void QBarChart::drawChartName()
+void QBarChart::drawChartLabels()
 {
     painter.setPen(QPen(boxStyle.cValue));
-    painter.drawText(calculateLabelPosition(),boxStyle.marginTop-7,QString::fromStdString(barChart->getLabel()));
+    painter.drawText(calculateCenterTextXPosition(LangManager::translate(qLabel)),boxStyle.marginTop-7,LangManager::translate(qLabel));
+
+    painter.drawText(calculateCenterTextXPosition(LangManager::translate(qLabelX)),height()-10,LangManager::translate(qLabelX));
+    painter.drawText(boxStyle.marginLeft/2-4,calculateCenterTextYPosition(LangManager::translate(qLabelY)),LangManager::translate(qLabelY));
 }
 
-void QBarChart::adjustBoxDisplayValues()
+void QBarChart::reconfigurateBarChartLayout()
 {
     int width {parentWidget()->width()};
     int size  {static_cast<int>(barChart->getBins().size())};
