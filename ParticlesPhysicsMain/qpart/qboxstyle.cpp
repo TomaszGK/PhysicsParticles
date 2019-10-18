@@ -116,7 +116,7 @@ T QBoxStyle::load( const QDomElement &element , const QString &tagName )
 
         if( !findBool.isNull() )
         {
-            value = findBool.text().toInt()==1?true:false;
+            value = findBool.text()=="true"?true:false;
         }
     }
 

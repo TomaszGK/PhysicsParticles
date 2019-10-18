@@ -11,7 +11,7 @@ void QParticlesPhysicsManager::addQBarChart( const std::string& name, QHBoxLayou
 {
     if( barCharts.count(name) != 0 )
     {       
-        qBoxPainters[name] = std::make_unique<QBarChart>(sqrt(physicsInfo.maxRapidity*2)/2,barCharts[name],layout->parentWidget());
+        qBoxPainters[name] = std::make_unique<QBarChart>(sqrt(physicsInfo.maxRapidity*2)/3,barCharts[name],layout->parentWidget());
         layout->addWidget( qBoxPainters[name].get() );
         if( style != BoxStyles::DEFAULT ) qBoxPainters[name]->loadStyle(style);
     }
@@ -58,10 +58,11 @@ void QParticlesPhysicsManager::addQGauge( const std::string& name, QHBoxLayout* 
     QcColorBand *clrBand =  qGauges[name].first->addColorBand(50);
     clrBand->setValueRange(0,100);
     qGauges[name].first->addValues(80)->setValueRange(0,100);
-    qGauges[name].first->addLabel(70)->setText(QString::fromStdString(name));
+    gaugeNameLabel = qGauges[name].first->addLabel(70);
+    gaugeNameLabel->setText(QString::fromStdString(LangManager::translate(name)));
     QcLabelItem *lab =  qGauges[name].first->addLabel(40);
     lab->setText("0");
-    qGauges[name].second.reset( qGauges[name].first->addNeedle(60));
+    qGauges[name].second.reset( qGauges[name].first->addNeedle(60) );
     qGauges[name].second->setLabel(lab);
     qGauges[name].second->setColor(Qt::blue);
     qGauges[name].second->setValueRange(0,100);
@@ -90,7 +91,11 @@ void QParticlesPhysicsManager::paintLayouts()
 {
     updateBars();    
     for( auto &painter : qBoxPainters ){ painter.second->update(); }
-    for( auto &gauge : qGauges ){ gauge.second.second->setCurrentValue( getPressureInPercent() ); }
+    for( auto &gauge : qGauges )
+    {
+        gaugeNameLabel->setText(LangManager::translate(gaugeNameLabel->text()));
+        gauge.second.second->setCurrentValue( getPressureInPercent() );
+    }
 }
 
 void QParticlesPhysicsManager::handleControls()

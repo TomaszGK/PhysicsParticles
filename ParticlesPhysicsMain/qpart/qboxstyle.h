@@ -129,8 +129,8 @@ public:
 
     /** map of location of xml style files */
     std::map<BoxStyles,QString> styleFiles {
-                                            {BoxStyles::BAR_CHART1,"styleBarChart.xml"},
-                                            {BoxStyles::BAR_CHART2,"styleBarChart.xml"},
+                                            {BoxStyles::BAR_CHART1,"styleBarChartVelocity.xml"},
+                                            {BoxStyles::BAR_CHART2,"styleBarChartEnergy.xml"},
                                             {BoxStyles::BAR_CHART3,"styleBarChart.xml"},
                                             {BoxStyles::HISTOGRAM1,"styleBarChart.xml"},
                                             {BoxStyles::HISTOGRAM2,"styleBarChart.xml"},

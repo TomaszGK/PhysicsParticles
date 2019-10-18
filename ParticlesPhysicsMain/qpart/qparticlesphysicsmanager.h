@@ -223,6 +223,9 @@ private:
     /** Maps QGauges objects. */
     std::map<std::string,std::pair<std::unique_ptr<QcGaugeWidget>,std::unique_ptr<QcNeedleItem>>> qGauges;
 
+    /** Gauge name label */
+    QcLabelItem* gaugeNameLabel {nullptr};
+
     /**
      * @brief Creates particle paint manager.
      */

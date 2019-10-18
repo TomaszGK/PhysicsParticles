@@ -8,13 +8,15 @@ const LangManager::TMap<std::string> LangManager::translateMap<std::string> =
 {
    { Language::PL ,
                     {
-                      { "Velocity" , "Prędkość" },
+                      { "Average Velocity of Gas Particles" , "Średnia Prędkość Cząsteczek Gazu" },
+                      { "Time" , "Czas" },
                       { "Blue Velocity" , "Niebieska Prędkość" },
                       { "Red Velocity" , "Czerwona Prędkość" },
                       { "Collisions" , "Ilość Kolizji" },
                       { "Plane Energy" , "Energia Pojemnika" },
                       { "Velocity Distribution", "Rozkład Prędkości"},
-                      { "Momentum Distribution", "Rozkład Pędu"}
+                      { "Momentum Distribution", "Rozkład Pędu"},
+                      { "Pressure", "Ciśnienie"},
                     }
    },
    { Language::ENG ,
@@ -39,21 +41,3 @@ const LangManager::TMap<QString> LangManager::translateMap<QString> =
     }
     return qtMap;
 }();
-
-/*
-template<>
-const LangManager::TMap<QStaticText> LangManager::translateMap<QStaticText> =
-[]()
-{
-    LangManager::TMap<QStaticText> qtMap;
-    for( const auto& [lang,translation] : LangManager::translateMap<QString> )
-    {
-        for( const auto& [from,to] : translation )
-        {
-            qtMap[lang][QStaticText(from)] = QStaticText(to);
-        }
-
-    }
-    return qtMap;
-}();*/
-

@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // create BASIC simulation
     physicsSimulation[0] = std::make_unique<QParticlesPhysicsManager>(SimulationType::BASIC,ui->particlesFrameTab0);
     physicsSimulation[0]->addQBarChart("velocity",ui->velocityBarChartTab0,BoxStyles::BAR_CHART1);
-    physicsSimulation[0]->addQBarChart("kinetic",ui->kineticEnergyBarChartTab0);
+    physicsSimulation[0]->addQBarChart("kinetic",ui->kineticEnergyBarChartTab0,BoxStyles::BAR_CHART2);
     physicsSimulation[0]->addQHistogram1D("velocityDistribution",ui->velocityDistributionHistogram1DTab0);
     physicsSimulation[0]->addQGauge("Pressure",ui->pressureGaugeHorizontalLayoutTab0);
     physicsSimulation[0]->setPlaneHitsPaint(true);

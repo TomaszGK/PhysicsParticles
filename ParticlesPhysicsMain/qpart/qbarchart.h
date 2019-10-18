@@ -37,8 +37,7 @@ public:
     /**
      * @brief Constructor
      *
-     * @param max                   maximum bin value
-     * @param scalability           scalability mode
+     * @param max                   maximum barchart bin values
      * @param ptr                   pointer to BarChart object
      * @param parent                ponter to parent widget
      */
@@ -112,18 +111,14 @@ private:
     void init() override;
 
     /**
-     * @brief Calculates text(label) center position along X axis.
+     * @brief Calculates text(label) center position between begin and end positions.
+     * @warning end>begin !
      * @param text                 text (label)
-     * @return calculated text center position along X axis
+     * @param begin                begin position
+     * @param end                  end position
+     * @return calculated text center position.
      */
-    int calculateCenterTextXPosition( const QString& text );
-
-    /**
-     * @brief Calculates text(label) center position along Y axis.
-     * @param text                 text (label)
-     * @return calculated text center position along Y axis
-     */
-    int calculateCenterTextYPosition( const QString& text );
+    int calculateCenterTextPosition( const QString& text , int begin , int end  );
 
     /**
      * @brief Draws current bar value value.

@@ -71,7 +71,7 @@
  </cInnerFrameColor>
 
  <cLabelColor>
-  <color>100,20,20</color>      
+  <color>30,50,30</color>      
  </cLabelColor>
 
  <cValue>
@@ -143,11 +143,11 @@
  </buttonIndent>
 
  <isScalableUp>  
-  <bool>0</bool>  
+  <bool>false</bool>  
  </isScalableUp>
 
  <isScalableDown>  
-  <bool>0</bool>  
+  <bool>false</bool>  
  </isScalableDown>
 
 </style>
