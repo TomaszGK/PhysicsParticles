@@ -1,0 +1,153 @@
+<style>
+
+ <buttonStyleSelected>  
+  <string>
+  	QPushButton 
+  	{
+  	 background-color: rgb(215,215,215);
+  	 border-style: outset;
+  	 border-radius: 10px;
+  	 border-color: rgb(110,110,110);
+  	 border-width: 1px;
+  	 font: bold 14px;  	 
+  	}  
+  </string>
+ </buttonStyleSelected>
+
+ <buttonStyleUnselected>  
+  <string>
+  	QPushButton 
+  	{ 
+  	 background-color: rgb(185,185,185);
+     border-style: outset;
+  	 border-radius: 10px;
+  	 border-color: rgb(110,110,110);
+  	 border-width: 1px;
+  	 font: bold 14px;
+  	}
+  	QPushButton:hover 
+  	{ 
+  	 background-color: rgb(215,215,215);  
+  	}    
+  </string>
+ </buttonStyleUnselected>
+
+ <buttonStyleReset>  
+  <string>
+  	QPushButton
+  	{ 
+  	 background-color: rgb(185,185,185);
+     border-style: outset;
+  	 border-radius: 10px;
+  	 border-color: rgb(110,110,110);
+  	 border-width: 1px;
+  	 font: bold 14px;
+  	}
+  	QPushButton:hover
+  	{ 
+  	 background-color: rgb(215,215,215);  
+  	} 
+  	QPushButton:pressed 
+  	{ 
+  	 background-color: red; 
+  	}   
+  </string>
+ </buttonStyleReset>
+
+ <cPlaneBorder>  
+  <color>120,120,120</color>  
+ </cPlaneBorder>
+
+ <cBackground>
+  <color>204,242,255</color>   
+ </cBackground>
+
+ <cAxesColor>
+  <color>120,120,120</color>   
+ </cAxesColor>
+
+ <cInnerFrameColor>
+  <color>100,100,100</color>   
+ </cInnerFrameColor>
+
+ <cLabelColor>
+  <color>30,50,30</color>      
+ </cLabelColor>
+
+ <cValue>
+  <color>100,20,20</color>      
+ </cValue>
+
+ <cButtonLabel>
+  <color>15,15,15</color>      
+ </cButtonLabel>
+
+ <cUpper>
+  <color>0,0,255</color>      
+ </cUpper>
+
+ <cLower>
+  <color>255,0,0</color>      
+ </cLower>
+
+ <cBigCirclePenColor>
+  <color>80,80,90</color>      
+ </cBigCirclePenColor>
+
+ <cSmallCircleColor>
+  <color>155,155,155</color>     
+ </cSmallCircleColor>
+
+ <cSmallCircleHookedColor>
+  <color>100,100,255</color>      
+ </cSmallCircleHookedColor>
+
+ <marginLeft> 
+  <int>20</int>  
+ </marginLeft>
+
+ <marginRight> 
+  <int>35</int>  
+ </marginRight>
+
+ <marginTop>  
+  <int>30</int>  
+ </marginTop>
+
+ <marginBottom>  
+  <int>30</int>  
+ </marginBottom>
+
+ <numberOfHorizontalAxes>  
+  <int>5</int>  
+ </numberOfHorizontalAxes>
+
+ <numberOfVerticalAxes>  
+  <int>5</int>  
+ </numberOfVerticalAxes>
+
+ <planeBorderWidth>  
+  <int>1</int>  
+ </planeBorderWidth>
+
+ <buttonWidth>  
+  <int>35</int>  
+ </buttonWidth>
+
+ <buttonHeight>  
+  <int>35</int>  
+ </buttonHeight>
+
+ <buttonIndent>  
+  <int>0</int>  
+ </buttonIndent>
+
+ <isScalableUp>  
+  <bool>true</bool>  
+ </isScalableUp>
+
+ <isScalableDown>  
+  <bool>true</bool>  
+ </isScalableDown>
+
+</style>
