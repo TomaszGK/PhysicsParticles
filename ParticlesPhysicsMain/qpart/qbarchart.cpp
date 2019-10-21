@@ -2,7 +2,7 @@
 
 QBarChart::QBarChart( double max,  ptrBarChart ptr, QWidget* parent )
 : QBoxPainter { parent }, barChart { std::move(ptr) }
-{
+{    
     setMaxOY(max);        
     setAutoFillBackground(false);
     boxStyle.marginTop = 30;
@@ -26,6 +26,21 @@ bool QBarChart::loadStyle(BoxStyles style)
     else return false;
 }
 
+void QBarChart::changeEvent(QEvent *event)
+{
+    if( event->type() == QEvent::LanguageChange )
+    {
+        buttons[DataVisualization::BARS]->setToolTip(tr("Bars display"));
+        buttons[DataVisualization::POINTS]->setToolTip(tr("Points display"));
+        buttons[DataVisualization::LINES]->setToolTip(tr("Lines display"));
+        resetButton->setToolTip(tr("Reset"));
+    }
+    else
+    {
+        QWidget::changeEvent(event);
+    }
+}
+
 void QBarChart::init()
 {    
     if( parentWidget() != nullptr )
@@ -34,26 +49,26 @@ void QBarChart::init()
 
         buttons[DataVisualization::BARS] = std::make_unique<QPushButton>("",this);
         buttons[DataVisualization::BARS]->setIcon(QIcon(QPixmap(":/new/icons/images/bars.png")));
-        buttons[DataVisualization::BARS]->setToolTip("Bars display");
+        buttons[DataVisualization::BARS]->setToolTip(tr("Bars display"));
 
         buttons[DataVisualization::POINTS] = std::make_unique<QPushButton>("",this);
         buttons[DataVisualization::POINTS]->setIcon(QIcon(QPixmap(":/new/icons/images/points.png")));
-        buttons[DataVisualization::POINTS]->setToolTip("Points display");
+        buttons[DataVisualization::POINTS]->setToolTip(tr("Points display"));
 
         buttons[DataVisualization::LINES] = std::make_unique<QPushButton>("",this);
         buttons[DataVisualization::LINES]->setIcon(QIcon(QPixmap(":/new/icons/images/lines.png")));
-        buttons[DataVisualization::LINES]->setToolTip("Lines display");
+        buttons[DataVisualization::LINES]->setToolTip(tr("Lines display"));
 
         resetButton = std::make_unique<QPushButton>("",this);
         resetButton->setIcon(QIcon(QPixmap(":/new/icons/images/reset_barchart.png")));
-        resetButton->setToolTip("Reset");
+        resetButton->setToolTip(tr("Reset"));
 
         configureButtons();
 
         connect( buttons[DataVisualization::BARS].get()   , &QPushButton::clicked , this, &QBarChart::onButtonClick );
         connect( buttons[DataVisualization::POINTS].get() , &QPushButton::clicked , this, &QBarChart::onButtonClick );
         connect( buttons[DataVisualization::LINES].get()  , &QPushButton::clicked , this, &QBarChart::onButtonClick );
-        connect( resetButton.get()  , &QPushButton::clicked , this, &QBarChart::onButtonClick );
+        connect( resetButton.get()                        , &QPushButton::clicked , this, &QBarChart::onButtonClick );
     }
 }
 
@@ -186,15 +201,15 @@ void QBarChart::onButtonClick()
             buttons[dataVisulization]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
             buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-5,buttons[dataVisulization]->pos().y());
 
-            if( clickedButton->toolTip().contains("Bars") )
+            if( clickedButton->toolTip() == tr("Bars display") )
             {
                 dataVisulization = DataVisualization::BARS;
             }
-            else if( clickedButton->toolTip().contains("Points") )
+            else if( clickedButton->toolTip() == tr("Points display") )
             {
                 dataVisulization = DataVisualization::POINTS;
             }
-            else if( clickedButton->toolTip().contains("Lines") )
+            else if( clickedButton->toolTip() == tr("Lines display") )
             {
                 dataVisulization = DataVisualization::LINES;
             }

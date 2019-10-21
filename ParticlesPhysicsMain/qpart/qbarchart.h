@@ -68,6 +68,15 @@ public:
      */
     bool loadStyle( BoxStyles style ) override;
 
+protected:
+
+    /**
+     * @brief Handles event changing signal.
+     *
+     * @param event                 event to handle
+     */
+    void changeEvent( QEvent *event ) override;
+
 private:
 
     /** Holds BarChart object. */
