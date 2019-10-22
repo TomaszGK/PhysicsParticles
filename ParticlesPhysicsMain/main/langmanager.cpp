@@ -13,7 +13,7 @@ const LangManager::TMap<std::string> LangManager::translateMap<std::string> =
                       { "Blue Velocity" , "Niebieska Prędkość" },
                       { "Red Velocity" , "Czerwona Prędkość" },
                       { "Collisions" , "Ilość Kolizji" },
-                      { "Plane Energy" , "Energia Pojemnika" },
+                      { "Energy of Particle Hits" , "Energia Uderzeń Cząstek" },
                       { "Velocity Distribution", "Rozkład Prędkości"},
                       { "Momentum Distribution", "Rozkład Pędu"},
                       { "Pressure", "Ciśnienie"},

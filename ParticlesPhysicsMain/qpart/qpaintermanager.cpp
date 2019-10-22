@@ -74,27 +74,27 @@ void QPainterManager::paint()
 
 void QPainterManager::paintPlaneConstraintWalls()
 {
-    painter.setPen(QPen(QColor(100, 100, 100)));
-    painter.setBrush(QBrush(QColor(100, 100, 100)));
-    painter.drawRect(static_cast<int>(planeArea->getXConstraint()),boxStyle.planeBorderWidth,3,geometry().height()-2*boxStyle.planeBorderWidth);
-    painter.drawRect(geometry().width()-static_cast<int>(planeArea->getXConstraint()),boxStyle.planeBorderWidth,3,geometry().height()-2*boxStyle.planeBorderWidth);
-    paintConstraintArrows();
-
-    // mask arrows on edges by redrawing horizontal borders
     painter.setPen(QPen(boxStyle.cPlaneBorder));
     painter.setBrush(QBrush(boxStyle.cPlaneBorder));
-    painter.drawRect(0,0,boxStyle.planeBorderWidth,geometry().height());
-    painter.drawRect(geometry().width()-boxStyle.planeBorderWidth,0,boxStyle.planeBorderWidth,geometry().height());
+    painter.drawRect(planeArea->getXConstraint(),boxStyle.planeBorderWidth,boxStyle.planeBorderWidth,height()-2*boxStyle.planeBorderWidth);
+    painter.drawRect(width()-planeArea->getXConstraint()-boxStyle.planeBorderWidth,boxStyle.planeBorderWidth,boxStyle.planeBorderWidth,height()-2*boxStyle.planeBorderWidth);
+
+    painter.setPen(QPen(boxStyle.cBackground));
+    painter.setBrush(QBrush(boxStyle.cBackground));
+    painter.drawRect(0,0,planeArea->getXConstraint(),height());
+    painter.drawRect(width()-planeArea->getXConstraint(),0,planeArea->getXConstraint(),height());
+
+    paintConstraintArrows();
 }
 
 void QPainterManager::paintConstraintArrows()
 {
-    vect2D position  { -150 , static_cast<double>(geometry().height()/2) };
-    vect2D direction { 150 + static_cast<double>(static_cast<int>(planeArea->getXConstraint())) , 0 };
+    vect2D position  { -150 , static_cast<double>(height()/2) };
+    vect2D direction { 150 + static_cast<double>(planeArea->getXConstraint()) , 0 };
     paintArrow( position , direction , 50 , 15 , QColor(100,60,250) );
 
-    position.set( static_cast<double>(geometry().width()) + 150 , static_cast<double>(geometry().height()/2) );
-    direction.set( -static_cast<double>(static_cast<int>(planeArea->getXConstraint())) - 150 + 3 , 0 );
+    position.set( static_cast<double>(width()) + 150 , static_cast<double>(height()/2) );
+    direction.set( (-1)*(150 + static_cast<double>(planeArea->getXConstraint())) , 0 );
     paintArrow( position , direction , 50 , 15 , QColor(100,60,250) );
 }
 
