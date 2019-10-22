@@ -138,8 +138,8 @@ struct SimulationInfo
                                                    };
 
     std::map<SimulationType,bool> disjointParticles {
-                                                      {SimulationType::BASIC,true},
-                                                      {SimulationType::DIFFUSION,true},
+                                                      {SimulationType::BASIC,false},
+                                                      {SimulationType::DIFFUSION,false},
                                                       {SimulationType::BROWNIAN_MOTION,false},
                                                       {SimulationType::SANDBOX,false}
                                                     };

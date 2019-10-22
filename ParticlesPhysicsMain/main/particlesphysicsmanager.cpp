@@ -744,6 +744,8 @@ void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle& part
             distance = (otherParticle->position - particle->calculateNextPosition(timeContribution))();
             minDistance = otherParticle->radius+particle->radius;
 
+            if( (otherParticle->position - particle->position)() <= minDistance ) continue;
+
             if( distance < minDistance )
             {
                 particle->modifiedVelocity = otherParticle->modifiedVelocity = true;
@@ -763,10 +765,9 @@ void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle& part
             }
             else if( simulationType == SimulationType::SANDBOX && physicsInfo.attractionForce!=0.0 )
             {
-                particle->modifiedVelocity = otherParticle->modifiedVelocity = true;
-                double distanceCut = ( distance<minDistance ) ? minDistance : distance ;
+                particle->modifiedVelocity = otherParticle->modifiedVelocity = true;                
                 vect2D direction = (particle->position-otherParticle->position).setLength(1.0);
-                double factor    = physicsInfo.attractionForce*calculationPeriod/distanceCut;
+                double factor    = physicsInfo.attractionForce*calculationPeriod/distance;
 
                 particle->velocity += direction*factor*(-1.0)*otherParticle->mass;
                 otherParticle->velocity += direction*factor*particle->mass;
