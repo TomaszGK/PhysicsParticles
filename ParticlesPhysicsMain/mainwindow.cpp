@@ -195,6 +195,7 @@ void MainWindow::change_language()
 
 void MainWindow::on_temperatureDialTab0_valueChanged( int value )
 {
+     ui->temperatureLabelTab0->setText(QString::number(value));
      physicsSimulation[0]->setTemperatureInPercent(value);
 }
 
@@ -212,6 +213,7 @@ void MainWindow::on_sizeOfParticleSliderTab0_valueChanged( int value )
 
 void MainWindow::on_planeSizeDialTab0_valueChanged( int value )
 {
+    ui->constraintLabelTab0->setText(QString::number(value));
     physicsSimulation[0]->setPlaneWidthInPercent(value);
 }
 
