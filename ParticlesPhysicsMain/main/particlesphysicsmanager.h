@@ -285,12 +285,12 @@ public:
     }
 
     /**
-     * @brief Gets (calculates) percent value of pressure in the particle plane.
-     * @return pressure value in percent [0,100]
+     * @brief Gets (calculates) value of pressure in the particle plane.
+     * @return current pressure value
      */
-    int getPressureInPercent() const
+    int getPressureValue() const
     {
-        return static_cast<int>(200000*particles->size()*physicsInfo.averageKineticEnergy/(planeArea->getPlaneFieldConstraint()));
+        return static_cast<int>(100*barCharts.at("kinetic")->getAvgInLast(5));
     }
 
     /**

@@ -52,20 +52,26 @@ void QParticlesPhysicsManager::addQGauge( const std::string& name, QHBoxLayout* 
 {
     qGauges[name] = { nullptr , nullptr };
 
+    int range {1000};
+
     qGauges[name].first = std::make_unique<QcGaugeWidget>();
     qGauges[name].first->addArc(55);
-    qGauges[name].first->addDegrees(65)->setValueRange(0,100);
+    QcDegreesItem* degreeItem = qGauges[name].first->addDegrees(65);
+    degreeItem->setValueRange(0,range);
+    degreeItem->setStep(range/10);
     QcColorBand *clrBand =  qGauges[name].first->addColorBand(50);
     clrBand->setValueRange(0,100);
-    qGauges[name].first->addValues(80)->setValueRange(0,100);
+    QcValuesItem *valueItem = qGauges[name].first->addValues(80);
+    valueItem->setValueRange(0,range);
+    valueItem->setStep(range/10);
     gaugeNameLabel = qGauges[name].first->addLabel(70);
     gaugeNameLabel->setText(QString::fromStdString(LangManager::translate(name)));
-    QcLabelItem *lab =  qGauges[name].first->addLabel(40);
+    QcLabelItem *lab = qGauges[name].first->addLabel(40);
     lab->setText("0");
     qGauges[name].second.reset( qGauges[name].first->addNeedle(60) );
     qGauges[name].second->setLabel(lab);
     qGauges[name].second->setColor(Qt::blue);
-    qGauges[name].second->setValueRange(0,100);
+    qGauges[name].second->setValueRange(0,range);
     qGauges[name].first->addBackground(7);
 
     layout->addWidget( qGauges[name].first.get() );
@@ -94,7 +100,7 @@ void QParticlesPhysicsManager::paintLayouts()
     for( auto &gauge : qGauges )
     {
         gaugeNameLabel->setText(LangManager::translate(gaugeNameLabel->text()));
-        gauge.second.second->setCurrentValue( getPressureInPercent() );
+        gauge.second.second->setCurrentValue( getPressureValue() );
     }
 }
 

@@ -58,6 +58,13 @@ public:
     double getAvg() const;
 
     /**
+     * @brief Get average value from a given percent number of bins containing the most recently added data
+     * @param percent                percent number of bins from average value is calculated
+     * @return average value
+     */
+    double getAvgInLast( int percent ) const;
+
+    /**
      * @brief Get barchart bins
      * @return barchart bins
      */
