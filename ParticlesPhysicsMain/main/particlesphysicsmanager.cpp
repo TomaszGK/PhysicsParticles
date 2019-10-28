@@ -24,8 +24,8 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
     selectedParticle = particles->begin();
 
     barCharts["velocity"]     = std::make_shared<BarChart>( 80 , "Average Velocity of Gas Particles" , "Time" , "V" );
-    barCharts["velocityBlue"] = std::make_shared<BarChart>( 70 , "Blue Velocity" );
-    barCharts["velocityRed"]  = std::make_shared<BarChart>( 70 , "Red Velocity" );
+    barCharts["velocityBlue"] = std::make_shared<BarChart>( 70 , "Average Velocity of Blue Gas Particles" , "Time" , "V" );
+    barCharts["velocityRed"]  = std::make_shared<BarChart>( 70 , "Average Velocity of Red Gas Particles" , "Time" , "V" );
     barCharts["collisions"]   = std::make_shared<BarChart>( 40 , "Collisions" );
     barCharts["kinetic"]      = std::make_shared<BarChart>( 160 , "Energy of Particle Hits" , "Time" , "E" );
 

@@ -150,4 +150,8 @@
   <bool>true</bool>  
  </isScalableDown>
 
+ <isValueDisplay>  
+  <bool>true</bool>  
+ </isValueDisplay> 
+
 </style>

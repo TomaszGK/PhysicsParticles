@@ -127,11 +127,14 @@ public:
     /** scalable down flag - if true then maxValue can decrease , in QBarChart */
     bool isScalableDown {true};
 
+    /** if true then last bin value will be display in QBarChart */
+    bool isValueDisplay {true};
+
     /** map of location of xml style files */
     std::map<BoxStyles,QString> styleFiles {
                                             {BoxStyles::BAR_CHART1,"styleBarChartVelocity.xml"},
                                             {BoxStyles::BAR_CHART2,"styleBarChartEnergy.xml"},
-                                            {BoxStyles::BAR_CHART3,"styleBarChart.xml"},
+                                            {BoxStyles::BAR_CHART3,"styleBarChartDiffusion.xml"},
                                             {BoxStyles::HISTOGRAM1,"styleBarChart.xml"},
                                             {BoxStyles::HISTOGRAM2,"styleBarChart.xml"},
                                             {BoxStyles::HISTOGRAM3,"styleBarChart.xml"},

@@ -66,6 +66,7 @@ bool QBoxStyle::loadStyleFromFile( BoxStyles style )
 
     isScalableUp = load<bool>(docElem,"isScalableUp");
     isScalableDown = load<bool>(docElem,"isScalableDown");
+    isValueDisplay = load<bool>(docElem,"isValueDisplay");
 
     file.close();
     return true;

@@ -29,8 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create DIFFIUSION simulation
     physicsSimulation[1] = std::make_unique<QParticlesPhysicsManager>(SimulationType::DIFFUSION,ui->particlesFrameTab1);
-    physicsSimulation[1]->addQBarChart("velocityBlue",ui->velocityBlueBarChartTab1,BoxStyles::BAR_CHART1);
-    physicsSimulation[1]->addQBarChart("velocityRed",ui->velocityRedBarChartTab1,BoxStyles::BAR_CHART1);
+    physicsSimulation[1]->addQBarChart("velocityBlue",ui->velocityBlueBarChartTab1,BoxStyles::BAR_CHART3);
+    physicsSimulation[1]->addQBarChart("velocityRed",ui->velocityRedBarChartTab1,BoxStyles::BAR_CHART3);
     physicsSimulation[1]->addQBarDisplay("diffiusion",ui->numBlueRedTab1);
 
     ui->temperatureLeftDialTab1->setValue(physicsSimulation[1]->getTemperatureLeftInPercent());
@@ -307,21 +307,25 @@ void MainWindow::on_startButtonTab1_clicked()
 void MainWindow::on_temperatureLeftDialTab1_valueChanged( int value )
 {
     physicsSimulation[1]->setTemperatureLeftInPercent(value);
+    ui->blueTemperatureLabelTab1->setText(QString::number(value));
 }
 
 void MainWindow::on_temperatureRightDialTab1_valueChanged(int value)
 {
     physicsSimulation[1]->setTemperatureRightInPercent(value);
+    ui->redTemperatureLabelTab1->setText(QString::number(value));
 }
 
 void MainWindow::on_particleSizeBlueDialTab1_valueChanged(int value)
 {
     physicsSimulation[1]->setSizeOfParticlesInPercent(ParticleType::BLUE,value);
+    ui->blueSizeLabelTab1->setText(QString::number(value));
 }
 
 void MainWindow::on_particleSizeRedDialTab1_valueChanged(int value)
 {
     physicsSimulation[1]->setSizeOfParticlesInPercent(ParticleType::RED,value);
+    ui->redSizeLabelTab1->setText(QString::number(value));
 }
 
 void MainWindow::on_visualizationTypeVelocityRadioButtonTab1_toggled( bool checked )

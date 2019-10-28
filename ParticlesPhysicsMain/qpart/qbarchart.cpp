@@ -124,7 +124,7 @@ void QBarChart::paint()
             valueLast = value;
         }
 
-        drawCurrentValue();
+        if( boxStyle.isValueDisplay ) drawCurrentValue();
         drawChartLabels();
     }
 
