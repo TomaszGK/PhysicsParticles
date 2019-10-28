@@ -14,11 +14,11 @@ bool QBoxStyle::loadStyleFromFile( BoxStyles style )
 
     qDebug() << "loading style from file : " << styleFiles[style] << "\n";
 
-    QDir pathDir {qApp->applicationDirPath()+"/styles"};
+    QDir pathDir {qApp->applicationDirPath()+"/styles/"};
     QString filepath {};
 
-    filepath = pathDir.exists()?pathDir.path():"D:/Programming/GitHub/Qt/ParticlesPhysics/ParticlesPhysicsMain/styles/";
-    filepath += styleFiles[style];
+    filepath = pathDir.exists()?pathDir.path()+"/":"D:/Programming/GitHub/Qt/ParticlesPhysics/ParticlesPhysicsMain/styles/";
+    filepath += styleFiles[style];    
 
     QFile file {filepath};
 
