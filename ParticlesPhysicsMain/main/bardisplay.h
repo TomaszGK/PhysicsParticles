@@ -46,20 +46,28 @@ public:
      * @param index     upper box index
      * @return upper box value
      */
-    inline int getUpperBox( size_t index ) const noexcept { return index<bins.size()?bins[index].first:0; }
+    inline int getUpperBox( int index ) const noexcept
+    {
+        Ensures(index<static_cast<int>(bins.size())&&index>=0);
+        return bins[static_cast<size_t>(index)].first;
+    }
 
     /**
      * @brief Get lower bardisplay box value
      * @param index     lower box index
      * @return lower box value
      */
-    inline int getLowerBox( size_t index ) const noexcept { return index<bins.size()?bins[index].second:0; }
+    inline int getLowerBox( int index ) const noexcept
+    {
+        Ensures(index<static_cast<int>(bins.size())&&index>=0);
+        return bins[static_cast<size_t>(index)].second;
+    }
 
     /**
      * @brief Get number of bardisplay bins
      * @return number of bardisplay bins
      */
-    inline size_t getSize() const noexcept { return bins.size(); }
+    inline int getSize() const noexcept { return static_cast<int>(bins.size()); }
 
     /**
      * @brief Get name of bardisplay
@@ -69,7 +77,10 @@ public:
 
 private:
 
-    std::vector<std::pair<int,int>>  bins      ; /**< contains upper and lower bar values */
-    std::string                     label {""} ; /**< bar display name */
+    /** contains upper and lower bar values */
+    std::vector<std::pair<int,int>> bins;
+
+    /** bar display name */
+    std::string label;
 
 };

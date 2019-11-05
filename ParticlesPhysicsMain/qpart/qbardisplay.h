@@ -46,10 +46,10 @@ private:
     /** Holds BarDisplay object. */
     ptrBarDisplay barDisplay;
 
-    /**< single bar width */
+    /** single bar width */
     int barWidth {0};
 
-    /**< maximum bin balue */
+    /** maximum bin value */
     int max {100};
 
     /**
@@ -63,10 +63,10 @@ private:
     void init() override;
 
     /**
-     * @brief Gets centered text position in a single bar.
+     * @brief Gets centered number position in a single bar.
      *
      * @param number                number to display in bar
      * @return centered position
      */
-    int  getCenteredTextPosition( int number );
+    int  getCenteredNumberPosition( int number );
 };

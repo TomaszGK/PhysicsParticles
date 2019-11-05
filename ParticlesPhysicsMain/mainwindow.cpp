@@ -282,7 +282,7 @@ void MainWindow::on_tabWidget_currentChanged( int index )
 
 void MainWindow::on_startButtonTab1_clicked()
 {
-    if( ui->startButtonTab1->text() == "START" )
+    if( ui->startButtonTab1->text() == "OPEN" )
     {        
         ui->startButtonTab1->setText("RESET");
         dividerGapAnimationStart = true;
@@ -290,7 +290,7 @@ void MainWindow::on_startButtonTab1_clicked()
     }
     else if( ui->startButtonTab1->text() == "RESET" )
     {
-        ui->startButtonTab1->setText("START");
+        ui->startButtonTab1->setText("OPEN");
         dividerGapAnimationStart = false;
         dividerGapPosition = 0;
         physicsSimulation[1]->reset();
@@ -336,7 +336,7 @@ void MainWindow::on_visualizationTypeVelocityRadioButtonTab1_toggled( bool check
 
 void MainWindow::on_gapSizeSliderTab1_valueChanged( int value )
 {
-    if( ui->startButtonTab1->text() == "START" && value>0 )
+    if( ui->startButtonTab1->text() == "OPEN" && value>0 )
     {
         physicsSimulation[currentIndex]->setAverageDiffusionTemperature();
         ui->startButtonTab1->setText("RESET");
