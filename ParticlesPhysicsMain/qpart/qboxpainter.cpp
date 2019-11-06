@@ -3,6 +3,9 @@
 QBoxPainter::QBoxPainter( QWidget* parentWidget )
 : QWidget {parentWidget}
 { 
+    QFont font = this->font();
+    font.setPointSize(12);
+    this->setFont(font);
 }
 
 void QBoxPainter::paintEvent(QPaintEvent *event)
@@ -80,9 +83,14 @@ void QBoxPainter::paintTriangle( const vect2D &a, const vect2D &b, const vect2D 
 }
 
 int QBoxPainter::getStringWidthInPixels( const QString& name )
+{    
+    return QFontMetrics(this->font()).horizontalAdvance(name);
+}
+
+int QBoxPainter::calculateCenterTextPosition( const QString &text , int begin , int end )
 {
-    QFontMetrics fm(parentWidget()->font());
-    return fm.horizontalAdvance(name);
+    auto pixelsWide = QFontMetrics(this->font()).horizontalAdvance(text);
+    return begin + (end-begin-pixelsWide)/2;
 }
 
 void QBoxPainter::paintPlaneBorder()

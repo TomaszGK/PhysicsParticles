@@ -62,11 +62,4 @@ private:
      */
     void init() override;
 
-    /**
-     * @brief Gets centered number position in a single bar.
-     *
-     * @param number                number to display in bar
-     * @return centered position
-     */
-    int  getCenteredNumberPosition( int number );
 };

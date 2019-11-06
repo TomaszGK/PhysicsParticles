@@ -24,5 +24,6 @@
     <qresource prefix="/css">
         <file>css/darkorange.qss</file>
         <file>css/styleblue.qss</file>
+        <file>css/qtabwidget.qss</file>
     </qresource>
 </RCC>

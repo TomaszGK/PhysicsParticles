@@ -47,14 +47,6 @@ void QHistogram1D::init()
     }
 }
 
-int QHistogram1D::calculateLabelPosition()
-{
-    QFontMetrics fm(parentWidget()->font());
-    int pixelsWide = fm.horizontalAdvance(histogram1D->getLabel().c_str());
-
-    return boxStyle.marginLeft + (parentWidget()->width()-(boxStyle.marginLeft+boxStyle.marginRight)-pixelsWide)/2;
-}
-
 void QHistogram1D::paint()
 {
 
@@ -92,8 +84,9 @@ void QHistogram1D::paint()
 
 void QHistogram1D::drawHistogramName()
 {
+    auto label = QString::fromStdString(histogram1D->getLabel());
     painter.setPen(QPen(boxStyle.cLabelColor));
-    painter.drawText(calculateLabelPosition(),boxStyle.marginTop-7,QString::fromStdString(histogram1D->getLabel()));
+    painter.drawText(calculateCenterTextPosition(label,boxStyle.marginLeft,width()-boxStyle.marginRight),boxStyle.marginTop-7,label);
 }
 
 void QHistogram1D::drawMarking()

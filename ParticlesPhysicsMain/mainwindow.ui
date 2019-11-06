@@ -48,6 +48,9 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="tabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -62,11 +65,107 @@
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
+      <underline>false</underline>
       <kerning>true</kerning>
      </font>
     </property>
     <property name="autoFillBackground">
      <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTabWidget::pane {
+	color: rgb(240, 240, 240);
+    border: 1px solid #6d95aa;
+    background: white;
+}
+
+QTabWidget::tab-bar:top {
+    top: 1px;
+}
+
+QTabWidget::tab-bar:bottom {
+    bottom: 1px;
+}
+
+QTabWidget::tab-bar:left {
+    right: 1px;
+}
+
+QTabWidget::tab-bar:right {
+    left: 1px;
+}
+
+QTabBar::tab {
+    border: 1px solid #6d95aa;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+QTabBar::tab:selected {
+    background: window;
+}
+
+QTabBar::tab:!selected {
+    background: #d1edff;	
+}
+
+QTabBar::tab:!selected:hover {
+    background: #6d95aa;
+}
+
+QTabBar::tab:top:!selected {
+    margin-top: 3px;
+}
+
+QTabBar::tab:bottom:!selected {
+    margin-bottom: 3px;
+}
+
+QTabBar::tab:top, QTabBar::tab:bottom {
+    min-width: 8ex;
+    margin-right: -1px;
+    padding: 5px 10px 5px 10px;
+}
+
+QTabBar::tab:top:selected {
+    border-bottom-color: #f0f0f0;
+}
+
+QTabBar::tab:bottom:selected {
+    border-top-color: none;
+}
+
+QTabBar::tab:top:last, QTabBar::tab:bottom:last,
+QTabBar::tab:top:only-one, QTabBar::tab:bottom:only-one {
+    margin-right: 0;
+}
+
+QTabBar::tab:left:!selected {
+    margin-right: 3px;
+}
+
+QTabBar::tab:right:!selected {
+    margin-left: 3px;
+}
+
+QTabBar::tab:left, QTabBar::tab:right {
+    min-height: 8ex;
+    margin-bottom: -1px;
+    padding: 10px 5px 10px 5px;
+}
+
+QTabBar::tab:left:selected {
+    border-left-color: none;
+}
+
+QTabBar::tab:right:selected {
+    border-right-color: none;
+}
+
+QTabBar::tab:left:last, QTabBar::tab:right:last,
+QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
+    margin-bottom: 0;
+}</string>
     </property>
     <property name="tabPosition">
      <enum>QTabWidget::North</enum>
@@ -3232,9 +3331,117 @@ Trace</string>
        <rect>
         <x>1360</x>
         <y>640</y>
-        <width>471</width>
+        <width>481</width>
         <height>261</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <kerning>true</kerning>
+       </font>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTabWidget::pane {
+	color: rgb(240, 240, 240);
+    border: 1px solid #6d95aa;
+    background: window;
+}
+
+QTabWidget::tab-bar:top {
+    top: 1px;
+}
+
+QTabWidget::tab-bar:bottom {
+    bottom: 1px;
+}
+
+QTabWidget::tab-bar:left {
+    right: 1px;
+}
+
+QTabWidget::tab-bar:right {
+    left: 1px;
+}
+
+QTabBar::tab {
+    border: 1px solid #6d95aa;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+QTabBar::tab:selected {
+    background: window;
+}
+
+QTabBar::tab:!selected {
+    background: #d1edff;	
+}
+
+QTabBar::tab:!selected:hover {
+    background: #6d95aa;
+}
+
+QTabBar::tab:top:!selected {
+    margin-top: 3px;
+}
+
+QTabBar::tab:bottom:!selected {
+    margin-bottom: 3px;
+}
+
+QTabBar::tab:top, QTabBar::tab:bottom {
+    min-width: 8ex;
+    margin-right: -1px;
+    padding: 5px 10px 5px 10px;
+}
+
+QTabBar::tab:top:selected {
+    border-bottom-color: #f0f0f0;
+}
+
+QTabBar::tab:bottom:selected {
+    border-top-color: none;
+}
+
+QTabBar::tab:top:last, QTabBar::tab:bottom:last,
+QTabBar::tab:top:only-one, QTabBar::tab:bottom:only-one {
+    margin-right: 0;
+}
+
+QTabBar::tab:left:!selected {
+    margin-right: 3px;
+}
+
+QTabBar::tab:right:!selected {
+    margin-left: 3px;
+}
+
+QTabBar::tab:left, QTabBar::tab:right {
+    min-height: 8ex;
+    margin-bottom: -1px;
+    padding: 10px 5px 10px 5px;
+}
+
+QTabBar::tab:left:selected {
+    border-left-color: none;
+}
+
+QTabBar::tab:right:selected {
+    border-right-color: none;
+}
+
+QTabBar::tab:left:last, QTabBar::tab:right:last,
+QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
+    margin-bottom: 0;
+}</string>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -3247,9 +3454,9 @@ Trace</string>
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>10</y>
-          <width>441</width>
-          <height>211</height>
+          <y>20</y>
+          <width>461</width>
+          <height>191</height>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="velocityDistributionlLayoutTab2"/>
@@ -3263,9 +3470,9 @@ Trace</string>
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>10</y>
-          <width>441</width>
-          <height>211</height>
+          <y>20</y>
+          <width>461</width>
+          <height>191</height>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="momentumDistributionlLayoutTab2"/>

@@ -57,6 +57,9 @@ void QBarDisplay::paint()
 
         for( int index=0 ; index<barDisplay->getSize() ; ++index )
         {
+            auto upperValue = QString::number(barDisplay->getUpperBox(index));
+            auto lowerValue = QString::number(barDisplay->getLowerBox(index));
+
             posx = index*barWidth;
 
             painter.setBrush(QBrush(boxStyle.cUpper));
@@ -64,22 +67,14 @@ void QBarDisplay::paint()
             percent =  static_cast<double>(barDisplay->getUpperBox(index))/max;
             value = static_cast<int>((height()/2.8)*percent);
             if( value>0 ) painter.drawRect(boxStyle.marginLeft+posx,height()/2-value,barWidth-1,value);
-            painter.drawText(boxStyle.marginLeft+posx+getCenteredNumberPosition(barDisplay->getUpperBox(index)),height()/2-value-5,QString::number(barDisplay->getUpperBox(index)));
+            painter.drawText(calculateCenterTextPosition(upperValue,boxStyle.marginLeft+posx,boxStyle.marginLeft+barWidth+posx),height()/2-value-5,upperValue);
 
             painter.setBrush(QBrush(boxStyle.cLower));
             painter.setPen(QPen(boxStyle.cLower));
             percent = static_cast<double>(barDisplay->getLowerBox(index))/max;
             value = static_cast<int>((height()/2.8)*percent);
             if( value>0 ) painter.drawRect(boxStyle.marginLeft+posx,height()/2,barWidth-1,value);
-            painter.drawText(boxStyle.marginLeft+posx+getCenteredNumberPosition(barDisplay->getLowerBox(index)),height()/2+value+17,QString::number(barDisplay->getLowerBox(index)));
+            painter.drawText(calculateCenterTextPosition(lowerValue,boxStyle.marginLeft+posx,boxStyle.marginLeft+barWidth+posx),height()/2+value+17,lowerValue);
         }
     }
-}
-
-int QBarDisplay::getCenteredNumberPosition( int number )
-{
-    QFontMetrics fm(parentWidget()->font());
-    int pixelsWide = fm.horizontalAdvance(QString::number(number));
-
-    return (barWidth - pixelsWide)/2;
 }

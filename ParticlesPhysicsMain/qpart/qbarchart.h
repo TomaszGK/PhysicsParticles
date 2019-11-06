@@ -120,16 +120,6 @@ private:
     void init() override;
 
     /**
-     * @brief Calculates text(label) center position between begin and end positions.
-     * @warning end>begin !
-     * @param text                 text (label)
-     * @param begin                begin position
-     * @param end                  end position
-     * @return calculated text center position.
-     */
-    int calculateCenterTextPosition( const QString& text , int begin , int end  );
-
-    /**
      * @brief Draws current bar value value.
      */
     void drawCurrentValue();

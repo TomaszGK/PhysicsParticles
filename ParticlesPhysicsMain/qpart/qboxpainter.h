@@ -123,6 +123,16 @@ protected:
      */
     int getStringWidthInPixels( const QString& name );
 
+    /**
+     * @brief Calculates text(label) center position between given begin and end positions.
+     * @warning end>begin !
+     * @param text                 text (label)
+     * @param begin                begin position
+     * @param end                  end position
+     * @return calculated text center position.
+     */
+    int calculateCenterTextPosition( const QString& text , int begin , int end  );
+
     /** box style parameters */
     QBoxStyle boxStyle;
 

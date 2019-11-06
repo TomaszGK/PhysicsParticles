@@ -9,7 +9,11 @@ MainWindow::MainWindow(QWidget *parent) :
     paintTimer(this), updateTimer(this), animationTimer(this)
 {
     ui->setupUi(this);
-    setWindowState(Qt::WindowMaximized);    
+    setWindowState(Qt::WindowMaximized);
+
+    //QFile File(":/css/css/qtabwidget.qss");
+    //File.open(QFile::ReadOnly);
+    //ui->tabWidget->setStyleSheet(QLatin1String(File.readAll()));
 
     physicsSimulation.resize( static_cast<size_t>(ui->tabWidget->count()) );
 

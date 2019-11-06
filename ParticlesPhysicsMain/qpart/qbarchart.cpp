@@ -10,7 +10,7 @@ QBarChart::QBarChart( double max,  ptrBarChart ptr, QWidget* parent )
 
     qLabel  = barChart->getLabel().c_str();
     qLabelX = barChart->getLabelX().c_str();
-    qLabelY = barChart->getLabelY().c_str();
+    qLabelY = barChart->getLabelY().c_str();   
 
     init();
 }
@@ -70,12 +70,6 @@ void QBarChart::init()
         connect( buttons[DataVisualization::LINES].get()  , &QPushButton::clicked , this, &QBarChart::onButtonClick );
         connect( resetButton.get()                        , &QPushButton::clicked , this, &QBarChart::onButtonClick );
     }
-}
-
-int QBarChart::calculateCenterTextPosition( const QString& text , int begin , int end )
-{
-    auto pixelsWide = QFontMetrics(parentWidget()->font()).horizontalAdvance(text);
-    return begin + (end-begin-pixelsWide)/2;
 }
 
 void QBarChart::paint()
