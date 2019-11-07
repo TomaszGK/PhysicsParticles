@@ -74,6 +74,9 @@ void QParticlesPhysicsManager::addQGauge( const std::string& name, QHBoxLayout* 
     qGauges[name].second->setValueRange(0,range);
     qGauges[name].first->addBackground(7);
 
+    // reset style sheet - needs default
+    qGauges[name].first->setStyleSheet("");
+
     layout->addWidget( qGauges[name].first.get() );
 }
 
