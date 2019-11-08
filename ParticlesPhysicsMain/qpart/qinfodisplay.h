@@ -8,7 +8,7 @@
 
 /**
  * @class QInfoDisplay
- * @brief Implements visualization of four percent values in QT box.
+ * @brief Implements visualization of several percent values in QT box.
  *
  * Paints four percent values in QT box on its sides.
  * @author Tomasz Gburek

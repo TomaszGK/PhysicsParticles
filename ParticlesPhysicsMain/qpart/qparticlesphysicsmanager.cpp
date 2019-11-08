@@ -82,7 +82,7 @@ void QParticlesPhysicsManager::addQGauge( const std::string& name, QHBoxLayout* 
 
 void QParticlesPhysicsManager::addQTrackingPlot2D( const std::string& name, QHBoxLayout *layout )
 {
-    qBoxPainters[name] = std::make_unique<QTrackingPlot2D>(particles,layout->parentWidget());    
+    qBoxPainters[name] = std::make_unique<QTrackingPlot2D>(particles,"Molecule Tracking Plot",layout->parentWidget());
     layout->addWidget( qBoxPainters[name].get() );
 }
 

@@ -29,7 +29,7 @@ public:
      * @param ptrParticles          shared pointer to constant vector of Particle objects
      * @param parent                ponter to parent widget
      */
-    explicit QTrackingPlot2D( cptrParticlesContainer ptrParticles, QWidget *parent = nullptr );
+    explicit QTrackingPlot2D( cptrParticlesContainer ptrParticles, QString _title = "", QWidget *parent = nullptr );
 
     /**
      * @brief Loads style type from xml file and /to complete/.
@@ -49,6 +49,9 @@ private:
 
     /** Holds constant iterator to tracking particle. */
     citerParticle trackingParticle;
+
+    /** Tracking plot title. */
+    QString title;
 
     /**
      * @brief Paints 2D plot.
