@@ -14,9 +14,10 @@ const LangManager::TMap<std::string> LangManager::translateMap<std::string> =
                       { "Average Velocity of Red Gas Particles" , "Średnia Prędkość Czerwonych Cząsteczek Gazu" },
                       { "Collisions" , "Ilość Kolizji" },
                       { "Energy of Particle Hits" , "Energia Uderzeń Cząstek" },
-                      { "Velocity Distribution", "Rozkład Prędkości"},
-                      { "Momentum Distribution", "Rozkład Pędu"},
-                      { "Pressure", "Ciśnienie"},
+                      { "Velocity Distribution", "Rozkład Prędkości" },
+                      { "Momentum Distribution", "Rozkład Pędu" },
+                      { "Pressure", "Ciśnienie" },
+                      { "Molecule Tracking Plot", "Wykres Śladu Molekuły" }
                     }
    },
    { Language::ENG ,

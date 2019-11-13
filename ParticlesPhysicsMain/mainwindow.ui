@@ -2338,7 +2338,7 @@ margin-top: 0.5em;</string>
        <rect>
         <x>40</x>
         <y>790</y>
-        <width>401</width>
+        <width>461</width>
         <height>111</height>
        </rect>
       </property>
@@ -2359,8 +2359,8 @@ margin-top: 0.5em;</string>
        </property>
        <property name="geometry">
         <rect>
-         <x>320</x>
-         <y>35</y>
+         <x>380</x>
+         <y>40</y>
          <width>61</width>
          <height>51</height>
         </rect>
@@ -2387,8 +2387,8 @@ margin-top: 0.5em;</string>
       <widget class="QPushButton" name="pauseButtonTab4">
        <property name="geometry">
         <rect>
-         <x>250</x>
-         <y>35</y>
+         <x>310</x>
+         <y>40</y>
          <width>61</width>
          <height>51</height>
         </rect>
@@ -2415,9 +2415,9 @@ margin-top: 0.5em;</string>
       <widget class="QPushButton" name="clearTrackMoleculePushButtonTab4">
        <property name="geometry">
         <rect>
-         <x>110</x>
-         <y>35</y>
-         <width>81</width>
+         <x>140</x>
+         <y>40</y>
+         <width>111</width>
          <height>51</height>
         </rect>
        </property>
@@ -2438,8 +2438,8 @@ Trace</string>
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>35</y>
-         <width>81</width>
+         <y>40</y>
+         <width>111</width>
          <height>51</height>
         </rect>
        </property>
@@ -3407,6 +3407,11 @@ Trace</string>
         <height>21</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Particle Color</string>
       </property>
@@ -3422,6 +3427,11 @@ Trace</string>
         <width>131</width>
         <height>21</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Velocity Color</string>
