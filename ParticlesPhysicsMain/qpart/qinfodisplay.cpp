@@ -31,10 +31,12 @@ void QInfoDisplay::paint()
     QPolygon poly;
     int xcap {0} , ycap {0};
 
+    painter.setPen(QColor(90, 141, 185));
+    painter.setBrush(QColor(113, 161, 215));
+
     xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlaneSide::UP]*0.01*0.5);
     ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlaneSide::UP]*0.01*0.5);
 
-    painter.setBrush(QBrush(QColor(113, 161, 215)));
     poly << QPoint(boxStyle.marginLeft,boxStyle.marginTop)
          << QPoint(boxStyle.marginLeft+xcap, boxStyle.marginTop+ycap)
          << QPoint(width()-boxStyle.marginRight-xcap, boxStyle.marginTop+ycap)
@@ -46,7 +48,6 @@ void QInfoDisplay::paint()
     xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlaneSide::DOWN]*0.01*0.5);
     ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlaneSide::DOWN]*0.01*0.5);
 
-    painter.setBrush(QBrush(QColor(113, 161, 215)));
     poly << QPoint(boxStyle.marginLeft,height()-boxStyle.marginTop)
          << QPoint(boxStyle.marginLeft+xcap, height()-boxStyle.marginTop-ycap)
          << QPoint(width()-boxStyle.marginRight-xcap, height()-boxStyle.marginTop-ycap)
@@ -58,7 +59,6 @@ void QInfoDisplay::paint()
     xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlaneSide::LEFT]*0.01*0.5);
     ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlaneSide::LEFT]*0.01*0.5);
 
-    painter.setBrush(QBrush(QColor(113, 161, 215)));
     poly << QPoint(boxStyle.marginLeft,boxStyle.marginTop)
          << QPoint(boxStyle.marginLeft+xcap, boxStyle.marginTop+ycap)
          << QPoint(boxStyle.marginLeft+xcap, height()-boxStyle.marginTop-ycap)
@@ -70,7 +70,6 @@ void QInfoDisplay::paint()
     xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlaneSide::RIGHT]*0.01*0.5);
     ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlaneSide::RIGHT]*0.01*0.5);
 
-    painter.setBrush(QBrush(QColor(113, 161, 215)));
     poly << QPoint(width()-boxStyle.marginRight,boxStyle.marginTop)
          << QPoint(width()-boxStyle.marginRight-xcap, boxStyle.marginTop+ycap)
          << QPoint(width()-boxStyle.marginRight-xcap, height()-boxStyle.marginTop-ycap)
@@ -79,8 +78,7 @@ void QInfoDisplay::paint()
     painter.drawPolygon(poly);
     poly.clear();
 
-    painter.setBrush(QBrush(QColor(130, 115, 215)));
-    painter.setPen(QPen(boxStyle.cLabelColor));
+    painter.setPen(boxStyle.cLabelColor);
     painter.drawText(2*boxStyle.marginLeft,height()/2+5,QString::number(value[PlaneSide::LEFT])+" %");
     painter.drawText(width()-2*boxStyle.marginRight-textWidth[PlaneSide::RIGHT],height()/2+5,QString::number(value[PlaneSide::RIGHT])+" %");
     painter.drawText(boxStyle.marginLeft + (width()-(boxStyle.marginLeft+boxStyle.marginRight)-textWidth[PlaneSide::UP])/2,2*boxStyle.marginTop+20,QString::number(value[PlaneSide::UP])+" %");

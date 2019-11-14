@@ -365,17 +365,19 @@ void MainWindow::on_temperatureDownSliderTab2_valueChanged( int value )
 void MainWindow::on_temperatureLeftSliderTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setSideTemperatureInPercent(PlaneSide::LEFT,value);
-    physicsSimulation[3]->setDisplay("infoDisplayTab2",PlaneSide::LEFT,value);
+    physicsSimulation[3]->setDisplay("infoDisplayTab2",PlaneSide::LEFT,value);    
 }
 
 void MainWindow::on_horizontalForceTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setHorizontalForceInPercent(value);
+    ui->horizontalForceSizeLabelTab2->setText(QString::number(value));
 }
 
 void MainWindow::on_verticalForceTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setVerticalForceInPercent(value);
+    ui->verticalForceSizeLabelTab2->setText(QString::number(value));
 }
 
 void MainWindow::on_runButtonTab2_clicked()
@@ -437,6 +439,7 @@ void MainWindow::on_visualizationTypeVelocityRadioButtonTab2_toggled( bool check
 void MainWindow::on_attractionForceTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setAttractionForceInPercent( value );
+    ui->atractionForceSizeLabelTab2->setText(QString::number(value));
 }
 
 void MainWindow::on_runButtonTab4_clicked()
