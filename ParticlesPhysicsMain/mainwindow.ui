@@ -700,6 +700,9 @@ QGroupBox::title {
         <property name="value">
          <number>50</number>
         </property>
+        <property name="tracking">
+         <bool>true</bool>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -2610,68 +2613,6 @@ Trace</string>
       </property>
       <layout class="QHBoxLayout" name="particlesFrameTab2"/>
      </widget>
-     <widget class="QPushButton" name="runButtonTab2">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>1260</x>
-        <y>640</y>
-        <width>61</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="graphics.qrc">
-        <normaloff>:/new/icons/images/play.png</normaloff>:/new/icons/images/play.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pauseButtonTab2">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>1200</x>
-        <y>640</y>
-        <width>61</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="graphics.qrc">
-        <normaloff>:/new/icons/images/stop.png</normaloff>:/new/icons/images/stop.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-     </widget>
      <widget class="QGroupBox" name="forceGroupBoxTab2">
       <property name="geometry">
        <rect>
@@ -3180,7 +3121,7 @@ margin-top: 0.5em;</string>
        <string>Particles</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
       <property name="flat">
        <bool>false</bool>
@@ -3188,156 +3129,11 @@ margin-top: 0.5em;</string>
       <property name="checkable">
        <bool>false</bool>
       </property>
-      <widget class="QSlider" name="blueParticlesSliderTab2">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>50</y>
-         <width>271</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>300</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QSlider" name="redParticlesSliderTab2">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>130</y>
-         <width>271</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>300</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QSlider" name="greenParticlesSliderTab2">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>210</y>
-         <width>271</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="maximum">
-        <number>300</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QSlider" name="blueParticlesSizeSliderTab2">
-       <property name="geometry">
-        <rect>
-         <x>410</x>
-         <y>50</y>
-         <width>141</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QSlider" name="redParticlesSizeSliderTab2">
-       <property name="geometry">
-        <rect>
-         <x>410</x>
-         <y>130</y>
-         <width>141</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QSlider" name="greenParticlesSizeSliderTab2">
-       <property name="geometry">
-        <rect>
-         <x>410</x>
-         <y>210</y>
-         <width>141</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="minimum">
-        <number>0</number>
-       </property>
-       <property name="maximum">
-        <number>100</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="particlesNumberLabellTab2">
-       <property name="geometry">
-        <rect>
-         <x>210</x>
-         <y>20</y>
-         <width>91</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Amount</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="particlesSizeLabellTab2">
-       <property name="geometry">
-        <rect>
-         <x>470</x>
-         <y>20</y>
-         <width>81</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Size</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="particlesType1LabellTab2">
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>50</y>
+         <y>60</y>
          <width>61</width>
          <height>31</height>
         </rect>
@@ -3357,7 +3153,7 @@ margin-top: 0.5em;</string>
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>130</y>
+         <y>120</y>
          <width>61</width>
          <height>31</height>
         </rect>
@@ -3377,7 +3173,7 @@ margin-top: 0.5em;</string>
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>210</y>
+         <y>180</y>
          <width>61</width>
          <height>31</height>
         </rect>
@@ -3393,175 +3189,328 @@ margin-top: 0.5em;</string>
         <string>GAS III</string>
        </property>
       </widget>
-      <widget class="QLabel" name="particlesNumberGas1LabellTab2">
+      <widget class="QGroupBox" name="amountGroupBoxTab2">
        <property name="geometry">
         <rect>
-         <x>230</x>
-         <y>70</y>
-         <width>31</width>
-         <height>31</height>
+         <x>90</x>
+         <y>30</y>
+         <width>281</width>
+         <height>221</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
+         <pointsize>12</pointsize>
         </font>
        </property>
-       <property name="text">
-        <string>50</string>
+       <property name="title">
+        <string>Amount</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <widget class="QSlider" name="blueParticlesSliderTab2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>30</y>
+          <width>241</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="maximum">
+         <number>300</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="particlesNumberGas1LabellTab2">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>55</y>
+          <width>41</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid gray;
+border-radius: 9px;
+margin-top: 0.5em;</string>
+        </property>
+        <property name="text">
+         <string>50</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QSlider" name="redParticlesSliderTab2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>90</y>
+          <width>241</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="maximum">
+         <number>300</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="particlesNumberGas2LabellTab2">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>115</y>
+          <width>41</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid gray;
+border-radius: 9px;
+margin-top: 0.5em;</string>
+        </property>
+        <property name="text">
+         <string>50</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QSlider" name="greenParticlesSliderTab2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>150</y>
+          <width>241</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="maximum">
+         <number>300</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="particlesNumberGas3LabellTab2">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>175</y>
+          <width>41</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid gray;
+border-radius: 9px;
+margin-top: 0.5em;</string>
+        </property>
+        <property name="text">
+         <string>50</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
       </widget>
-      <widget class="QLabel" name="particlesNumberGas2LabellTab2">
+      <widget class="QGroupBox" name="sizeGroupBoxTab2">
        <property name="geometry">
         <rect>
-         <x>230</x>
-         <y>150</y>
-         <width>31</width>
-         <height>31</height>
+         <x>380</x>
+         <y>30</y>
+         <width>181</width>
+         <height>221</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
+         <pointsize>12</pointsize>
         </font>
        </property>
-       <property name="text">
-        <string>50</string>
+       <property name="title">
+        <string>Size</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <widget class="QSlider" name="blueParticlesSizeSliderTab2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>30</y>
+          <width>141</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="particlesSizeGas1LabellTab2">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>55</y>
+          <width>41</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid gray;
+border-radius: 9px;
+margin-top: 0.5em;</string>
+        </property>
+        <property name="text">
+         <string>50</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QSlider" name="redParticlesSizeSliderTab2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>90</y>
+          <width>141</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="particlesSizeGas2LabellTab2">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>115</y>
+          <width>41</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid gray;
+border-radius: 9px;
+margin-top: 0.5em;</string>
+        </property>
+        <property name="text">
+         <string>50</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QSlider" name="greenParticlesSizeSliderTab2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>150</y>
+          <width>141</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QLabel" name="particlesSizeGas3LabellTab2">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>175</y>
+          <width>41</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid gray;
+border-radius: 9px;
+margin-top: 0.5em;</string>
+        </property>
+        <property name="text">
+         <string>50</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
       </widget>
-      <widget class="QLabel" name="particlesNumberGas3LabellTab2">
-       <property name="geometry">
-        <rect>
-         <x>230</x>
-         <y>230</y>
-         <width>31</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>50</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="particlesSizeGas1LabellTab2">
-       <property name="geometry">
-        <rect>
-         <x>470</x>
-         <y>70</y>
-         <width>31</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>50</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="particlesSizeGas2LabellTab2">
-       <property name="geometry">
-        <rect>
-         <x>470</x>
-         <y>150</y>
-         <width>31</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>50</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="particlesSizeGas3LabellTab2">
-       <property name="geometry">
-        <rect>
-         <x>470</x>
-         <y>230</y>
-         <width>31</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>50</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QRadioButton" name="visualizationTypeParticleRadioButtonTab2">
-      <property name="geometry">
-       <rect>
-        <x>1210</x>
-        <y>730</y>
-        <width>131</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Particle Color</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QRadioButton" name="visualizationTypeVelocityRadioButtonTab2">
-      <property name="geometry">
-       <rect>
-        <x>1210</x>
-        <y>760</y>
-        <width>131</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Velocity Color</string>
-      </property>
-      <property name="checked">
-       <bool>false</bool>
-      </property>
      </widget>
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="geometry">
        <rect>
-        <x>1360</x>
+        <x>1390</x>
         <y>640</y>
-        <width>481</width>
+        <width>451</width>
         <height>261</height>
        </rect>
       </property>
@@ -3685,7 +3634,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
          <rect>
           <x>10</x>
           <y>20</y>
-          <width>461</width>
+          <width>431</width>
           <height>191</height>
          </rect>
         </property>
@@ -3701,7 +3650,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
          <rect>
           <x>10</x>
           <y>20</y>
-          <width>461</width>
+          <width>431</width>
           <height>191</height>
          </rect>
         </property>
@@ -3709,41 +3658,171 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
        </widget>
       </widget>
      </widget>
-     <widget class="QPushButton" name="resetPushButton_tab2">
-      <property name="geometry">
-       <rect>
-        <x>1280</x>
-        <y>840</y>
-        <width>71</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>RESET</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="randomPushButton_tab2">
+     <widget class="QGroupBox" name="controlGroupBoxTab2">
       <property name="geometry">
        <rect>
         <x>1200</x>
-        <y>840</y>
-        <width>71</width>
-        <height>61</height>
+        <y>630</y>
+        <width>181</width>
+        <height>271</height>
        </rect>
       </property>
-      <property name="text">
-       <string/>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
       </property>
-      <property name="icon">
-       <iconset resource="graphics.qrc">
-        <normaloff>:/new/icons/images/random.png</normaloff>:/new/icons/images/random.png</iconset>
+      <property name="title">
+       <string>Control</string>
       </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
+      <widget class="QPushButton" name="pauseButtonTab2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>40</y>
+         <width>61</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="graphics.qrc">
+         <normaloff>:/new/icons/images/stop.png</normaloff>:/new/icons/images/stop.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="runButtonTab2">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>40</y>
+         <width>61</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="graphics.qrc">
+         <normaloff>:/new/icons/images/play.png</normaloff>:/new/icons/images/play.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="visualizationTypeParticleRadioButtonTab2">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>120</y>
+         <width>131</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Particle Color</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="visualizationTypeVelocityRadioButtonTab2">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>140</y>
+         <width>131</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Velocity Color</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="randomPushButton_tab2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>190</y>
+         <width>71</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="graphics.qrc">
+         <normaloff>:/new/icons/images/random.png</normaloff>:/new/icons/images/random.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>50</width>
+         <height>50</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="resetPushButton_tab2">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>190</y>
+         <width>71</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>RESET</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>

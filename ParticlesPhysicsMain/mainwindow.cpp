@@ -3,6 +3,7 @@
 #include <thread>
 #include <QRandomGenerator>
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -398,36 +399,48 @@ void MainWindow::on_blueParticlesSliderTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setParticlesInPlane(ParticleType::GAS1,value);
     ui->particlesNumberGas1LabellTab2->setText(QString::number(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS1)));
+    double posx = static_cast<double>(ui->blueParticlesSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->blueParticlesSliderTab2->maximum()-ui->blueParticlesSliderTab2->minimum())));
+    ui->particlesNumberGas1LabellTab2->move(ui->blueParticlesSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesNumberGas1LabellTab2->pos().y());
 }
 
 void MainWindow::on_redParticlesSliderTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setParticlesInPlane(ParticleType::GAS2,value);
     ui->particlesNumberGas2LabellTab2->setText(QString::number(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS2)));
+    double posx = static_cast<double>(ui->redParticlesSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->redParticlesSliderTab2->maximum()-ui->redParticlesSliderTab2->minimum())));
+    ui->particlesNumberGas2LabellTab2->move(ui->redParticlesSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesNumberGas2LabellTab2->pos().y());
 }
 
 void MainWindow::on_greenParticlesSliderTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setParticlesInPlane(ParticleType::GAS3,value);
     ui->particlesNumberGas3LabellTab2->setText(QString::number(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS3)));
+    double posx = static_cast<double>(ui->greenParticlesSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->greenParticlesSliderTab2->maximum()-ui->greenParticlesSliderTab2->minimum())));
+    ui->particlesNumberGas3LabellTab2->move(ui->greenParticlesSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesNumberGas3LabellTab2->pos().y());
 }
 
 void MainWindow::on_blueParticlesSizeSliderTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setSizeOfParticlesInPercent(ParticleType::GAS1,value);
     ui->particlesSizeGas1LabellTab2->setText(QString::number(physicsSimulation[3]->getSizeOfParticle(ParticleType::GAS1)));
+    double posx = static_cast<double>(ui->blueParticlesSizeSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->blueParticlesSizeSliderTab2->maximum()-ui->blueParticlesSizeSliderTab2->minimum())));
+    ui->particlesSizeGas1LabellTab2->move(ui->blueParticlesSizeSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesSizeGas1LabellTab2->pos().y());
 }
 
 void MainWindow::on_redParticlesSizeSliderTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setSizeOfParticlesInPercent(ParticleType::GAS2,value);
     ui->particlesSizeGas2LabellTab2->setText(QString::number(physicsSimulation[3]->getSizeOfParticle(ParticleType::GAS2)));
+    double posx = static_cast<double>(ui->redParticlesSizeSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->redParticlesSizeSliderTab2->maximum()-ui->redParticlesSizeSliderTab2->minimum())));
+    ui->particlesSizeGas2LabellTab2->move(ui->redParticlesSizeSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesSizeGas2LabellTab2->pos().y());
 }
 
 void MainWindow::on_greenParticlesSizeSliderTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setSizeOfParticlesInPercent(ParticleType::GAS3,value);
     ui->particlesSizeGas3LabellTab2->setText(QString::number(physicsSimulation[3]->getSizeOfParticle(ParticleType::GAS3)));
+    double posx = static_cast<double>(ui->greenParticlesSizeSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->greenParticlesSizeSliderTab2->maximum()-ui->greenParticlesSizeSliderTab2->minimum())));
+    ui->particlesSizeGas3LabellTab2->move(ui->greenParticlesSizeSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesSizeGas3LabellTab2->pos().y());
 }
 
 void MainWindow::on_visualizationTypeVelocityRadioButtonTab2_toggled( bool checked )
