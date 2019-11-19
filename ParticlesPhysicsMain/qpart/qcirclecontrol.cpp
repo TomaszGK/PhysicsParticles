@@ -37,6 +37,22 @@ void QCircleControl::paint()
 
     if( smallCircleHooked || smallCircleHovered ) currentSmallCircleColor = boxStyle.cSmallCircleHookedColor;
 
+    if( indicatorPos!=origin )
+    {
+        int angle {0};
+        auto diff = 2*(origin-indicatorPos).manhattanLength();
+
+        if( diff>255 ) diff=255;
+
+        if( indicatorPos.x()>origin.x() && indicatorPos.y()<origin.y() ) angle = 0;
+        else if( indicatorPos.x()>origin.x() && indicatorPos.y()>origin.y() ) angle = 270;
+        else if( indicatorPos.x()<origin.x() && indicatorPos.y()>origin.y() ) angle = 180;
+        else if( indicatorPos.x()<origin.x() && indicatorPos.y()<origin.y() ) angle = 90;
+
+        painter.setBrush(QColor(diff,200,255-diff));
+        painter.drawPie(origin.x()-bigCircleSize,origin.y()-bigCircleSize,2*bigCircleSize,2*bigCircleSize,angle*16,90*16);
+    }
+
     painter.setBrush(Qt::NoBrush);
     painter.setPen(QPen(QBrush(boxStyle.cBigCirclePenColor),2,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
     painter.drawEllipse( origin, bigCircleSize, bigCircleSize );
@@ -59,6 +75,7 @@ void QCircleControl::paint()
         indicatorPos = origin;
         smallCircleHovered = false;
     }
+
 }
 
 void QCircleControl::paintMarks()
