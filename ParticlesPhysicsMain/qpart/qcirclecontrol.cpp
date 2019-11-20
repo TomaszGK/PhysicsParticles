@@ -34,22 +34,21 @@ void QCircleControl::paint()
 {
     QPoint cursorPos = mapFromGlobal(QCursor::pos());
     QColor currentSmallCircleColor {boxStyle.cSmallCircleColor};
+    double distance {0};
 
     if( smallCircleHooked || smallCircleHovered ) currentSmallCircleColor = boxStyle.cSmallCircleHookedColor;
 
     if( indicatorPos!=origin )
     {
         int angle {0};
-        auto diff = 2*(origin-indicatorPos).manhattanLength();
-
-        if( diff>255 ) diff=255;
+        distance = sqrt( pow(cursorPos.x()-origin.x(),2) + pow(cursorPos.y()-origin.y(),2) );
 
         if( indicatorPos.x()>origin.x() && indicatorPos.y()<origin.y() ) angle = 0;
         else if( indicatorPos.x()>origin.x() && indicatorPos.y()>origin.y() ) angle = 270;
         else if( indicatorPos.x()<origin.x() && indicatorPos.y()>origin.y() ) angle = 180;
         else if( indicatorPos.x()<origin.x() && indicatorPos.y()<origin.y() ) angle = 90;
 
-        painter.setBrush(QColor(diff,200,255-diff));
+        painter.setBrush(QColor(static_cast<int>(distance)%255,200,255-(static_cast<int>(distance)%255)));
         painter.drawPie(origin.x()-bigCircleSize,origin.y()-bigCircleSize,2*bigCircleSize,2*bigCircleSize,angle*16,90*16);
     }
 
@@ -65,9 +64,17 @@ void QCircleControl::paint()
     painter.drawEllipse( indicatorPos, smallCircleSize, smallCircleSize );
 
     if( isCursorHookToSmallCircle(cursorPos) )
-    {
-        double distance = sqrt( pow(cursorPos.x()-origin.x(),2) + pow(cursorPos.y()-origin.y(),2) );
-        if( distance < static_cast<double>(bigCircleSize - smallCircleSize) ) indicatorPos = mapFromGlobal(QCursor::pos());
+    {        
+        if( distance < static_cast<double>(bigCircleSize - smallCircleSize) ) indicatorPos = cursorPos;
+        else
+        {
+            auto vec = cursorPos-origin;
+            vect2D limit {static_cast<double>(vec.x()),static_cast<double>(vec.y())};
+            limit.setLength(bigCircleSize - smallCircleSize);
+            vec.setX( origin.x() + static_cast<int>(limit.x) );
+            vec.setY( origin.y() + static_cast<int>(limit.y) );
+            indicatorPos = vec;
+        }
     }
 
     if( !smallCircleHooked && indicatorPos!=origin )
