@@ -44,7 +44,11 @@ bool Histogram1D::fill( const double& value )
         }
 
         binsIndex.pop_front();
-    }   
+    }
+
+    average = std::accumulate(bins.cbegin(),bins.cend(),0.0)/bins.size();
+    deviation = std::accumulate(bins.cbegin(),bins.cend(),0.0,[this](int a,int b){return a+(this->average-b)*(this->average-b);});
+    deviation = sqrt(deviation/bins.size());
 
     return true;
 }

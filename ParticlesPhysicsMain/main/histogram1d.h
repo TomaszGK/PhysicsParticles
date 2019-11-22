@@ -87,9 +87,21 @@ public:
 
     /**
      * @brief Gets index of marking bin.
-     * @returnindex of marking bin
+     * @return index of marking bin
      */
     int getMarkingBin() const noexcept { return markingBin; }
+
+    /**
+     * @brief Gets average bin value.
+     * @return average
+     */
+    double getAverage() const noexcept { return average; }
+
+    /**
+     * @brief Gets bins standard deviation value.
+     * @return standard deviation
+     */
+    double getDeviation() const noexcept { return deviation; }
 
     /**
      * @brief Marks a certain bin.
@@ -99,16 +111,40 @@ public:
 
 private:
 
-    std::vector<int>   bins      ; /**< stores histogram values, having form of equal intervals */
-    std::deque<size_t> binsIndex ; /**< contains bin indexes of last added values */
+    /**< stores histogram values, having form of equal intervals */
+    std::vector<int>   bins;
 
-    int         max           {0}      ; /**< maximum value stored in bins */
-    int         min           {0}      ; /**< minimum value stored in bins */
-    size_t      fadeThreshold {300000} ; /**< threshold describes maximum binsIndex size, crossing it means that oldest values are being removed from bins */
-    double      begin         {0.0}    ; /**< begin position of first bin */
-    double      end           {10.0}   ; /**< end position of last bin */
-    double      binsize       {1.0}    ; /**< size of bins (intervals) */
-    int         markingBin    {-1}     ; /**< index of marking (selecting) bin */
-    std::string label         {""}     ; /**< histogram name */
+    /**< contains bin indexes of last added values */
+    std::deque<size_t> binsIndex;
+
+    /**< maximum value stored in bins */
+    int max {0};
+
+    /**< minimum value stored in bins */
+    int min {0};
+
+    /**< threshold describes maximum binsIndex size, crossing it means that oldest values are being removed from bins */
+    size_t fadeThreshold {300000};
+
+    /**< begin position of first bin */
+    double begin {0.0};
+
+    /**< end position of last bin */
+    double end {10.0};
+
+    /**< size of bins (intervals) */
+    double binsize {1.0};
+
+    /**< index of marking (selecting) bin */
+    int markingBin {-1};
+
+    /**< histogram name */
+    std::string label {""};
+
+    /**< bins average value */
+    double average {0.0};
+
+    /**< bins standard deviation */
+    double deviation {0.0};
 
 };
