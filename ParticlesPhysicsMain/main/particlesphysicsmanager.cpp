@@ -72,23 +72,20 @@ void ParticlesPhysicsManager::createParticles()
 {
     switch( simulationType )
     {
-        case SimulationType::BASIC:
-         prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
+        case SimulationType::BASIC:         
          visualizationType = VisualizationType::VELOCITY;
          addParticles(ParticleType::NORMAL,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::NORMAL],simulationInfo.particleSizeInit[ParticleType::NORMAL]);
          planeArea->getPlainDivider().setDividerGap(100);
         break;
 
-        case SimulationType::DIFFUSION:
-         prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
+        case SimulationType::DIFFUSION:         
          visualizationType = VisualizationType::PARTICLE;
          addParticles(ParticleType::BLUE,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::BLUE],simulationInfo.particleSizeInit[ParticleType::BLUE]);
          addParticles(ParticleType::RED,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::RED],simulationInfo.particleSizeInit[ParticleType::RED]);
          planeArea->getPlainDivider().setDividerGap(0);
         break;
 
-        case SimulationType::BROWNIAN_MOTION:
-         prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
+        case SimulationType::BROWNIAN_MOTION:         
          visualizationType = VisualizationType::PARTICLE;
          physicsInfo.temperature = 1.0;
          addParticles(ParticleType::MACROSCOPIC,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MACROSCOPIC],simulationInfo.particleSizeInit[ParticleType::MACROSCOPIC]);
@@ -96,8 +93,7 @@ void ParticlesPhysicsManager::createParticles()
          planeArea->getPlainDivider().setDividerGap(100);
         break;
 
-        case SimulationType::SANDBOX:
-         prtCalculateNextPositions = &ParticlesPhysicsManager::calculateNextPositions;
+        case SimulationType::SANDBOX:         
          visualizationType = VisualizationType::PARTICLE;
          addParticles(ParticleType::GAS1,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::GAS1],simulationInfo.particleSize[ParticleType::GAS1]);
          addParticles(ParticleType::GAS2,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::GAS2],simulationInfo.particleSize[ParticleType::GAS2]);
@@ -440,14 +436,13 @@ iterCluster ParticlesPhysicsManager::getClusterIter( const size_t& posx, const s
     return clusterIters.at(posx).at(posy);
 }
 
-void ParticlesPhysicsManager::calculateNextPositions()
+void ParticlesPhysicsManager::update()
 {
     calculationPeriod = std::chrono::duration_cast<std::chrono::microseconds>(HRClock::now() - calculationStart).count()*0.001;
     calculationStart = HRClock::now();
 
-    timeContribution = calculationPeriod<=simulationInfo.maxTimeContribution ? calculationPeriod : simulationInfo.maxTimeContribution;
+    timeContribution = calculationPeriod<simulationInfo.maxTimeContribution ? calculationPeriod : simulationInfo.maxTimeContribution;
 
-    int numOfCollision {0};
     double velocitySum {0};
     double kineticEnergy {0};
     double velocity {0};
@@ -471,7 +466,7 @@ void ParticlesPhysicsManager::calculateNextPositions()
             kineticEnergy = handleParticleCollisionWithPlaneBoundries(particle);
             if( kineticEnergy>0 )
             {
-                ++numOfCollision;
+                ++physicsInfo.numOfCollision;
                 physicsInfo.kineticEnergySum += kineticEnergy;
             }
         }
@@ -493,7 +488,7 @@ void ParticlesPhysicsManager::calculateNextPositions()
 
         if( particle->particleType == ParticleType::NORMAL )
         {
-            velocitySum  += velocity;
+            velocitySum += velocity;
         }
         else if( particle->particleType == ParticleType::BLUE )
         {
@@ -504,9 +499,7 @@ void ParticlesPhysicsManager::calculateNextPositions()
             velocityRedSum += velocity;
         }
 
-    }    
-
-    physicsInfo.numOfCollision += numOfCollision;
+    }        
 
     if( simulationType == SimulationType::BASIC )
     {
@@ -537,7 +530,7 @@ void ParticlesPhysicsManager::calculateNextPositions()
 
 }
 
-void ParticlesPhysicsManager::calculateNextPositionsLoop()
+void ParticlesPhysicsManager::mainLoop()
 {
     while( calculationState.load() != ThreadCalculationState::END )
     {
@@ -546,7 +539,7 @@ void ParticlesPhysicsManager::calculateNextPositionsLoop()
             try
             {
                 calculateNextPositionFlag.store(true);
-                (this->*prtCalculateNextPositions)();
+                update();
                 calculateNextPositionFlag.store(false);
             }
             catch( const std::exception& ex )

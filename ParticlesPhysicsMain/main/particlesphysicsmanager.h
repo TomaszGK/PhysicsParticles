@@ -64,7 +64,7 @@ public:
     {
         calculationState = ThreadCalculationState::RUNNING;
         calculationStart = HRClock::now();
-        return std::thread( &ParticlesPhysicsManager::calculateNextPositionsLoop , this );
+        return std::thread( &ParticlesPhysicsManager::mainLoop , this );
     }
 
     /**
@@ -513,9 +513,6 @@ protected:
     /** Calculation state */
     std::atomic<ThreadCalculationState> calculationState { ThreadCalculationState::END };
 
-    /** Pointer to calculation function assigned to a given simulation state */
-    void (ParticlesPhysicsManager::*prtCalculateNextPositions)() {nullptr};
-
     /** @brief Gets cluster iterator
      *
      * Gets cluster iterator from a given position (x,y).
@@ -526,14 +523,14 @@ protected:
      */
     iterCluster getClusterIter( const size_t& posx , const size_t& posy );
 
-    /** Caluclates next particles positions */
-    void calculateNextPositions();
+    /** Updates particles positions */
+    void update();
 
-    /** Calls calculateNextPositions in while() loop
+    /** Calls update in while() loop
      *
      * The following loop is running in separate thread.
      */
-    void calculateNextPositionsLoop();
+    void mainLoop();
 
     /** Gets random color
      * @return random RGB color

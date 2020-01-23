@@ -37,6 +37,7 @@ INCLUDEPATH += \
 
 SOURCES += \
     main.cpp \
+    main/simulationanalyzer.cpp \
     mainwindow.cpp \
     extern/qcgaugewidget.cpp \
     qpart/qboxstyle.cpp \
@@ -64,6 +65,7 @@ SOURCES += \
 
    
 HEADERS += \
+    main/simulationanalyzer.h \
     mainwindow.h \
     extern/random.hpp \
     extern/qcgaugewidget.h \
