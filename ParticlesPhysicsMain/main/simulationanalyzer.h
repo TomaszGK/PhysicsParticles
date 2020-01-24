@@ -1,6 +1,10 @@
 #pragma once
 
 #include "definitions.h"
+#include "particle.h"
+#include "histogram1d.h"
+#include "barchart.h"
+#include "bardisplay.h"
 
 /** @file
  * @brief Class @ref SimulationAnalyzer
@@ -23,16 +27,33 @@ public:
     /**
      * @brief Default Constructor
      *
+     * @param _ptrParticles          shared pointer to constant vector of Particle objects
      */
-    SimulationAnalyzer() = default;
+    SimulationAnalyzer( cptrParticlesContainer _ptrParticles );
 
     void resetPhysicsData();
+
+    void update();
 
     /** Contains main simulation parameters */
     SimulationInfo simulationInfo;
 
     /** Contains global physics quantities related to states of particles */
     PhysicsInfo physicsInfo;
+
+    /** Contains bar charts */
+    std::map<std::string,ptrBarChart> barCharts;
+
+    /** Contains bar displays */
+    std::map<std::string,ptrBarDisplay> barDisplays;
+
+    /** Contains histograms 1D */
+    std::map<std::string,ptrHistogram1D> histograms1D;
+
+private:
+
+    /** Holds shared pointer to constant vector of Particle objects. */
+    cptrParticlesContainer ptrParticles;
 
 };
 

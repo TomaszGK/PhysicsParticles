@@ -106,25 +106,55 @@ public:
      */
     inline int getCurrentVelocityPercent() const { return static_cast<int>(100*velocity()/maxRapidity); }
 
+    /** stores particle saved positions */
+    std::list<vect2D> particlePositionsTracking;
 
-    std::list<vect2D> particlePositionsTracking; /**< stores particle saved positions */
+    /** maximum saved positions in particlePositionTracking list */
+    size_t maxPositionsInTracking {200};
 
-    size_t maxPositionsInTracking {200}; /**< maximum saved positions in particlePositionTracking list */
+    /** particle type @ref ParticleType */
+    ParticleType particleType {ParticleType::NORMAL};
 
-    ParticleType      particleType {ParticleType::NORMAL}             ; /**< particle type @ref ParticleType */
-    VisualizationType visualizationType {VisualizationType::VELOCITY} ; /**< visualization type @ref VisualizationType */
+    /** visualization type @ref VisualizationType */
+    VisualizationType visualizationType {VisualizationType::VELOCITY};
 
-    vect2D      position    {0.0,0.0} ; /**< particle position */
-    vect2D      velocity    {0.0,0.0} ; /**< particle velocity */
-    double      mass        {0}       ; /**< particle mass */
-    double      maxRapidity {1.0}     ; /**< particle maximum rapidity */
-    int         size        {0}       ; /**< particle size */
-    double      radius      {0}       ; /**< particle radius */
-    colorRGB    color                 ; /**< particle color */
-    iterCluster cluster               ; /**< particle cluster */
+    /** particle position */
+    vect2D position {0.0,0.0};
 
-    bool modifiedVelocity {false} ; /**< true if particle velocity have been modified */
-    bool isTracking       {false} ; /**< true if position of particle is tracking */
-    bool isMacroscopic    {false} ; /**< true if particle is macroscopic */
+    /** particle velocity */
+    vect2D velocity {0.0,0.0};
+
+    /** particle mass */
+    double mass {0};
+
+    /** particle maximum rapidity */
+    double maxRapidity {1.0};
+
+    /** particle size */
+    int size {0};
+
+    /** particle radius */
+    double radius {0};
+
+    /** particle color */
+    colorRGB color;
+
+    /** particle cluster */
+    iterCluster cluster;
+
+    /** sum of kinetic energies measured when particle was hit the plane */
+    mutable double sumPlaneHitKineticEnergy {0.0};
+
+    /** number of particle hits */
+    mutable int numberOfPlaneHits {0};
+
+    /** true if particle velocity have been modified */
+    bool modifiedVelocity {false};
+
+    /** true if position of particle is tracking */
+    bool isTracking {false};
+
+    /** true if particle is macroscopic */
+    bool isMacroscopic {false};
 
 };

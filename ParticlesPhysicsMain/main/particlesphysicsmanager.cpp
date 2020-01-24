@@ -842,7 +842,7 @@ void ParticlesPhysicsManager::handleParticleCollisionsAlternative( const iterPar
 double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const iterParticle &particle )
 {
     vect2D newPosition = particle->calculateNextPosition(timeContribution);
-    double kineticEnergy {0};
+    double kineticEnergy {0.0};
     double temperature {0};
 
     if( simulationType == SimulationType::BASIC )
@@ -853,8 +853,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     {
         if( newPosition.x < planeArea->getPlainDivider().getDividerPosX() ) temperature = physicsInfo.temperatureLeft;
         else temperature =  physicsInfo.temperatureRight;
-    }    
-
+    }
 
     if( newPosition.x - particle->radius <= planeArea->getXConstraint() )
     {
