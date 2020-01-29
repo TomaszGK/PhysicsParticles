@@ -26,19 +26,10 @@ public:
 
     /**
      * @brief Constructor
-     *
-     * @param ptrParticles          shared pointer to constant vector of Particle objects
-     * @param ptrPlaneArea          shared pointer to constant PlaneArea object
+     *    
      * @param parent                ponter to parent widget
      */
-    explicit QPainterManager( cptrParticlesContainer ptrParticles, std::shared_ptr<const PlaneArea> ptrPlaneArea, QWidget *parent = nullptr );
-
-    /**
-     * @brief Sets a new shared pointer to constant vector of Particle objects
-     *
-     * @param ptrParticles          shared pointer to constant vector of Particle objects
-     */
-    void setParticlesContainer( const cptrParticlesContainer& ptrParticles ) { particles = ptrParticles; }
+    explicit QPainterManager( QWidget *parent = nullptr );
 
     /**
      * @brief Sets vector paint flag.
@@ -92,14 +83,19 @@ private:
     std::pair<bool,std::vector<Particle>::const_iterator> displayVelocityVector;
 
     /** Holds shared pointer to constant vector of Particle objects. */
-    cptrParticlesContainer particles;
+    cptrParticlesContainer particles {nullptr};
 
     /** Holds shared pointer to constant PlaneArea object. */
-    std::shared_ptr<const PlaneArea> planeArea;   
+    cptrPlaneArea planeArea {nullptr};
 
-    bool toVectorPaint     {false} ; /**< vector paint flag */
-    bool toTrackingPaint   {false} ; /**< tracking paint flag */
-    bool toHandlePlaneHits {false} ; /**< plane hits paint flag */
+    /** vector paint flag */
+    bool toVectorPaint {false};
+
+    /** tracking paint flag */
+    bool toTrackingPaint {false};
+
+    /** plane hits paint flag */
+    bool toHandlePlaneHits {false};
 
     /**
      * @brief Paints the particle plane.

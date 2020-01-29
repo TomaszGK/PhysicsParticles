@@ -21,6 +21,7 @@ class Particle;
 class BarChart;
 class BarDisplay;
 class Histogram1D;
+class PlaneArea;
 
 /** @enum ThreadCalculationState
  *  @brief Representing calculation thread state
@@ -99,6 +100,8 @@ using vect2D = vector2D<double>;
 using coord2D = vector2D<int>;
 using iterParticle = std::vector<Particle>::iterator;
 using citerParticle = std::vector<Particle>::const_iterator;
+using cptrPlaneArea = std::shared_ptr<const PlaneArea>;
+using ptrPlaneArea = std::shared_ptr<PlaneArea>;
 using iterCluster = std::vector<Cluster>::iterator;
 using Random = effolkronium::random_static;
 using MapClustersIterCoordinates = std::map<coord2D,iterCluster>;

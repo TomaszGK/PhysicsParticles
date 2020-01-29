@@ -229,6 +229,6 @@ private:
     /**
      * @brief Creates particle paint manager.
      */
-    void createParticlesPaintManager();
+    void createParticlesPaintManager();   
 
 };

@@ -143,10 +143,10 @@ public:
     iterCluster cluster;
 
     /** sum of kinetic energies measured when particle was hit the plane */
-    mutable double sumPlaneHitKineticEnergy {0.0};
+    double sumPlaneHitKineticEnergy {0.0};
 
     /** number of particle hits */
-    mutable int numberOfPlaneHits {0};
+    int numberOfPlaneHits {0};
 
     /** true if particle velocity have been modified */
     bool modifiedVelocity {false};
@@ -155,6 +155,6 @@ public:
     bool isTracking {false};
 
     /** true if particle is macroscopic */
-    bool isMacroscopic {false};
+    bool isMacroscopic {false};  
 
 };

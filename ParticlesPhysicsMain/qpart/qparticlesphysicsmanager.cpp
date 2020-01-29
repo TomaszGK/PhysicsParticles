@@ -88,7 +88,7 @@ void QParticlesPhysicsManager::addQTrackingPlot2D( const std::string& name, QHBo
 
 void QParticlesPhysicsManager::createParticlesPaintManager()
 {
-    particlesPaintManager = std::make_unique<QPainterManager>(particles,planeArea);
+    particlesPaintManager = std::make_unique<QPainterManager>();
 }
 
 void QParticlesPhysicsManager::paintParticlesPlane()

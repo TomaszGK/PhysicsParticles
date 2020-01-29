@@ -25,13 +25,17 @@ class SimulationAnalyzer
 public:
 
     /**
-     * @brief Default Constructor
+     * @brief Constructor
      *
-     * @param _ptrParticles          shared pointer to constant vector of Particle objects
+     * @param _simulationType      simulation type
      */
-    SimulationAnalyzer( cptrParticlesContainer _ptrParticles );
+    SimulationAnalyzer( SimulationType _simulationType ) : simulationType { _simulationType } {}
 
     void resetPhysicsData();
+
+    void collect( iterParticle particle );
+
+    void collect( double kineticEnergy );
 
     void update();
 
@@ -52,8 +56,10 @@ public:
 
 private:
 
-    /** Holds shared pointer to constant vector of Particle objects. */
-    cptrParticlesContainer ptrParticles;
+    SimulationType simulationType;
+
+    std::map<ParticleType,double> velocitySum;
+    std::map<ParticleType,int> velocityCounter;
 
 };
 

@@ -17,15 +17,37 @@
  * @brief Manages particles.
  *
  * Creates of clusters and populates them with particles, calculates next particle positions,
- * handles particle collisions and check particle collisions with plane and divider.
+ * handles particle collisions and check if particles hit the plane or collide with its divider.
  * @author Tomasz Gburek
  * @date 2019
  */
 
 class ParticlesPhysicsManager
-{   
+{
 
 public:
+
+    class Locator
+    {
+    public:
+
+        static cptrParticlesContainer getConstParticles() { return cparticles; }
+
+        static cptrPlaneArea getConstPlaneArea() { return cplane; }
+
+        static void provide( ParticlesPhysicsManager *manager )
+        {
+            cparticles = manager->particles;
+            cplane = manager->planeArea;
+        }
+
+    private:
+
+        inline static cptrParticlesContainer cparticles {nullptr};
+
+        inline static cptrPlaneArea cplane {nullptr};
+
+    };
 
     /**
      * @brief Constructor
@@ -53,19 +75,6 @@ public:
 
     /** @brief Move assigment operator */
     ParticlesPhysicsManager& operator=( ParticlesPhysicsManager&& ) = delete;    
-
-    /**
-     * @brief Creates thread where new particle position are calculating in loop.
-     *
-     * Creates thread and calling function calculateNextPositionsLoop.
-     * @return created thread
-     */
-    std::thread calculateNextPositionsInThread()
-    {
-        calculationState = ThreadCalculationState::RUNNING;
-        calculationStart = HRClock::now();
-        return std::thread( &ParticlesPhysicsManager::mainLoop , this );
-    }
 
     /**
      * @brief Tries to set a new number of particles in the plane.
@@ -247,7 +256,7 @@ public:
         if( simulationType == SimulationType::BROWNIAN_MOTION )
         {
             particles->begin()->particlePositionsTracking.clear();
-        }
+        }        
     }
 
     /** Changes molecule velocity to zero. */
@@ -393,7 +402,7 @@ public:
         {
             calculationState.store(ThreadCalculationState::PAUSE);
             if( userCall ) pauseByUserFlag = true;
-            while( calculateNextPositionFlag.load() ){}; // wait for the end of calculation step
+            while( calculateNextPositionFlag.load() ); // wait for the end of calculation step
         }
     }
 
@@ -438,6 +447,20 @@ public:
      */
     bool isPauseByUser() const noexcept { return pauseByUserFlag; }
 
+    /**
+     * @brief Creates thread where new particle position are calculating in loop.
+     *
+     * Creates thread and calling function calculateNextPositionsLoop.
+     * @return created thread
+     */
+    std::thread calculateNextPositionsInThread()
+    {
+        calculationState = ThreadCalculationState::RUNNING;
+        Locator::provide(this);
+        calculationStart = HRClock::now();
+        return std::thread( &ParticlesPhysicsManager::mainLoop , this );
+    }
+
 protected:
 
     /** Simulation type */
@@ -456,7 +479,7 @@ protected:
     const PhysicsInfo physicsInfoInitial;
 
     /** Holds PlaneArea object storing basic information about particle plane */
-    std::shared_ptr<PlaneArea> planeArea;
+    ptrPlaneArea planeArea;
 
     /** @brief Points out to selected particle.
      *
@@ -526,9 +549,9 @@ protected:
     /** Updates particles positions */
     void update();
 
-    /** Calls update in while() loop
+    /** Calls updates in while() loop
      *
-     * The following loop is running in separate thread.
+     * The following loop should be running in separate thread.
      */
     void mainLoop();
 

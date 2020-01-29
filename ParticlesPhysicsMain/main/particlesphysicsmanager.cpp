@@ -19,7 +19,7 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
 
     createClusters();
 
-    createParticles();
+    createParticles();    
 
     selectedParticle = particles->begin();
 
@@ -33,6 +33,8 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
 
     histograms1D["velocityDistribution"] = std::make_shared<Histogram1D>( 80 , physicsInfo.minRapidity , physicsInfo.maxRapidity*2.0 , "Velocity Distribution" );
     histograms1D["momentumDistribution"] = std::make_shared<Histogram1D>( 80 , physicsInfo.minRapidity , physicsInfo.maxRapidity*2.0 , "Momentum Distribution" );
+
+    Locator::provide(this);
 }
 
 ParticlesPhysicsManager::~ParticlesPhysicsManager()
@@ -81,7 +83,7 @@ void ParticlesPhysicsManager::createParticles()
         case SimulationType::DIFFUSION:         
          visualizationType = VisualizationType::PARTICLE;
          addParticles(ParticleType::BLUE,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::BLUE],simulationInfo.particleSizeInit[ParticleType::BLUE]);
-         addParticles(ParticleType::RED,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::RED],simulationInfo.particleSizeInit[ParticleType::RED]);
+         addParticles(ParticleType::RED,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::RED],simulationInfo.particleSizeInit[ParticleType::RED]);         
          planeArea->getPlainDivider().setDividerGap(0);
         break;
 
@@ -484,8 +486,6 @@ void ParticlesPhysicsManager::update()
         histograms1D["velocityDistribution"]->fill(velocity);
         histograms1D["momentumDistribution"]->fill(velocity*particle->mass);
 
-        if( simulationType == SimulationType::BROWNIAN_MOTION ) histograms1D["velocityDistribution"]->markBin( getMoleculeVelocity() );
-
         if( particle->particleType == ParticleType::NORMAL )
         {
             velocitySum += velocity;
@@ -500,6 +500,8 @@ void ParticlesPhysicsManager::update()
         }
 
     }        
+
+    if( simulationType == SimulationType::BROWNIAN_MOTION ) histograms1D["velocityDistribution"]->markBin( getMoleculeVelocity() );
 
     if( simulationType == SimulationType::BASIC )
     {
@@ -517,7 +519,7 @@ void ParticlesPhysicsManager::update()
 
     if( std::chrono::duration_cast<Milliseconds>(HRClock::now() - time) > physicsInfo.timePeriod )
     {        
-        time = HRClock::now();
+        time = HRClock::now();       
         physicsInfo.kineticEnergySumTP = physicsInfo.kineticEnergySum/simulationInfo.calculationCount;
         physicsInfo.kineticEnergySum = 0;
         physicsInfo.numOfCollisionTP = static_cast<double>(physicsInfo.numOfCollision)/static_cast<double>(simulationInfo.calculationCount);
@@ -535,7 +537,7 @@ void ParticlesPhysicsManager::mainLoop()
     while( calculationState.load() != ThreadCalculationState::END )
     {
         if( calculationState.load() != ThreadCalculationState::PAUSE )
-        {            
+        {
             try
             {
                 calculateNextPositionFlag.store(true);
@@ -543,7 +545,7 @@ void ParticlesPhysicsManager::mainLoop()
                 calculateNextPositionFlag.store(false);
             }
             catch( const std::exception& ex )
-            {                
+            {
                 std::cout << "1: " << ex.what() << "\n";
                 correctParticlesInvalidParameters();
             }
@@ -557,7 +559,7 @@ void ParticlesPhysicsManager::mainLoop()
             }
 
         }
-    }    
+    }
 }
 
 void ParticlesPhysicsManager::updateBars()

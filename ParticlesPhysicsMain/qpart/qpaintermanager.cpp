@@ -1,10 +1,10 @@
 #include "qpaintermanager.h"
 
 #include <QTimer>
-#include "particle.h"
+#include "particlesphysicsmanager.h"
 
-QPainterManager::QPainterManager( cptrParticlesContainer ptrParticles, std::shared_ptr<const PlaneArea> ptrPlaneArea, QWidget* parent )
-: QBoxPainter { parent }, particles { std::move(ptrParticles) }, planeArea { std::move(ptrPlaneArea) }
+QPainterManager::QPainterManager( QWidget* parent )
+: QBoxPainter { parent }
 {
     boxStyle.cBackground = QColor(235, 235, 235);
     selectedParticleColor = QColor(32, 165, 56);
@@ -29,6 +29,7 @@ bool QPainterManager::loadStyle( BoxStyles style )
 
 void QPainterManager::init()
 {
+    planeArea = ParticlesPhysicsManager::Locator::getConstPlaneArea();
     if( planeArea != nullptr )
     {
         boxStyle.planeBorderWidth = static_cast<int>(planeArea->getPlaneBorderWidth());
@@ -37,6 +38,9 @@ void QPainterManager::init()
 
 void QPainterManager::paint()
 {
+    particles = ParticlesPhysicsManager::Locator::getConstParticles();
+    planeArea = ParticlesPhysicsManager::Locator::getConstPlaneArea();
+
     if( particles != nullptr )
     {
         painter.translate(0,0);
@@ -44,7 +48,7 @@ void QPainterManager::paint()
 
         int size {0};
         int posx {0};
-        int posy {0};       
+        int posy {0};
 
         for( auto particle = particles->cend() ; particle-- != particles->cbegin() ; )
         {
@@ -99,7 +103,7 @@ void QPainterManager::paintConstraintArrows()
 }
 
 void QPainterManager::paintPlaneDivider()
-{
+{    
     painter.setPen(boxStyle.cPlaneBorder);
     painter.setBrush(boxStyle.cPlaneBorder);
     painter.drawRect( planeArea->getPlainDivider().getUpperRect().first.x+boxStyle.planeBorderWidth, planeArea->getPlainDivider().getUpperRect().first.y+boxStyle.planeBorderWidth, planeArea->getPlainDivider().getUpperRect().second.x, planeArea->getPlainDivider().getUpperRect().second.y );
