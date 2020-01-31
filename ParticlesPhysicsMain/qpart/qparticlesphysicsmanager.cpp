@@ -7,83 +7,87 @@ QParticlesPhysicsManager::QParticlesPhysicsManager( SimulationType type, QHBoxLa
     layout->addWidget( particlesPaintManager.get() );
 }
 
-void QParticlesPhysicsManager::addQBarChart( const std::string& name, QHBoxLayout* layout, BoxStyles style )
+void QParticlesPhysicsManager::add( BoxType boxType, MeasurementType measurementType, QHBoxLayout *layout, BoxStyles style )
 {
-    if( barCharts.count(name) != 0 )
-    {       
-        qBoxPainters[name] = std::make_unique<QBarChart>(sqrt(physicsInfo.maxRapidity*2)/3,barCharts[name],layout->parentWidget());
-        layout->addWidget( qBoxPainters[name].get() );
-        if( style != BoxStyles::DEFAULT ) qBoxPainters[name]->loadStyle(style);
+    switch( boxType )
+    {
+     case BoxType::BARCHART :
+        if( barCharts->count(measurementType) != 0 )
+        {
+            qBoxPainters[measurementType] = std::make_unique<QBarChart>(measurementType,sqrt(physicsInfo.maxRapidity*2)/3,layout->parentWidget());
+            layout->addWidget( qBoxPainters[measurementType].get() );
+            if( style != BoxStyles::DEFAULT ) qBoxPainters[measurementType]->loadStyle(style);
+        }
+     break;
+
+     case BoxType::BARDISPLAY :
+        if( barDisplays->count(measurementType) != 0 )
+        {
+            qBoxPainters[measurementType] = std::make_unique<QBarDisplay>(measurementType,layout->parentWidget());
+            layout->addWidget( qBoxPainters[measurementType].get() );
+        }
+     break;
+
+     case BoxType::HISTOGRAM1D :
+        if( histograms1D->count(measurementType) != 0 )
+        {
+            qBoxPainters[measurementType] = std::make_unique<QHistogram1D>(measurementType,160,layout->parentWidget());
+            layout->addWidget( qBoxPainters[measurementType].get() );
+        }
+     break;
+
+     case BoxType::TRACKINGPLOT :
+        qBoxPainters[measurementType] = std::make_unique<QTrackingPlot2D>("Molecule Tracking Plot",layout->parentWidget());
+        layout->addWidget( qBoxPainters[measurementType].get() );
+     break;
+
+     case BoxType::GAUGE :
+        addQGauge( measurementType , layout );
+     break;
+
+     case BoxType::CIRCLECONTROL :
+        qBoxPainters[measurementType] = std::make_unique<QCircleControl>(layout->parentWidget());
+        controlBoxType[measurementType] = ControlType::CIRCLE_CONTROL;
+        layout->addWidget( qBoxPainters[measurementType].get() );
+     break;
+
+     case BoxType::INFODISPLAY :
+        qBoxPainters[measurementType] = std::make_unique<QInfoDisplay>();
+        layout->addWidget( qBoxPainters[measurementType].get() );
+     break;
     }
 }
 
-void QParticlesPhysicsManager::addQCircleControl( const std::string& name, QHBoxLayout* layout )
+void QParticlesPhysicsManager::addQGauge( MeasurementType type, QHBoxLayout* layout )
 {
-    qBoxPainters[name] = std::make_unique<QCircleControl>(layout->parentWidget());
-    controlBoxType[name] = ControlType::CIRCLE_CONTROL;
-    layout->addWidget( qBoxPainters[name].get() );
-}
-
-void QParticlesPhysicsManager::addQBarDisplay( const std::string& name, QHBoxLayout* layout )
-{
-    if( barDisplays.count(name) != 0 )
-    {        
-        qBoxPainters[name] = std::make_unique<QBarDisplay>(simulationInfo.numberOfParticlesInit[ParticleType::RED],barDisplays[name],layout->parentWidget());        
-        layout->addWidget( qBoxPainters[name].get() );        
-    }
-}
-
-void QParticlesPhysicsManager::addQHistogram1D( const std::string& name, QHBoxLayout* layout )
-{
-    if( histograms1D.count(name) != 0 )
-    {       
-        qBoxPainters[name] = std::make_unique<QHistogram1D>(160,histograms1D[name],layout->parentWidget());
-        layout->addWidget( qBoxPainters[name].get() );        
-    }
-}
-
-void QParticlesPhysicsManager::addQInfoDisplay(  const std::string& name, QHBoxLayout* layout  )
-{    
-    qBoxPainters[name] = std::make_unique<QInfoDisplay>();    
-    layout->addWidget( qBoxPainters[name].get() );
-}
-
-void QParticlesPhysicsManager::addQGauge( const std::string& name, QHBoxLayout* layout )
-{
-    qGauges[name] = { nullptr , nullptr };
+    qGauges[type] = { nullptr , nullptr };
 
     int range {1000};
 
-    qGauges[name].first = std::make_unique<QcGaugeWidget>();
-    qGauges[name].first->addArc(55);
-    QcDegreesItem* degreeItem = qGauges[name].first->addDegrees(65);
+    qGauges[type].first = std::make_unique<QcGaugeWidget>();
+    qGauges[type].first->addArc(55);
+    QcDegreesItem* degreeItem = qGauges[type].first->addDegrees(65);
     degreeItem->setValueRange(0,range);
     degreeItem->setStep(range/10);
-    QcColorBand *clrBand =  qGauges[name].first->addColorBand(50);
+    QcColorBand *clrBand =  qGauges[type].first->addColorBand(50);
     clrBand->setValueRange(0,100);
-    QcValuesItem *valueItem = qGauges[name].first->addValues(80);
+    QcValuesItem *valueItem = qGauges[type].first->addValues(80);
     valueItem->setValueRange(0,range);
     valueItem->setStep(range/10);
-    gaugeNameLabel = qGauges[name].first->addLabel(70);
-    gaugeNameLabel->setText(QString::fromStdString(LangManager::translate(name)));
-    QcLabelItem *lab = qGauges[name].first->addLabel(40);
+    gaugeNameLabel = qGauges[type].first->addLabel(70);
+    gaugeNameLabel->setText(LangManager::translate(QString("Pressure")));
+    QcLabelItem *lab = qGauges[type].first->addLabel(40);
     lab->setText("0");
-    qGauges[name].second.reset( qGauges[name].first->addNeedle(60) );
-    qGauges[name].second->setLabel(lab);
-    qGauges[name].second->setColor(Qt::blue);
-    qGauges[name].second->setValueRange(0,range);
-    qGauges[name].first->addBackground(7);
+    qGauges[type].second.reset( qGauges[type].first->addNeedle(60) );
+    qGauges[type].second->setLabel(lab);
+    qGauges[type].second->setColor(Qt::blue);
+    qGauges[type].second->setValueRange(0,range);
+    qGauges[type].first->addBackground(7);
 
     // reset style sheet - needs default
-    qGauges[name].first->setStyleSheet("");
+    qGauges[type].first->setStyleSheet("");
 
-    layout->addWidget( qGauges[name].first.get() );
-}
-
-void QParticlesPhysicsManager::addQTrackingPlot2D( const std::string& name, QHBoxLayout *layout )
-{
-    qBoxPainters[name] = std::make_unique<QTrackingPlot2D>(particles,"Molecule Tracking Plot",layout->parentWidget());
-    layout->addWidget( qBoxPainters[name].get() );
+    layout->addWidget( qGauges[type].first.get() );
 }
 
 void QParticlesPhysicsManager::createParticlesPaintManager()

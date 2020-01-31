@@ -71,7 +71,7 @@ enum class PlaneSide
 };
 
 /** @enum VisualizationType
- *  @brief Representing the particle visualization
+ *  @brief Representing particle visualization
  */
 enum class VisualizationType
 {
@@ -88,28 +88,76 @@ enum class Language
     ENG   /**< english language */
 };
 
-using HRClock = std::chrono::high_resolution_clock;
-using Milliseconds = std::chrono::milliseconds;
-using ptrBarDisplay = std::shared_ptr<BarDisplay>;
-using ptrBarChart = std::shared_ptr<BarChart>;
-using ptrHistogram1D = std::shared_ptr<Histogram1D>;
-using ptrParticlesContainer = std::shared_ptr<std::vector<Particle>>;
-using cptrParticlesContainer = std::shared_ptr<const std::vector<Particle>>;
-using ptrClustersContainer = std::unique_ptr<std::vector<Cluster>>;
+/** @enum BoxType
+ *  @brief Representing type of box that may collect and store some physics quantities or control some action.
+ */
+enum class BoxType
+{
+    BARCHART      , /**< bar chart box */
+    BARDISPLAY    , /**< bar display box */
+    HISTOGRAM1D   , /**< 1D histogram box */
+    TRACKINGPLOT  , /**< 1D tracking plot box */
+    CIRCLECONTROL , /**< circle control box */
+    INFODISPLAY   , /**< info display control box */
+    GAUGE           /**< gauge box */
+};
+
+/** @enum MeasurementType
+ *  @brief Representing type of measurement
+ */
+enum class MeasurementType
+{
+    VELOCITY      , /**< velocity measure */
+    VELOCITY_RED  , /**< red particles velocity measure */
+    VELOCITY_BLUE , /**< blue particles velocity measure */
+    VELOCITY_DIST , /**< velocity distribution measure */
+    MOMENTUM_DIST , /**< momentum distribution measure */
+    DIFFIUSION    , /**< diffiusion measure */
+    COLLISIONS    , /**< collision measure */
+    KINETIC       , /**< kinetic energy measure */
+    PRESSURE      , /**< pressure measure */
+    POSITION      , /**< position measure */
+    CONTROL       , /**< no measurement - uses in control boxes */
+    INFO            /**< no measurement - uses in info display */
+};
+
 using vect2D = vector2D<double>;
 using coord2D = vector2D<int>;
+using HRClock = std::chrono::high_resolution_clock;
+using Milliseconds = std::chrono::milliseconds;
+using Random = effolkronium::random_static;
+
+using ptrBarDisplay = std::shared_ptr<BarDisplay>;
+using cptrBarDisplay = std::shared_ptr<const BarDisplay>;
+using MapBarDisplay = std::map<MeasurementType,ptrBarDisplay>;
+using ptrMapBarDisplay = std::shared_ptr<MapBarDisplay>;
+
+using ptrBarChart = std::shared_ptr<BarChart>;
+using cptrBarChart = std::shared_ptr<const BarChart>;
+using MapBarChart = std::map<MeasurementType,ptrBarChart>;
+using ptrMapBarChart = std::shared_ptr<MapBarChart>;
+
+using ptrHistogram1D = std::shared_ptr<Histogram1D>;
+using cptrHistogram1D = std::shared_ptr<const Histogram1D>;
+using MapHistogram1D = std::map<MeasurementType,ptrHistogram1D>;
+using ptrMapHistogram1D = std::shared_ptr<MapHistogram1D>;
+
+using ptrParticlesContainer = std::shared_ptr<std::vector<Particle>>;
+using cptrParticlesContainer = std::shared_ptr<const std::vector<Particle>>;
 using iterParticle = std::vector<Particle>::iterator;
 using citerParticle = std::vector<Particle>::const_iterator;
-using cptrPlaneArea = std::shared_ptr<const PlaneArea>;
-using ptrPlaneArea = std::shared_ptr<PlaneArea>;
-using iterCluster = std::vector<Cluster>::iterator;
-using Random = effolkronium::random_static;
-using MapClustersIterCoordinates = std::map<coord2D,iterCluster>;
 using ListParticleIters = std::list<iterParticle>;
-using VectorClusterIters = std::vector<iterCluster>;
 using ptrListParticleIters = std::unique_ptr<ListParticleIters>;
+
+using ptrClustersContainer = std::unique_ptr<std::vector<Cluster>>;
+using iterCluster = std::vector<Cluster>::iterator;
+using MapClustersIterCoordinates = std::map<coord2D,iterCluster>;
+using VectorClusterIters = std::vector<iterCluster>;
 using ptrVectorClusterIters = std::unique_ptr<VectorClusterIters>;
 using table2D = std::vector<std::vector<iterCluster>>;
+
+using ptrPlaneArea = std::shared_ptr<PlaneArea>;
+using cptrPlaneArea = std::shared_ptr<const PlaneArea>;
 
 /** @struct colorRGB
  *  @brief Defines color Red Green and Blue values (0-255)

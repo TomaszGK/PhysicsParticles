@@ -37,11 +37,11 @@ public:
     /**
      * @brief Constructor
      *
-     * @param max                   maximum barchart bin values
-     * @param ptr                   pointer to BarChart object
+     * @param type                  measurement type
+     * @param max                   maximum barchart bin values     
      * @param parent                ponter to parent widget
      */
-    explicit QBarChart( double max = 1, ptrBarChart ptr = nullptr, QWidget* parent = nullptr );
+    explicit QBarChart( MeasurementType type, double max = 1, QWidget* parent = nullptr );
 
     /**
      * @brief Sets maximum bin value.

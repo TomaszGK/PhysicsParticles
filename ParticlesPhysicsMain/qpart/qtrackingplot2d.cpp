@@ -1,11 +1,16 @@
 #include "qtrackingplot2d.h"
 #include "langmanager.h"
+#include "particlesphysicsmanager.h"
 
-QTrackingPlot2D::QTrackingPlot2D( cptrParticlesContainer ptr, QString _title, QWidget *parent )
-: QBoxPainter { parent }, particles { std::move(ptr) }, title { std::move(_title) }
+QTrackingPlot2D::QTrackingPlot2D( QString _title, QWidget *parent )
+: QBoxPainter { parent },  title { std::move(_title) }
 {
-    trackingParticle = particles->begin();
-    boxStyle.marginTop = boxStyle.marginBottom = boxStyle.marginLeft = boxStyle.marginRight = 2*static_cast<int>(trackingParticle->radius);
+    particles = ParticlesPhysicsManager::Locator::getConstParticles();
+    if( particles != nullptr )
+    {
+        trackingParticle = particles->begin();
+        boxStyle.marginTop = boxStyle.marginBottom = boxStyle.marginLeft = boxStyle.marginRight = 2*static_cast<int>(trackingParticle->radius);
+    }
     plotPen.setWidth(2);
 }
 

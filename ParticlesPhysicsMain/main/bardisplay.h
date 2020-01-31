@@ -46,9 +46,9 @@ public:
      * @param index     upper box index
      * @return upper box value
      */
-    inline int getUpperBox( int index ) const noexcept
+    int getUpperBox( int index ) const noexcept
     {
-        Ensures(index<static_cast<int>(bins.size())&&index>=0);
+        Ensures( index<static_cast<int>(bins.size()) && index>=0 );
         return bins[static_cast<size_t>(index)].first;
     }
 
@@ -57,17 +57,39 @@ public:
      * @param index     lower box index
      * @return lower box value
      */
-    inline int getLowerBox( int index ) const noexcept
+    int getLowerBox( int index ) const noexcept
     {
-        Ensures(index<static_cast<int>(bins.size())&&index>=0);
+        Ensures( index<static_cast<int>(bins.size()) && index>=0 );
         return bins[static_cast<size_t>(index)].second;
+    }
+
+    /**
+     * @brief Get sum of upper bardisplay box values
+     * @return sum of upper box values
+     */
+    int getUpperBoxSum() const noexcept
+    {
+        int sum {0};
+        for( const auto& bin : bins ) sum+= bin.first;
+        return sum==0?1:sum;
+    }
+
+    /**
+     * @brief Get sum of lower bardisplay box values
+     * @return sum of lower box values
+     */
+    int getLowerBoxSum() const noexcept
+    {
+        int sum {0};
+        for( const auto& bin : bins ) sum+= bin.second;
+        return sum==0?1:sum;
     }
 
     /**
      * @brief Get number of bardisplay bins
      * @return number of bardisplay bins
      */
-    inline int getSize() const noexcept { return static_cast<int>(bins.size()); }
+    int getSize() const noexcept { return static_cast<int>(bins.size()); }
 
     /**
      * @brief Get name of bardisplay

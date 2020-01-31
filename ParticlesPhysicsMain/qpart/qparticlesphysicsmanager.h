@@ -70,76 +70,29 @@ public:
     QParticlesPhysicsManager& operator=( QParticlesPhysicsManager&& ) = delete;
 
     /**
-     * @brief Adds a new QBarChart for a given layout.
+     * @brief Adds a new box type for a given layout.
      *
-     * @param name                  name of bar chart
-     * @param layout                a given layout for QBarChart    
+     * @param boxType               a given box type
+     * @param measurementType       a given measurement type
+     * @param layout                a given layout for QBarChart
      * @param style                 bar chart style
      */
-    void addQBarChart( const std::string& name, QHBoxLayout* layout, BoxStyles style = BoxStyles::DEFAULT );
-
-    /**
-     * @brief Adds a new QCircleControl for a given layout.
-     *
-     * @param name                  name of circle control
-     * @param layout                a given layout for QCircleControl
-     */
-    void addQCircleControl( const std::string& name, QHBoxLayout* layout );
-
-    /**
-     * @brief Adds a new QBarDisplay for a given layout.
-     *
-     * @param name                  name of bar display
-     * @param layout                a given layout for QBarDisplay
-     */
-    void addQBarDisplay( const std::string& name, QHBoxLayout* layout );
-
-    /**
-     * @brief Adds a new QHistogram1D for a given layout.
-     *
-     * @param name                  name of histogram
-     * @param layout                a given layout for QHistogram1D
-     */
-    void addQHistogram1D( const std::string& name, QHBoxLayout* layout );
-
-    /**
-     * @brief Adds a new QInfoDisplay for a given layout.
-     *
-     * @param name                  name of info display
-     * @param layout                a given layout for QInfoDisplay
-     */
-    void addQInfoDisplay( const std::string& name, QHBoxLayout* layout );
-
-    /**
-     * @brief Adds a new QGauge for a given layout.
-     *
-     * @param name                  name of gauge
-     * @param layout                a given layout for QGauge
-     */
-    void addQGauge( const std::string& name, QHBoxLayout* layout );
-
-    /**
-     * @brief Adds a new QTrackingPlot2D for a given layout.
-     *
-     * @param name                  name of tracking plot
-     * @param layout                a given layout for QTrackingPlot2D
-     */
-    void addQTrackingPlot2D( const std::string& name, QHBoxLayout* layout );
+    void add( BoxType boxType, MeasurementType measurementType, QHBoxLayout* layout, BoxStyles style = BoxStyles::DEFAULT );
 
     /**
      * @brief Sets new value to display in QInfoDisplay for a given box side.
      *
-     * @param displayName           name of QInfoDisplay
+     * @param type                  type of measurement
      * @param side                  plane side corresponding to box side
      * @param newValue              new percent value to display
      */
-    void setDisplay( std::string displayName, PlaneSide side, int value )
+    void setDisplay( MeasurementType type, PlaneSide side, int value )
     {
-        if( qBoxPainters.count(displayName) != 0 )
+        if( qBoxPainters.count(type) != 0 )
         {
-            if( dynamic_cast<QInfoDisplay*>(qBoxPainters[displayName].get()) != nullptr )
+            if( dynamic_cast<QInfoDisplay*>(qBoxPainters[type].get()) != nullptr )
             {
-                dynamic_cast<QInfoDisplay*>(qBoxPainters[displayName].get())->setDisplay(side,value);
+                dynamic_cast<QInfoDisplay*>(qBoxPainters[type].get())->setDisplay(side,value);
             }
         }
     }
@@ -215,16 +168,24 @@ private:
     std::unique_ptr<QPainterManager> particlesPaintManager;
 
     /** Maps unique pointers to QBoxPainter derived objects. */
-    std::map<std::string,std::unique_ptr<QBoxPainter>> qBoxPainters;
+    std::map<MeasurementType,std::unique_ptr<QBoxPainter>> qBoxPainters;
 
     /** Maps control types for QBoxPainter derived objects. */
-    std::map<std::string,ControlType> controlBoxType;
+    std::map<MeasurementType,ControlType> controlBoxType;
 
     /** Maps QGauges objects. */
-    std::map<std::string,std::pair<std::unique_ptr<QcGaugeWidget>,std::unique_ptr<QcNeedleItem>>> qGauges;
+    std::map<MeasurementType,std::pair<std::unique_ptr<QcGaugeWidget>,std::unique_ptr<QcNeedleItem>>> qGauges;
 
     /** Gauge name label */
     QcLabelItem* gaugeNameLabel {nullptr};
+
+    /**
+     * @brief Adds a new QGauge for a given layout.
+     *
+     * @param type                  measurement type
+     * @param layout                a given layout for QGauge
+     */
+    void addQGauge( MeasurementType type, QHBoxLayout* layout );
 
     /**
      * @brief Creates particle paint manager.

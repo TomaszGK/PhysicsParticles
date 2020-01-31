@@ -16,10 +16,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create BASIC simulation
     physicsSimulation[0] = std::make_unique<QParticlesPhysicsManager>(SimulationType::BASIC,ui->particlesFrameTab0);
-    physicsSimulation[0]->addQBarChart("velocity",ui->velocityBarChartTab0,BoxStyles::BAR_CHART1);
-    physicsSimulation[0]->addQBarChart("kinetic",ui->kineticEnergyBarChartTab0,BoxStyles::BAR_CHART2);
-    physicsSimulation[0]->addQHistogram1D("velocityDistribution",ui->velocityDistributionHistogram1DTab0);
-    physicsSimulation[0]->addQGauge("Pressure",ui->pressureGaugeHorizontalLayoutTab0);
+    physicsSimulation[0]->add( BoxType::BARCHART , MeasurementType::VELOCITY , ui->velocityBarChartTab0 , BoxStyles::BAR_CHART1 );
+    physicsSimulation[0]->add( BoxType::BARCHART , MeasurementType::KINETIC , ui->kineticEnergyBarChartTab0 , BoxStyles::BAR_CHART2 );
+    physicsSimulation[0]->add( BoxType::HISTOGRAM1D , MeasurementType::VELOCITY_DIST , ui->velocityDistributionHistogram1DTab0 );
+    physicsSimulation[0]->add( BoxType::GAUGE , MeasurementType::PRESSURE , ui->pressureGaugeHorizontalLayoutTab0 );
     physicsSimulation[0]->setPlaneHitsPaint(true);
 
     ui->temperatureDialTab0->setValue(physicsSimulation[0]->getTemperatureInPercent());    
@@ -30,9 +30,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create DIFFIUSION simulation
     physicsSimulation[1] = std::make_unique<QParticlesPhysicsManager>(SimulationType::DIFFUSION,ui->particlesFrameTab1);
-    physicsSimulation[1]->addQBarChart("velocityBlue",ui->velocityBlueBarChartTab1,BoxStyles::BAR_CHART3);
-    physicsSimulation[1]->addQBarChart("velocityRed",ui->velocityRedBarChartTab1,BoxStyles::BAR_CHART3);
-    physicsSimulation[1]->addQBarDisplay("diffiusion",ui->numBlueRedTab1);
+    physicsSimulation[1]->add( BoxType::BARCHART , MeasurementType::VELOCITY_BLUE , ui->velocityBlueBarChartTab1 , BoxStyles::BAR_CHART3 );
+    physicsSimulation[1]->add( BoxType::BARCHART , MeasurementType::VELOCITY_RED , ui->velocityRedBarChartTab1,BoxStyles::BAR_CHART3 );
+    physicsSimulation[1]->add( BoxType::BARDISPLAY , MeasurementType::DIFFIUSION , ui->numBlueRedTab1 );
 
     ui->temperatureLeftDialTab1->setValue(physicsSimulation[1]->getTemperatureLeftInPercent());
     ui->temperatureRightDialTab1->setValue(physicsSimulation[1]->getTemperatureRightInPercent());
@@ -42,15 +42,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create BROWNIAN_MOTION simulation
     physicsSimulation[2] = std::make_unique<QParticlesPhysicsManager>(SimulationType::BROWNIAN_MOTION,ui->particlesFrameTab4);
-    physicsSimulation[2]->addQTrackingPlot2D("trackingPlot",ui->trackingFrameTab4);
-    physicsSimulation[2]->addQHistogram1D("velocityDistribution",ui->velocityDistributionLayoutTab4);
-    physicsSimulation[2]->addQCircleControl("pushForceCircleControl",ui->circleControlLayoutTab4);
+    physicsSimulation[2]->add( BoxType::TRACKINGPLOT , MeasurementType::POSITION , ui->trackingFrameTab4 );
+    physicsSimulation[2]->add( BoxType::HISTOGRAM1D , MeasurementType::VELOCITY_DIST , ui->velocityDistributionLayoutTab4 );
+    physicsSimulation[2]->add( BoxType::CIRCLECONTROL , MeasurementType::CONTROL , ui->circleControlLayoutTab4 );
 
     // create SANDBOX simulation
     physicsSimulation[3] = std::make_unique<QParticlesPhysicsManager>(SimulationType::SANDBOX,ui->particlesFrameTab2);
-    physicsSimulation[3]->addQInfoDisplay("infoDisplayTab2",ui->infoLayoutTab2);
-    physicsSimulation[3]->addQHistogram1D("velocityDistribution",ui->velocityDistributionlLayoutTab2);
-    physicsSimulation[3]->addQHistogram1D("momentumDistribution",ui->momentumDistributionlLayoutTab2);
+    physicsSimulation[3]->add( BoxType::INFODISPLAY ,MeasurementType::INFO , ui->infoLayoutTab2 );
+    physicsSimulation[3]->add( BoxType::HISTOGRAM1D , MeasurementType::VELOCITY_DIST , ui->velocityDistributionlLayoutTab2 );
+    physicsSimulation[3]->add( BoxType::HISTOGRAM1D , MeasurementType::MOMENTUM_DIST , ui->momentumDistributionlLayoutTab2 );
 
     ui->temperatureUpSliderTab2->setValue(physicsSimulation[3]->getSideTemperatureInPercent(PlaneSide::UP));
     ui->temperatureDownSliderTab2->setValue(physicsSimulation[3]->getSideTemperatureInPercent(PlaneSide::DOWN));
@@ -348,25 +348,25 @@ void MainWindow::on_gapSizeSliderTab1_valueChanged( int value )
 void MainWindow::on_temperatureUpSliderTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setSideTemperatureInPercent(PlaneSide::UP,value);
-    physicsSimulation[3]->setDisplay("infoDisplayTab2",PlaneSide::UP,value);
+    physicsSimulation[3]->setDisplay(MeasurementType::INFO,PlaneSide::UP,value);
 }
 
 void MainWindow::on_temperatureRightSliderTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setSideTemperatureInPercent(PlaneSide::RIGHT,value);
-    physicsSimulation[3]->setDisplay("infoDisplayTab2",PlaneSide::RIGHT,value);
+    physicsSimulation[3]->setDisplay(MeasurementType::INFO,PlaneSide::RIGHT,value);
 }
 
 void MainWindow::on_temperatureDownSliderTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setSideTemperatureInPercent(PlaneSide::DOWN,value);
-    physicsSimulation[3]->setDisplay("infoDisplayTab2",PlaneSide::DOWN,value);
+    physicsSimulation[3]->setDisplay(MeasurementType::INFO,PlaneSide::DOWN,value);
 }
 
 void MainWindow::on_temperatureLeftSliderTab2_valueChanged( int value )
 {
     physicsSimulation[3]->setSideTemperatureInPercent(PlaneSide::LEFT,value);
-    physicsSimulation[3]->setDisplay("infoDisplayTab2",PlaneSide::LEFT,value);    
+    physicsSimulation[3]->setDisplay(MeasurementType::INFO,PlaneSide::LEFT,value);
 }
 
 void MainWindow::on_horizontalForceTab2_valueChanged( int value )

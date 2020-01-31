@@ -11,7 +11,7 @@
  * @class QBarDisplay
  * @brief Implements visualization of bar display in QT.
  *
- * Paints bar display using QT framework and BarDisplay class for data manimulation.
+ * Paints bar display using QT framework and BarDisplay class for data manipulation.
  * @author Tomasz Gburek
  * @date 2019
  */
@@ -25,12 +25,10 @@ public:
 
     /**
      * @brief Constructor
-     *
-     * @param max                   maximum value in bin
-     * @param ptr                   pointer to BarDisplay object
+     *     
      * @param parent                ponter to parent widget
      */
-    explicit QBarDisplay( int max = 100, ptrBarDisplay ptr = nullptr, QWidget* parentWidget = nullptr );
+    explicit QBarDisplay( MeasurementType type, QWidget* parentWidget = nullptr );
 
     /**
      * @brief Loads style type from xml file and /to complete/.
@@ -44,13 +42,10 @@ public:
 private:    
 
     /** Holds BarDisplay object. */
-    ptrBarDisplay barDisplay;
+    cptrBarDisplay barDisplay;
 
     /** single bar width */
-    int barWidth {0};
-
-    /** maximum bin value */
-    int max {100};
+    int barWidth {0};   
 
     /**
      * @brief Paints bar charts.

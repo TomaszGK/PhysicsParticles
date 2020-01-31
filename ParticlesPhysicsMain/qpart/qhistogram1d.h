@@ -26,11 +26,11 @@ public:
     /**
      * @brief Constructor
      *
-     * @param max                   maximum bin value
-     * @param ptr                   pointer to Histogram1D object
+     * @param type                  measurement type
+     * @param max                   maximum bin value     
      * @param parent                ponter to parent widget
      */
-    explicit QHistogram1D( double maxValue = 100, ptrHistogram1D ptr = nullptr, QWidget* parent = nullptr );
+    explicit QHistogram1D( MeasurementType type, double maxValue = 100, QWidget* parent = nullptr );
 
     /**
      * @brief Loads style type from xml file and /to complete/.
@@ -44,7 +44,7 @@ public:
 private:
 
     /** Holds Histogram1D object. */
-    ptrHistogram1D histogram1D;
+    cptrHistogram1D histogram1D;
 
     /** histogram bar width */
     double barWidth {0};

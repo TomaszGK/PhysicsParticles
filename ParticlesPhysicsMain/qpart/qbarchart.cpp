@@ -1,7 +1,8 @@
 #include "qbarchart.h"
+#include "particlesphysicsmanager.h"
 
-QBarChart::QBarChart( double max,  ptrBarChart ptr, QWidget* parent )
-: QBoxPainter { parent }, barChart { std::move(ptr) }
+QBarChart::QBarChart( MeasurementType type, double max, QWidget* parent )
+: QBoxPainter { parent }, barChart { ParticlesPhysicsManager::Locator::getBarChart(type) }
 {    
     setMaxOY(max);        
     setAutoFillBackground(false);

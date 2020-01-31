@@ -1,9 +1,9 @@
 #include "qbardisplay.h"
+#include "particlesphysicsmanager.h"
 
-QBarDisplay::QBarDisplay( int max, ptrBarDisplay ptr, QWidget* parentWidget )
-: QBoxPainter { parentWidget }, barDisplay { std::move(ptr) }, max { max }
+QBarDisplay::QBarDisplay( MeasurementType type, QWidget* parentWidget )
+: QBoxPainter { parentWidget } , barDisplay { ParticlesPhysicsManager::Locator::getBarDisplay(type) }
 {    
-    Ensures(max>0);
     setAutoFillBackground(false);
     init();
 }
@@ -21,7 +21,7 @@ bool QBarDisplay::loadStyle( BoxStyles style )
 void QBarDisplay::init()
 {
     if( parentWidget() != nullptr )
-    {
+    {        
         int width = parentWidget()->width();
         int size = static_cast<int>(barDisplay->getSize());
         int marginAdjustment = width - size*(width/size);
@@ -47,7 +47,7 @@ void QBarDisplay::init()
 void QBarDisplay::paint()
 {
     if( barDisplay != nullptr )
-    {
+    {      
         int value {0};
         int posx {0};
         double percent {0};
@@ -64,14 +64,14 @@ void QBarDisplay::paint()
 
             painter.setBrush(QBrush(boxStyle.cUpper));
             painter.setPen(QPen(boxStyle.cUpper));
-            percent =  static_cast<double>(barDisplay->getUpperBox(index))/max;
+            percent =  static_cast<double>(barDisplay->getUpperBox(index))/barDisplay->getUpperBoxSum();
             value = static_cast<int>((height()/2.8)*percent);
             if( value>0 ) painter.drawRect(boxStyle.marginLeft+posx,height()/2-value,barWidth-1,value);
             painter.drawText(calculateCenterTextPosition(upperValue,boxStyle.marginLeft+posx,boxStyle.marginLeft+barWidth+posx),height()/2-value-5,upperValue);
 
             painter.setBrush(QBrush(boxStyle.cLower));
             painter.setPen(QPen(boxStyle.cLower));
-            percent = static_cast<double>(barDisplay->getLowerBox(index))/max;
+            percent = static_cast<double>(barDisplay->getLowerBox(index))/barDisplay->getLowerBoxSum();
             value = static_cast<int>((height()/2.8)*percent);
             if( value>0 ) painter.drawRect(boxStyle.marginLeft+posx,height()/2,barWidth-1,value);
             painter.drawText(calculateCenterTextPosition(lowerValue,boxStyle.marginLeft+posx,boxStyle.marginLeft+barWidth+posx),height()/2+value+17,lowerValue);

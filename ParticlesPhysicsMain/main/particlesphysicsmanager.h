@@ -35,10 +35,19 @@ public:
 
         static cptrPlaneArea getConstPlaneArea() { return cplane; }
 
+        static ptrBarDisplay getBarDisplay( MeasurementType type ) { return barDisplayMap==nullptr?nullptr:(*barDisplayMap)[type]; }
+
+        static ptrBarChart getBarChart( MeasurementType type ) { return barChartMap==nullptr?nullptr:(*barChartMap)[type]; }
+
+        static ptrHistogram1D getHistogram1D( MeasurementType type ) { return histogram1DMap==nullptr?nullptr:(*histogram1DMap)[type]; }
+
         static void provide( ParticlesPhysicsManager *manager )
         {
             cparticles = manager->particles;
             cplane = manager->planeArea;
+            barDisplayMap = manager->barDisplays;
+            barChartMap = manager->barCharts;
+            histogram1DMap = manager->histograms1D;
         }
 
     private:
@@ -47,6 +56,11 @@ public:
 
         inline static cptrPlaneArea cplane {nullptr};
 
+        inline static ptrMapBarDisplay barDisplayMap {nullptr};
+
+        inline static ptrMapBarChart barChartMap {nullptr};
+
+        inline static ptrMapHistogram1D histogram1DMap {nullptr};
     };
 
     /**
@@ -299,7 +313,7 @@ public:
      */
     int getPressureValue() const
     {
-        return static_cast<int>(100*barCharts.at("kinetic")->getAvgInLast(5));
+        return static_cast<int>(100*barCharts->at(MeasurementType::KINETIC)->getAvgInLast(5));
     }
 
     /**
@@ -504,13 +518,13 @@ protected:
     double timeContribution {0.0};
 
     /** Contains bar charts */
-    std::map<std::string,ptrBarChart> barCharts;
+    ptrMapBarChart barCharts;
 
     /** Contains bar displays */
-    std::map<std::string,ptrBarDisplay> barDisplays;
+    ptrMapBarDisplay barDisplays;
 
     /** Contains histograms 1D */
-    std::map<std::string,ptrHistogram1D> histograms1D;
+    ptrMapHistogram1D histograms1D;
 
     /** Atomic flag acts out like simple mutex to prevents particles modification before the end of calculation */
     std::atomic<bool> calculateNextPositionFlag {false};

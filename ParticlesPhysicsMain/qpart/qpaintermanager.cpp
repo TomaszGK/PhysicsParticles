@@ -14,6 +14,9 @@ QPainterManager::QPainterManager( QWidget* parent )
 
     setAutoFillBackground(false);
 
+    particles = ParticlesPhysicsManager::Locator::getConstParticles();
+    planeArea = ParticlesPhysicsManager::Locator::getConstPlaneArea();
+
     init();
 }
 
@@ -28,8 +31,7 @@ bool QPainterManager::loadStyle( BoxStyles style )
 }
 
 void QPainterManager::init()
-{
-    planeArea = ParticlesPhysicsManager::Locator::getConstPlaneArea();
+{    
     if( planeArea != nullptr )
     {
         boxStyle.planeBorderWidth = static_cast<int>(planeArea->getPlaneBorderWidth());
@@ -38,8 +40,6 @@ void QPainterManager::init()
 
 void QPainterManager::paint()
 {
-    particles = ParticlesPhysicsManager::Locator::getConstParticles();
-    planeArea = ParticlesPhysicsManager::Locator::getConstPlaneArea();
 
     if( particles != nullptr )
     {
