@@ -140,7 +140,8 @@ private:
 
     DialogAbout dialogAboutWindow;
 
-    std::vector<std::unique_ptr<QParticlesPhysicsManager>> physicsSimulation;  
+    std::map<SimulationType,std::unique_ptr<QParticlesPhysicsManager>> simulation;
+    std::map<int,SimulationType> simulationTab;
 
     QTimer paintTimer;
     QTimer updateTimer;
@@ -148,7 +149,7 @@ private:
 
     QTranslator qtLanguageTranslator;
 
-    size_t currentIndex {0};
+    SimulationType current {SimulationType::BASIC};
     double dividerGapPosition {0};
     double dividerGapStep {0.1};
     bool   dividerGapAnimationStart {false};

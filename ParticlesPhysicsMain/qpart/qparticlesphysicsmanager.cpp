@@ -7,58 +7,58 @@ QParticlesPhysicsManager::QParticlesPhysicsManager( SimulationType type, QHBoxLa
     layout->addWidget( particlesPaintManager.get() );
 }
 
-void QParticlesPhysicsManager::add( BoxType boxType, MeasurementType measurementType, QHBoxLayout *layout, BoxStyles style )
+void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, ActionType actionType, BoxStyles style )
 {
     switch( boxType )
     {
      case BoxType::BARCHART :
-        if( barCharts->count(measurementType) != 0 )
+        if( barCharts->count(actionType) != 0 )
         {
-            qBoxPainters[measurementType] = std::make_unique<QBarChart>(measurementType,sqrt(physicsInfo.maxRapidity*2)/3,layout->parentWidget());
-            layout->addWidget( qBoxPainters[measurementType].get() );
-            if( style != BoxStyles::DEFAULT ) qBoxPainters[measurementType]->loadStyle(style);
+            qBoxPainters[actionType] = std::make_unique<QBarChart>(actionType,sqrt(physicsInfo.maxRapidity*2)/3,layout->parentWidget());
+            layout->addWidget( qBoxPainters[actionType].get() );
+            if( style != BoxStyles::DEFAULT ) qBoxPainters[actionType]->loadStyle(style);
         }
      break;
 
      case BoxType::BARDISPLAY :
-        if( barDisplays->count(measurementType) != 0 )
+        if( barDisplays->count(actionType) != 0 )
         {
-            qBoxPainters[measurementType] = std::make_unique<QBarDisplay>(measurementType,layout->parentWidget());
-            layout->addWidget( qBoxPainters[measurementType].get() );
+            qBoxPainters[actionType] = std::make_unique<QBarDisplay>(actionType,layout->parentWidget());
+            layout->addWidget( qBoxPainters[actionType].get() );
         }
      break;
 
      case BoxType::HISTOGRAM1D :
-        if( histograms1D->count(measurementType) != 0 )
+        if( histograms1D->count(actionType) != 0 )
         {
-            qBoxPainters[measurementType] = std::make_unique<QHistogram1D>(measurementType,160,layout->parentWidget());
-            layout->addWidget( qBoxPainters[measurementType].get() );
+            qBoxPainters[actionType] = std::make_unique<QHistogram1D>(actionType,160,layout->parentWidget());
+            layout->addWidget( qBoxPainters[actionType].get() );
         }
      break;
 
      case BoxType::TRACKINGPLOT :
-        qBoxPainters[measurementType] = std::make_unique<QTrackingPlot2D>("Molecule Tracking Plot",layout->parentWidget());
-        layout->addWidget( qBoxPainters[measurementType].get() );
+        qBoxPainters[actionType] = std::make_unique<QTrackingPlot2D>("Molecule Tracking Plot",layout->parentWidget());
+        layout->addWidget( qBoxPainters[actionType].get() );
      break;
 
      case BoxType::GAUGE :
-        addQGauge( measurementType , layout );
+        addQGauge( actionType , layout );
      break;
 
      case BoxType::CIRCLECONTROL :
-        qBoxPainters[measurementType] = std::make_unique<QCircleControl>(layout->parentWidget());
-        controlBoxType[measurementType] = ControlType::CIRCLE_CONTROL;
-        layout->addWidget( qBoxPainters[measurementType].get() );
+        qBoxPainters[actionType] = std::make_unique<QCircleControl>(layout->parentWidget());
+        controlBoxType[actionType] = ControlType::CIRCLE_CONTROL;
+        layout->addWidget( qBoxPainters[actionType].get() );
      break;
 
      case BoxType::INFODISPLAY :
-        qBoxPainters[measurementType] = std::make_unique<QInfoDisplay>();
-        layout->addWidget( qBoxPainters[measurementType].get() );
+        qBoxPainters[actionType] = std::make_unique<QInfoDisplay>();
+        layout->addWidget( qBoxPainters[actionType].get() );
      break;
     }
 }
 
-void QParticlesPhysicsManager::addQGauge( MeasurementType type, QHBoxLayout* layout )
+void QParticlesPhysicsManager::addQGauge( ActionType type, QHBoxLayout* layout )
 {
     qGauges[type] = { nullptr , nullptr };
 

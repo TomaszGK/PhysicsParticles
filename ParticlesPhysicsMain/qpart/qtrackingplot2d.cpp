@@ -3,7 +3,7 @@
 #include "particlesphysicsmanager.h"
 
 QTrackingPlot2D::QTrackingPlot2D( QString _title, QWidget *parent )
-: QBoxPainter { parent },  title { std::move(_title) }
+: QBoxPainter { parent }, title { std::move(_title) }
 {
     particles = ParticlesPhysicsManager::Locator::getConstParticles();
     if( particles != nullptr )

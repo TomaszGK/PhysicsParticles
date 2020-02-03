@@ -26,11 +26,11 @@ public:
     /**
      * @brief Constructor
      *
-     * @param type                  measurement type
+     * @param type                  action type
      * @param max                   maximum bin value     
      * @param parent                ponter to parent widget
      */
-    explicit QHistogram1D( MeasurementType type, double maxValue = 100, QWidget* parent = nullptr );
+    explicit QHistogram1D( ActionType type, double maxValue = 100, QWidget* parent = nullptr );
 
     /**
      * @brief Loads style type from xml file and /to complete/.

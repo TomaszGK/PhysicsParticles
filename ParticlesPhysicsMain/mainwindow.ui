@@ -489,7 +489,7 @@ margin-top: 0.5em;</string>
         <height>281</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="pressureGaugeHorizontalLayoutTab0"/>
+      <layout class="QHBoxLayout" name="Layout4_Tab0"/>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_3">
       <property name="geometry">
@@ -500,7 +500,7 @@ margin-top: 0.5em;</string>
         <height>281</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="velocityBarChartTab0"/>
+      <layout class="QHBoxLayout" name="Layout1_Tab0"/>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_4">
       <property name="geometry">
@@ -511,7 +511,7 @@ margin-top: 0.5em;</string>
         <height>281</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="kineticEnergyBarChartTab0"/>
+      <layout class="QHBoxLayout" name="Layout2_Tab0"/>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_7">
       <property name="geometry">
@@ -522,7 +522,7 @@ margin-top: 0.5em;</string>
         <height>641</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="particlesFrameTab0"/>
+      <layout class="QHBoxLayout" name="ParticlesLayout_Tab0"/>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_10">
       <property name="geometry">
@@ -533,7 +533,7 @@ margin-top: 0.5em;</string>
         <height>281</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="velocityDistributionHistogram1DTab0"/>
+      <layout class="QHBoxLayout" name="Layout3_Tab0"/>
      </widget>
      <widget class="QGroupBox" name="groupBoxParticlesSettingsTab0">
       <property name="geometry">
@@ -1215,7 +1215,7 @@ margin-top: 0.5em;</string>
         <height>261</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="velocityBlueBarChartTab1"/>
+      <layout class="QHBoxLayout" name="Layout1_Tab1"/>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_6">
       <property name="geometry">
@@ -1226,7 +1226,7 @@ margin-top: 0.5em;</string>
         <height>261</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="velocityRedBarChartTab1"/>
+      <layout class="QHBoxLayout" name="Layout2_Tab1"/>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_8">
       <property name="geometry">
@@ -1237,7 +1237,7 @@ margin-top: 0.5em;</string>
         <height>601</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="particlesFrameTab1"/>
+      <layout class="QHBoxLayout" name="ParticlesLayout_Tab1"/>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_11">
       <property name="geometry">
@@ -1248,7 +1248,7 @@ margin-top: 0.5em;</string>
         <height>161</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="numBlueRedTab1"/>
+      <layout class="QHBoxLayout" name="Layout3_Tab1"/>
      </widget>
      <widget class="QGroupBox" name="blueParticlesGroupBoxTab1">
       <property name="geometry">
@@ -2144,7 +2144,7 @@ margin-top: 0.5em;</string>
         <height>601</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="particlesFrameTab4"/>
+      <layout class="QHBoxLayout" name="ParticlesLayout_Tab2"/>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_15">
       <property name="geometry">
@@ -2155,7 +2155,7 @@ margin-top: 0.5em;</string>
         <height>601</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="trackingFrameTab4"/>
+      <layout class="QHBoxLayout" name="Layout2_Tab2"/>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_16">
       <property name="geometry">
@@ -2166,7 +2166,7 @@ margin-top: 0.5em;</string>
         <height>251</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="velocityDistributionLayoutTab4"/>
+      <layout class="QHBoxLayout" name="Layout3_Tab2"/>
      </widget>
      <widget class="QGroupBox" name="groupBoxMoleculeMassTab4">
       <property name="geometry">
@@ -2486,7 +2486,7 @@ Trace</string>
          <height>211</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="circleControlLayoutTab4"/>
+       <layout class="QHBoxLayout" name="Layout1_Tab2"/>
       </widget>
      </widget>
     </widget>
@@ -2599,7 +2599,7 @@ Trace</string>
          <height>151</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="infoLayoutTab2"/>
+       <layout class="QHBoxLayout" name="Layout1_Tab3"/>
       </widget>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_9">
@@ -2611,7 +2611,7 @@ Trace</string>
         <height>601</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="particlesFrameTab2"/>
+      <layout class="QHBoxLayout" name="ParticlesLayout_Tab3"/>
      </widget>
      <widget class="QGroupBox" name="forceGroupBoxTab2">
       <property name="geometry">
@@ -3638,7 +3638,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
           <height>191</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="velocityDistributionlLayoutTab2"/>
+        <layout class="QHBoxLayout" name="Layout2_Tab3"/>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_B">
@@ -3654,7 +3654,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
           <height>191</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="momentumDistributionlLayoutTab2"/>
+        <layout class="QHBoxLayout" name="Layout3_Tab3"/>
        </widget>
       </widget>
      </widget>
@@ -3866,7 +3866,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
      <x>0</x>
      <y>0</y>
      <width>1920</width>
-     <height>27</height>
+     <height>28</height>
     </rect>
    </property>
    <property name="font">

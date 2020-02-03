@@ -26,9 +26,10 @@ public:
     /**
      * @brief Constructor
      *     
+     * @param type                  action type
      * @param parent                ponter to parent widget
      */
-    explicit QBarDisplay( MeasurementType type, QWidget* parentWidget = nullptr );
+    explicit QBarDisplay( ActionType type, QWidget* parentWidget = nullptr );
 
     /**
      * @brief Loads style type from xml file and /to complete/.

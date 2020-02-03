@@ -1,7 +1,7 @@
 #include "qhistogram1d.h"
 #include "particlesphysicsmanager.h"
 
-QHistogram1D::QHistogram1D( MeasurementType type, double maxValue, QWidget* parent )
+QHistogram1D::QHistogram1D( ActionType type, double maxValue, QWidget* parent )
 : QBoxPainter { parent }, histogram1D { ParticlesPhysicsManager::Locator::getHistogram1D(type) }, maxValue {maxValue}
 {
     boxStyle.cBackground = QColor(145, 215, 215);

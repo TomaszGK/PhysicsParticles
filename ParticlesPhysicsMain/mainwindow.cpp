@@ -12,58 +12,61 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowState(Qt::WindowMaximized);
 
-    physicsSimulation.resize( static_cast<size_t>(ui->tabWidget->count()) );
+    // create BASIC simulation [ TAB 0 ]
+    simulationTab[0] = SimulationType::BASIC;
+    simulation[SimulationType::BASIC] = std::make_unique<QParticlesPhysicsManager>(SimulationType::BASIC,ui->ParticlesLayout_Tab0);
+    simulation[SimulationType::BASIC]->add( ui->Layout1_Tab0 , BoxType::BARCHART , ActionType::M_VELOCITY , BoxStyles::BAR_CHART1 );
+    simulation[SimulationType::BASIC]->add( ui->Layout2_Tab0 , BoxType::BARCHART , ActionType::M_KINETIC ,  BoxStyles::BAR_CHART2 );
+    simulation[SimulationType::BASIC]->add( ui->Layout3_Tab0 , BoxType::HISTOGRAM1D , ActionType::M_VELOCITY_DIST );
+    simulation[SimulationType::BASIC]->add( ui->Layout4_Tab0 , BoxType::GAUGE , ActionType::M_PRESSURE );
+    simulation[SimulationType::BASIC]->setPlaneHitsPaint(true);
 
-    // create BASIC simulation
-    physicsSimulation[0] = std::make_unique<QParticlesPhysicsManager>(SimulationType::BASIC,ui->particlesFrameTab0);
-    physicsSimulation[0]->add( BoxType::BARCHART , MeasurementType::VELOCITY , ui->velocityBarChartTab0 , BoxStyles::BAR_CHART1 );
-    physicsSimulation[0]->add( BoxType::BARCHART , MeasurementType::KINETIC , ui->kineticEnergyBarChartTab0 , BoxStyles::BAR_CHART2 );
-    physicsSimulation[0]->add( BoxType::HISTOGRAM1D , MeasurementType::VELOCITY_DIST , ui->velocityDistributionHistogram1DTab0 );
-    physicsSimulation[0]->add( BoxType::GAUGE , MeasurementType::PRESSURE , ui->pressureGaugeHorizontalLayoutTab0 );
-    physicsSimulation[0]->setPlaneHitsPaint(true);
-
-    ui->temperatureDialTab0->setValue(physicsSimulation[0]->getTemperatureInPercent());    
+    ui->temperatureDialTab0->setValue(simulation[SimulationType::BASIC]->getTemperatureInPercent());
     ui->numberOfParticlesSliderTab0->setValue(50);
-    ui->sizeOfParticleSliderTab0->setValue(physicsSimulation[0]->getSizeOfParticleInPercent());    
+    ui->sizeOfParticleSliderTab0->setValue(simulation[SimulationType::BASIC]->getSizeOfParticleInPercent());
     ui->trackingOffButtonTab0->setDisabled(true);
 
 
-    // create DIFFIUSION simulation
-    physicsSimulation[1] = std::make_unique<QParticlesPhysicsManager>(SimulationType::DIFFUSION,ui->particlesFrameTab1);
-    physicsSimulation[1]->add( BoxType::BARCHART , MeasurementType::VELOCITY_BLUE , ui->velocityBlueBarChartTab1 , BoxStyles::BAR_CHART3 );
-    physicsSimulation[1]->add( BoxType::BARCHART , MeasurementType::VELOCITY_RED , ui->velocityRedBarChartTab1,BoxStyles::BAR_CHART3 );
-    physicsSimulation[1]->add( BoxType::BARDISPLAY , MeasurementType::DIFFIUSION , ui->numBlueRedTab1 );
+    // create DIFFIUSION simulation [ TAB 1 ]
+    simulationTab[1] = SimulationType::DIFFUSION;
+    simulation[SimulationType::DIFFUSION] = std::make_unique<QParticlesPhysicsManager>(SimulationType::DIFFUSION,ui->ParticlesLayout_Tab1);
+    simulation[SimulationType::DIFFUSION]->add( ui->Layout1_Tab1 , BoxType::BARCHART , ActionType::M_VELOCITY_BLUE , BoxStyles::BAR_CHART3 );
+    simulation[SimulationType::DIFFUSION]->add( ui->Layout2_Tab1 , BoxType::BARCHART , ActionType::M_VELOCITY_RED , BoxStyles::BAR_CHART3 );
+    simulation[SimulationType::DIFFUSION]->add( ui->Layout3_Tab1 , BoxType::BARDISPLAY , ActionType::M_DIFFIUSION );
 
-    ui->temperatureLeftDialTab1->setValue(physicsSimulation[1]->getTemperatureLeftInPercent());
-    ui->temperatureRightDialTab1->setValue(physicsSimulation[1]->getTemperatureRightInPercent());
-    ui->particleSizeBlueDialTab1->setValue(physicsSimulation[1]->getSizeOfParticleInPercent(ParticleType::BLUE));
-    ui->particleSizeRedDialTab1->setValue(physicsSimulation[1]->getSizeOfParticleInPercent(ParticleType::RED));
+    ui->temperatureLeftDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getTemperatureLeftInPercent());
+    ui->temperatureRightDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getTemperatureRightInPercent());
+    ui->particleSizeBlueDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getSizeOfParticleInPercent(ParticleType::BLUE));
+    ui->particleSizeRedDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getSizeOfParticleInPercent(ParticleType::RED));
 
 
-    // create BROWNIAN_MOTION simulation
-    physicsSimulation[2] = std::make_unique<QParticlesPhysicsManager>(SimulationType::BROWNIAN_MOTION,ui->particlesFrameTab4);
-    physicsSimulation[2]->add( BoxType::TRACKINGPLOT , MeasurementType::POSITION , ui->trackingFrameTab4 );
-    physicsSimulation[2]->add( BoxType::HISTOGRAM1D , MeasurementType::VELOCITY_DIST , ui->velocityDistributionLayoutTab4 );
-    physicsSimulation[2]->add( BoxType::CIRCLECONTROL , MeasurementType::CONTROL , ui->circleControlLayoutTab4 );
+    // create BROWNIAN_MOTION simulation [ TAB 2 ]
+    simulationTab[2] = SimulationType::BROWNIAN_MOTION;
+    simulation[SimulationType::BROWNIAN_MOTION] = std::make_unique<QParticlesPhysicsManager>(SimulationType::BROWNIAN_MOTION,ui->ParticlesLayout_Tab2);
+    simulation[SimulationType::BROWNIAN_MOTION]->add( ui->Layout1_Tab2 , BoxType::CIRCLECONTROL , ActionType::C_PARTICLES_FLOW );
+    simulation[SimulationType::BROWNIAN_MOTION]->add( ui->Layout2_Tab2 , BoxType::TRACKINGPLOT , ActionType::M_POSITION );
+    simulation[SimulationType::BROWNIAN_MOTION]->add( ui->Layout3_Tab2 , BoxType::HISTOGRAM1D , ActionType::M_VELOCITY_DIST );
 
-    // create SANDBOX simulation
-    physicsSimulation[3] = std::make_unique<QParticlesPhysicsManager>(SimulationType::SANDBOX,ui->particlesFrameTab2);
-    physicsSimulation[3]->add( BoxType::INFODISPLAY ,MeasurementType::INFO , ui->infoLayoutTab2 );
-    physicsSimulation[3]->add( BoxType::HISTOGRAM1D , MeasurementType::VELOCITY_DIST , ui->velocityDistributionlLayoutTab2 );
-    physicsSimulation[3]->add( BoxType::HISTOGRAM1D , MeasurementType::MOMENTUM_DIST , ui->momentumDistributionlLayoutTab2 );
 
-    ui->temperatureUpSliderTab2->setValue(physicsSimulation[3]->getSideTemperatureInPercent(PlaneSide::UP));
-    ui->temperatureDownSliderTab2->setValue(physicsSimulation[3]->getSideTemperatureInPercent(PlaneSide::DOWN));
-    ui->temperatureLeftSliderTab2->setValue(physicsSimulation[3]->getSideTemperatureInPercent(PlaneSide::LEFT));
-    ui->temperatureRightSliderTab2->setValue(physicsSimulation[3]->getSideTemperatureInPercent(PlaneSide::RIGHT));
+    // create SANDBOX simulation [ TAB 3 ]
+    simulationTab[3] = SimulationType::SANDBOX;
+    simulation[SimulationType::SANDBOX] = std::make_unique<QParticlesPhysicsManager>(SimulationType::SANDBOX,ui->ParticlesLayout_Tab3);
+    simulation[SimulationType::SANDBOX]->add( ui->Layout1_Tab3 , BoxType::INFODISPLAY , ActionType::D_TEMPERATURE );
+    simulation[SimulationType::SANDBOX]->add( ui->Layout2_Tab3 , BoxType::HISTOGRAM1D , ActionType::M_VELOCITY_DIST );
+    simulation[SimulationType::SANDBOX]->add( ui->Layout3_Tab3 , BoxType::HISTOGRAM1D , ActionType::M_MOMENTUM_DIST );
 
-    ui->blueParticlesSliderTab2->setValue(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS1));
-    ui->redParticlesSliderTab2->setValue(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS2));
-    ui->greenParticlesSliderTab2->setValue(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS3));
+    ui->temperatureUpSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::UP));
+    ui->temperatureDownSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::DOWN));
+    ui->temperatureLeftSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::LEFT));
+    ui->temperatureRightSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::RIGHT));
 
-    ui->blueParticlesSizeSliderTab2->setValue(physicsSimulation[3]->getSizeOfParticleInPercent(ParticleType::GAS1));
-    ui->redParticlesSizeSliderTab2->setValue(physicsSimulation[3]->getSizeOfParticleInPercent(ParticleType::GAS2));
-    ui->greenParticlesSizeSliderTab2->setValue(physicsSimulation[3]->getSizeOfParticleInPercent(ParticleType::GAS3));
+    ui->blueParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS1));
+    ui->redParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS2));
+    ui->greenParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS3));
+
+    ui->blueParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS1));
+    ui->redParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS2));
+    ui->greenParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS3));
 
     // connect menu actions
     connect( ui->actionAbout, &QAction::triggered, this, &MainWindow::about_action );
@@ -82,22 +85,22 @@ MainWindow::MainWindow(QWidget *parent) :
     updateTimer.start(100);
     animationTimer.start(10);
 
-    calculationThread = physicsSimulation[currentIndex]->calculateNextPositionsInThread();
+    calculationThread = simulation[current]->calculateNextPositionsInThread();
 
 }
 
 MainWindow::~MainWindow()
 {
-    physicsSimulation[currentIndex]->end();
+    simulation[current]->end();
     calculationThread.join();
     delete ui;
 }
 
 void MainWindow::update()
 {    
-    physicsSimulation[currentIndex]->paintLayouts();
-    physicsSimulation[currentIndex]->handleControls();
-    ui->calculationCount->display(static_cast<int>(physicsSimulation[currentIndex]->getAvgCalculationCount()));
+    simulation[current]->paintLayouts();
+    simulation[current]->handleControls();
+    ui->calculationCount->display(static_cast<int>(simulation[current]->getAvgCalculationCount()));
 }
 
 void MainWindow::animate()
@@ -110,7 +113,7 @@ void MainWindow::animate()
             dividerGapStep = 0.0;
             dividerGapAnimationStart = false;
         }
-        physicsSimulation[1]->setDividerGap(static_cast<int>(dividerGapPosition));
+        simulation[SimulationType::DIFFUSION]->setDividerGap(static_cast<int>(dividerGapPosition));
         dividerGapPosition += dividerGapStep;
         dividerGapStep += 0.1;
     }
@@ -118,7 +121,7 @@ void MainWindow::animate()
 
 void MainWindow::paint()
 {
-    physicsSimulation[currentIndex]->paintParticlesPlane();
+    simulation[current]->paintParticlesPlane();
 }
 
 void MainWindow::about_action()
@@ -197,30 +200,30 @@ void MainWindow::change_language()
 void MainWindow::on_temperatureDialTab0_valueChanged( int value )
 {
      ui->temperatureLabelTab0->setText(QString::number(value));
-     physicsSimulation[0]->setTemperatureInPercent(value);
+     simulation[SimulationType::BASIC]->setTemperatureInPercent(value);
 }
 
 void MainWindow::on_numberOfParticlesSliderTab0_valueChanged( int value )
 {
-    physicsSimulation[0]->setParticlesInPlaneInPercent(ParticleType::NORMAL,value);
-    ui->numberOfParticlesLabelTab0->setText(QString::number(physicsSimulation[0]->getNumberOfParticles(ParticleType::NORMAL)));
+    simulation[SimulationType::BASIC]->setParticlesInPlaneInPercent(ParticleType::NORMAL,value);
+    ui->numberOfParticlesLabelTab0->setText(QString::number(simulation[SimulationType::BASIC]->getNumberOfParticles(ParticleType::NORMAL)));
 }
 
 void MainWindow::on_sizeOfParticleSliderTab0_valueChanged( int value )
 {
-    physicsSimulation[0]->setSizeOfParticlesInPercent( ParticleType::NORMAL, value );
-    ui->sizeOfParticlesInfoLabelTab0->setText(QString::number(physicsSimulation[0]->getSizeOfParticle()));
+    simulation[SimulationType::BASIC]->setSizeOfParticlesInPercent( ParticleType::NORMAL, value );
+    ui->sizeOfParticlesInfoLabelTab0->setText(QString::number(simulation[SimulationType::BASIC]->getSizeOfParticle()));
 }
 
 void MainWindow::on_planeSizeDialTab0_valueChanged( int value )
 {
     ui->constraintLabelTab0->setText(QString::number(value));
-    physicsSimulation[0]->setPlaneWidthInPercent(value);
+    simulation[SimulationType::BASIC]->setPlaneWidthInPercent(value);
 }
 
 void MainWindow::on_runButtonTab0_clicked()
 {
-    physicsSimulation[0]->run(true);
+    simulation[SimulationType::BASIC]->run(true);
     ui->pauseButtonTab0->setEnabled(true);
     ui->runButtonTab0->setEnabled(false);
     ui->planeSizeDialTab0->setEnabled(true);
@@ -228,7 +231,7 @@ void MainWindow::on_runButtonTab0_clicked()
 
 void MainWindow::on_pauseButtonTab0_clicked()
 {
-    physicsSimulation[0]->pause(true);
+    simulation[SimulationType::BASIC]->pause(true);
     ui->pauseButtonTab0->setEnabled(false);
     ui->runButtonTab0->setEnabled(true);
     ui->planeSizeDialTab0->setEnabled(false);
@@ -238,19 +241,19 @@ void MainWindow::on_trackingOnButtonTab0_clicked()
 {
     ui->trackingOnButtonTab0->setDisabled(true);
     ui->trackingOffButtonTab0->setDisabled(false);
-    physicsSimulation[0]->enableTracking();
+    simulation[SimulationType::BASIC]->enableTracking();
 }
 
 void MainWindow::on_trackingOffButtonTab0_clicked()
 {
     ui->trackingOffButtonTab0->setDisabled(true);
     ui->trackingOnButtonTab0->setDisabled(false);
-    physicsSimulation[0]->disableTracking();
+    simulation[SimulationType::BASIC]->disableTracking();
 }
 
 void MainWindow::on_runButtonTab1_clicked()
 {
-    physicsSimulation[1]->run(true);
+    simulation[SimulationType::DIFFUSION]->run(true);
     ui->pauseButtonTab1->setEnabled(true);
     ui->runButtonTab1->setEnabled(false);
     ui->startButtonTab1->setEnabled(true);
@@ -258,7 +261,7 @@ void MainWindow::on_runButtonTab1_clicked()
 
 void MainWindow::on_pauseButtonTab1_clicked()
 {
-    physicsSimulation[1]->pause(true);
+    simulation[SimulationType::DIFFUSION]->pause(true);
     ui->pauseButtonTab1->setEnabled(false);
     ui->runButtonTab1->setEnabled(true);
     ui->startButtonTab1->setEnabled(false);
@@ -266,19 +269,19 @@ void MainWindow::on_pauseButtonTab1_clicked()
 
 void MainWindow::on_tabWidget_currentChanged( int index )
 {
-    if( physicsSimulation[currentIndex]->getCalculationState() != "End" )
+    if( simulation[current]->getCalculationState() != "End" )
     {
-        physicsSimulation[currentIndex]->end();
+        simulation[current]->end();
         calculationThread.join();        
     }
 
-    calculationThread = physicsSimulation[static_cast<size_t>(index)]->calculateNextPositionsInThread();    
-    if( physicsSimulation[static_cast<size_t>(index)]->isPauseByUser() )
+    calculationThread = simulation[simulationTab[index]]->calculateNextPositionsInThread();
+    if( simulation[simulationTab[index]]->isPauseByUser() )
     {
-        physicsSimulation[static_cast<size_t>(index)]->pause();
+        simulation[simulationTab[index]]->pause();
     }
 
-    currentIndex = static_cast<size_t>(index);
+    current = simulationTab[index];
 }
 
 void MainWindow::on_startButtonTab1_clicked()
@@ -287,233 +290,233 @@ void MainWindow::on_startButtonTab1_clicked()
     {        
         ui->startButtonTab1->setText("RESET");
         dividerGapAnimationStart = true;
-        physicsSimulation[1]->setAverageDiffusionTemperature();
+        simulation[SimulationType::DIFFUSION]->setAverageDiffusionTemperature();
     }
     else if( ui->startButtonTab1->text() == "RESET" )
     {
         ui->startButtonTab1->setText("OPEN");
         dividerGapAnimationStart = false;
         dividerGapPosition = 0;
-        physicsSimulation[1]->reset();
-        ui->particleSizeBlueDialTab1->setValue(physicsSimulation[1]->getSizeOfParticleInPercent(ParticleType::BLUE));
-        ui->particleSizeRedDialTab1->setValue(physicsSimulation[1]->getSizeOfParticleInPercent(ParticleType::RED));
+        simulation[SimulationType::DIFFUSION]->reset();
+        ui->particleSizeBlueDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getSizeOfParticleInPercent(ParticleType::BLUE));
+        ui->particleSizeRedDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getSizeOfParticleInPercent(ParticleType::RED));
         ui->visualizationTypeParticleRadioButtonTab1->setChecked(true);
         ui->gapSizeSliderTab1->setValue(0);
     }
 
-    ui->temperatureLeftDialTab1->setValue(physicsSimulation[1]->getTemperatureLeftInPercent());
-    ui->temperatureRightDialTab1->setValue(physicsSimulation[1]->getTemperatureRightInPercent());   
+    ui->temperatureLeftDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getTemperatureLeftInPercent());
+    ui->temperatureRightDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getTemperatureRightInPercent());
 }
 
 void MainWindow::on_temperatureLeftDialTab1_valueChanged( int value )
 {
-    physicsSimulation[1]->setTemperatureLeftInPercent(value);
+    simulation[SimulationType::DIFFUSION]->setTemperatureLeftInPercent(value);
     ui->blueTemperatureLabelTab1->setText(QString::number(value));
 }
 
 void MainWindow::on_temperatureRightDialTab1_valueChanged(int value)
 {
-    physicsSimulation[1]->setTemperatureRightInPercent(value);
+    simulation[SimulationType::DIFFUSION]->setTemperatureRightInPercent(value);
     ui->redTemperatureLabelTab1->setText(QString::number(value));
 }
 
 void MainWindow::on_particleSizeBlueDialTab1_valueChanged(int value)
 {
-    physicsSimulation[1]->setSizeOfParticlesInPercent(ParticleType::BLUE,value);
+    simulation[SimulationType::DIFFUSION]->setSizeOfParticlesInPercent(ParticleType::BLUE,value);
     ui->blueSizeLabelTab1->setText(QString::number(value));
 }
 
 void MainWindow::on_particleSizeRedDialTab1_valueChanged(int value)
 {
-    physicsSimulation[1]->setSizeOfParticlesInPercent(ParticleType::RED,value);
+    simulation[SimulationType::DIFFUSION]->setSizeOfParticlesInPercent(ParticleType::RED,value);
     ui->redSizeLabelTab1->setText(QString::number(value));
 }
 
 void MainWindow::on_visualizationTypeVelocityRadioButtonTab1_toggled( bool checked )
 {
-    if( checked ) physicsSimulation[1]->setVisualizationType(VisualizationType::VELOCITY);
-    else physicsSimulation[1]->setVisualizationType(VisualizationType::PARTICLE);
+    if( checked ) simulation[SimulationType::DIFFUSION]->setVisualizationType(VisualizationType::VELOCITY);
+    else simulation[SimulationType::DIFFUSION]->setVisualizationType(VisualizationType::PARTICLE);
 }
 
 void MainWindow::on_gapSizeSliderTab1_valueChanged( int value )
 {
     if( ui->startButtonTab1->text() == "OPEN" && value>0 )
     {
-        physicsSimulation[currentIndex]->setAverageDiffusionTemperature();
+        simulation[current]->setAverageDiffusionTemperature();
         ui->startButtonTab1->setText("RESET");
     }
-    physicsSimulation[1]->setDividerGap(value);
+    simulation[SimulationType::DIFFUSION]->setDividerGap(value);
 }
 
 void MainWindow::on_temperatureUpSliderTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setSideTemperatureInPercent(PlaneSide::UP,value);
-    physicsSimulation[3]->setDisplay(MeasurementType::INFO,PlaneSide::UP,value);
+    simulation[SimulationType::SANDBOX]->setSideTemperatureInPercent(PlaneSide::UP,value);
+    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlaneSide::UP,value);
 }
 
 void MainWindow::on_temperatureRightSliderTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setSideTemperatureInPercent(PlaneSide::RIGHT,value);
-    physicsSimulation[3]->setDisplay(MeasurementType::INFO,PlaneSide::RIGHT,value);
+    simulation[SimulationType::SANDBOX]->setSideTemperatureInPercent(PlaneSide::RIGHT,value);
+    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlaneSide::RIGHT,value);
 }
 
 void MainWindow::on_temperatureDownSliderTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setSideTemperatureInPercent(PlaneSide::DOWN,value);
-    physicsSimulation[3]->setDisplay(MeasurementType::INFO,PlaneSide::DOWN,value);
+    simulation[SimulationType::SANDBOX]->setSideTemperatureInPercent(PlaneSide::DOWN,value);
+    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlaneSide::DOWN,value);
 }
 
 void MainWindow::on_temperatureLeftSliderTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setSideTemperatureInPercent(PlaneSide::LEFT,value);
-    physicsSimulation[3]->setDisplay(MeasurementType::INFO,PlaneSide::LEFT,value);
+    simulation[SimulationType::SANDBOX]->setSideTemperatureInPercent(PlaneSide::LEFT,value);
+    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlaneSide::LEFT,value);
 }
 
 void MainWindow::on_horizontalForceTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setHorizontalForceInPercent(value);
+    simulation[SimulationType::SANDBOX]->setHorizontalForceInPercent(value);
     ui->horizontalForceSizeLabelTab2->setText(QString::number(value));
 }
 
 void MainWindow::on_verticalForceTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setVerticalForceInPercent(value);
+    simulation[SimulationType::SANDBOX]->setVerticalForceInPercent(value);
     ui->verticalForceSizeLabelTab2->setText(QString::number(value));
 }
 
 void MainWindow::on_runButtonTab2_clicked()
 {
-    physicsSimulation[3]->run(true);
+    simulation[SimulationType::SANDBOX]->run(true);
     ui->pauseButtonTab2->setEnabled(true);
     ui->runButtonTab2->setEnabled(false);
 }
 
 void MainWindow::on_pauseButtonTab2_clicked()
 {
-    physicsSimulation[3]->pause(true);
+    simulation[SimulationType::SANDBOX]->pause(true);
     ui->pauseButtonTab2->setEnabled(false);
     ui->runButtonTab2->setEnabled(true);
 }
 
 void MainWindow::on_blueParticlesSliderTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setParticlesInPlane(ParticleType::GAS1,value);
-    ui->particlesNumberGas1LabellTab2->setText(QString::number(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS1)));
+    simulation[SimulationType::SANDBOX]->setParticlesInPlane(ParticleType::GAS1,value);
+    ui->particlesNumberGas1LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS1)));
     double posx = static_cast<double>(ui->blueParticlesSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->blueParticlesSliderTab2->maximum()-ui->blueParticlesSliderTab2->minimum())));
     ui->particlesNumberGas1LabellTab2->move(ui->blueParticlesSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesNumberGas1LabellTab2->pos().y());
 }
 
 void MainWindow::on_redParticlesSliderTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setParticlesInPlane(ParticleType::GAS2,value);
-    ui->particlesNumberGas2LabellTab2->setText(QString::number(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS2)));
+    simulation[SimulationType::SANDBOX]->setParticlesInPlane(ParticleType::GAS2,value);
+    ui->particlesNumberGas2LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS2)));
     double posx = static_cast<double>(ui->redParticlesSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->redParticlesSliderTab2->maximum()-ui->redParticlesSliderTab2->minimum())));
     ui->particlesNumberGas2LabellTab2->move(ui->redParticlesSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesNumberGas2LabellTab2->pos().y());
 }
 
 void MainWindow::on_greenParticlesSliderTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setParticlesInPlane(ParticleType::GAS3,value);
-    ui->particlesNumberGas3LabellTab2->setText(QString::number(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS3)));
+    simulation[SimulationType::SANDBOX]->setParticlesInPlane(ParticleType::GAS3,value);
+    ui->particlesNumberGas3LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS3)));
     double posx = static_cast<double>(ui->greenParticlesSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->greenParticlesSliderTab2->maximum()-ui->greenParticlesSliderTab2->minimum())));
     ui->particlesNumberGas3LabellTab2->move(ui->greenParticlesSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesNumberGas3LabellTab2->pos().y());
 }
 
 void MainWindow::on_blueParticlesSizeSliderTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setSizeOfParticlesInPercent(ParticleType::GAS1,value);
-    ui->particlesSizeGas1LabellTab2->setText(QString::number(physicsSimulation[3]->getSizeOfParticle(ParticleType::GAS1)));
+    simulation[SimulationType::SANDBOX]->setSizeOfParticlesInPercent(ParticleType::GAS1,value);
+    ui->particlesSizeGas1LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getSizeOfParticle(ParticleType::GAS1)));
     double posx = static_cast<double>(ui->blueParticlesSizeSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->blueParticlesSizeSliderTab2->maximum()-ui->blueParticlesSizeSliderTab2->minimum())));
     ui->particlesSizeGas1LabellTab2->move(ui->blueParticlesSizeSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesSizeGas1LabellTab2->pos().y());
 }
 
 void MainWindow::on_redParticlesSizeSliderTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setSizeOfParticlesInPercent(ParticleType::GAS2,value);
-    ui->particlesSizeGas2LabellTab2->setText(QString::number(physicsSimulation[3]->getSizeOfParticle(ParticleType::GAS2)));
+    simulation[SimulationType::SANDBOX]->setSizeOfParticlesInPercent(ParticleType::GAS2,value);
+    ui->particlesSizeGas2LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getSizeOfParticle(ParticleType::GAS2)));
     double posx = static_cast<double>(ui->redParticlesSizeSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->redParticlesSizeSliderTab2->maximum()-ui->redParticlesSizeSliderTab2->minimum())));
     ui->particlesSizeGas2LabellTab2->move(ui->redParticlesSizeSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesSizeGas2LabellTab2->pos().y());
 }
 
 void MainWindow::on_greenParticlesSizeSliderTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setSizeOfParticlesInPercent(ParticleType::GAS3,value);
-    ui->particlesSizeGas3LabellTab2->setText(QString::number(physicsSimulation[3]->getSizeOfParticle(ParticleType::GAS3)));
+    simulation[SimulationType::SANDBOX]->setSizeOfParticlesInPercent(ParticleType::GAS3,value);
+    ui->particlesSizeGas3LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getSizeOfParticle(ParticleType::GAS3)));
     double posx = static_cast<double>(ui->greenParticlesSizeSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->greenParticlesSizeSliderTab2->maximum()-ui->greenParticlesSizeSliderTab2->minimum())));
     ui->particlesSizeGas3LabellTab2->move(ui->greenParticlesSizeSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesSizeGas3LabellTab2->pos().y());
 }
 
 void MainWindow::on_visualizationTypeVelocityRadioButtonTab2_toggled( bool checked )
 {
-    if( checked ) physicsSimulation[3]->setVisualizationType(VisualizationType::VELOCITY);
-    else physicsSimulation[3]->setVisualizationType(VisualizationType::PARTICLE);
+    if( checked ) simulation[SimulationType::SANDBOX]->setVisualizationType(VisualizationType::VELOCITY);
+    else simulation[SimulationType::SANDBOX]->setVisualizationType(VisualizationType::PARTICLE);
 }
 
 void MainWindow::on_attractionForceTab2_valueChanged( int value )
 {
-    physicsSimulation[3]->setAttractionForceInPercent( value );
+    simulation[SimulationType::SANDBOX]->setAttractionForceInPercent( value );
     ui->atractionForceSizeLabelTab2->setText(QString::number(value));
 }
 
 void MainWindow::on_runButtonTab4_clicked()
 {
-    physicsSimulation[2]->run(true);
+    simulation[SimulationType::BROWNIAN_MOTION]->run(true);
     ui->pauseButtonTab4->setEnabled(true);
     ui->runButtonTab4->setEnabled(false);
 }
 
 void MainWindow::on_pauseButtonTab4_clicked()
 {
-    physicsSimulation[2]->pause(true);
+    simulation[SimulationType::BROWNIAN_MOTION]->pause(true);
     ui->pauseButtonTab4->setEnabled(false);
     ui->runButtonTab4->setEnabled(true);
 }
 
 void MainWindow::on_massMoleculeSliderTab4_valueChanged( int value )
 {
-    physicsSimulation[2]->setMassOfMoleculeInPercent( value );
+    simulation[SimulationType::BROWNIAN_MOTION]->setMassOfMoleculeInPercent( value );
     ui->massMoleculeLabelTab4->setText( QString::number(value) );
 }
 
 void MainWindow::on_stopMoleculePushButtonTab4_clicked()
 {
-    physicsSimulation[2]->stopMolecule();    
+    simulation[SimulationType::BROWNIAN_MOTION]->stopMolecule();
 }
 
 void MainWindow::on_clearTrackMoleculePushButtonTab4_clicked()
 {
-    physicsSimulation[2]->clearMoleculeTrace();
+    simulation[SimulationType::BROWNIAN_MOTION]->clearMoleculeTrace();
 }
 
 void MainWindow::on_resetPushButton_tab2_clicked()
 {
-    physicsSimulation[3]->reset();
+    simulation[SimulationType::SANDBOX]->reset();
 
     ui->verticalForceTab2->setValue(0);
     ui->horizontalForceTab2->setValue(0);
     ui->attractionForceTab2->setValue(0);
 
-    ui->temperatureUpSliderTab2->setValue(physicsSimulation[3]->getSideTemperatureInPercent(PlaneSide::UP));
-    ui->temperatureDownSliderTab2->setValue(physicsSimulation[3]->getSideTemperatureInPercent(PlaneSide::DOWN));
-    ui->temperatureLeftSliderTab2->setValue(physicsSimulation[3]->getSideTemperatureInPercent(PlaneSide::LEFT));
-    ui->temperatureRightSliderTab2->setValue(physicsSimulation[3]->getSideTemperatureInPercent(PlaneSide::RIGHT));
+    ui->temperatureUpSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::UP));
+    ui->temperatureDownSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::DOWN));
+    ui->temperatureLeftSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::LEFT));
+    ui->temperatureRightSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::RIGHT));
 
-    ui->blueParticlesSliderTab2->setValue(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS1));
-    ui->redParticlesSliderTab2->setValue(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS2));
-    ui->greenParticlesSliderTab2->setValue(physicsSimulation[3]->getNumberOfParticles(ParticleType::GAS3));
+    ui->blueParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS1));
+    ui->redParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS2));
+    ui->greenParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS3));
 
-    ui->blueParticlesSizeSliderTab2->setValue(physicsSimulation[3]->getSizeOfParticleInPercent(ParticleType::GAS1));
-    ui->redParticlesSizeSliderTab2->setValue(physicsSimulation[3]->getSizeOfParticleInPercent(ParticleType::GAS2));
-    ui->greenParticlesSizeSliderTab2->setValue(physicsSimulation[3]->getSizeOfParticleInPercent(ParticleType::GAS3));
+    ui->blueParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS1));
+    ui->redParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS2));
+    ui->greenParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS3));
 }
 
 void MainWindow::on_randomPushButton_tab2_clicked()
 {
-     physicsSimulation[3]->reset();
+     simulation[SimulationType::SANDBOX]->reset();
 
-     ui->blueParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(physicsSimulation[3]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
-     ui->redParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(physicsSimulation[3]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
-     ui->greenParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(physicsSimulation[3]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
+     ui->blueParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(simulation[SimulationType::SANDBOX]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
+     ui->redParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(simulation[SimulationType::SANDBOX]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
+     ui->greenParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(simulation[SimulationType::SANDBOX]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
 
      ui->blueParticlesSliderTab2->setValue(QRandomGenerator::global()->bounded(ui->blueParticlesSliderTab2->maximum()));
      ui->redParticlesSliderTab2->setValue(QRandomGenerator::global()->bounded(ui->redParticlesSliderTab2->maximum()));

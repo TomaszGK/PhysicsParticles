@@ -27,16 +27,16 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
     barCharts = std::make_shared<MapBarChart>();
     histograms1D = std::make_shared<MapHistogram1D>();
 
-    (*barCharts)[MeasurementType::VELOCITY]      = std::make_shared<BarChart>( 80 , "Average Velocity of Gas Particles" , "Time" , "V" );
-    (*barCharts)[MeasurementType::VELOCITY_BLUE] = std::make_shared<BarChart>( 70 , "Average Velocity of Blue Gas Particles" , "Time" , "V" );
-    (*barCharts)[MeasurementType::VELOCITY_RED]  = std::make_shared<BarChart>( 70 , "Average Velocity of Red Gas Particles" , "Time" , "V" );
-    (*barCharts)[MeasurementType::COLLISIONS]    = std::make_shared<BarChart>( 40 , "Collisions" );
-    (*barCharts)[MeasurementType::KINETIC]       = std::make_shared<BarChart>( 160 , "Energy of Particle Hits" , "Time" , "E" );
+    (*barCharts)[ActionType::M_VELOCITY]      = std::make_shared<BarChart>( 80 , "Average Velocity of Gas Particles" , "Time" , "V" );
+    (*barCharts)[ActionType::M_VELOCITY_BLUE] = std::make_shared<BarChart>( 70 , "Average Velocity of Blue Gas Particles" , "Time" , "V" );
+    (*barCharts)[ActionType::M_VELOCITY_RED]  = std::make_shared<BarChart>( 70 , "Average Velocity of Red Gas Particles" , "Time" , "V" );
+    (*barCharts)[ActionType::M_COLLISIONS]    = std::make_shared<BarChart>( 40 , "Collisions" );
+    (*barCharts)[ActionType::M_KINETIC]       = std::make_shared<BarChart>( 160 , "Energy of Particle Hits" , "Time" , "E" );
 
-    (*barDisplays)[MeasurementType::DIFFIUSION] = std::make_shared<BarDisplay>(2);
+    (*barDisplays)[ActionType::M_DIFFIUSION] = std::make_shared<BarDisplay>(2);
 
-    (*histograms1D)[MeasurementType::VELOCITY_DIST] = std::make_shared<Histogram1D>( 80 , physicsInfo.minRapidity , physicsInfo.maxRapidity*2.0 , "Velocity Distribution" );
-    (*histograms1D)[MeasurementType::MOMENTUM_DIST] = std::make_shared<Histogram1D>( 80 , physicsInfo.minRapidity , physicsInfo.maxRapidity*2.0 , "Momentum Distribution" );
+    (*histograms1D)[ActionType::M_VELOCITY_DIST] = std::make_shared<Histogram1D>( 80 , physicsInfo.minRapidity , physicsInfo.maxRapidity*2.0 , "Velocity Distribution" );
+    (*histograms1D)[ActionType::M_MOMENTUM_DIST] = std::make_shared<Histogram1D>( 80 , physicsInfo.minRapidity , physicsInfo.maxRapidity*2.0 , "Momentum Distribution" );
 
     Locator::provide(this);
 }
@@ -487,8 +487,8 @@ void ParticlesPhysicsManager::update()
         handleParticleClusterTransition(particle);
 
         velocity = particle->velocity();
-        (*histograms1D)[MeasurementType::VELOCITY_DIST]->fill(velocity);
-        (*histograms1D)[MeasurementType::MOMENTUM_DIST]->fill(velocity*particle->mass);
+        (*histograms1D)[ActionType::M_VELOCITY_DIST]->fill(velocity);
+        (*histograms1D)[ActionType::M_MOMENTUM_DIST]->fill(velocity*particle->mass);
 
         if( particle->particleType == ParticleType::NORMAL )
         {
@@ -505,7 +505,7 @@ void ParticlesPhysicsManager::update()
 
     }        
 
-    if( simulationType == SimulationType::BROWNIAN_MOTION ) (*histograms1D)[MeasurementType::VELOCITY_DIST]->markBin( getMoleculeVelocity() );
+    if( simulationType == SimulationType::BROWNIAN_MOTION ) (*histograms1D)[ActionType::M_VELOCITY_DIST]->markBin( getMoleculeVelocity() );
 
     if( simulationType == SimulationType::BASIC )
     {
@@ -572,20 +572,20 @@ void ParticlesPhysicsManager::updateBars()
     {
         if( simulationType == SimulationType::BASIC )
         {
-            (*barCharts)[MeasurementType::VELOCITY]->add(physicsInfo.avgVelocity);
-            (*barCharts)[MeasurementType::COLLISIONS]->add(physicsInfo.numOfCollisionTP);
-            (*barCharts)[MeasurementType::KINETIC]->add(physicsInfo.kineticEnergySumTP);
+            (*barCharts)[ActionType::M_VELOCITY]->add(physicsInfo.avgVelocity);
+            (*barCharts)[ActionType::M_COLLISIONS]->add(physicsInfo.numOfCollisionTP);
+            (*barCharts)[ActionType::M_KINETIC]->add(physicsInfo.kineticEnergySumTP);
         }
         if( simulationType == SimulationType::DIFFUSION )
         {
-            (*barCharts)[MeasurementType::VELOCITY_BLUE]->add(physicsInfo.avgVelocityBlue);
-            (*barCharts)[MeasurementType::VELOCITY_RED]->add(physicsInfo.avgVelocityRed);
+            (*barCharts)[ActionType::M_VELOCITY_BLUE]->add(physicsInfo.avgVelocityBlue);
+            (*barCharts)[ActionType::M_VELOCITY_RED]->add(physicsInfo.avgVelocityRed);
 
             updateParticlesLocationInPlane();
-            (*barDisplays)[MeasurementType::DIFFIUSION]->setUpperBox(0,physicsInfo.numBlueParticlesLeft);
-            (*barDisplays)[MeasurementType::DIFFIUSION]->setUpperBox(1,physicsInfo.numBlueParticlesRight);
-            (*barDisplays)[MeasurementType::DIFFIUSION]->setLowerBox(0,physicsInfo.numRedParticlesLeft);
-            (*barDisplays)[MeasurementType::DIFFIUSION]->setLowerBox(1,physicsInfo.numRedParticlesRight);
+            (*barDisplays)[ActionType::M_DIFFIUSION]->setUpperBox(0,physicsInfo.numBlueParticlesLeft);
+            (*barDisplays)[ActionType::M_DIFFIUSION]->setUpperBox(1,physicsInfo.numBlueParticlesRight);
+            (*barDisplays)[ActionType::M_DIFFIUSION]->setLowerBox(0,physicsInfo.numRedParticlesLeft);
+            (*barDisplays)[ActionType::M_DIFFIUSION]->setLowerBox(1,physicsInfo.numRedParticlesRight);
         }
     }
 }

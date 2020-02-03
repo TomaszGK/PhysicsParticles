@@ -1,7 +1,7 @@
 #include "qbarchart.h"
 #include "particlesphysicsmanager.h"
 
-QBarChart::QBarChart( MeasurementType type, double max, QWidget* parent )
+QBarChart::QBarChart( ActionType type, double max, QWidget* parent )
 : QBoxPainter { parent }, barChart { ParticlesPhysicsManager::Locator::getBarChart(type) }
 {    
     setMaxOY(max);        

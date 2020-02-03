@@ -35,11 +35,11 @@ public:
 
         static cptrPlaneArea getConstPlaneArea() { return cplane; }
 
-        static ptrBarDisplay getBarDisplay( MeasurementType type ) { return barDisplayMap==nullptr?nullptr:(*barDisplayMap)[type]; }
+        static ptrBarDisplay getBarDisplay( ActionType type ) { return barDisplayMap==nullptr?nullptr:(*barDisplayMap)[type]; }
 
-        static ptrBarChart getBarChart( MeasurementType type ) { return barChartMap==nullptr?nullptr:(*barChartMap)[type]; }
+        static ptrBarChart getBarChart( ActionType type ) { return barChartMap==nullptr?nullptr:(*barChartMap)[type]; }
 
-        static ptrHistogram1D getHistogram1D( MeasurementType type ) { return histogram1DMap==nullptr?nullptr:(*histogram1DMap)[type]; }
+        static ptrHistogram1D getHistogram1D( ActionType type ) { return histogram1DMap==nullptr?nullptr:(*histogram1DMap)[type]; }
 
         static void provide( ParticlesPhysicsManager *manager )
         {
@@ -313,7 +313,7 @@ public:
      */
     int getPressureValue() const
     {
-        return static_cast<int>(100*barCharts->at(MeasurementType::KINETIC)->getAvgInLast(5));
+        return static_cast<int>(100*barCharts->at(ActionType::M_KINETIC)->getAvgInLast(5));
     }
 
     /**

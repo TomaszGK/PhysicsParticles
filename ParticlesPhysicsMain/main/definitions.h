@@ -105,20 +105,20 @@ enum class BoxType
 /** @enum MeasurementType
  *  @brief Representing type of measurement
  */
-enum class MeasurementType
+enum class ActionType
 {
-    VELOCITY      , /**< velocity measure */
-    VELOCITY_RED  , /**< red particles velocity measure */
-    VELOCITY_BLUE , /**< blue particles velocity measure */
-    VELOCITY_DIST , /**< velocity distribution measure */
-    MOMENTUM_DIST , /**< momentum distribution measure */
-    DIFFIUSION    , /**< diffiusion measure */
-    COLLISIONS    , /**< collision measure */
-    KINETIC       , /**< kinetic energy measure */
-    PRESSURE      , /**< pressure measure */
-    POSITION      , /**< position measure */
-    CONTROL       , /**< no measurement - uses in control boxes */
-    INFO            /**< no measurement - uses in info display */
+    M_VELOCITY       , /**< velocity measure */
+    M_VELOCITY_RED   , /**< red particles velocity measure */
+    M_VELOCITY_BLUE  , /**< blue particles velocity measure */
+    M_VELOCITY_DIST  , /**< velocity distribution measure */
+    M_MOMENTUM_DIST  , /**< momentum distribution measure */
+    M_DIFFIUSION     , /**< diffiusion measure */
+    M_COLLISIONS     , /**< collision measure */
+    M_KINETIC        , /**< kinetic energy measure */
+    M_PRESSURE       , /**< pressure measure */
+    M_POSITION       , /**< position measure */
+    C_PARTICLES_FLOW , /**< controls direction of particles flow */
+    D_TEMPERATURE      /**< displays temperature information  */
 };
 
 using vect2D = vector2D<double>;
@@ -129,17 +129,17 @@ using Random = effolkronium::random_static;
 
 using ptrBarDisplay = std::shared_ptr<BarDisplay>;
 using cptrBarDisplay = std::shared_ptr<const BarDisplay>;
-using MapBarDisplay = std::map<MeasurementType,ptrBarDisplay>;
+using MapBarDisplay = std::map<ActionType,ptrBarDisplay>;
 using ptrMapBarDisplay = std::shared_ptr<MapBarDisplay>;
 
 using ptrBarChart = std::shared_ptr<BarChart>;
 using cptrBarChart = std::shared_ptr<const BarChart>;
-using MapBarChart = std::map<MeasurementType,ptrBarChart>;
+using MapBarChart = std::map<ActionType,ptrBarChart>;
 using ptrMapBarChart = std::shared_ptr<MapBarChart>;
 
 using ptrHistogram1D = std::shared_ptr<Histogram1D>;
 using cptrHistogram1D = std::shared_ptr<const Histogram1D>;
-using MapHistogram1D = std::map<MeasurementType,ptrHistogram1D>;
+using MapHistogram1D = std::map<ActionType,ptrHistogram1D>;
 using ptrMapHistogram1D = std::shared_ptr<MapHistogram1D>;
 
 using ptrParticlesContainer = std::shared_ptr<std::vector<Particle>>;

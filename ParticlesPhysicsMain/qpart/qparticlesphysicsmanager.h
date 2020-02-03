@@ -73,20 +73,20 @@ public:
      * @brief Adds a new box type for a given layout.
      *
      * @param boxType               a given box type
-     * @param measurementType       a given measurement type
+     * @param actionType            a given action type
      * @param layout                a given layout for QBarChart
      * @param style                 bar chart style
      */
-    void add( BoxType boxType, MeasurementType measurementType, QHBoxLayout* layout, BoxStyles style = BoxStyles::DEFAULT );
+    void add( QHBoxLayout* layout, BoxType boxType, ActionType actionType, BoxStyles style = BoxStyles::DEFAULT );
 
     /**
      * @brief Sets new value to display in QInfoDisplay for a given box side.
      *
-     * @param type                  type of measurement
+     * @param type                  type of action
      * @param side                  plane side corresponding to box side
      * @param newValue              new percent value to display
      */
-    void setDisplay( MeasurementType type, PlaneSide side, int value )
+    void setDisplay( ActionType type, PlaneSide side, int value )
     {
         if( qBoxPainters.count(type) != 0 )
         {
@@ -168,13 +168,13 @@ private:
     std::unique_ptr<QPainterManager> particlesPaintManager;
 
     /** Maps unique pointers to QBoxPainter derived objects. */
-    std::map<MeasurementType,std::unique_ptr<QBoxPainter>> qBoxPainters;
+    std::map<ActionType,std::unique_ptr<QBoxPainter>> qBoxPainters;
 
     /** Maps control types for QBoxPainter derived objects. */
-    std::map<MeasurementType,ControlType> controlBoxType;
+    std::map<ActionType,ControlType> controlBoxType;
 
     /** Maps QGauges objects. */
-    std::map<MeasurementType,std::pair<std::unique_ptr<QcGaugeWidget>,std::unique_ptr<QcNeedleItem>>> qGauges;
+    std::map<ActionType,std::pair<std::unique_ptr<QcGaugeWidget>,std::unique_ptr<QcNeedleItem>>> qGauges;
 
     /** Gauge name label */
     QcLabelItem* gaugeNameLabel {nullptr};
@@ -182,10 +182,10 @@ private:
     /**
      * @brief Adds a new QGauge for a given layout.
      *
-     * @param type                  measurement type
+     * @param type                  action type
      * @param layout                a given layout for QGauge
      */
-    void addQGauge( MeasurementType type, QHBoxLayout* layout );
+    void addQGauge( ActionType type, QHBoxLayout* layout );
 
     /**
      * @brief Creates particle paint manager.
