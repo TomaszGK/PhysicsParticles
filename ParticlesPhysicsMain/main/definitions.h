@@ -88,6 +88,15 @@ enum class Language
     ENG   /**< english language */
 };
 
+/** @enum DataType
+ *  @brief Representing data format
+ */
+enum class DataFormat
+{
+    SCALAR  , /**< scalar format - e.g. int,float */
+    PERCENT   /**< percent format - 0 to 100 */
+};
+
 /** @enum BoxType
  *  @brief Representing type of box that may collect and store some physics quantities or control some action.
  */

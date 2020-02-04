@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->temperatureDialTab0->setValue(simulation[SimulationType::BASIC]->getTemperatureInPercent());
     ui->numberOfParticlesSliderTab0->setValue(50);
-    ui->sizeOfParticleSliderTab0->setValue(simulation[SimulationType::BASIC]->getSizeOfParticleInPercent());
+    ui->sizeOfParticleSliderTab0->setValue(simulation[SimulationType::BASIC]->getParticleSize(ParticleType::NORMAL,DataFormat::PERCENT));
     ui->trackingOffButtonTab0->setDisabled(true);
 
 
@@ -36,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->temperatureLeftDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getTemperatureLeftInPercent());
     ui->temperatureRightDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getTemperatureRightInPercent());
-    ui->particleSizeBlueDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getSizeOfParticleInPercent(ParticleType::BLUE));
-    ui->particleSizeRedDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getSizeOfParticleInPercent(ParticleType::RED));
+    ui->particleSizeBlueDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getParticleSize(ParticleType::BLUE,DataFormat::PERCENT));
+    ui->particleSizeRedDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getParticleSize(ParticleType::RED,DataFormat::PERCENT));
 
 
     // create BROWNIAN_MOTION simulation [ TAB 2 ]
@@ -64,9 +64,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->redParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS2));
     ui->greenParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS3));
 
-    ui->blueParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS1));
-    ui->redParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS2));
-    ui->greenParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS3));
+    ui->blueParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS1,DataFormat::PERCENT));
+    ui->redParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS2,DataFormat::PERCENT));
+    ui->greenParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS3,DataFormat::PERCENT));
 
     // connect menu actions
     connect( ui->actionAbout, &QAction::triggered, this, &MainWindow::about_action );
@@ -211,8 +211,8 @@ void MainWindow::on_numberOfParticlesSliderTab0_valueChanged( int value )
 
 void MainWindow::on_sizeOfParticleSliderTab0_valueChanged( int value )
 {
-    simulation[SimulationType::BASIC]->setSizeOfParticlesInPercent( ParticleType::NORMAL, value );
-    ui->sizeOfParticlesInfoLabelTab0->setText(QString::number(simulation[SimulationType::BASIC]->getSizeOfParticle()));
+    simulation[SimulationType::BASIC]->setParticleSize( ParticleType::NORMAL, DataFormat::PERCENT, value );
+    ui->sizeOfParticlesInfoLabelTab0->setText(QString::number(simulation[SimulationType::BASIC]->getParticleSize(ParticleType::NORMAL)));
 }
 
 void MainWindow::on_planeSizeDialTab0_valueChanged( int value )
@@ -298,8 +298,8 @@ void MainWindow::on_startButtonTab1_clicked()
         dividerGapAnimationStart = false;
         dividerGapPosition = 0;
         simulation[SimulationType::DIFFUSION]->reset();
-        ui->particleSizeBlueDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getSizeOfParticleInPercent(ParticleType::BLUE));
-        ui->particleSizeRedDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getSizeOfParticleInPercent(ParticleType::RED));
+        ui->particleSizeBlueDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getParticleSize(ParticleType::BLUE,DataFormat::PERCENT));
+        ui->particleSizeRedDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getParticleSize(ParticleType::RED,DataFormat::PERCENT));
         ui->visualizationTypeParticleRadioButtonTab1->setChecked(true);
         ui->gapSizeSliderTab1->setValue(0);
     }
@@ -322,13 +322,13 @@ void MainWindow::on_temperatureRightDialTab1_valueChanged(int value)
 
 void MainWindow::on_particleSizeBlueDialTab1_valueChanged(int value)
 {
-    simulation[SimulationType::DIFFUSION]->setSizeOfParticlesInPercent(ParticleType::BLUE,value);
+    simulation[SimulationType::DIFFUSION]->setParticleSize(ParticleType::BLUE,DataFormat::PERCENT,value);
     ui->blueSizeLabelTab1->setText(QString::number(value));
 }
 
 void MainWindow::on_particleSizeRedDialTab1_valueChanged(int value)
 {
-    simulation[SimulationType::DIFFUSION]->setSizeOfParticlesInPercent(ParticleType::RED,value);
+    simulation[SimulationType::DIFFUSION]->setParticleSize(ParticleType::RED,DataFormat::PERCENT,value);
     ui->redSizeLabelTab1->setText(QString::number(value));
 }
 
@@ -424,24 +424,24 @@ void MainWindow::on_greenParticlesSliderTab2_valueChanged( int value )
 
 void MainWindow::on_blueParticlesSizeSliderTab2_valueChanged( int value )
 {
-    simulation[SimulationType::SANDBOX]->setSizeOfParticlesInPercent(ParticleType::GAS1,value);
-    ui->particlesSizeGas1LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getSizeOfParticle(ParticleType::GAS1)));
+    simulation[SimulationType::SANDBOX]->setParticleSize(ParticleType::GAS1,DataFormat::PERCENT,value);
+    ui->particlesSizeGas1LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS1)));
     double posx = static_cast<double>(ui->blueParticlesSizeSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->blueParticlesSizeSliderTab2->maximum()-ui->blueParticlesSizeSliderTab2->minimum())));
     ui->particlesSizeGas1LabellTab2->move(ui->blueParticlesSizeSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesSizeGas1LabellTab2->pos().y());
 }
 
 void MainWindow::on_redParticlesSizeSliderTab2_valueChanged( int value )
 {
-    simulation[SimulationType::SANDBOX]->setSizeOfParticlesInPercent(ParticleType::GAS2,value);
-    ui->particlesSizeGas2LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getSizeOfParticle(ParticleType::GAS2)));
+    simulation[SimulationType::SANDBOX]->setParticleSize(ParticleType::GAS2,DataFormat::PERCENT,value);
+    ui->particlesSizeGas2LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS2)));
     double posx = static_cast<double>(ui->redParticlesSizeSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->redParticlesSizeSliderTab2->maximum()-ui->redParticlesSizeSliderTab2->minimum())));
     ui->particlesSizeGas2LabellTab2->move(ui->redParticlesSizeSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesSizeGas2LabellTab2->pos().y());
 }
 
 void MainWindow::on_greenParticlesSizeSliderTab2_valueChanged( int value )
 {
-    simulation[SimulationType::SANDBOX]->setSizeOfParticlesInPercent(ParticleType::GAS3,value);
-    ui->particlesSizeGas3LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getSizeOfParticle(ParticleType::GAS3)));
+    simulation[SimulationType::SANDBOX]->setParticleSize(ParticleType::GAS3,DataFormat::PERCENT,value);
+    ui->particlesSizeGas3LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS3)));
     double posx = static_cast<double>(ui->greenParticlesSizeSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->greenParticlesSizeSliderTab2->maximum()-ui->greenParticlesSizeSliderTab2->minimum())));
     ui->particlesSizeGas3LabellTab2->move(ui->greenParticlesSizeSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesSizeGas3LabellTab2->pos().y());
 }
@@ -505,9 +505,9 @@ void MainWindow::on_resetPushButton_tab2_clicked()
     ui->redParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS2));
     ui->greenParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS3));
 
-    ui->blueParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS1));
-    ui->redParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS2));
-    ui->greenParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSizeOfParticleInPercent(ParticleType::GAS3));
+    ui->blueParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS1,DataFormat::PERCENT));
+    ui->redParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS2,DataFormat::PERCENT));
+    ui->greenParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS3,DataFormat::PERCENT));
 }
 
 void MainWindow::on_randomPushButton_tab2_clicked()

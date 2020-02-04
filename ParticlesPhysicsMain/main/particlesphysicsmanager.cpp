@@ -297,10 +297,12 @@ bool ParticlesPhysicsManager::setParticlesInPlane( ParticleType particleType, in
     return ( simulationInfo.numberOfParticles[particleType] < quantity ) ? addParticles( particleType, visualizationType, diff, simulationInfo.particleSize[particleType] ) : removeParticles( particleType , diff );
 }
 
-void ParticlesPhysicsManager::setSizeOfParticlesInPercent( ParticleType type, int quantity )
+void ParticlesPhysicsManager::setParticleSize( ParticleType type, DataFormat format, int quantity )
 {
     Ensures( quantity>=0 && quantity<=100 );
-    int newSize = simulationInfo.minSizeOfParticle + static_cast<int>(quantity*0.01*(simulationInfo.maxSizeOfParticle[simulationType]-simulationInfo.minSizeOfParticle));
+
+    int newSize {quantity};
+    if( format == DataFormat::PERCENT ) newSize = simulationInfo.minSizeOfParticle + static_cast<int>(quantity*0.01*(simulationInfo.maxSizeOfParticle[simulationType]-simulationInfo.minSizeOfParticle));
 
     if( isParticlePlaneFull(type,newSize) ) return;
 

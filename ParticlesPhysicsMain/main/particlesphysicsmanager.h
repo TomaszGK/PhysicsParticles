@@ -344,29 +344,22 @@ public:
     /**
      * @brief Gets particle size for a given particle type.
      * @param type                  particle type
-     * @return particle size
+     * @param format                data format
+     * @return particle size as raw scalar or percent value
      */
-    int getSizeOfParticle( ParticleType type=ParticleType::NORMAL ) noexcept
+    int getParticleSize( ParticleType type, DataFormat format = DataFormat::SCALAR ) const noexcept
     {
-        return simulationInfo.particleSize[type];
-    }
+        if( format == DataFormat::PERCENT ) return static_cast<int>((simulationInfo.particleSize.at(type)-simulationInfo.minSizeOfParticle)*100/(simulationInfo.maxSizeOfParticle.at(simulationType)-simulationInfo.minSizeOfParticle));
+        return simulationInfo.particleSize.at(type);
+    }    
 
     /**
-     * @brief Gets percent value of particle size for a given particle type.
+     * @brief Sets new particle size for all particles having the same type.
      * @param type                  particle type
-     * @return percent value of particle size
+     * @param format                data format ( scalar or percent )
+     * @param quantity              new raw or percent value of particle size
      */
-    int getSizeOfParticleInPercent( ParticleType type=ParticleType::NORMAL ) noexcept
-    {
-        return static_cast<int>((simulationInfo.particleSize[type]-simulationInfo.minSizeOfParticle)*100/(simulationInfo.maxSizeOfParticle[simulationType]-simulationInfo.minSizeOfParticle));
-    }
-
-    /**
-     * @brief Sets percent value of particle size for a given particle type.
-     * @param type                  particle type
-     * @param quantity              new percent value of particle size
-     */
-    void setSizeOfParticlesInPercent( ParticleType type, int quantity );
+    void setParticleSize( ParticleType type, DataFormat format, int quantity );
 
     /**
      * @brief Sets percent value of attraction force.
