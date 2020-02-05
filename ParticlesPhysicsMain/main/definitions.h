@@ -140,16 +140,19 @@ using ptrBarDisplay = std::shared_ptr<BarDisplay>;
 using cptrBarDisplay = std::shared_ptr<const BarDisplay>;
 using MapBarDisplay = std::map<ActionType,ptrBarDisplay>;
 using ptrMapBarDisplay = std::shared_ptr<MapBarDisplay>;
+using cptrMapBarDisplay = std::shared_ptr<const MapBarDisplay>;
 
 using ptrBarChart = std::shared_ptr<BarChart>;
 using cptrBarChart = std::shared_ptr<const BarChart>;
 using MapBarChart = std::map<ActionType,ptrBarChart>;
 using ptrMapBarChart = std::shared_ptr<MapBarChart>;
+using cptrMapBarChart = std::shared_ptr<const MapBarChart>;
 
 using ptrHistogram1D = std::shared_ptr<Histogram1D>;
 using cptrHistogram1D = std::shared_ptr<const Histogram1D>;
 using MapHistogram1D = std::map<ActionType,ptrHistogram1D>;
 using ptrMapHistogram1D = std::shared_ptr<MapHistogram1D>;
+using cptrMapHistogram1D = std::shared_ptr<const MapHistogram1D>;
 
 using ptrParticlesContainer = std::shared_ptr<std::vector<Particle>>;
 using cptrParticlesContainer = std::shared_ptr<const std::vector<Particle>>;

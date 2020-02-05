@@ -27,20 +27,66 @@ class ParticlesPhysicsManager
 
 public:
 
+    /**
+     * @class Locator
+     * @brief Simply service locator for data that must be use outside scope of this class.
+     *
+     * Provide a static global point of access to particles, plane, histograms and bardisplays.
+     */
     class Locator
     {
+
     public:
 
+        /** @brief Default Constructor */
+        Locator() = delete;
+
+        /** @brief Copy constructor */
+        Locator( const Locator& ) = delete;
+
+        /** @brief Move constructor */
+        Locator( Locator&& ) = delete;
+
+        /**
+         * @brief Gets constant pointer to the container of particles.
+         *
+         * @return constant smart pointer to the container of particles
+         */
         static cptrParticlesContainer getConstParticles() { return cparticles; }
 
+        /**
+         * @brief Gets constant pointer to the plane area.
+         *
+         * @return constant smart pointer to the plane area
+         */
         static cptrPlaneArea getConstPlaneArea() { return cplane; }
 
-        static ptrBarDisplay getBarDisplay( ActionType type ) { return barDisplayMap==nullptr?nullptr:(*barDisplayMap)[type]; }
+        /**
+         * @brief Gets constant pointer to the container of bar displays.
+         *
+         * @return constant smart pointer to the container of bar displays
+         */
+        static cptrBarDisplay getBarDisplay( ActionType type ) { return barDisplayMap==nullptr?nullptr:(*barDisplayMap).at(type); }
 
-        static ptrBarChart getBarChart( ActionType type ) { return barChartMap==nullptr?nullptr:(*barChartMap)[type]; }
+        /**
+         * @brief Gets constant pointer to the container of bar charts.
+         *
+         * @return constant smart pointer to the container of bar charts
+         */
+        static cptrBarChart getBarChart( ActionType type ) { return barChartMap==nullptr?nullptr:(*barChartMap).at(type); }
 
-        static ptrHistogram1D getHistogram1D( ActionType type ) { return histogram1DMap==nullptr?nullptr:(*histogram1DMap)[type]; }
+        /**
+         * @brief Gets constant pointer to the container of histograms.
+         *
+         * @return constant smart pointer to the container of histograms
+         */
+        static cptrHistogram1D getHistogram1D( ActionType type ) { return histogram1DMap==nullptr?nullptr:(*histogram1DMap).at(type); }
 
+        /**
+         * @brief Provides and saves data location.
+         *
+         * @param manager       pointer to @ref ParticlesPhysicsManager
+         */
         static void provide( ParticlesPhysicsManager *manager )
         {
             cparticles = manager->particles;
@@ -52,15 +98,20 @@ public:
 
     private:
 
+        /** constant pointer to the container of particles */
         inline static cptrParticlesContainer cparticles {nullptr};
 
+        /** constant pointer to the particle plane */
         inline static cptrPlaneArea cplane {nullptr};
 
-        inline static ptrMapBarDisplay barDisplayMap {nullptr};
+        /** constant pointer to the map of bar displays */
+        inline static cptrMapBarDisplay barDisplayMap {nullptr};
 
-        inline static ptrMapBarChart barChartMap {nullptr};
+        /** constant pointer to the map of bar charts */
+        inline static cptrMapBarChart barChartMap {nullptr};
 
-        inline static ptrMapHistogram1D histogram1DMap {nullptr};
+        /** constant pointer to the map of histograms */
+        inline static cptrMapHistogram1D histogram1DMap {nullptr};
     };
 
     /**
