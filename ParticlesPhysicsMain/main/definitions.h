@@ -59,15 +59,18 @@ enum class ParticleType
     MACROSCOPIC   /**< used in BROWNIAN_MOTION type */
 };
 
-/** @enum PlaneSide
- *  @brief Representing particle plane side
+/** @enum PlanePart
+ *  @brief Representing some part of particle plane
  */
-enum class PlaneSide
+enum class PlanePart
 {
-    UP    , /**< upper particle side */
-    DOWN  , /**< down particle side */
-    RIGHT , /**< right particle side */
-    LEFT    /**< left particle side */
+    WHOLE    , /**< whole particle plane - use in basic */
+    LEFTBOX  , /**< left box of particle plane - use in diffiusion */
+    RIGHTBOX , /**< right box of particle plane - use in diffiusion */
+    UP       , /**< upper particle side - use in sandbox */
+    DOWN     , /**< down particle side - use in sandbox */
+    RIGHT    , /**< right particle side - use in sandbo x*/
+    LEFT       /**< left particle side - use in sandbox */
 };
 
 /** @enum VisualizationType
@@ -280,10 +283,7 @@ struct PhysicsInfo
 {
     double       maxRapidity           {1.0}; /**< maximum rapidity constrain */
     double       minRapidity           {0.0}; /**< minimum rapidity constrain */
-    double       maxSideForce       {0.0005}; /**< maximum value of side force */
-    double       temperature           {0.1}; /**< boundries temperature in the particles plane - SimulationType::BASIC and SimulationType::SANDBOX mode */
-    double       temperatureLeft       {0.1}; /**< boundries temperature in the left part of particles plane - SimulationType::DIFFUSION mode */
-    double       temperatureRight      {0.6}; /**< boundries temperature in the right part of particles plane - SimulationType::DIFFUSION mode */
+    double       maxSideForce       {0.0005}; /**< maximum value of side force */    
     double       attractionForce       {0.0}; /**< attraction force between particles */
     vect2D       pushForce         {0.0,0.0}; /**< push force attracted by all particles - may simulate gravity */
     double       maxAttractionForce  {0.001}; /**< maximum of attraction force between particles */
@@ -305,13 +305,16 @@ struct PhysicsInfo
     double       collVelocityChange    {0};   /**< use in testing */
     Milliseconds timePeriod          {200};   /**< period of time in miliseconds */
 
-    /**< temperature of a given plane side */
-    std::map<PlaneSide,double> planeSideTemperature {
-                                                      {PlaneSide::UP,0.1},
-                                                      {PlaneSide::DOWN,0.1},
-                                                      {PlaneSide::RIGHT,0.1},
-                                                      {PlaneSide::LEFT,0.1}
-                                                    };
+    /**< temperature of a given plane part */
+    std::map<PlanePart,double> temperature {
+                                             {PlanePart::WHOLE,0.1},
+                                             {PlanePart::LEFTBOX,0.1},
+                                             {PlanePart::RIGHTBOX,0.6},
+                                             {PlanePart::UP,0.1},
+                                             {PlanePart::DOWN,0.1},
+                                             {PlanePart::RIGHT,0.1},
+                                             {PlanePart::LEFT,0.1}
+                                           };
 };
 
 /** @struct ClustersInfo

@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     simulation[SimulationType::BASIC]->add( ui->Layout4_Tab0 , BoxType::GAUGE , ActionType::M_PRESSURE );
     simulation[SimulationType::BASIC]->setPlaneHitsPaint(true);
 
-    ui->temperatureDialTab0->setValue(simulation[SimulationType::BASIC]->getTemperatureInPercent());
+    ui->temperatureDialTab0->setValue(static_cast<int>(simulation[SimulationType::BASIC]->getTemperature(PlanePart::WHOLE,DataFormat::PERCENT)));
     ui->numberOfParticlesSliderTab0->setValue(50);
     ui->sizeOfParticleSliderTab0->setValue(simulation[SimulationType::BASIC]->getParticleSize(ParticleType::NORMAL,DataFormat::PERCENT));
     ui->trackingOffButtonTab0->setDisabled(true);
@@ -34,8 +34,8 @@ MainWindow::MainWindow(QWidget *parent) :
     simulation[SimulationType::DIFFUSION]->add( ui->Layout2_Tab1 , BoxType::BARCHART , ActionType::M_VELOCITY_RED , BoxStyles::BAR_CHART3 );
     simulation[SimulationType::DIFFUSION]->add( ui->Layout3_Tab1 , BoxType::BARDISPLAY , ActionType::M_DIFFIUSION );
 
-    ui->temperatureLeftDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getTemperatureLeftInPercent());
-    ui->temperatureRightDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getTemperatureRightInPercent());
+    ui->temperatureLeftDialTab1->setValue(static_cast<int>(simulation[SimulationType::DIFFUSION]->getTemperature(PlanePart::LEFTBOX,DataFormat::PERCENT)));
+    ui->temperatureRightDialTab1->setValue(static_cast<int>(simulation[SimulationType::DIFFUSION]->getTemperature(PlanePart::RIGHTBOX,DataFormat::PERCENT)));
     ui->particleSizeBlueDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getParticleSize(ParticleType::BLUE,DataFormat::PERCENT));
     ui->particleSizeRedDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getParticleSize(ParticleType::RED,DataFormat::PERCENT));
 
@@ -55,10 +55,10 @@ MainWindow::MainWindow(QWidget *parent) :
     simulation[SimulationType::SANDBOX]->add( ui->Layout2_Tab3 , BoxType::HISTOGRAM1D , ActionType::M_VELOCITY_DIST );
     simulation[SimulationType::SANDBOX]->add( ui->Layout3_Tab3 , BoxType::HISTOGRAM1D , ActionType::M_MOMENTUM_DIST );
 
-    ui->temperatureUpSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::UP));
-    ui->temperatureDownSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::DOWN));
-    ui->temperatureLeftSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::LEFT));
-    ui->temperatureRightSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::RIGHT));
+    ui->temperatureUpSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::UP,DataFormat::PERCENT)));
+    ui->temperatureDownSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::DOWN,DataFormat::PERCENT)));
+    ui->temperatureLeftSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::LEFT,DataFormat::PERCENT)));
+    ui->temperatureRightSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::RIGHT,DataFormat::PERCENT)));
 
     ui->blueParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS1));
     ui->redParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS2));
@@ -200,12 +200,12 @@ void MainWindow::change_language()
 void MainWindow::on_temperatureDialTab0_valueChanged( int value )
 {
      ui->temperatureLabelTab0->setText(QString::number(value));
-     simulation[SimulationType::BASIC]->setTemperatureInPercent(value);
+     simulation[SimulationType::BASIC]->setTemperature(PlanePart::WHOLE,DataFormat::PERCENT,value);
 }
 
 void MainWindow::on_numberOfParticlesSliderTab0_valueChanged( int value )
 {
-    simulation[SimulationType::BASIC]->setParticlesInPlaneInPercent(ParticleType::NORMAL,value);
+    simulation[SimulationType::BASIC]->setParticlesInPlane(ParticleType::NORMAL,DataFormat::PERCENT,value);
     ui->numberOfParticlesLabelTab0->setText(QString::number(simulation[SimulationType::BASIC]->getNumberOfParticles(ParticleType::NORMAL)));
 }
 
@@ -304,19 +304,19 @@ void MainWindow::on_startButtonTab1_clicked()
         ui->gapSizeSliderTab1->setValue(0);
     }
 
-    ui->temperatureLeftDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getTemperatureLeftInPercent());
-    ui->temperatureRightDialTab1->setValue(simulation[SimulationType::DIFFUSION]->getTemperatureRightInPercent());
+    ui->temperatureLeftDialTab1->setValue(static_cast<int>(simulation[SimulationType::DIFFUSION]->getTemperature(PlanePart::LEFTBOX,DataFormat::PERCENT)));
+    ui->temperatureRightDialTab1->setValue(static_cast<int>(simulation[SimulationType::DIFFUSION]->getTemperature(PlanePart::RIGHTBOX,DataFormat::PERCENT)));
 }
 
 void MainWindow::on_temperatureLeftDialTab1_valueChanged( int value )
 {
-    simulation[SimulationType::DIFFUSION]->setTemperatureLeftInPercent(value);
+    simulation[SimulationType::DIFFUSION]->setTemperature(PlanePart::LEFTBOX,DataFormat::PERCENT,value);
     ui->blueTemperatureLabelTab1->setText(QString::number(value));
 }
 
 void MainWindow::on_temperatureRightDialTab1_valueChanged(int value)
 {
-    simulation[SimulationType::DIFFUSION]->setTemperatureRightInPercent(value);
+    simulation[SimulationType::DIFFUSION]->setTemperature(PlanePart::RIGHTBOX,DataFormat::PERCENT,value);
     ui->redTemperatureLabelTab1->setText(QString::number(value));
 }
 
@@ -350,26 +350,26 @@ void MainWindow::on_gapSizeSliderTab1_valueChanged( int value )
 
 void MainWindow::on_temperatureUpSliderTab2_valueChanged( int value )
 {
-    simulation[SimulationType::SANDBOX]->setSideTemperatureInPercent(PlaneSide::UP,value);
-    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlaneSide::UP,value);
+    simulation[SimulationType::SANDBOX]->setTemperature(PlanePart::UP,DataFormat::PERCENT,value);
+    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlanePart::UP,value);
 }
 
 void MainWindow::on_temperatureRightSliderTab2_valueChanged( int value )
 {
-    simulation[SimulationType::SANDBOX]->setSideTemperatureInPercent(PlaneSide::RIGHT,value);
-    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlaneSide::RIGHT,value);
+    simulation[SimulationType::SANDBOX]->setTemperature(PlanePart::RIGHT,DataFormat::PERCENT,value);
+    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlanePart::RIGHT,value);
 }
 
 void MainWindow::on_temperatureDownSliderTab2_valueChanged( int value )
 {
-    simulation[SimulationType::SANDBOX]->setSideTemperatureInPercent(PlaneSide::DOWN,value);
-    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlaneSide::DOWN,value);
+    simulation[SimulationType::SANDBOX]->setTemperature(PlanePart::DOWN,DataFormat::PERCENT,value);
+    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlanePart::DOWN,value);
 }
 
 void MainWindow::on_temperatureLeftSliderTab2_valueChanged( int value )
 {
-    simulation[SimulationType::SANDBOX]->setSideTemperatureInPercent(PlaneSide::LEFT,value);
-    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlaneSide::LEFT,value);
+    simulation[SimulationType::SANDBOX]->setTemperature(PlanePart::LEFT,DataFormat::PERCENT,value);
+    simulation[SimulationType::SANDBOX]->setDisplay(ActionType::D_TEMPERATURE,PlanePart::LEFT,value);
 }
 
 void MainWindow::on_horizontalForceTab2_valueChanged( int value )
@@ -400,7 +400,7 @@ void MainWindow::on_pauseButtonTab2_clicked()
 
 void MainWindow::on_blueParticlesSliderTab2_valueChanged( int value )
 {
-    simulation[SimulationType::SANDBOX]->setParticlesInPlane(ParticleType::GAS1,value);
+    simulation[SimulationType::SANDBOX]->setParticlesInPlane(ParticleType::GAS1,DataFormat::SCALAR,value);
     ui->particlesNumberGas1LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS1)));
     double posx = static_cast<double>(ui->blueParticlesSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->blueParticlesSliderTab2->maximum()-ui->blueParticlesSliderTab2->minimum())));
     ui->particlesNumberGas1LabellTab2->move(ui->blueParticlesSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesNumberGas1LabellTab2->pos().y());
@@ -408,7 +408,7 @@ void MainWindow::on_blueParticlesSliderTab2_valueChanged( int value )
 
 void MainWindow::on_redParticlesSliderTab2_valueChanged( int value )
 {
-    simulation[SimulationType::SANDBOX]->setParticlesInPlane(ParticleType::GAS2,value);
+    simulation[SimulationType::SANDBOX]->setParticlesInPlane(ParticleType::GAS2,DataFormat::SCALAR,value);
     ui->particlesNumberGas2LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS2)));
     double posx = static_cast<double>(ui->redParticlesSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->redParticlesSliderTab2->maximum()-ui->redParticlesSliderTab2->minimum())));
     ui->particlesNumberGas2LabellTab2->move(ui->redParticlesSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesNumberGas2LabellTab2->pos().y());
@@ -416,7 +416,7 @@ void MainWindow::on_redParticlesSliderTab2_valueChanged( int value )
 
 void MainWindow::on_greenParticlesSliderTab2_valueChanged( int value )
 {
-    simulation[SimulationType::SANDBOX]->setParticlesInPlane(ParticleType::GAS3,value);
+    simulation[SimulationType::SANDBOX]->setParticlesInPlane(ParticleType::GAS3,DataFormat::SCALAR,value);
     ui->particlesNumberGas3LabellTab2->setText(QString::number(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS3)));
     double posx = static_cast<double>(ui->greenParticlesSliderTab2->width()-10)*(static_cast<double>(value)/static_cast<double>(abs(ui->greenParticlesSliderTab2->maximum()-ui->greenParticlesSliderTab2->minimum())));
     ui->particlesNumberGas3LabellTab2->move(ui->greenParticlesSliderTab2->pos().x()-15+static_cast<int>(posx),ui->particlesNumberGas3LabellTab2->pos().y());
@@ -496,10 +496,10 @@ void MainWindow::on_resetPushButton_tab2_clicked()
     ui->horizontalForceTab2->setValue(0);
     ui->attractionForceTab2->setValue(0);
 
-    ui->temperatureUpSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::UP));
-    ui->temperatureDownSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::DOWN));
-    ui->temperatureLeftSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::LEFT));
-    ui->temperatureRightSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getSideTemperatureInPercent(PlaneSide::RIGHT));
+    ui->temperatureUpSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::UP,DataFormat::PERCENT)));
+    ui->temperatureDownSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::DOWN,DataFormat::PERCENT)));
+    ui->temperatureLeftSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::LEFT,DataFormat::PERCENT)));
+    ui->temperatureRightSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::RIGHT,DataFormat::PERCENT)));
 
     ui->blueParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS1));
     ui->redParticlesSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getNumberOfParticles(ParticleType::GAS2));

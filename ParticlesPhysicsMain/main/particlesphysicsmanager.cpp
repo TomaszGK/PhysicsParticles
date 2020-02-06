@@ -93,7 +93,7 @@ void ParticlesPhysicsManager::createParticles()
 
         case SimulationType::BROWNIAN_MOTION:         
          visualizationType = VisualizationType::PARTICLE;
-         physicsInfo.temperature = 1.0;
+         physicsInfo.temperature[PlanePart::WHOLE] = 1.0;
          addParticles(ParticleType::MACROSCOPIC,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MACROSCOPIC],simulationInfo.particleSizeInit[ParticleType::MACROSCOPIC]);
          addParticles(ParticleType::MINI,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MINI]-1,simulationInfo.particleSizeInit[ParticleType::MINI]);
          planeArea->getPlainDivider().setDividerGap(100);
@@ -143,22 +143,22 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
         case ParticleType::GAS2:
         case ParticleType::GAS3:
         case ParticleType::NORMAL:
-         temperatureMax = physicsInfo.temperature;
+         temperatureMax = physicsInfo.temperature[PlanePart::WHOLE];
         break;
 
         case ParticleType::BLUE:
-         temperatureMax = physicsInfo.temperatureLeft;
+         temperatureMax = physicsInfo.temperature[PlanePart::LEFTBOX];
          maxX = planeArea->getPlainDivider().getUpperRect().first.x-5;
         break;
 
         case ParticleType::RED:
-         temperatureMax = physicsInfo.temperatureRight;
+         temperatureMax = physicsInfo.temperature[PlanePart::RIGHTBOX];
          minX = planeArea->getPlainDivider().getUpperRect().first.x+planeArea->getPlainDivider().getUpperRect().second.x+5;
         break;
 
         case ParticleType::MINI:
-         temperatureMax = physicsInfo.temperature;
-         temperatureMin = physicsInfo.temperature*0.9;
+         temperatureMax = physicsInfo.temperature[PlanePart::WHOLE];
+         temperatureMin = physicsInfo.temperature[PlanePart::WHOLE]*0.9;
         break;
 
         case ParticleType::MACROSCOPIC:
@@ -287,8 +287,10 @@ bool ParticlesPhysicsManager::isParticlePlaneFull( ParticleType particleType, in
     return ( planeArea->getPlaneField() < simulationInfo.planeFillCoefficient*particlesVolume ) ? true : false;
 }
 
-bool ParticlesPhysicsManager::setParticlesInPlane( ParticleType particleType, int quantity )
+bool ParticlesPhysicsManager::setParticlesInPlane( ParticleType particleType, DataFormat format, int quantity )
 {
+    if( format == DataFormat::PERCENT ) quantity = static_cast<int>(simulationInfo.maxParticles[simulationType]*static_cast<int>(quantity)*0.01);
+
     if( simulationInfo.maxParticles[simulationType] < quantity ) return false;
     if( simulationInfo.numberOfParticles[particleType] == quantity ) return true;
 
@@ -598,28 +600,15 @@ void ParticlesPhysicsManager::setDividerGap( int dividerGap )
     planeArea->getPlainDivider().setDividerGap(dividerGap);
 }
 
-void ParticlesPhysicsManager::setTemperatureInPercent( int temperature )
+void ParticlesPhysicsManager::setTemperature( PlanePart part, DataFormat format, double temperature )
 {
-    Ensures( temperature>=0 && temperature<=100 );
-    physicsInfo.temperature = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01;
-}
+    if( format == DataFormat::PERCENT )
+    {
+        Ensures( temperature>=0 && temperature<=100 );
 
-void ParticlesPhysicsManager::setTemperatureLeftInPercent( int temperature )
-{
-    Ensures( temperature>=0 && temperature<=100 );
-    physicsInfo.temperatureLeft = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01;
-}
-
-void ParticlesPhysicsManager::setTemperatureRightInPercent( int temperature )
-{
-    Ensures( temperature>=0 && temperature<=100 );
-    physicsInfo.temperatureRight = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01;
-}
-
-void ParticlesPhysicsManager::setSideTemperatureInPercent( PlaneSide side, int temperature )
-{
-    Ensures( temperature>=0 && temperature<=100 );
-    physicsInfo.planeSideTemperature[side] = (sqrt(physicsInfo.maxRapidity*2)/2)*temperature*0.01;
+        physicsInfo.temperature[part] = (sqrt(physicsInfo.maxRapidity*2.0)/2.0)*temperature*0.01;
+    }
+    else physicsInfo.temperature[part] = temperature;
 }
 
 void ParticlesPhysicsManager::setHorizontalForceInPercent( int force )
@@ -855,17 +844,17 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
 
     if( simulationType == SimulationType::BASIC )
     {
-        temperature = physicsInfo.temperature;
+        temperature = physicsInfo.temperature[PlanePart::WHOLE];
     }   
     else if( simulationType == SimulationType::DIFFUSION )
     {
-        if( newPosition.x < planeArea->getPlainDivider().getDividerPosX() ) temperature = physicsInfo.temperatureLeft;
-        else temperature =  physicsInfo.temperatureRight;
+        if( newPosition.x < planeArea->getPlainDivider().getDividerPosX() ) temperature = physicsInfo.temperature[PlanePart::LEFTBOX];
+        else temperature =  physicsInfo.temperature[PlanePart::RIGHTBOX];
     }
 
     if( newPosition.x - particle->radius <= planeArea->getXConstraint() )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::LEFT];
+        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.temperature[PlanePart::LEFT];
         particle->position.x = particle->radius + planeArea->getXConstraint();
         kineticEnergy = abs(particle->velocity.x)*particle->mass*0.5;
         particle->velocity.x = simulationType == SimulationType::BROWNIAN_MOTION ? (-1.0)*particle->velocity.x : temperature;
@@ -874,7 +863,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     }
     if( newPosition.x + particle->radius >= planeArea->getWidth() - planeArea->getXConstraint() )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::RIGHT];
+        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.temperature[PlanePart::RIGHT];
         particle->position.x = static_cast<double>(planeArea->getWidth()) - particle->radius - planeArea->getXConstraint();
         kineticEnergy = abs(particle->velocity.x)*particle->mass*0.5;
         particle->velocity.x = (-1.0)*( simulationType == SimulationType::BROWNIAN_MOTION ? particle->velocity.x : temperature);
@@ -884,7 +873,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
 
     if( newPosition.y - particle->radius <= 0 )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::UP];
+        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.temperature[PlanePart::UP];
         particle->position.y = particle->radius;
         kineticEnergy = abs(particle->velocity.y)*particle->mass*0.5;
         particle->velocity.y = simulationType == SimulationType::BROWNIAN_MOTION ? (-1.0)*particle->velocity.y : temperature;
@@ -893,7 +882,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     }
     if( newPosition.y + particle->radius >= planeArea->getHeight() )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.planeSideTemperature[PlaneSide::DOWN];
+        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.temperature[PlanePart::DOWN];
         particle->position.y = static_cast<double>(planeArea->getHeight()) - particle->radius;
         kineticEnergy = abs(particle->velocity.y)*particle->mass*0.5;
         particle->velocity.y = (-1.0)*( simulationType == SimulationType::BROWNIAN_MOTION ? particle->velocity.y : temperature);

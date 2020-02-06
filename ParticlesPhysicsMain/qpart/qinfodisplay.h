@@ -35,7 +35,7 @@ public:
      * @param side                  plane side corresponding to box side
      * @param newValue              new percent value to display
      */
-    void setDisplay( PlaneSide side, int newValue );
+    void setDisplay( PlanePart side, int newValue );
 
     /**
      * @brief Loads style type from xml file and /to complete/.
@@ -59,9 +59,9 @@ private:
     void init() override {}
 
     /** Maps percent values to display. */
-    std::map<PlaneSide,int> value { {PlaneSide::UP,0},{PlaneSide::DOWN,0},{PlaneSide::RIGHT,0},{PlaneSide::LEFT,0} };
+    std::map<PlanePart,int> value { {PlanePart::UP,0},{PlanePart::DOWN,0},{PlanePart::RIGHT,0},{PlanePart::LEFT,0} };
 
     /** Maps length of values text in pixels. */
-    std::map<PlaneSide,int> textWidth { {PlaneSide::UP,0},{PlaneSide::DOWN,0},{PlaneSide::RIGHT,0},{PlaneSide::LEFT,0} };
+    std::map<PlanePart,int> textWidth { {PlanePart::UP,0},{PlanePart::DOWN,0},{PlanePart::RIGHT,0},{PlanePart::LEFT,0} };
 
 };

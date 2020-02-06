@@ -5,7 +5,7 @@
 QTrackingPlot2D::QTrackingPlot2D( QString _title, QWidget *parent )
 : QBoxPainter { parent }, title { std::move(_title) }
 {
-    particles = ParticlesPhysicsManager::Locator::getConstParticles();
+    particles = ParticlesPhysicsManager::Locator::getParticles();
     if( particles != nullptr )
     {
         trackingParticle = particles->begin();

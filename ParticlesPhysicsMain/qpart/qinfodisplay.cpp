@@ -9,7 +9,7 @@ QInfoDisplay::QInfoDisplay( QWidget *parentWidget )
     boxStyle.marginLeft = boxStyle.marginRight = boxStyle.marginTop = boxStyle.marginBottom = 5;
 }
 
-void QInfoDisplay::setDisplay( PlaneSide side, int newValue )
+void QInfoDisplay::setDisplay( PlanePart side, int newValue )
 {   
    value[side] = newValue;
    textWidth[side] = getStringWidthInPixels(QString::number(value[side])+" %");
@@ -34,8 +34,8 @@ void QInfoDisplay::paint()
     painter.setPen(QColor(90, 141, 185));
     painter.setBrush(QColor(113, 161, 215));
 
-    xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlaneSide::UP]*0.01*0.5);
-    ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlaneSide::UP]*0.01*0.5);
+    xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlanePart::UP]*0.01*0.5);
+    ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlanePart::UP]*0.01*0.5);
 
     poly << QPoint(boxStyle.marginLeft,boxStyle.marginTop)
          << QPoint(boxStyle.marginLeft+xcap, boxStyle.marginTop+ycap)
@@ -45,8 +45,8 @@ void QInfoDisplay::paint()
     painter.drawPolygon(poly);
     poly.clear();
 
-    xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlaneSide::DOWN]*0.01*0.5);
-    ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlaneSide::DOWN]*0.01*0.5);
+    xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlanePart::DOWN]*0.01*0.5);
+    ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlanePart::DOWN]*0.01*0.5);
 
     poly << QPoint(boxStyle.marginLeft,height()-boxStyle.marginTop)
          << QPoint(boxStyle.marginLeft+xcap, height()-boxStyle.marginTop-ycap)
@@ -56,8 +56,8 @@ void QInfoDisplay::paint()
     painter.drawPolygon(poly);
     poly.clear();
 
-    xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlaneSide::LEFT]*0.01*0.5);
-    ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlaneSide::LEFT]*0.01*0.5);
+    xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlanePart::LEFT]*0.01*0.5);
+    ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlanePart::LEFT]*0.01*0.5);
 
     poly << QPoint(boxStyle.marginLeft,boxStyle.marginTop)
          << QPoint(boxStyle.marginLeft+xcap, boxStyle.marginTop+ycap)
@@ -67,8 +67,8 @@ void QInfoDisplay::paint()
     painter.drawPolygon(poly);
     poly.clear();
 
-    xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlaneSide::RIGHT]*0.01*0.5);
-    ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlaneSide::RIGHT]*0.01*0.5);
+    xcap = static_cast<int>((width()-boxStyle.marginLeft-boxStyle.marginRight)*value[PlanePart::RIGHT]*0.01*0.5);
+    ycap = static_cast<int>((height()-boxStyle.marginTop-boxStyle.marginBottom)*value[PlanePart::RIGHT]*0.01*0.5);
 
     poly << QPoint(width()-boxStyle.marginRight,boxStyle.marginTop)
          << QPoint(width()-boxStyle.marginRight-xcap, boxStyle.marginTop+ycap)
@@ -79,8 +79,8 @@ void QInfoDisplay::paint()
     poly.clear();
 
     painter.setPen(boxStyle.cLabelColor);
-    painter.drawText(2*boxStyle.marginLeft,height()/2+5,QString::number(value[PlaneSide::LEFT])+" %");
-    painter.drawText(width()-2*boxStyle.marginRight-textWidth[PlaneSide::RIGHT],height()/2+5,QString::number(value[PlaneSide::RIGHT])+" %");
-    painter.drawText(boxStyle.marginLeft + (width()-(boxStyle.marginLeft+boxStyle.marginRight)-textWidth[PlaneSide::UP])/2,2*boxStyle.marginTop+20,QString::number(value[PlaneSide::UP])+" %");
-    painter.drawText(boxStyle.marginLeft + (width()-(boxStyle.marginLeft+boxStyle.marginRight)-textWidth[PlaneSide::DOWN])/2,height()-2*boxStyle.marginBottom-5,QString::number(value[PlaneSide::DOWN])+" %");
+    painter.drawText(2*boxStyle.marginLeft,height()/2+5,QString::number(value[PlanePart::LEFT])+" %");
+    painter.drawText(width()-2*boxStyle.marginRight-textWidth[PlanePart::RIGHT],height()/2+5,QString::number(value[PlanePart::RIGHT])+" %");
+    painter.drawText(boxStyle.marginLeft + (width()-(boxStyle.marginLeft+boxStyle.marginRight)-textWidth[PlanePart::UP])/2,2*boxStyle.marginTop+20,QString::number(value[PlanePart::UP])+" %");
+    painter.drawText(boxStyle.marginLeft + (width()-(boxStyle.marginLeft+boxStyle.marginRight)-textWidth[PlanePart::DOWN])/2,height()-2*boxStyle.marginBottom-5,QString::number(value[PlanePart::DOWN])+" %");
 }

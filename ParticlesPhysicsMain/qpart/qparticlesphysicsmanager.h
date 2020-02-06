@@ -86,7 +86,7 @@ public:
      * @param side                  plane side corresponding to box side
      * @param newValue              new percent value to display
      */
-    void setDisplay( ActionType type, PlaneSide side, int value )
+    void setDisplay( ActionType type, PlanePart side, int value )
     {
         if( qBoxPainters.count(type) != 0 )
         {

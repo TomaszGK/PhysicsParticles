@@ -52,14 +52,14 @@ public:
          *
          * @return constant smart pointer to the container of particles
          */
-        static cptrParticlesContainer getConstParticles() { return cparticles; }
+        static cptrParticlesContainer getParticles() { return cparticles; }
 
         /**
          * @brief Gets constant pointer to the plane area.
          *
          * @return constant smart pointer to the plane area
          */
-        static cptrPlaneArea getConstPlaneArea() { return cplane; }
+        static cptrPlaneArea getPlaneArea() { return cplane; }
 
         /**
          * @brief Gets constant pointer to the container of bar displays.
@@ -69,11 +69,11 @@ public:
         static cptrBarDisplay getBarDisplay( ActionType type ) { return barDisplayMap==nullptr?nullptr:(*barDisplayMap).at(type); }
 
         /**
-         * @brief Gets constant pointer to the container of bar charts.
+         * @brief Gets pointer to the container of bar charts.
          *
-         * @return constant smart pointer to the container of bar charts
+         * @return smart pointer to the container of bar charts
          */
-        static cptrBarChart getBarChart( ActionType type ) { return barChartMap==nullptr?nullptr:(*barChartMap).at(type); }
+        static ptrBarChart getBarChart( ActionType type ) { return barChartMap==nullptr?nullptr:(*barChartMap).at(type); }
 
         /**
          * @brief Gets constant pointer to the container of histograms.
@@ -87,7 +87,7 @@ public:
          *
          * @param manager       pointer to @ref ParticlesPhysicsManager
          */
-        static void provide( ParticlesPhysicsManager *manager )
+        static void provide( const ParticlesPhysicsManager *manager )
         {
             cparticles = manager->particles;
             cplane = manager->planeArea;
@@ -108,7 +108,7 @@ public:
         inline static cptrMapBarDisplay barDisplayMap {nullptr};
 
         /** constant pointer to the map of bar charts */
-        inline static cptrMapBarChart barChartMap {nullptr};
+        inline static ptrMapBarChart barChartMap {nullptr};
 
         /** constant pointer to the map of histograms */
         inline static cptrMapHistogram1D histogram1DMap {nullptr};
@@ -146,22 +146,11 @@ public:
      *
      * Uses addParticles() or removeParticles() to set correct number of particles in the plane.
      * @param particleType          particle type
-     * @param quantity              number of particles
+     * @param format                data format ( percent or scalar )
+     * @param quantity              value consider as number of particles or percent value of particles [0,100]
      * @return true if success otherwise false
      */
-    bool setParticlesInPlane( ParticleType particleType, int quantity );
-
-    /**
-     * @brief Tries to set a new percent value of particles in the plane.
-     *
-     * @param particleType          particle type
-     * @param percent               percent value of particles [0,100]
-     * @return true if success otherwise false
-     */
-    bool setParticlesInPlaneInPercent( ParticleType particleType, int percent )
-    {
-       return setParticlesInPlane( particleType,static_cast<int>(simulationInfo.maxParticles[simulationType]*static_cast<int>(percent)*0.01)  );
-    }
+    bool setParticlesInPlane( ParticleType particleType, DataFormat format, int quantity );
 
     /** Updates all bar charts and displays, adds new physics values to chart boxes */
     void updateBars();
@@ -174,84 +163,31 @@ public:
 
     /**
      * @brief Sets size of gap divider in percent.
+     *
      * @param dividerGap            new divider value in percent [0,100]
      */
     void setDividerGap( int dividerGap );
 
     /**
      * @brief Sets percent value of temperature in the particle plane.
-     * @param temperature           new temperature value [0,100]
+     *
+     * @param part                  part type of particle plane
+     * @param format                data format ( percent or scalar )
+     * @param temperature           new temperature
      */
-    void setTemperatureInPercent( int temperature );
+    void setTemperature( PlanePart part, DataFormat format, double temperature );
 
     /**
      * @brief Gets value of temperature in the particle plane.
+     *
+     * @param part                  part type of particle plane
+     * @param format                data format ( percent or scalar )
      * @return temperature value
      */
-    inline double getTemperature() const noexcept { return physicsInfo.temperature; }
-
-    /**
-     * @brief Gets percent value of temperature in the particle plane.
-     * @return temperature value in percent [0,100]
-     */
-    inline int getTemperatureInPercent() const noexcept { return static_cast<int>(physicsInfo.temperature*100/physicsInfo.maxRapidity); }
-
-    /**
-     * @brief Sets percent value of temperature in the left side of particle plane.
-     * @param temperature           new temperature value [0,100]
-     */
-    void setTemperatureLeftInPercent( int temperature );
-
-    /**
-     * @brief Gets value of temperature in the left side of particle plane.
-     * @return temperature value
-     */
-    inline double getTemperatureLeft() const noexcept { return physicsInfo.temperatureLeft; }
-
-    /**
-     * @brief Gets percent value of temperature in the left side of particle plane.
-     * @return temperature value in percent [0,100]
-     */
-    inline int getTemperatureLeftInPercent() const noexcept { return static_cast<int>(physicsInfo.temperatureLeft*100/physicsInfo.maxRapidity); }
-
-    /**
-     * @brief Sets percent value of temperature in the right side of particle plane.
-     * @param temperature           new temperature value [0,100]
-     */
-    void setTemperatureRightInPercent( int temperature );
-
-    /**
-     * @brief Gets value of temperature in the right side of particle plane.
-     * @return temperature value
-     */
-    inline double getTemperatureRight() const noexcept { return physicsInfo.temperatureRight; }
-
-    /**
-     * @brief Gets percent value of temperature in the right side of particle plane.
-     * @return temperature value in percent [0,100]
-     */
-    inline int getTemperatureRightInPercent() const noexcept { return static_cast<int>(physicsInfo.temperatureRight*100/physicsInfo.maxRapidity); }
-
-    /**
-     * @brief Sets percent value of temperature in a given side of particle plane.
-     * @param side                  plane side
-     * @param temperature           new temperature value [0,100]
-     */
-    void setSideTemperatureInPercent( PlaneSide side, int temperature );
-
-    /**
-     * @brief Gets value of temperature in a given side of particle plane.
-     * @param side                  plane side
-     * @return temperature value
-     */
-    inline double getSideTemperature( PlaneSide side ) const noexcept { return physicsInfo.planeSideTemperature.at(side); }
-
-    /**
-     * @brief Gets percentvalue of temperature in a given side of particle plane.
-     * @param side                  plane side
-     * @return temperature value in percent [0,100]
-     */
-    inline int getSideTemperatureInPercent( PlaneSide side ) const noexcept { return static_cast<int>(physicsInfo.planeSideTemperature.at(side)*100/physicsInfo.maxRapidity); }
+    inline double getTemperature( PlanePart part, DataFormat format ) const noexcept
+    {
+        return ( format == DataFormat::PERCENT ) ? physicsInfo.temperature.at(part)*100.0/physicsInfo.maxRapidity : physicsInfo.temperature.at(part);
+    }
 
     /**
      * @brief Sets percent value of horizontal force.
@@ -304,7 +240,7 @@ public:
      */
     void setAverageDiffusionTemperature()
     {
-        physicsInfo.temperatureRight = physicsInfo.temperatureLeft = (physicsInfo.temperatureRight + physicsInfo.temperatureLeft)/2;
+        physicsInfo.temperature[PlanePart::RIGHTBOX] = physicsInfo.temperature[PlanePart::LEFTBOX] = (physicsInfo.temperature[PlanePart::RIGHTBOX] + physicsInfo.temperature[PlanePart::LEFTBOX])/2.0;
     }
 
     /**
@@ -400,8 +336,7 @@ public:
      */
     int getParticleSize( ParticleType type, DataFormat format = DataFormat::SCALAR ) const noexcept
     {
-        if( format == DataFormat::PERCENT ) return static_cast<int>((simulationInfo.particleSize.at(type)-simulationInfo.minSizeOfParticle)*100/(simulationInfo.maxSizeOfParticle.at(simulationType)-simulationInfo.minSizeOfParticle));
-        return simulationInfo.particleSize.at(type);
+        return ( format == DataFormat::PERCENT ) ? static_cast<int>((simulationInfo.particleSize.at(type)-simulationInfo.minSizeOfParticle)*100/(simulationInfo.maxSizeOfParticle.at(simulationType)-simulationInfo.minSizeOfParticle)) : simulationInfo.particleSize.at(type);
     }    
 
     /**

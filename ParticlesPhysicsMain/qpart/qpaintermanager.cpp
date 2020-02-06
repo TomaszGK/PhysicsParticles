@@ -14,8 +14,8 @@ QPainterManager::QPainterManager( QWidget* parent )
 
     setAutoFillBackground(false);
 
-    particles = ParticlesPhysicsManager::Locator::getConstParticles();
-    planeArea = ParticlesPhysicsManager::Locator::getConstPlaneArea();
+    particles = ParticlesPhysicsManager::Locator::getParticles();
+    planeArea = ParticlesPhysicsManager::Locator::getPlaneArea();
 
     init();
 }
@@ -24,7 +24,7 @@ bool QPainterManager::loadStyle( BoxStyles style )
 {
     if( boxStyle.loadStyleFromFile(style) )
     {
-        // to do some needed recalculations
+        // to do some necessary recalculations
         return true;
     }
     else return false;
@@ -54,7 +54,7 @@ void QPainterManager::paint()
         {
             if( toTrackingPaint && particle->isTracking ) paintTracking(particle);
 
-            size = particle->size;
+            size = particle->size;            
             posx = static_cast<int>(particle->position.x)+boxStyle.planeBorderWidth;
             posy = static_cast<int>(particle->position.y)+boxStyle.planeBorderWidth;
 
