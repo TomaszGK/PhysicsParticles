@@ -287,7 +287,7 @@ bool ParticlesPhysicsManager::isParticlePlaneFull( ParticleType particleType, in
     return ( planeArea->getPlaneField() < simulationInfo.planeFillCoefficient*particlesVolume ) ? true : false;
 }
 
-bool ParticlesPhysicsManager::setParticlesInPlane( ParticleType particleType, DataFormat format, int quantity )
+bool ParticlesPhysicsManager::setNumberOfParticlesInPlane( ParticleType particleType, DataFormat format, int quantity )
 {
     if( format == DataFormat::PERCENT ) quantity = static_cast<int>(simulationInfo.maxParticles[simulationType]*static_cast<int>(quantity)*0.01);
 
@@ -611,16 +611,16 @@ void ParticlesPhysicsManager::setTemperature( PlanePart part, DataFormat format,
     else physicsInfo.temperature[part] = temperature;
 }
 
-void ParticlesPhysicsManager::setHorizontalForceInPercent( int force )
+void ParticlesPhysicsManager::setForce( Axis type, DataFormat format, double force )
 {
-    Ensures( force>=-100 && force<=100 );
-    physicsInfo.pushForce.x = 0.01*force*physicsInfo.maxSideForce;
-}
+    if( format == DataFormat::PERCENT )
+    {
+        Ensures( force>=-100 && force<=100 );
+        force = 0.01*force*physicsInfo.maxSideForce;
+    }
 
-void ParticlesPhysicsManager::setVerticalForceInPercent( int force )
-{
-    Ensures( force>=-100 && force<=100 );
-    physicsInfo.pushForce.y = 0.01*force*physicsInfo.maxSideForce;
+    if( type == Axis::HORIZONTAL ) physicsInfo.pushForce.x = force;
+    else physicsInfo.pushForce.y = force;
 }
 
 void ParticlesPhysicsManager::setMassOfMoleculeInPercent( int percent )
@@ -635,7 +635,7 @@ colorRGB ParticlesPhysicsManager::getRandomColor()
 {
     return { static_cast<unsigned char>(Random::get<int>(0,255)),
              static_cast<unsigned char>(Random::get<int>(0,255)),
-                static_cast<unsigned char>(Random::get<int>(0,255))   };
+             static_cast<unsigned char>(Random::get<int>(0,255))   };
 }
 
 double ParticlesPhysicsManager::getAverageKineticEnergyOfParticles()

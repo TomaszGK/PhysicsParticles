@@ -1,4 +1,5 @@
 #include "simulationanalyzer.h"
+#include "particlesphysicsmanager.h"
 
 
 void SimulationAnalyzer::resetPhysicsData()
@@ -18,14 +19,12 @@ void SimulationAnalyzer::collect( iterParticle particle )
     velocitySum[particle->particleType] += velocity;
     ++velocityCounter[particle->particleType];
 
-    histograms1D["velocityDistribution"]->fill(velocity);
-    histograms1D["momentumDistribution"]->fill(velocity*particle->mass);
+    (*histograms1D)[ActionType::M_VELOCITY_DIST]->fill(velocity);
+    (*histograms1D)[ActionType::M_MOMENTUM_DIST]->fill(velocity*particle->mass);
 }
 
 void SimulationAnalyzer::update()
 {
-
-    //if( simulationType == SimulationType::BROWNIAN_MOTION ) histograms1D["velocityDistribution"]->markBin( getMoleculeVelocity() );
 
     switch( simulationType )
     {
@@ -33,24 +32,28 @@ void SimulationAnalyzer::update()
      case SimulationType::DIFFUSION :
         if( velocityCounter[ParticleType::BLUE]>0 ) physicsInfo.avgVelocityBlue = velocitySum[ParticleType::BLUE]/velocityCounter[ParticleType::BLUE];
         if( velocityCounter[ParticleType::RED]>0 ) physicsInfo.avgVelocityRed = velocitySum[ParticleType::RED]/velocityCounter[ParticleType::RED];
-      break;
+     break;
+
+     case SimulationType::BROWNIAN_MOTION :
+        (*histograms1D)[ActionType::M_VELOCITY_DIST]->markBin( ParticlesPhysicsManager::Locator::getParticles()->begin()->velocity() );
+     [[fallthrough]];
 
      default :
         double sum {0};
         int counter {0};
         for( auto& [type,value] : velocitySum )
         {
-           sum += velocitySum[type];
+           sum += value;
            counter += velocityCounter[type];
         }
         if( counter>0 ) physicsInfo.avgVelocity = sum/counter;
-      break;
+     break;
 
     }
 
     for( auto& [type,value] : velocitySum )
     {
-       velocitySum[type] = 0.0;
+       value = 0.0;
        velocityCounter[type] = 0;
     }
 

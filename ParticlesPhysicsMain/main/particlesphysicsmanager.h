@@ -142,6 +142,18 @@ public:
     ParticlesPhysicsManager& operator=( ParticlesPhysicsManager&& ) = delete;    
 
     /**
+     * @brief Gets number of particles (for a given type) in the plane.
+     *
+     * @param format                data format
+     * @param type                  particle type
+     * @return number of particles
+     */
+    double getNumberOfParticlesInPlane( ParticleType type, DataFormat format ) const noexcept
+    {
+        return ( format == DataFormat::PERCENT ) ? simulationInfo.numberOfParticles.at(type)*100.0/simulationInfo.maxParticles.at(simulationType) : simulationInfo.numberOfParticles.at(type);
+    }
+
+    /**
      * @brief Tries to set a new number of particles in the plane.
      *
      * Uses addParticles() or removeParticles() to set correct number of particles in the plane.
@@ -150,7 +162,7 @@ public:
      * @param quantity              value consider as number of particles or percent value of particles [0,100]
      * @return true if success otherwise false
      */
-    bool setParticlesInPlane( ParticleType particleType, DataFormat format, int quantity );
+    bool setNumberOfParticlesInPlane( ParticleType particleType, DataFormat format, int quantity );
 
     /** Updates all bar charts and displays, adds new physics values to chart boxes */
     void updateBars();
@@ -169,6 +181,18 @@ public:
     void setDividerGap( int dividerGap );
 
     /**
+     * @brief Gets value of temperature in the particle plane.
+     *
+     * @param part                  part type of particle plane
+     * @param format                data format ( percent or scalar )
+     * @return temperature value
+     */
+    double getTemperature( PlanePart part, DataFormat format ) const noexcept
+    {
+        return ( format == DataFormat::PERCENT ) ? physicsInfo.temperature.at(part)*100.0/physicsInfo.maxRapidity : physicsInfo.temperature.at(part);
+    }
+
+    /**
      * @brief Sets percent value of temperature in the particle plane.
      *
      * @param part                  part type of particle plane
@@ -178,52 +202,29 @@ public:
     void setTemperature( PlanePart part, DataFormat format, double temperature );
 
     /**
-     * @brief Gets value of temperature in the particle plane.
+     * @brief Gets value of force.
      *
-     * @param part                  part type of particle plane
-     * @param format                data format ( percent or scalar )
-     * @return temperature value
+     * Gets value of force along horizontal or vertical axis.
+     * @param type                  type of axis
+     * @param type                  data format
+     * @return force value
      */
-    inline double getTemperature( PlanePart part, DataFormat format ) const noexcept
+    double getForce( Axis type, DataFormat format ) const noexcept
     {
-        return ( format == DataFormat::PERCENT ) ? physicsInfo.temperature.at(part)*100.0/physicsInfo.maxRapidity : physicsInfo.temperature.at(part);
+        auto force = ( type == Axis::HORIZONTAL ) ? physicsInfo.pushForce.x : physicsInfo.pushForce.y;
+        if( format == DataFormat::PERCENT ) force = force*100/physicsInfo.maxSideForce;
+
+        return force;
     }
 
     /**
      * @brief Sets percent value of horizontal force.
-     * @param force                 new horizontal force [-100,100]
+     *
+     * @param type                  type of axis along a given force operate
+     * @param type                  data format
+     * @param force                 new force
      */
-    void setHorizontalForceInPercent( int force );
-
-    /**
-     * @brief Gets value of horizontal force.
-     * @return horizontal force value
-     */
-    inline double getHorizontalForce() const noexcept { return physicsInfo.pushForce.x; }
-
-    /**
-     * @brief Gets percent value of horizontal force.
-     * @return horizontal force value in percent [0,100]
-     */
-    inline int getHorizontalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.pushForce.x*100/physicsInfo.maxSideForce); }
-
-    /**
-     * @brief Sets percent value of vertical force.
-     * @param force                 new vertical force [-100,100]
-     */
-    void setVerticalForceInPercent( int force );
-
-    /**
-     * @brief Gets value of vertical force.
-     * @return vertical force value
-     */
-    inline double getVerticalForce() const noexcept { return physicsInfo.pushForce.y; }
-
-    /**
-     * @brief Gets percent value of vertical force.
-     * @return vertical force value in percent [0,100]
-     */
-    inline int getVerticalForceInPercent() const noexcept { return static_cast<int>(physicsInfo.pushForce.y*100/physicsInfo.maxSideForce); }
+    void setForce( Axis type, DataFormat format, double force );
 
     /**
      * @brief Sets value of push force.
@@ -231,7 +232,7 @@ public:
      * Using in SimulationType::BROWNIAN_MOTION
      * @param force                 new push force
      */
-    void setPushForce( vect2D force ){ physicsInfo.pushForce = force; }
+    void setForce( vect2D force ){ physicsInfo.pushForce = force; }
 
     /**
      * @brief Sets (calculates) average value of diffiusion temperature.
@@ -307,26 +308,13 @@ public:
      * @brief Gets maximum number of particles in the plane.
      * @return maximum number of particles
      */
-    inline int getMaxNumberOfParticles() const noexcept { return static_cast<int>( simulationInfo.maxParticles.at(simulationType)); }
-
-    /**
-     * @brief Gets number of particles (for a given type) in the plane.
-     * @param type                  particle type
-     * @return number of particles
-     */
-    inline int getNumberOfParticles( ParticleType type ) const noexcept { return static_cast<int>(simulationInfo.numberOfParticles.at(type)); }
-
-    /**
-     * @brief Gets percent number of particles in the plane.
-     * @return percent value of particles [0,100]
-     */
-    inline int getNumberOfParticlesInPercent() const noexcept { return static_cast<int>(particles->size())*100/simulationInfo.maxParticles.at(simulationType); }
+    int getMaxNumberOfParticles() const noexcept { return static_cast<int>( simulationInfo.maxParticles.at(simulationType)); }
 
     /**
      * @brief Gets average number of calulations (next particles position) in the period of time.
      * @return average calculation time
      */
-    int inline getAvgCalculationCount() const noexcept { return simulationInfo.avgCalculationCount; }
+    int getAvgCalculationCount() const noexcept { return simulationInfo.avgCalculationCount; }
 
     /**
      * @brief Gets particle size for a given particle type.

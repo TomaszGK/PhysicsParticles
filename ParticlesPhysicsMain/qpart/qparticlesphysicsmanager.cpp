@@ -119,7 +119,7 @@ void QParticlesPhysicsManager::handleControls()
         {
             QPoint forceOut = dynamic_cast<QCircleControl*>(qBoxPainters[control.first].get())->getIndicator();
             vect2D forceIn(0.00001*forceOut.x(),0.00001*forceOut.y());
-            setPushForce(forceIn);
+            setForce(forceIn);
         }
     }
 }

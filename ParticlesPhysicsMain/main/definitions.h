@@ -82,6 +82,15 @@ enum class VisualizationType
     PARTICLE   /**< particle color depends on particle type */
 };
 
+/** @enum Axis
+ *  @brief Representing axis type
+ */
+enum class Axis
+{
+    HORIZONTAL , /**< horizontal axis */
+    VERTICAL     /**< vertical axis */
+};
+
 /** @enum Language
  *  @brief Representing application language
  */

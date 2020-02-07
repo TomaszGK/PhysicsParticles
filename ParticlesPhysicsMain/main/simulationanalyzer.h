@@ -46,13 +46,13 @@ public:
     PhysicsInfo physicsInfo;
 
     /** Contains bar charts */
-    std::map<std::string,ptrBarChart> barCharts;
+    ptrMapBarChart barCharts;
 
     /** Contains bar displays */
-    std::map<std::string,ptrBarDisplay> barDisplays;
+    ptrMapBarDisplay barDisplays;
 
     /** Contains histograms 1D */
-    std::map<std::string,ptrHistogram1D> histograms1D;
+    ptrMapHistogram1D histograms1D;
 
 private:
 
