@@ -26,10 +26,9 @@ public:
 
     /**
      * @brief Constructor
-     *
-     * @param _simulationType      simulation type
+     *     
      */
-    SimulationAnalyzer( SimulationType _simulationType ) : simulationType { _simulationType } {}
+    SimulationAnalyzer();
 
     void resetPhysicsData();
 
@@ -37,7 +36,10 @@ public:
 
     void collect( double kineticEnergy );
 
-    void update();
+    void update( SimulationType simulationType );
+
+    /** Updates all bar charts and displays, adds new physics values to chart boxes */
+    void updateBars( SimulationType simulationType );
 
     /** Contains main simulation parameters */
     SimulationInfo simulationInfo;
@@ -54,11 +56,10 @@ public:
     /** Contains histograms 1D */
     ptrMapHistogram1D histograms1D;
 
-private:
-
-    SimulationType simulationType;
+private:    
 
     std::map<ParticleType,double> velocitySum;
+
     std::map<ParticleType,int> velocityCounter;
 
 };

@@ -8,6 +8,8 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
 {
     planeArea = std::make_shared<PlaneArea>(planeWidth,planeHeight,simulationInfo.planeBorderSize[type]);
 
+    analyzer = std::make_unique<SimulationAnalyzer>(type);
+
     calculationStart = time = HRClock::now();
 
     clustersInfo.clusterSize = static_cast<int>(simulationInfo.maxSizeOfParticle[type]*simulationInfo.clusterRatio[type]);

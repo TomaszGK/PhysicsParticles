@@ -1,8 +1,7 @@
 #include "qbardisplay.h"
-#include "particlesphysicsmanager.h"
 
 QBarDisplay::QBarDisplay( ActionType type, QWidget* parentWidget )
-: QBoxPainter { parentWidget } , barDisplay { ParticlesPhysicsManager::Locator::getBarDisplay(type) }
+: QBoxPainter { parentWidget } , barDisplay { Locator::getBarDisplay(type) }
 {    
     setAutoFillBackground(false);
     init();

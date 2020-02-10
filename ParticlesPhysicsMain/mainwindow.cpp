@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     paintTimer(this), updateTimer(this), animationTimer(this)
 {
+
     ui->setupUi(this);
     setWindowState(Qt::WindowMaximized);
 

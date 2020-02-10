@@ -22,6 +22,8 @@ class BarChart;
 class BarDisplay;
 class Histogram1D;
 class PlaneArea;
+class SimulationAnalyzer;
+class ParticlesPhysicsManager;
 
 /** @enum ThreadCalculationState
  *  @brief Representing calculation thread state
@@ -183,6 +185,8 @@ using table2D = std::vector<std::vector<iterCluster>>;
 using ptrPlaneArea = std::shared_ptr<PlaneArea>;
 using cptrPlaneArea = std::shared_ptr<const PlaneArea>;
 
+using ptrAnalyzer = std::unique_ptr<SimulationAnalyzer>;
+
 /** @struct colorRGB
  *  @brief Defines color Red Green and Blue values (0-255)
  */
@@ -338,6 +342,98 @@ struct ClustersInfo
     const int clusterMinSizeX {10}; /**< minimum horizontal size of cluster */
     const int clusterMinSizeY {10}; /**< minimum vertical size of cluster */
 };
+
+/**
+ * @class Locator
+ * @brief Simply service locator for data that must be use outside scope of @ref ParticlesPhysicsManager class.
+ *
+ * Provide a static global point of access to particles, plane, histograms and bardisplays.
+ */
+class Locator
+{
+
+public:
+
+    friend ParticlesPhysicsManager;
+
+    /** @brief Default Constructor */
+    Locator() = delete;
+
+    /** @brief Copy constructor */
+    Locator( const Locator& ) = delete;
+
+    /** @brief Move constructor */
+    Locator( Locator&& ) = delete;
+
+    /**
+     * @brief Gets constant pointer to the container of particles.
+     *
+     * @return constant smart pointer to the container of particles
+     */
+    static cptrParticlesContainer getParticles() { return cparticles; }
+
+    /**
+     * @brief Gets constant pointer to the plane area.
+     *
+     * @return constant smart pointer to the plane area
+     */
+    static cptrPlaneArea getPlaneArea() { return cplane; }
+
+    /**
+     * @brief Gets constant pointer to the container of bar displays.
+     *
+     * @return constant smart pointer to the container of bar displays
+     */
+    static cptrBarDisplay getBarDisplay( ActionType type ) { return barDisplayMap==nullptr?nullptr:(*barDisplayMap).at(type); }
+
+    /**
+     * @brief Gets pointer to the container of bar charts.
+     *
+     * @return smart pointer to the container of bar charts
+     */
+    static ptrBarChart getBarChart( ActionType type ) { return barChartMap==nullptr?nullptr:(*barChartMap).at(type); }
+
+    /**
+     * @brief Gets constant pointer to the container of histograms.
+     *
+     * @return constant smart pointer to the container of histograms
+     */
+    static cptrHistogram1D getHistogram1D( ActionType type ) { return histogram1DMap==nullptr?nullptr:(*histogram1DMap).at(type); }
+
+private:
+
+    /**
+     * @brief Provides and saves data location to all friendly classes.
+     *
+     * @param manager       must be pointer to @ref ParticlesPhysicsManager or derived
+     */
+    template< typename T >
+    static void provide( T* manager )
+    {
+        cparticles = manager->particles;
+        cplane = manager->planeArea;
+        barDisplayMap = manager->barDisplays;
+        barChartMap = manager->barCharts;
+        histogram1DMap = manager->histograms1D;
+    }
+
+    /** constant pointer to the container of particles */
+    inline static cptrParticlesContainer cparticles {nullptr};
+
+    /** constant pointer to the particle plane */
+    inline static cptrPlaneArea cplane {nullptr};
+
+    /** constant pointer to the map of bar displays */
+    inline static cptrMapBarDisplay barDisplayMap {nullptr};
+
+    /** constant pointer to the map of bar charts */
+    inline static ptrMapBarChart barChartMap {nullptr};
+
+    /** constant pointer to the map of histograms */
+    inline static cptrMapHistogram1D histogram1DMap {nullptr};
+};
+
+
 
 // C++14 make_unique
 template<typename T, typename... Args>

@@ -1,7 +1,6 @@
 #include "qpaintermanager.h"
 
 #include <QTimer>
-#include "particlesphysicsmanager.h"
 
 QPainterManager::QPainterManager( QWidget* parent )
 : QBoxPainter { parent }
@@ -14,8 +13,8 @@ QPainterManager::QPainterManager( QWidget* parent )
 
     setAutoFillBackground(false);
 
-    particles = ParticlesPhysicsManager::Locator::getParticles();
-    planeArea = ParticlesPhysicsManager::Locator::getPlaneArea();
+    particles = Locator::getParticles();
+    planeArea = Locator::getPlaneArea();
 
     init();
 }
