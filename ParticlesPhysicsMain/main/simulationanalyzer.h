@@ -30,7 +30,7 @@ public:
      */
     SimulationAnalyzer();
 
-    void resetPhysicsData();
+    void reset();
 
     void collect( iterParticle particle );
 

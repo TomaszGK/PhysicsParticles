@@ -412,9 +412,9 @@ private:
     {
         cparticles = manager->particles;
         cplane = manager->planeArea;
-        barDisplayMap = manager->barDisplays;
-        barChartMap = manager->barCharts;
-        histogram1DMap = manager->histograms1D;
+        barDisplayMap = manager->analyzer->barDisplays;
+        barChartMap = manager->analyzer->barCharts;
+        histogram1DMap = manager->analyzer->histograms1D;
     }
 
     /** constant pointer to the container of particles */

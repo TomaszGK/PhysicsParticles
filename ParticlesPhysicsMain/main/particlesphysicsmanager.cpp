@@ -6,17 +6,17 @@
 ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int planeWidth, int planeHeight )
 : simulationType {type}
 {
-    planeArea = std::make_shared<PlaneArea>(planeWidth,planeHeight,simulationInfo.planeBorderSize[type]);
+    analyzer = std::make_unique<SimulationAnalyzer>();
 
-    analyzer = std::make_unique<SimulationAnalyzer>(type);
+    planeArea = std::make_shared<PlaneArea>(planeWidth,planeHeight,analyzer->simulationInfo.planeBorderSize[type]);
 
     calculationStart = time = HRClock::now();
 
-    clustersInfo.clusterSize = static_cast<int>(simulationInfo.maxSizeOfParticle[type]*simulationInfo.clusterRatio[type]);
+    clustersInfo.clusterSize = static_cast<int>(analyzer->simulationInfo.maxSizeOfParticle[type]*analyzer->simulationInfo.clusterRatio[type]);
 
     particles = std::make_shared<std::vector<Particle>>();
     clusters = std::make_unique<std::vector<Cluster>>();
-    particles->reserve(static_cast<size_t>(simulationInfo.maxParticles[type]));
+    particles->reserve(static_cast<size_t>(analyzer->simulationInfo.maxParticles[type]));
     clusters->reserve(static_cast<size_t>((planeWidth*planeHeight)/(clustersInfo.clusterSize*clustersInfo.clusterSize)+10));
 
     createClusters();
@@ -24,21 +24,6 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
     createParticles();    
 
     selectedParticle = particles->begin();
-
-    barDisplays = std::make_shared<MapBarDisplay>();
-    barCharts = std::make_shared<MapBarChart>();
-    histograms1D = std::make_shared<MapHistogram1D>();
-
-    (*barCharts)[ActionType::M_VELOCITY]      = std::make_shared<BarChart>( 80 , "Average Velocity of Gas Particles" , "Time" , "V" );
-    (*barCharts)[ActionType::M_VELOCITY_BLUE] = std::make_shared<BarChart>( 70 , "Average Velocity of Blue Gas Particles" , "Time" , "V" );
-    (*barCharts)[ActionType::M_VELOCITY_RED]  = std::make_shared<BarChart>( 70 , "Average Velocity of Red Gas Particles" , "Time" , "V" );
-    (*barCharts)[ActionType::M_COLLISIONS]    = std::make_shared<BarChart>( 40 , "Collisions" );
-    (*barCharts)[ActionType::M_KINETIC]       = std::make_shared<BarChart>( 160 , "Energy of Particle Hits" , "Time" , "E" );
-
-    (*barDisplays)[ActionType::M_DIFFIUSION] = std::make_shared<BarDisplay>(2);
-
-    (*histograms1D)[ActionType::M_VELOCITY_DIST] = std::make_shared<Histogram1D>( 80 , physicsInfo.minRapidity , physicsInfo.maxRapidity*2.0 , "Velocity Distribution" );
-    (*histograms1D)[ActionType::M_MOMENTUM_DIST] = std::make_shared<Histogram1D>( 80 , physicsInfo.minRapidity , physicsInfo.maxRapidity*2.0 , "Momentum Distribution" );
 
     Locator::provide(this);
 }
@@ -50,21 +35,7 @@ ParticlesPhysicsManager::~ParticlesPhysicsManager()
 
 void ParticlesPhysicsManager::reset()
 {
-    simulationInfo.particleSize[ParticleType::BLUE]   = simulationInfo.particleSizeInit[ParticleType::BLUE];
-    simulationInfo.particleSize[ParticleType::RED]    = simulationInfo.particleSizeInit[ParticleType::RED];    
-    simulationInfo.particleSize[ParticleType::NORMAL] = simulationInfo.particleSizeInit[ParticleType::NORMAL];
-    simulationInfo.particleSize[ParticleType::GAS1]  = simulationInfo.particleSizeInit[ParticleType::GAS1];
-    simulationInfo.particleSize[ParticleType::GAS2]  = simulationInfo.particleSizeInit[ParticleType::GAS2];
-    simulationInfo.particleSize[ParticleType::GAS3]  = simulationInfo.particleSizeInit[ParticleType::GAS3];
-
-    simulationInfo.numberOfParticles[ParticleType::BLUE] = 0;
-    simulationInfo.numberOfParticles[ParticleType::RED] = 0;
-    simulationInfo.numberOfParticles[ParticleType::NORMAL] = 0;
-    simulationInfo.numberOfParticles[ParticleType::GAS1] = 0;
-    simulationInfo.numberOfParticles[ParticleType::GAS2] = 0;
-    simulationInfo.numberOfParticles[ParticleType::GAS3] = 0;
-
-    physicsInfo = physicsInfoInitial;
+    analyzer->reset();
     calculationStart = time = HRClock::now();
 
     if( !pauseByUserFlag ) pause();
@@ -82,30 +53,30 @@ void ParticlesPhysicsManager::createParticles()
     {
         case SimulationType::BASIC:         
          visualizationType = VisualizationType::VELOCITY;
-         addParticles(ParticleType::NORMAL,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::NORMAL],simulationInfo.particleSizeInit[ParticleType::NORMAL]);
+         addParticles(ParticleType::NORMAL,visualizationType,analyzer->simulationInfo.numberOfParticlesInit[ParticleType::NORMAL],analyzer->simulationInfo.particleSizeInit[ParticleType::NORMAL]);
          planeArea->getPlainDivider().setDividerGap(100);
         break;
 
         case SimulationType::DIFFUSION:         
          visualizationType = VisualizationType::PARTICLE;
-         addParticles(ParticleType::BLUE,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::BLUE],simulationInfo.particleSizeInit[ParticleType::BLUE]);
-         addParticles(ParticleType::RED,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::RED],simulationInfo.particleSizeInit[ParticleType::RED]);         
+         addParticles(ParticleType::BLUE,visualizationType,analyzer->simulationInfo.numberOfParticlesInit[ParticleType::BLUE],analyzer->simulationInfo.particleSizeInit[ParticleType::BLUE]);
+         addParticles(ParticleType::RED,visualizationType,analyzer->simulationInfo.numberOfParticlesInit[ParticleType::RED],analyzer->simulationInfo.particleSizeInit[ParticleType::RED]);
          planeArea->getPlainDivider().setDividerGap(0);
         break;
 
         case SimulationType::BROWNIAN_MOTION:         
          visualizationType = VisualizationType::PARTICLE;
-         physicsInfo.temperature[PlanePart::WHOLE] = 1.0;
-         addParticles(ParticleType::MACROSCOPIC,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MACROSCOPIC],simulationInfo.particleSizeInit[ParticleType::MACROSCOPIC]);
-         addParticles(ParticleType::MINI,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::MINI]-1,simulationInfo.particleSizeInit[ParticleType::MINI]);
+         analyzer->physicsInfo.temperature[PlanePart::WHOLE] = 1.0;
+         addParticles(ParticleType::MACROSCOPIC,visualizationType,analyzer->simulationInfo.numberOfParticlesInit[ParticleType::MACROSCOPIC],analyzer->simulationInfo.particleSizeInit[ParticleType::MACROSCOPIC]);
+         addParticles(ParticleType::MINI,visualizationType,analyzer->simulationInfo.numberOfParticlesInit[ParticleType::MINI]-1,analyzer->simulationInfo.particleSizeInit[ParticleType::MINI]);
          planeArea->getPlainDivider().setDividerGap(100);
         break;
 
         case SimulationType::SANDBOX:         
          visualizationType = VisualizationType::PARTICLE;
-         addParticles(ParticleType::GAS1,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::GAS1],simulationInfo.particleSize[ParticleType::GAS1]);
-         addParticles(ParticleType::GAS2,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::GAS2],simulationInfo.particleSize[ParticleType::GAS2]);
-         addParticles(ParticleType::GAS3,visualizationType,simulationInfo.numberOfParticlesInit[ParticleType::GAS3],simulationInfo.particleSize[ParticleType::GAS3]);
+         addParticles(ParticleType::GAS1,visualizationType,analyzer->simulationInfo.numberOfParticlesInit[ParticleType::GAS1],analyzer->simulationInfo.particleSize[ParticleType::GAS1]);
+         addParticles(ParticleType::GAS2,visualizationType,analyzer->simulationInfo.numberOfParticlesInit[ParticleType::GAS2],analyzer->simulationInfo.particleSize[ParticleType::GAS2]);
+         addParticles(ParticleType::GAS3,visualizationType,analyzer->simulationInfo.numberOfParticlesInit[ParticleType::GAS3],analyzer->simulationInfo.particleSize[ParticleType::GAS3]);
          planeArea->getPlainDivider().setDividerGap(100);
         break;
     }
@@ -128,8 +99,8 @@ void ParticlesPhysicsManager::setVisualizationType( VisualizationType type )
 
 bool ParticlesPhysicsManager::addParticles( ParticleType particleType, VisualizationType visualizationType, int quantity, int particleSize )
 {
-    if( simulationInfo.numberOfParticles[particleType]+quantity > simulationInfo.maxParticles[simulationType] ) return false;
-    if( simulationInfo.maxSizeOfParticle[simulationType] < particleSize ) return false;  // beware of cluster size
+    if( analyzer->simulationInfo.numberOfParticles[particleType]+quantity > analyzer->simulationInfo.maxParticles[simulationType] ) return false;
+    if( analyzer->simulationInfo.maxSizeOfParticle[simulationType] < particleSize ) return false;  // beware of cluster size
 
     vect2D position,velocity;
     double temperatureMax {0};
@@ -145,22 +116,22 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
         case ParticleType::GAS2:
         case ParticleType::GAS3:
         case ParticleType::NORMAL:
-         temperatureMax = physicsInfo.temperature[PlanePart::WHOLE];
+         temperatureMax = analyzer->physicsInfo.temperature[PlanePart::WHOLE];
         break;
 
         case ParticleType::BLUE:
-         temperatureMax = physicsInfo.temperature[PlanePart::LEFTBOX];
+         temperatureMax = analyzer->physicsInfo.temperature[PlanePart::LEFTBOX];
          maxX = planeArea->getPlainDivider().getUpperRect().first.x-5;
         break;
 
         case ParticleType::RED:
-         temperatureMax = physicsInfo.temperature[PlanePart::RIGHTBOX];
+         temperatureMax = analyzer->physicsInfo.temperature[PlanePart::RIGHTBOX];
          minX = planeArea->getPlainDivider().getUpperRect().first.x+planeArea->getPlainDivider().getUpperRect().second.x+5;
         break;
 
         case ParticleType::MINI:
-         temperatureMax = physicsInfo.temperature[PlanePart::WHOLE];
-         temperatureMin = physicsInfo.temperature[PlanePart::WHOLE]*0.9;
+         temperatureMax = analyzer->physicsInfo.temperature[PlanePart::WHOLE];
+         temperatureMin = analyzer->physicsInfo.temperature[PlanePart::WHOLE]*0.9;
         break;
 
         case ParticleType::MACROSCOPIC:
@@ -190,11 +161,11 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
         velocity.y *= Random::get<bool>() ? 1.0 : -1.0;
 
         auto iterCluster = getClusterIter(static_cast<size_t>(position.x),static_cast<size_t>(position.y));
-        particles->push_back(Particle(particleType,visualizationType,position,velocity,physicsInfo.maxRapidity,particleSize,iterCluster));
+        particles->push_back(Particle(particleType,visualizationType,position,velocity,analyzer->physicsInfo.maxRapidity,particleSize,iterCluster));
         iterCluster->addParticle( std::prev(particles->end()) );
     }
 
-    simulationInfo.numberOfParticles[particleType] += quantity;
+    analyzer->simulationInfo.numberOfParticles[particleType] += quantity;
 
     if( !pauseByUserFlag ) run();
 
@@ -204,7 +175,7 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
 bool ParticlesPhysicsManager::removeParticles( ParticleType particleType, int quantity )
 {    
 
-    if( simulationInfo.numberOfParticles[particleType] < quantity ) return false;
+    if( analyzer->simulationInfo.numberOfParticles[particleType] < quantity ) return false;
 
     if( !pauseByUserFlag ) pause();
 
@@ -212,7 +183,7 @@ bool ParticlesPhysicsManager::removeParticles( ParticleType particleType, int qu
     bool erase = false;
     bool isTrackingFlag = selectedParticle->isTracking;
 
-    simulationInfo.numberOfParticles[particleType] -= quantity;
+    analyzer->simulationInfo.numberOfParticles[particleType] -= quantity;
 
     while( quantity>0 )
     {
@@ -275,7 +246,7 @@ bool ParticlesPhysicsManager::isParticlePlaneFull()
         particlesVolume += 3.1415*particle.radius*particle.radius;
     }
 
-    return ( planeArea->getPlaneField() < simulationInfo.planeFillCoefficient*particlesVolume ) ? true : false;
+    return ( planeArea->getPlaneField() < analyzer->simulationInfo.planeFillCoefficient*particlesVolume ) ? true : false;
 }
 
 bool ParticlesPhysicsManager::isParticlePlaneFull( ParticleType particleType, int newSize )
@@ -286,19 +257,19 @@ bool ParticlesPhysicsManager::isParticlePlaneFull( ParticleType particleType, in
         particlesVolume += 3.1415 * ( ( particle.particleType == particleType ) ? newSize*newSize*0.25 : particle.radius*particle.radius );
     }
 
-    return ( planeArea->getPlaneField() < simulationInfo.planeFillCoefficient*particlesVolume ) ? true : false;
+    return ( planeArea->getPlaneField() < analyzer->simulationInfo.planeFillCoefficient*particlesVolume ) ? true : false;
 }
 
 bool ParticlesPhysicsManager::setNumberOfParticlesInPlane( ParticleType particleType, DataFormat format, int quantity )
 {
-    if( format == DataFormat::PERCENT ) quantity = static_cast<int>(simulationInfo.maxParticles[simulationType]*static_cast<int>(quantity)*0.01);
+    if( format == DataFormat::PERCENT ) quantity = static_cast<int>(analyzer->simulationInfo.maxParticles[simulationType]*static_cast<int>(quantity)*0.01);
 
-    if( simulationInfo.maxParticles[simulationType] < quantity ) return false;
-    if( simulationInfo.numberOfParticles[particleType] == quantity ) return true;
+    if( analyzer->simulationInfo.maxParticles[simulationType] < quantity ) return false;
+    if( analyzer->simulationInfo.numberOfParticles[particleType] == quantity ) return true;
 
-    int diff = std::abs( quantity - simulationInfo.numberOfParticles[particleType] );
+    int diff = std::abs( quantity - analyzer->simulationInfo.numberOfParticles[particleType] );
 
-    return ( simulationInfo.numberOfParticles[particleType] < quantity ) ? addParticles( particleType, visualizationType, diff, simulationInfo.particleSize[particleType] ) : removeParticles( particleType , diff );
+    return ( analyzer->simulationInfo.numberOfParticles[particleType] < quantity ) ? addParticles( particleType, visualizationType, diff, analyzer->simulationInfo.particleSize[particleType] ) : removeParticles( particleType , diff );
 }
 
 void ParticlesPhysicsManager::setParticleSize( ParticleType type, DataFormat format, int quantity )
@@ -306,11 +277,11 @@ void ParticlesPhysicsManager::setParticleSize( ParticleType type, DataFormat for
     Ensures( quantity>=0 && quantity<=100 );
 
     int newSize {quantity};
-    if( format == DataFormat::PERCENT ) newSize = simulationInfo.minSizeOfParticle + static_cast<int>(quantity*0.01*(simulationInfo.maxSizeOfParticle[simulationType]-simulationInfo.minSizeOfParticle));
+    if( format == DataFormat::PERCENT ) newSize = analyzer->simulationInfo.minSizeOfParticle + static_cast<int>(quantity*0.01*(analyzer->simulationInfo.maxSizeOfParticle[simulationType]-analyzer->simulationInfo.minSizeOfParticle));
 
     if( isParticlePlaneFull(type,newSize) ) return;
 
-    simulationInfo.particleSize[type] = newSize;
+    analyzer->simulationInfo.particleSize[type] = newSize;
 
     if( !pauseByUserFlag ) pause();
 
@@ -318,7 +289,7 @@ void ParticlesPhysicsManager::setParticleSize( ParticleType type, DataFormat for
     {
         if( iter->particleType == type )
         {
-            iter->setParticleSize(simulationInfo.particleSize[type]);
+            iter->setParticleSize(analyzer->simulationInfo.particleSize[type]);
             disjoint(iter);
         }
     }
@@ -329,13 +300,13 @@ void ParticlesPhysicsManager::setParticleSize( ParticleType type, DataFormat for
 void ParticlesPhysicsManager::setAttractionForceInPercent( int quantity )
 {
     Ensures( quantity>=-100 && quantity<=100 );
-    physicsInfo.attractionForce = quantity*0.01*physicsInfo.maxAttractionForce;
+    analyzer->physicsInfo.attractionForce = quantity*0.01*analyzer->physicsInfo.maxAttractionForce;
 }
 
 void ParticlesPhysicsManager::setPlaneWidthInPercent( int quantity )
 {
     Ensures( quantity>=0 && quantity<=100 );
-    planeArea->setXConstraint( static_cast<int>(0.5*0.01*simulationInfo.maxPlaneXConstraint*planeArea->getWidth()*quantity*0.01) );
+    planeArea->setXConstraint( static_cast<int>(0.5*0.01*analyzer->simulationInfo.maxPlaneXConstraint*planeArea->getWidth()*quantity*0.01) );
 }
 
 void ParticlesPhysicsManager::enableTracking()
@@ -453,34 +424,23 @@ void ParticlesPhysicsManager::update()
     calculationPeriod = std::chrono::duration_cast<std::chrono::microseconds>(HRClock::now() - calculationStart).count()*0.001;
     calculationStart = HRClock::now();
 
-    timeContribution = calculationPeriod<simulationInfo.maxTimeContribution ? calculationPeriod : simulationInfo.maxTimeContribution;
+    timeContribution = calculationPeriod<analyzer->simulationInfo.maxTimeContribution ? calculationPeriod : analyzer->simulationInfo.maxTimeContribution;
 
-    double velocitySum {0};
-    double kineticEnergy {0};
-    double velocity {0};
-    double velocityBlueSum {0};
-    double velocityRedSum {0};
-
-    simulationInfo.calculationCount++;    
+    analyzer->simulationInfo.calculationCount++;
 
     for( auto particle=particles->begin() ; particle!=particles->end() ; ++particle )
     {
 
-        if( !physicsInfo.pushForce.isZero() )
+        if( !analyzer->physicsInfo.pushForce.isZero() )
         {
-            if( !particle->isMacroscopic ) particle->velocity += physicsInfo.pushForce*calculationPeriod;
+            if( !particle->isMacroscopic ) particle->velocity += analyzer->physicsInfo.pushForce*calculationPeriod;
         }
 
         handleParticleCollisions(particle);
 
         if( particle->cluster->PLANE_BOUNDRY || planeArea->getXConstraint()>0 )
         {
-            kineticEnergy = handleParticleCollisionWithPlaneBoundries(particle);
-            if( kineticEnergy>0 )
-            {
-                ++physicsInfo.numOfCollision;
-                physicsInfo.kineticEnergySum += kineticEnergy;
-            }
+            analyzer->collect( handleParticleCollisionWithPlaneBoundries(particle) );
         }
 
         if( planeArea->getPlainDivider().isDividerInPlane() && particle->cluster->PLANE_DIVIDER )
@@ -492,52 +452,23 @@ void ParticlesPhysicsManager::update()
 
         handleParticleClusterTransition(particle);
 
-        velocity = particle->velocity();
-        (*histograms1D)[ActionType::M_VELOCITY_DIST]->fill(velocity);
-        (*histograms1D)[ActionType::M_MOMENTUM_DIST]->fill(velocity*particle->mass);
-
-        if( particle->particleType == ParticleType::NORMAL )
-        {
-            velocitySum += velocity;
-        }
-        else if( particle->particleType == ParticleType::BLUE )
-        {
-            velocityBlueSum += velocity;
-        }
-        else if( particle->particleType == ParticleType::RED )
-        {
-            velocityRedSum += velocity;
-        }
+        analyzer->collect(particle);
 
     }        
 
-    if( simulationType == SimulationType::BROWNIAN_MOTION ) (*histograms1D)[ActionType::M_VELOCITY_DIST]->markBin( getMoleculeVelocity() );
+    analyzer->update(simulationType);
 
-    if( simulationType == SimulationType::BASIC )
-    {
-        physicsInfo.avgVelocity = velocitySum/particles->size();
-    }
-    else if( simulationType == SimulationType::DIFFUSION )
-    {
-        physicsInfo.avgVelocityBlue = velocityBlueSum/simulationInfo.numberOfParticlesInit[ParticleType::BLUE];
-        physicsInfo.avgVelocityRed = velocityRedSum/simulationInfo.numberOfParticlesInit[ParticleType::RED];
-    }
-    else if( simulationType == SimulationType::SANDBOX )
-    {
-        physicsInfo.avgVelocity = velocitySum/particles->size();
-    }
-
-    if( std::chrono::duration_cast<Milliseconds>(HRClock::now() - time) > physicsInfo.timePeriod )
+    if( std::chrono::duration_cast<Milliseconds>(HRClock::now() - time) > analyzer->physicsInfo.timePeriod )
     {        
         time = HRClock::now();       
-        physicsInfo.kineticEnergySumTP = physicsInfo.kineticEnergySum/simulationInfo.calculationCount;
-        physicsInfo.kineticEnergySum = 0;
-        physicsInfo.numOfCollisionTP = static_cast<double>(physicsInfo.numOfCollision)/static_cast<double>(simulationInfo.calculationCount);
-        physicsInfo.numOfCollision = 0;
-        simulationInfo.avgCalculationCount = simulationInfo.calculationCount;
-        simulationInfo.calculationCount = 0;
-        if( simulationInfo.disjointParticles[simulationType] ) disjointPositions(0.9);
-        physicsInfo.averageKineticEnergy = getAverageKineticEnergyOfParticles();
+        analyzer->physicsInfo.kineticEnergySumTP = analyzer->physicsInfo.kineticEnergySum/analyzer->simulationInfo.calculationCount;
+        analyzer->physicsInfo.kineticEnergySum = 0;
+        analyzer->physicsInfo.numOfCollisionTP = static_cast<double>(analyzer->physicsInfo.numOfCollision)/static_cast<double>(analyzer->simulationInfo.calculationCount);
+        analyzer->physicsInfo.numOfCollision = 0;
+        analyzer->simulationInfo.avgCalculationCount = analyzer->simulationInfo.calculationCount;
+        analyzer->simulationInfo.calculationCount = 0;
+        if( analyzer->simulationInfo.disjointParticles[simulationType] ) disjointPositions(0.9);
+        analyzer->physicsInfo.averageKineticEnergy = getAverageKineticEnergyOfParticles();
     }
 
 }
@@ -576,23 +507,8 @@ void ParticlesPhysicsManager::updateBars()
 {
     if( calculationState != ThreadCalculationState::PAUSE )
     {
-        if( simulationType == SimulationType::BASIC )
-        {
-            (*barCharts)[ActionType::M_VELOCITY]->add(physicsInfo.avgVelocity);
-            (*barCharts)[ActionType::M_COLLISIONS]->add(physicsInfo.numOfCollisionTP);
-            (*barCharts)[ActionType::M_KINETIC]->add(physicsInfo.kineticEnergySumTP);
-        }
-        if( simulationType == SimulationType::DIFFUSION )
-        {
-            (*barCharts)[ActionType::M_VELOCITY_BLUE]->add(physicsInfo.avgVelocityBlue);
-            (*barCharts)[ActionType::M_VELOCITY_RED]->add(physicsInfo.avgVelocityRed);
-
-            updateParticlesLocationInPlane();
-            (*barDisplays)[ActionType::M_DIFFIUSION]->setUpperBox(0,physicsInfo.numBlueParticlesLeft);
-            (*barDisplays)[ActionType::M_DIFFIUSION]->setUpperBox(1,physicsInfo.numBlueParticlesRight);
-            (*barDisplays)[ActionType::M_DIFFIUSION]->setLowerBox(0,physicsInfo.numRedParticlesLeft);
-            (*barDisplays)[ActionType::M_DIFFIUSION]->setLowerBox(1,physicsInfo.numRedParticlesRight);
-        }
+        if( simulationType == SimulationType::DIFFUSION ) updateParticlesLocationInPlane();
+        analyzer->updateBars(simulationType);
     }
 }
 
@@ -608,9 +524,9 @@ void ParticlesPhysicsManager::setTemperature( PlanePart part, DataFormat format,
     {
         Ensures( temperature>=0 && temperature<=100 );
 
-        physicsInfo.temperature[part] = (sqrt(physicsInfo.maxRapidity*2.0)/2.0)*temperature*0.01;
+        analyzer->physicsInfo.temperature[part] = (sqrt(analyzer->physicsInfo.maxRapidity*2.0)/2.0)*temperature*0.01;
     }
-    else physicsInfo.temperature[part] = temperature;
+    else analyzer->physicsInfo.temperature[part] = temperature;
 }
 
 void ParticlesPhysicsManager::setForce( Axis type, DataFormat format, double force )
@@ -618,11 +534,11 @@ void ParticlesPhysicsManager::setForce( Axis type, DataFormat format, double for
     if( format == DataFormat::PERCENT )
     {
         Ensures( force>=-100 && force<=100 );
-        force = 0.01*force*physicsInfo.maxSideForce;
+        force = 0.01*force*analyzer->physicsInfo.maxSideForce;
     }
 
-    if( type == Axis::HORIZONTAL ) physicsInfo.pushForce.x = force;
-    else physicsInfo.pushForce.y = force;
+    if( type == Axis::HORIZONTAL ) analyzer->physicsInfo.pushForce.x = force;
+    else analyzer->physicsInfo.pushForce.y = force;
 }
 
 void ParticlesPhysicsManager::setMassOfMoleculeInPercent( int percent )
@@ -654,20 +570,20 @@ double ParticlesPhysicsManager::getAverageKineticEnergyOfParticles()
 
 void ParticlesPhysicsManager::updateParticlesLocationInPlane()
 {
-    physicsInfo.numBlueParticlesRight = physicsInfo.numBlueParticlesLeft = 0;
-    physicsInfo.numRedParticlesRight = physicsInfo.numRedParticlesLeft = 0;
+    analyzer->physicsInfo.numBlueParticlesRight = analyzer->physicsInfo.numBlueParticlesLeft = 0;
+    analyzer->physicsInfo.numRedParticlesRight = analyzer->physicsInfo.numRedParticlesLeft = 0;
 
     for( auto &particle : *particles )
     {
         if( particle.particleType == ParticleType::BLUE )
         {
-            if( particle.position.x>planeArea->getPlainDivider().getDividerPosX() ) physicsInfo.numBlueParticlesRight++;
-            else physicsInfo.numBlueParticlesLeft++;
+            if( particle.position.x>planeArea->getPlainDivider().getDividerPosX() ) analyzer->physicsInfo.numBlueParticlesRight++;
+            else analyzer->physicsInfo.numBlueParticlesLeft++;
         }
         else if( particle.particleType == ParticleType::RED )
         {
-            if( particle.position.x>planeArea->getPlainDivider().getDividerPosX() ) physicsInfo.numRedParticlesRight++;
-            else physicsInfo.numRedParticlesLeft++;
+            if( particle.position.x>planeArea->getPlainDivider().getDividerPosX() ) analyzer->physicsInfo.numRedParticlesRight++;
+            else analyzer->physicsInfo.numRedParticlesLeft++;
         }
     }
 }
@@ -755,11 +671,11 @@ void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle& part
 
 
             }
-            else if( simulationType == SimulationType::SANDBOX && physicsInfo.attractionForce!=0.0 )
+            else if( simulationType == SimulationType::SANDBOX && analyzer->physicsInfo.attractionForce!=0.0 )
             {
                 particle->modifiedVelocity = otherParticle->modifiedVelocity = true;                
                 vect2D direction = (particle->position-otherParticle->position).setLength(1.0);
-                double factor    = physicsInfo.attractionForce*calculationPeriod/distance;
+                double factor    = analyzer->physicsInfo.attractionForce*calculationPeriod/distance;
 
                 particle->velocity += direction*factor*(-1.0)*otherParticle->mass;
                 otherParticle->velocity += direction*factor*particle->mass;
@@ -822,12 +738,12 @@ void ParticlesPhysicsManager::handleParticleCollisionsAlternative( const iterPar
                 otherParticle->velocity.setLength(v2-diffVelocity);
 
             }
-            else if( simulationType == SimulationType::SANDBOX && physicsInfo.attractionForce!=0.0 )
+            else if( simulationType == SimulationType::SANDBOX && analyzer->physicsInfo.attractionForce!=0.0 )
             {
                 particle->modifiedVelocity = otherParticle->modifiedVelocity = true;
                 double distanceCut = ( distance<minDistance ) ? minDistance : distance ;
                 vect2D direction = (particle->position-otherParticle->position).setLength(1.0);
-                double factor    = physicsInfo.attractionForce*calculationPeriod/distanceCut;
+                double factor    = analyzer->physicsInfo.attractionForce*calculationPeriod/distanceCut;
 
                 particle->velocity += direction*factor*(-1.0)*otherParticle->mass;
                 otherParticle->velocity += direction*factor*particle->mass;
@@ -846,17 +762,17 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
 
     if( simulationType == SimulationType::BASIC )
     {
-        temperature = physicsInfo.temperature[PlanePart::WHOLE];
+        temperature = analyzer->physicsInfo.temperature[PlanePart::WHOLE];
     }   
     else if( simulationType == SimulationType::DIFFUSION )
     {
-        if( newPosition.x < planeArea->getPlainDivider().getDividerPosX() ) temperature = physicsInfo.temperature[PlanePart::LEFTBOX];
-        else temperature =  physicsInfo.temperature[PlanePart::RIGHTBOX];
+        if( newPosition.x < planeArea->getPlainDivider().getDividerPosX() ) temperature = analyzer->physicsInfo.temperature[PlanePart::LEFTBOX];
+        else temperature =  analyzer->physicsInfo.temperature[PlanePart::RIGHTBOX];
     }
 
     if( newPosition.x - particle->radius <= planeArea->getXConstraint() )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.temperature[PlanePart::LEFT];
+        if( simulationType == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::LEFT];
         particle->position.x = particle->radius + planeArea->getXConstraint();
         kineticEnergy = abs(particle->velocity.x)*particle->mass*0.5;
         particle->velocity.x = simulationType == SimulationType::BROWNIAN_MOTION ? (-1.0)*particle->velocity.x : temperature;
@@ -865,7 +781,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     }
     if( newPosition.x + particle->radius >= planeArea->getWidth() - planeArea->getXConstraint() )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.temperature[PlanePart::RIGHT];
+        if( simulationType == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::RIGHT];
         particle->position.x = static_cast<double>(planeArea->getWidth()) - particle->radius - planeArea->getXConstraint();
         kineticEnergy = abs(particle->velocity.x)*particle->mass*0.5;
         particle->velocity.x = (-1.0)*( simulationType == SimulationType::BROWNIAN_MOTION ? particle->velocity.x : temperature);
@@ -875,7 +791,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
 
     if( newPosition.y - particle->radius <= 0 )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.temperature[PlanePart::UP];
+        if( simulationType == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::UP];
         particle->position.y = particle->radius;
         kineticEnergy = abs(particle->velocity.y)*particle->mass*0.5;
         particle->velocity.y = simulationType == SimulationType::BROWNIAN_MOTION ? (-1.0)*particle->velocity.y : temperature;
@@ -884,7 +800,7 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
     }
     if( newPosition.y + particle->radius >= planeArea->getHeight() )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = physicsInfo.temperature[PlanePart::DOWN];
+        if( simulationType == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::DOWN];
         particle->position.y = static_cast<double>(planeArea->getHeight()) - particle->radius;
         kineticEnergy = abs(particle->velocity.y)*particle->mass*0.5;
         particle->velocity.y = (-1.0)*( simulationType == SimulationType::BROWNIAN_MOTION ? particle->velocity.y : temperature);

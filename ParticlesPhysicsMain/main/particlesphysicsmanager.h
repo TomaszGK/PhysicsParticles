@@ -62,7 +62,7 @@ public:
      */
     double getNumberOfParticlesInPlane( ParticleType type, DataFormat format ) const noexcept
     {
-        return ( format == DataFormat::PERCENT ) ? simulationInfo.numberOfParticles.at(type)*100.0/simulationInfo.maxParticles.at(simulationType) : simulationInfo.numberOfParticles.at(type);
+        return ( format == DataFormat::PERCENT ) ? analyzer->simulationInfo.numberOfParticles.at(type)*100.0/analyzer->simulationInfo.maxParticles.at(simulationType) : analyzer->simulationInfo.numberOfParticles.at(type);
     }
 
     /**
@@ -101,7 +101,7 @@ public:
      */
     double getTemperature( PlanePart part, DataFormat format ) const noexcept
     {
-        return ( format == DataFormat::PERCENT ) ? physicsInfo.temperature.at(part)*100.0/physicsInfo.maxRapidity : physicsInfo.temperature.at(part);
+        return ( format == DataFormat::PERCENT ) ? analyzer->physicsInfo.temperature.at(part)*100.0/analyzer->physicsInfo.maxRapidity : analyzer->physicsInfo.temperature.at(part);
     }
 
     /**
@@ -123,8 +123,8 @@ public:
      */
     double getForce( Axis type, DataFormat format ) const noexcept
     {
-        auto force = ( type == Axis::HORIZONTAL ) ? physicsInfo.pushForce.x : physicsInfo.pushForce.y;
-        if( format == DataFormat::PERCENT ) force = force*100/physicsInfo.maxSideForce;
+        auto force = ( type == Axis::HORIZONTAL ) ? analyzer->physicsInfo.pushForce.x : analyzer->physicsInfo.pushForce.y;
+        if( format == DataFormat::PERCENT ) force = force*100/analyzer->physicsInfo.maxSideForce;
 
         return force;
     }
@@ -144,7 +144,7 @@ public:
      * Using in SimulationType::BROWNIAN_MOTION
      * @param force                 new push force
      */
-    void setForce( vect2D force ){ physicsInfo.pushForce = force; }
+    void setForce( vect2D force ){ analyzer->physicsInfo.pushForce = force; }
 
     /**
      * @brief Sets (calculates) average value of diffiusion temperature.
@@ -153,7 +153,7 @@ public:
      */
     void setAverageDiffusionTemperature()
     {
-        physicsInfo.temperature[PlanePart::RIGHTBOX] = physicsInfo.temperature[PlanePart::LEFTBOX] = (physicsInfo.temperature[PlanePart::RIGHTBOX] + physicsInfo.temperature[PlanePart::LEFTBOX])/2.0;
+        analyzer->physicsInfo.temperature[PlanePart::RIGHTBOX] = analyzer->physicsInfo.temperature[PlanePart::LEFTBOX] = (analyzer->physicsInfo.temperature[PlanePart::RIGHTBOX] + analyzer->physicsInfo.temperature[PlanePart::LEFTBOX])/2.0;
     }
 
     /**
@@ -213,20 +213,20 @@ public:
      */
     int getPressureValue() const
     {
-        return static_cast<int>(100*barCharts->at(ActionType::M_KINETIC)->getAvgInLast(5));
+        return static_cast<int>(100*analyzer->barCharts->at(ActionType::M_KINETIC)->getAvgInLast(5));
     }
 
     /**
      * @brief Gets maximum number of particles in the plane.
      * @return maximum number of particles
      */
-    int getMaxNumberOfParticles() const noexcept { return static_cast<int>( simulationInfo.maxParticles.at(simulationType)); }
+    int getMaxNumberOfParticles() const noexcept { return static_cast<int>( analyzer->simulationInfo.maxParticles.at(simulationType)); }
 
     /**
      * @brief Gets average number of calulations (next particles position) in the period of time.
      * @return average calculation time
      */
-    int getAvgCalculationCount() const noexcept { return simulationInfo.avgCalculationCount; }
+    int getAvgCalculationCount() const noexcept { return analyzer->simulationInfo.avgCalculationCount; }
 
     /**
      * @brief Gets particle size for a given particle type.
@@ -236,7 +236,7 @@ public:
      */
     int getParticleSize( ParticleType type, DataFormat format = DataFormat::SCALAR ) const noexcept
     {
-        return ( format == DataFormat::PERCENT ) ? static_cast<int>((simulationInfo.particleSize.at(type)-simulationInfo.minSizeOfParticle)*100/(simulationInfo.maxSizeOfParticle.at(simulationType)-simulationInfo.minSizeOfParticle)) : simulationInfo.particleSize.at(type);
+        return ( format == DataFormat::PERCENT ) ? static_cast<int>((analyzer->simulationInfo.particleSize.at(type)-analyzer->simulationInfo.minSizeOfParticle)*100/(analyzer->simulationInfo.maxSizeOfParticle.at(simulationType)-analyzer->simulationInfo.minSizeOfParticle)) : analyzer->simulationInfo.particleSize.at(type);
     }    
 
     /**
@@ -260,13 +260,13 @@ public:
     void setPlaneWidthInPercent( int quantity );
 
     /** Gets simulation information. */
-    const SimulationInfo& getSimulationInfo() const noexcept { return simulationInfo; }
+    const SimulationInfo& getSimulationInfo() const noexcept { return analyzer->simulationInfo; }
 
     /** Gets clusters information. */
     const ClustersInfo& getClustersInfo() const noexcept { return clustersInfo; }
 
     /** Gets physics information. */
-    const PhysicsInfo& getPhysicsInfo() const noexcept { return physicsInfo; }
+    const PhysicsInfo& getPhysicsInfo() const noexcept { return analyzer->physicsInfo; }
 
     /** Enables tracking of selected particle. */
     void enableTracking();
@@ -362,15 +362,6 @@ protected:
     /** Visualization type */
     VisualizationType visualizationType {VisualizationType::VELOCITY};
 
-    /** Contains main simulation parameters */
-    SimulationInfo simulationInfo;
-
-    /** Contains global physics quantities describes states of particles */
-    PhysicsInfo physicsInfo;
-
-    /** Initial state of physicsInfo quantities */
-    const PhysicsInfo physicsInfoInitial;
-
     /** Holds @ref SimulationAnalyzer object */
     ptrAnalyzer analyzer;
 
@@ -398,15 +389,6 @@ protected:
      *  v is velocity of particle
      */
     double timeContribution {0.0};
-
-    /** Contains bar charts */
-    ptrMapBarChart barCharts;
-
-    /** Contains bar displays */
-    ptrMapBarDisplay barDisplays;
-
-    /** Contains histograms 1D */
-    ptrMapHistogram1D histograms1D;
 
     /** Atomic flag acts out like simple mutex to prevents particles modification before the end of calculation */
     std::atomic<bool> calculateNextPositionFlag {false};

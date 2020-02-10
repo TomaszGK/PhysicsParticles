@@ -12,16 +12,16 @@ void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, Action
     switch( boxType )
     {
      case BoxType::BARCHART :
-        if( barCharts->count(actionType) != 0 )
+        if( analyzer->barCharts->count(actionType) != 0 )
         {
-            qBoxPainters[actionType] = std::make_unique<QBarChart>(actionType,sqrt(physicsInfo.maxRapidity*2)/3,layout->parentWidget());
+            qBoxPainters[actionType] = std::make_unique<QBarChart>(actionType,sqrt(analyzer->physicsInfo.maxRapidity*2)/3,layout->parentWidget());
             layout->addWidget( qBoxPainters[actionType].get() );
             if( style != BoxStyles::DEFAULT ) qBoxPainters[actionType]->loadStyle(style);
         }
      break;
 
      case BoxType::BARDISPLAY :
-        if( barDisplays->count(actionType) != 0 )
+        if( analyzer->barDisplays->count(actionType) != 0 )
         {
             qBoxPainters[actionType] = std::make_unique<QBarDisplay>(actionType,layout->parentWidget());
             layout->addWidget( qBoxPainters[actionType].get() );
@@ -29,7 +29,7 @@ void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, Action
      break;
 
      case BoxType::HISTOGRAM1D :
-        if( histograms1D->count(actionType) != 0 )
+        if( analyzer->histograms1D->count(actionType) != 0 )
         {
             qBoxPainters[actionType] = std::make_unique<QHistogram1D>(actionType,160,layout->parentWidget());
             layout->addWidget( qBoxPainters[actionType].get() );

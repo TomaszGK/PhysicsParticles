@@ -19,9 +19,10 @@ SimulationAnalyzer::SimulationAnalyzer()
     (*histograms1D)[ActionType::M_MOMENTUM_DIST] = std::make_shared<Histogram1D>( 80 , physicsInfo.minRapidity , physicsInfo.maxRapidity*2.0 , "Momentum Distribution" );
 }
 
-void SimulationAnalyzer::resetPhysicsData()
+void SimulationAnalyzer::reset()
 {
     physicsInfo = PhysicsInfo();
+    simulationInfo = SimulationInfo();
 }
 
 void SimulationAnalyzer::collect( double kineticEnergy )
