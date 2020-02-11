@@ -202,12 +202,12 @@ struct colorRGB
  */
 struct SimulationInfo
 {       
-    int    maxPlaneXConstraint  {30}  ; /**< maximum value of plane X axis constraint (in percent of planeWidth value) */
-    int    calculationCount     {0}   ; /**< current number of calculateNextPositions calls, sets to zero after end of time period */
-    int    avgCalculationCount  {0}   ; /**< average number of calculateNextPositions calls in a period of time */
-    int    minSizeOfParticle    {5}   ; /**< minimum size of particle (in pixels) */
-    double maxTimeContribution  {1.5} ; /**< maximum time contribution in calculating the next particle positions */
-    double planeFillCoefficient {2.5} ; /**< defines a capacity of the particle plane, increase it to reduce plane capacity */
+    int    maxPlaneXConstraint   {30}  ; /**< maximum value of plane X axis constraint (in percent of planeWidth value) */
+    int    calculationCount      {0}   ; /**< number of update calls, sets to zero after end of time period */
+    int    calculationsPerSecond {0}   ; /**< number of update call in one second */
+    int    minSizeOfParticle     {5}   ; /**< minimum size of particle (in pixels) */
+    double maxTimeContribution   {1.5} ; /**< maximum time contribution in calculating the next particle positions */
+    double planeFillCoefficient  {2.5} ; /**< defines a capacity of the particle plane, increase it to reduce plane capacity */
 
     std::map<SimulationType,int> maxSizeOfParticle {
                                                      {SimulationType::BASIC,20},
@@ -311,8 +311,7 @@ struct PhysicsInfo
     int          numRedParticlesLeft   {0};   /**< number of red particles in the left part of plane - SimulationType::DIFFUSION mode */
     int          numRedParticlesRight  {0};   /**< number of red particles in the right part of plane - SimulationType::DIFFUSION mode */
     double       kineticEnergySum      {0};   /**< summed particle kinetic energies transfer to the plane */
-    double       kineticEnergySumTP    {0};   /**< summed particle kinetic energies transfer to the plane in a period of time */
-    double       averageKineticEnergy  {0};   /**< average kinetic energy of particles */
+    double       kineticEnergySumTP    {0};   /**< summed particle kinetic energies transfer to the plane in a period of time */    
     double       energyFromPlaneSum    {0};   /**< summed energy transfered from the plane to particles */
     double       energyFromPlaneSumTP  {0};   /**< summed energy transfered from the plane in a period of time */
     double       collVelocityChange    {0};   /**< use in testing */

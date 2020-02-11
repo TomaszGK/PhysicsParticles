@@ -456,19 +456,11 @@ void ParticlesPhysicsManager::update()
 
     }        
 
-    analyzer->update(simulationType);
-
     if( std::chrono::duration_cast<Milliseconds>(HRClock::now() - time) > analyzer->physicsInfo.timePeriod )
     {        
         time = HRClock::now();       
-        analyzer->physicsInfo.kineticEnergySumTP = analyzer->physicsInfo.kineticEnergySum/analyzer->simulationInfo.calculationCount;
-        analyzer->physicsInfo.kineticEnergySum = 0;
-        analyzer->physicsInfo.numOfCollisionTP = static_cast<double>(analyzer->physicsInfo.numOfCollision)/static_cast<double>(analyzer->simulationInfo.calculationCount);
-        analyzer->physicsInfo.numOfCollision = 0;
-        analyzer->simulationInfo.avgCalculationCount = analyzer->simulationInfo.calculationCount;
-        analyzer->simulationInfo.calculationCount = 0;
-        if( analyzer->simulationInfo.disjointParticles[simulationType] ) disjointPositions(0.9);
-        analyzer->physicsInfo.averageKineticEnergy = getAverageKineticEnergyOfParticles();
+        analyzer->update(simulationType);
+        if( analyzer->simulationInfo.disjointParticles[simulationType] ) disjointPositions(0.9);        
     }
 
 }
@@ -554,18 +546,6 @@ colorRGB ParticlesPhysicsManager::getRandomColor()
     return { static_cast<unsigned char>(Random::get<int>(0,255)),
              static_cast<unsigned char>(Random::get<int>(0,255)),
              static_cast<unsigned char>(Random::get<int>(0,255))   };
-}
-
-double ParticlesPhysicsManager::getAverageKineticEnergyOfParticles()
-{
-    double average {0};
-
-    for( const auto& particle : *particles )
-    {
-        average += 0.5*particle.mass*(~particle.velocity);
-    }
-
-    return average/particles->size();
 }
 
 void ParticlesPhysicsManager::updateParticlesLocationInPlane()

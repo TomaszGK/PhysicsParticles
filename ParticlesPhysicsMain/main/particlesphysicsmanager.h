@@ -226,7 +226,7 @@ public:
      * @brief Gets average number of calulations (next particles position) in the period of time.
      * @return average calculation time
      */
-    int getAvgCalculationCount() const noexcept { return analyzer->simulationInfo.avgCalculationCount; }
+    int getAvgCalculationCount() const noexcept { return analyzer->simulationInfo.calculationsPerSecond; }
 
     /**
      * @brief Gets particle size for a given particle type.
@@ -437,11 +437,6 @@ protected:
      * @return random RGB color
      */
     colorRGB getRandomColor();
-
-    /** Gets average kinetcic energy of particles in the plane.
-     * @return average kinetcic energy
-     */
-    double getAverageKineticEnergyOfParticles();
 
     /** @brief Updates number of ParticleType::RED and ParticleType::BLUE.
      *

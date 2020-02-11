@@ -75,6 +75,14 @@ void SimulationAnalyzer::update( SimulationType simulationType )
        velocityCounter[type] = 0;
     }
 
+    physicsInfo.kineticEnergySumTP = physicsInfo.kineticEnergySum/simulationInfo.calculationCount;
+    physicsInfo.numOfCollisionTP = static_cast<double>(physicsInfo.numOfCollision)/static_cast<double>(simulationInfo.calculationCount);
+    simulationInfo.calculationsPerSecond = simulationInfo.calculationCount*(1000/physicsInfo.timePeriod.count());
+
+    physicsInfo.numOfCollision = 0;
+    physicsInfo.kineticEnergySum = 0;
+    simulationInfo.calculationCount = 0;
+
 }
 
 void SimulationAnalyzer::updateBars( SimulationType simulationType )
