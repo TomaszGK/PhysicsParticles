@@ -3840,17 +3840,29 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
       <pointsize>8</pointsize>
      </font>
     </property>
+    <property name="toolTip">
+     <string>Number of particles updates per second.</string>
+    </property>
+    <property name="statusTip">
+     <string/>
+    </property>
     <property name="frameShape">
      <enum>QFrame::NoFrame</enum>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
     <property name="smallDecimalPoint">
      <bool>false</bool>
     </property>
     <property name="digitCount">
      <number>10</number>
+    </property>
+    <property name="mode">
+     <enum>QLCDNumber::Dec</enum>
     </property>
     <property name="segmentStyle">
      <enum>QLCDNumber::Flat</enum>
@@ -3866,7 +3878,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
      <x>0</x>
      <y>0</y>
      <width>1920</width>
-     <height>28</height>
+     <height>27</height>
     </rect>
    </property>
    <property name="font">

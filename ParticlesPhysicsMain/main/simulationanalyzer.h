@@ -27,16 +27,47 @@ public:
     /**
      * @brief Constructor
      *     
+     * Creates histograms, bar chart and bar display objects.
      */
     SimulationAnalyzer();
 
+    /**
+     * @brief Resets simulationInfo and physicsInfo to its initial values.
+     *
+     */
     void reset();
 
-    void collect( iterParticle particle );
+    /**
+     * @brief Collects information provided by particle
+     *
+     * Collects particle velocity and momentum.
+     * @param particle            iterator to particle
+     */
+    void collect( citerParticle particle );
 
+    /**
+     * @brief Collects particle kinetic energy
+     *
+     * @param kineticEnergy       particle kinetic energy
+     */
     void collect( double kineticEnergy );
 
+    /**
+     * @brief Updates and recalculates physics quantities used in a given simulation type.
+     *
+     * @param simulationType      simulation type
+     */
     void update( SimulationType simulationType );
+
+    /**
+     * @brief Adjusts time contribution
+     *
+     * @param calculationPeriod   calculation period
+     */
+    double adjustTimeContribution( double calculationPeriod )
+    {
+        return calculationPeriod < simulationInfo.maxTimeContribution ? calculationPeriod : simulationInfo.maxTimeContribution;
+    }
 
     /** Updates all bar charts and displays, adds new physics values to chart boxes */
     void updateBars( SimulationType simulationType );
@@ -58,8 +89,10 @@ public:
 
 private:    
 
+    /** Map of velocity sum */
     std::map<ParticleType,double> velocitySum;
 
+    /** Map of velocity counter */
     std::map<ParticleType,int> velocityCounter;
 
 };

@@ -31,7 +31,7 @@ void SimulationAnalyzer::collect( double kineticEnergy )
     physicsInfo.kineticEnergySum += kineticEnergy;
 }
 
-void SimulationAnalyzer::collect( iterParticle particle )
+void SimulationAnalyzer::collect( citerParticle particle )
 {
     auto velocity = particle->velocity();
     velocitySum[particle->particleType] += velocity;

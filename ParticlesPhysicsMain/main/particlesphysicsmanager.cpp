@@ -415,7 +415,7 @@ void ParticlesPhysicsManager::recalculateParticlesInClusters()
 
 iterCluster ParticlesPhysicsManager::getClusterIter( const size_t& posx, const size_t& posy )
 {
-    // if position out of range then throw exception
+    // if position is out of range then exception is thrown
     return clusterIters.at(posx).at(posy);
 }
 
@@ -424,17 +424,12 @@ void ParticlesPhysicsManager::update()
     calculationPeriod = std::chrono::duration_cast<std::chrono::microseconds>(HRClock::now() - calculationStart).count()*0.001;
     calculationStart = HRClock::now();
 
-    timeContribution = calculationPeriod<analyzer->simulationInfo.maxTimeContribution ? calculationPeriod : analyzer->simulationInfo.maxTimeContribution;
+    timeContribution = calculationPeriod;//analyzer->adjustTimeContribution(calculationPeriod);
 
     analyzer->simulationInfo.calculationCount++;
 
     for( auto particle=particles->begin() ; particle!=particles->end() ; ++particle )
-    {
-
-        if( !analyzer->physicsInfo.pushForce.isZero() )
-        {
-            if( !particle->isMacroscopic ) particle->velocity += analyzer->physicsInfo.pushForce*calculationPeriod;
-        }
+    {       
 
         handleParticleCollisions(particle);
 
@@ -451,6 +446,11 @@ void ParticlesPhysicsManager::update()
         particle->moveToNextPosition(timeContribution);
 
         handleParticleClusterTransition(particle);
+
+        if( simulationType == SimulationType::BROWNIAN_MOTION || simulationType == SimulationType::SANDBOX )
+        {
+            if( !particle->isMacroscopic ) particle->velocity += analyzer->physicsInfo.pushForce*calculationPeriod;
+        }
 
         analyzer->collect(particle);
 

@@ -153,6 +153,7 @@ public:
     /**
      * @brief Checks if this vector has not zeros coefficients.
      *
+     * Use only with integral types. For floating point may be trickery.
      * @return true if vector is equal [0,0] otherwise false
      */
     bool isZero() const noexcept { return (x==T{} && y==T{}); }
