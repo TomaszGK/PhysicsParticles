@@ -28,21 +28,20 @@ public:
      * @param particleType      particle type
      * @param visualizationType visualization type
      * @param position          particle position
-     * @param velocity          particle velocity
-     * @param maxRapidity       particle maximum velocity
+     * @param velocity          particle velocity    
      * @param size              particle size = 2*radius
      * @param cluster           cluster  where particle is located
      */
-    Particle( ParticleType particleType, VisualizationType visualizationType, vect2D position, vect2D velocity, double maxRapidity, int size, iterCluster cluster );
+    Particle( ParticleType particleType, VisualizationType visualizationType, vect2D position, vect2D velocity, int size, iterCluster cluster );
 
     /**
-     * @brief Calculates the next particle position.
+     * @brief Calculates and returns the next particle position.
      *
-     * Calculates the next position adding velocity multipling by time period.
+     * Calculates the next position by adding velocity multipling by a given period of time.
      * @param time time period
      * @return next particle position
      */
-    inline vect2D calculateNextPosition( const double& time = 1.0 ) const { return position+(velocity*time); }
+    vect2D calculateNextPosition( const double& time = 1.0 ) const { return position+(velocity*time); }
 
     /**
      * @brief Set particle size.
@@ -81,6 +80,17 @@ public:
     void savePosition();
 
     /**
+     * @brief Adds velocity.
+     *
+     * @param newVelocity       a given velocity
+     */
+    void addVelocity( const vect2D& newVelocity )
+    {
+        velocity += newVelocity;
+        if( velocity() > 1.0 ) velocity.setLength(1.0);
+    }
+
+    /**
      * @brief Moves to the next particle position.
      *
      * Calculates next particle position and assign it to the current particle position.
@@ -99,12 +109,6 @@ public:
             savePosition();
         }      
     }
-
-    /**
-     * @brief Gets current particle velocity in percent value with respect to maximum particle rapidity.
-     * @return current particle velocity in percent value
-     */
-    inline int getCurrentVelocityPercent() const { return static_cast<int>(100*velocity()/maxRapidity); }
 
     /** stores particle saved positions */
     std::list<vect2D> particlePositionsTracking;
@@ -127,9 +131,6 @@ public:
     /** particle mass */
     double mass {0};
 
-    /** particle maximum rapidity */
-    double maxRapidity {1.0};
-
     /** particle size */
     int size {0};
 
@@ -141,12 +142,6 @@ public:
 
     /** particle cluster */
     iterCluster cluster;
-
-    /** sum of kinetic energies measured when particle was hit the plane */
-    double sumPlaneHitKineticEnergy {0.0};
-
-    /** number of particle hits */
-    int numberOfPlaneHits {0};
 
     /** true if particle velocity have been modified */
     bool modifiedVelocity {false};

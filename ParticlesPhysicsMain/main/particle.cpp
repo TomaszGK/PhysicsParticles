@@ -1,8 +1,8 @@
 #include "particle.h"
 
-Particle::Particle( ParticleType particleType, VisualizationType visualizationType, vect2D position, vect2D velocity, double maxRapidity, int size, iterCluster cluster )
+Particle::Particle( ParticleType particleType, VisualizationType visualizationType, vect2D position, vect2D velocity, int size, iterCluster cluster )
 : particleType {particleType}, visualizationType {visualizationType}, position {position}, velocity {velocity},
-  maxRapidity {maxRapidity}, size {size}, cluster {cluster}
+  size {size}, cluster {cluster}
 {
     radius = static_cast<double>(size)*0.5;
     setParticleMassInPercent(100);
@@ -44,11 +44,10 @@ void Particle::calculateParticleColor()
 
 void Particle::updateParticleColor()
 {
-    auto intensity = 255.0*velocity()/maxRapidity;
-    if( intensity>255 ) intensity = 255;
-    color.R = static_cast<unsigned char>(intensity);
+    unsigned char intensity = static_cast<unsigned char>(255.0*velocity())%255;
+    color.R = intensity;
     color.G = 0;
-    color.B = static_cast<unsigned char>(255-intensity);
+    color.B = 255-intensity;
 }
 
 void Particle::savePosition()

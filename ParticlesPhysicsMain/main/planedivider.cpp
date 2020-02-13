@@ -33,7 +33,7 @@ void PlaneDivider::setDividerGap( int gap )
     lowerRect.second.y  = static_cast<int>(dividerHeight/2-((dividerHeight/2)*gap)/100);
 }
 
-void PlaneDivider::handleParticleCollision( iterParticle& particle )
+void PlaneDivider::handleParticleCollision( const iterParticle particle )
 {
     vect2D newPosition = particle->calculateNextPosition();
 

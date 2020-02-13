@@ -185,9 +185,10 @@ void QPainterManager::handleCursorPosition()
             displayVelocityVector.first = true;
             displayVelocityVector.second = particle;
 
+            auto normVelocity = static_cast<int>(100*particle->velocity());
             int posx   { static_cast<int>(particle->position.x)+boxStyle.planeBorderWidth };
             int posy   { static_cast<int>(particle->position.y)+boxStyle.planeBorderWidth };
-            int number { particle->getCurrentVelocityPercent() };
+            int number { normVelocity };
             int shiftx {0};
 
             paintArrow( position + particle->velocity.getVectorOfLength(particle->radius) , particle->velocity.getVectorOfLength(100) , 25 , 6 , selectedParticleColor );
@@ -198,7 +199,7 @@ void QPainterManager::handleCursorPosition()
             else if( number>9 && number<99 ) shiftx = 9;
             else shiftx = 13;
 
-            painter.drawText(posx-shiftx,posy+5,QString::number(particle->getCurrentVelocityPercent()));
+            painter.drawText(posx-shiftx,posy+5,QString::number(normVelocity));
         }       
     }
 }

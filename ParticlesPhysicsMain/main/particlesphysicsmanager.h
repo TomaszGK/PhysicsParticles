@@ -477,7 +477,7 @@ protected:
      * and then changes appropriate cluster iterator values.
      * @param particle    iterator to particle
      */
-    void handleParticleClusterTransition( const iterParticle& particle );
+    void handleParticleClusterTransition( const iterParticle particle );
 
     /** @brief Handles particle collisions.
      *
@@ -485,7 +485,7 @@ protected:
      * All collided particles are recalculated their vector velocities to comply rebound behavior.
      * @param particle    iterator to particle
      */
-    void handleParticleCollisions( const iterParticle& particle );
+    void handleParticleCollisions( const iterParticle particle );
 
     /** @brief Handles particle collisions using alternative algorithm.
      *
@@ -493,7 +493,7 @@ protected:
      * All collided particles are recalculated their vector velocities to comply rebound behavior.
      * @param particle    iterator to particle
      */
-    void handleParticleCollisionsAlternative( const iterParticle& particle );
+    void handleParticleCollisionsAlternative( const iterParticle particle );
 
     /** @brief Handles particle collisions with a plane boundry.
      *
@@ -502,7 +502,7 @@ protected:
      * @param particle    iterator to particle
      * @return particle kinetic energy if collision occured or zero otherwise
      */
-    double handleParticleCollisionWithPlaneBoundries( const iterParticle& particle );
+    double handleParticleCollisionWithPlaneBoundries( const iterParticle particle );
 
     /** @brief Checks if particle overlaped with others.
      *
@@ -556,7 +556,7 @@ protected:
      *
      * @param particle    iterator to particle
      */
-    void shuffleParticle( const iterParticle& particle );
+    void shuffleParticle( const iterParticle particle );
 
     /** @brief Checks if the particle plane is full of particles.
      *
@@ -578,7 +578,7 @@ protected:
      * @param particle              iterator to particle
      * @return true if disjont success otherwise false
      */
-    bool disjoint( const iterParticle& particle );
+    bool disjoint( const iterParticle particle );
 
     /** @brief Corrects particles invalid parameters.
      *
@@ -599,7 +599,7 @@ protected:
      * and modifies its position to fit to plane borders.
      * @param particle              iterator to particle
      */
-    void preserveParticleInPlane( const iterParticle& particle );
+    void preserveParticleInPlane( const iterParticle particle );
 
     /** Removes all particles from all clusters */
     void removeParticlesFromClusters();

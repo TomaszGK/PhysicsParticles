@@ -75,7 +75,7 @@ public:
      * Changes particle vector velocity if collision has been detected.
      * @param particle              iterator to particle
      */
-    void handleParticleCollision( iterParticle& particle );
+    void handleParticleCollision( const iterParticle particle );
 
 private:
 

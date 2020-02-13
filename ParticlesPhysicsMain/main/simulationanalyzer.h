@@ -43,7 +43,7 @@ public:
      * Collects particle velocity and momentum.
      * @param particle            iterator to particle
      */
-    void collect( citerParticle particle );
+    void collect( const citerParticle particle );
 
     /**
      * @brief Collects particle kinetic energy
@@ -67,6 +67,16 @@ public:
     double adjustTimeContribution( double calculationPeriod )
     {
         return calculationPeriod < simulationInfo.maxTimeContribution ? calculationPeriod : simulationInfo.maxTimeContribution;
+    }
+
+    /**
+     * @brief Checks if difference from a given time point to current time point is greater then fix period time.
+     *
+     * @param time   a given time point
+     */
+    bool isTimePeriodUp( const HRClock::time_point& time )
+    {
+       return std::chrono::duration_cast<Milliseconds>(HRClock::now() - time) > physicsInfo.timePeriod;
     }
 
     /** Updates all bar charts and displays, adds new physics values to chart boxes */

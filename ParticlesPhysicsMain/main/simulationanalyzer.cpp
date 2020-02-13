@@ -1,6 +1,5 @@
 #include "simulationanalyzer.h"
 
-
 SimulationAnalyzer::SimulationAnalyzer()
 {
     barDisplays = std::make_shared<MapBarDisplay>();
@@ -31,7 +30,7 @@ void SimulationAnalyzer::collect( double kineticEnergy )
     physicsInfo.kineticEnergySum += kineticEnergy;
 }
 
-void SimulationAnalyzer::collect( citerParticle particle )
+void SimulationAnalyzer::collect( const citerParticle particle )
 {
     auto velocity = particle->velocity();
     velocitySum[particle->particleType] += velocity;

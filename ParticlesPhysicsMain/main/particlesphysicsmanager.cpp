@@ -161,7 +161,7 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
         velocity.y *= Random::get<bool>() ? 1.0 : -1.0;
 
         auto iterCluster = getClusterIter(static_cast<size_t>(position.x),static_cast<size_t>(position.y));
-        particles->push_back(Particle(particleType,visualizationType,position,velocity,analyzer->physicsInfo.maxRapidity,particleSize,iterCluster));
+        particles->push_back(Particle(particleType,visualizationType,position,velocity,particleSize,iterCluster));
         iterCluster->addParticle( std::prev(particles->end()) );
     }
 
@@ -212,7 +212,7 @@ void ParticlesPhysicsManager::removeAllParticles()
     particles->clear();
 }
 
-void ParticlesPhysicsManager::shuffleParticle( const iterParticle& particle )
+void ParticlesPhysicsManager::shuffleParticle( const iterParticle particle )
 {
     double minX {0};
     double maxX {0};
@@ -320,7 +320,7 @@ void ParticlesPhysicsManager::disableTracking()
     selectedParticle->particlePositionsTracking.clear();
 }
 
-bool ParticlesPhysicsManager::disjoint( const iterParticle& particle )
+bool ParticlesPhysicsManager::disjoint( const iterParticle particle )
 {
     double distance {0};
 
@@ -384,7 +384,7 @@ void ParticlesPhysicsManager::disjointPositions( double impactFactor )
     }
 }
 
-void ParticlesPhysicsManager::preserveParticleInPlane( const iterParticle& particle )
+void ParticlesPhysicsManager::preserveParticleInPlane( const iterParticle particle )
 {
     if( particle->position.x-particle->radius<=0 ) particle->position.x = particle->radius+1;
     else if( particle->position.x+particle->radius>=planeArea->getWidth() ) particle->position.x = static_cast<double>(planeArea->getWidth())-particle->radius-1;
@@ -456,7 +456,7 @@ void ParticlesPhysicsManager::update()
 
     }        
 
-    if( std::chrono::duration_cast<Milliseconds>(HRClock::now() - time) > analyzer->physicsInfo.timePeriod )
+    if( analyzer->isTimePeriodUp(time) )
     {        
         time = HRClock::now();       
         analyzer->update(simulationType);
@@ -489,6 +489,7 @@ void ParticlesPhysicsManager::mainLoop()
             catch(...)
             {
                 std::cout << "3: Cought undefined exception \n";
+                return;
             }
 
         }
@@ -604,7 +605,7 @@ vect2D ParticlesPhysicsManager::getDisjointRandomParticlePositionTries( double m
     return position;
 }
 
-void ParticlesPhysicsManager::handleParticleClusterTransition( const iterParticle& particle )
+void ParticlesPhysicsManager::handleParticleClusterTransition( const iterParticle particle )
 {
     auto iterCurrent = getClusterIter(static_cast<size_t>(particle->position.x),static_cast<size_t>(particle->position.y));
     if( iterCurrent != particle->cluster )
@@ -615,7 +616,7 @@ void ParticlesPhysicsManager::handleParticleClusterTransition( const iterParticl
     }
 }
 
-void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle& particle )
+void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle particle )
 {
 
     double dotProductV1V2 {0};
@@ -666,7 +667,7 @@ void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle& part
 
 }
 
-void ParticlesPhysicsManager::handleParticleCollisionsAlternative( const iterParticle& particle )
+void ParticlesPhysicsManager::handleParticleCollisionsAlternative( const iterParticle particle )
 {
 
     vect2D velocityChangeP1; // velocity change for particle
@@ -734,7 +735,7 @@ void ParticlesPhysicsManager::handleParticleCollisionsAlternative( const iterPar
 
 }
 
-double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const iterParticle &particle )
+double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const iterParticle particle )
 {
     vect2D newPosition = particle->calculateNextPosition(timeContribution);
     double kineticEnergy {0.0};
