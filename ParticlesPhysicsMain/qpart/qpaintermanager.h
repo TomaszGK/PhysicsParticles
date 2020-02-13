@@ -97,6 +97,9 @@ private:
     /** plane hits paint flag */
     bool toHandlePlaneHits {false};
 
+    /** map of particle colors */
+    std::map<ParticleType,QColor> color;
+
     /**
      * @brief Paints the particle plane.
      *
@@ -152,6 +155,17 @@ private:
     /**
      * @brief Handles by checking if mouse cursor position is hovering on some particle.
      */
-    void handleCursorPosition();   
+    void handleCursorPosition();
+
+
+    /**
+     * @brief Updates a given particle color.
+     *
+     * Updates color corresponding to particle velocity.
+     * Using when @ref VisualizationType is set on VisualizationType::VELOCITY.
+     *
+     * @param particle              a given particle
+     */
+    void updateParticleColor( citerParticle particle );
 
 };

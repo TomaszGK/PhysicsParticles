@@ -90,8 +90,7 @@ void ParticlesPhysicsManager::setVisualizationType( VisualizationType type )
 
     for( auto &particle : *particles )
     {
-        particle.visualizationType = type;
-        particle.calculateParticleColor();
+        particle.visualizationType = type;        
     }
 
     if( !pauseByUserFlag ) run();

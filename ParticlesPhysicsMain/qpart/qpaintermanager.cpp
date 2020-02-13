@@ -16,6 +16,15 @@ QPainterManager::QPainterManager( QWidget* parent )
     particles = Locator::getParticles();
     planeArea = Locator::getPlaneArea();
 
+    color[ParticleType::BLUE]        = {0,0,255};
+    color[ParticleType::RED]         = {255,0,0};
+    color[ParticleType::NORMAL]      = {255,0,255};
+    color[ParticleType::GAS1]        = {255,0,0};
+    color[ParticleType::GAS2]        = {0,85,80};
+    color[ParticleType::GAS3]        = {0,0,255};
+    color[ParticleType::MINI]        = {50,10,255};
+    color[ParticleType::MACROSCOPIC] = {50,10,95};
+
     init();
 }
 
@@ -58,7 +67,11 @@ void QPainterManager::paint()
             posy = static_cast<int>(particle->position.y)+boxStyle.planeBorderWidth;
 
             if( toTrackingPaint && !particle->isTracking ) particleColor = QColor(200,200,200);
-            else particleColor = QColor(particle->color.R, particle->color.G, particle->color.B);
+            else
+            {
+                if( particle->visualizationType == VisualizationType::VELOCITY ) updateParticleColor( particle );
+                else particleColor = color[particle->particleType];
+            }
 
             paintParticle(posx,posy,size,particleColor);
 
@@ -68,7 +81,7 @@ void QPainterManager::paint()
         if( planeArea->getPlainDivider().isDividerInPlane() ) paintPlaneDivider();
         if( toVectorPaint ) handleCursorPosition();
 
-        if( static_cast<int>(planeArea->getXConstraint())>boxStyle.planeBorderWidth ) paintPlaneConstraintWalls();
+        if( static_cast<int>(planeArea->getXConstraint()) > boxStyle.planeBorderWidth ) paintPlaneConstraintWalls();
 
         painter.restore();
     }
@@ -202,4 +215,10 @@ void QPainterManager::handleCursorPosition()
             painter.drawText(posx-shiftx,posy+5,QString::number(normVelocity));
         }       
     }
+}
+
+void QPainterManager::updateParticleColor( citerParticle particle )
+{
+    unsigned char intensity = static_cast<unsigned char>(255.0*particle->velocity())%255;
+    particleColor.setRgb( intensity, 0, 255-intensity );
 }

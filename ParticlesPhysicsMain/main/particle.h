@@ -56,21 +56,6 @@ public:
     void setParticleMassInPercent( int percent );
 
     /**
-     * @brief Calculates particle color.
-     *
-     * Particle color depends on @ref VisualizationType and @ref ParticleType.
-     */
-    void calculateParticleColor();
-
-    /**
-     * @brief Updates particle color.
-     *
-     * Updates color corresponding to particle velocity.
-     * Using when @ref VisualizationType is set on VisualizationType::VELOCITY.
-     */
-    void updateParticleColor();
-
-    /**
      * @brief Save current particle position.
      *
      * Current particle position is saved in the list particlePositionsTracking using push_back().
@@ -100,8 +85,7 @@ public:
      * @param time time period
      */
     void moveToNextPosition( const double& time = 1.0 )
-    {
-        if( visualizationType == VisualizationType::VELOCITY && modifiedVelocity ) updateParticleColor();
+    {        
         position += (velocity*time);
         modifiedVelocity = false;
         if( isTracking )
