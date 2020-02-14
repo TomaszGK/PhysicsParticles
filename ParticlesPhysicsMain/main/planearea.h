@@ -2,6 +2,7 @@
 
 #include "definitions.h"
 #include "planedivider.h"
+#include "cluster.h"
 
 /** @file
  * @brief Class @ref PlaneArea
@@ -41,6 +42,19 @@ public:
      * @param planeBorderWidth      plane border width in pixels
      */
     PlaneArea( vect2D origin, double radius, int planeBorderWidth );
+
+    /**
+     * @brief Handles particle collision with plane divider.
+     *
+     * @param particle               iterator to particle
+     */
+    void handleParticleCollisionWithPlaneDivider( const iterParticle particle )
+    {
+        if( planeDivider->isDividerInPlane() && particle->cluster->PLANE_DIVIDER )
+        {
+            planeDivider->handleParticleCollision(particle);
+        }
+    }
 
     /**
      * @brief Gets plane width.

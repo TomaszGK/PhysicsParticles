@@ -87,7 +87,6 @@ MainWindow::MainWindow(QWidget *parent) :
     animationTimer.start(10);
 
     calculationThread = simulation[current]->calculateNextPositionsInThread();
-
 }
 
 MainWindow::~MainWindow()

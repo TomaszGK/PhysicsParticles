@@ -26,6 +26,11 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
     selectedParticle = particles->begin();
 
     Locator::provide(this);
+
+    mainLoop<SimulationType::BASIC>();
+    mainLoop<SimulationType::DIFFUSION>();
+    mainLoop<SimulationType::BROWNIAN_MOTION>();
+    mainLoop<SimulationType::SANDBOX>();
 }
 
 ParticlesPhysicsManager::~ParticlesPhysicsManager()
@@ -418,6 +423,7 @@ iterCluster ParticlesPhysicsManager::getClusterIter( const size_t& posx, const s
     return clusterIters.at(posx).at(posy);
 }
 
+template< SimulationType type >
 void ParticlesPhysicsManager::update()
 {
     calculationPeriod = std::chrono::duration_cast<std::chrono::microseconds>(HRClock::now() - calculationStart).count()*0.001;
@@ -437,16 +443,13 @@ void ParticlesPhysicsManager::update()
             analyzer->collect( handleParticleCollisionWithPlaneBoundries(particle) );
         }
 
-        if( planeArea->getPlainDivider().isDividerInPlane() && particle->cluster->PLANE_DIVIDER )
-        {
-            planeArea->getPlainDivider().handleParticleCollision(particle);
-        }
+        if constexpr( type == SimulationType::DIFFUSION ) planeArea->handleParticleCollisionWithPlaneDivider(particle);
 
         particle->moveToNextPosition(timeContribution);
 
         handleParticleClusterTransition(particle);
 
-        if( simulationType == SimulationType::BROWNIAN_MOTION || simulationType == SimulationType::SANDBOX )
+        if constexpr( type == SimulationType::BROWNIAN_MOTION || type == SimulationType::SANDBOX )
         {
             if( !particle->isMacroscopic ) particle->velocity += analyzer->physicsInfo.pushForce*calculationPeriod;
         }
@@ -464,6 +467,7 @@ void ParticlesPhysicsManager::update()
 
 }
 
+template< SimulationType type >
 void ParticlesPhysicsManager::mainLoop()
 {
     while( calculationState.load() != ThreadCalculationState::END )
@@ -473,7 +477,7 @@ void ParticlesPhysicsManager::mainLoop()
             try
             {
                 calculateNextPositionFlag.store(true);
-                update();
+                update<type>();
                 calculateNextPositionFlag.store(false);
             }
             catch( const std::exception& ex )

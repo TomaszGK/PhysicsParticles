@@ -102,7 +102,7 @@ void QParticlesPhysicsManager::paintParticlesPlane()
 
 void QParticlesPhysicsManager::paintLayouts()
 {
-    updateBars();    
+    updateBars();
     for( auto &painter : qBoxPainters ){ painter.second->update(); }
     for( auto &gauge : qGauges )
     {

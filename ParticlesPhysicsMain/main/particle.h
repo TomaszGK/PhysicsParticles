@@ -121,9 +121,6 @@ public:
     /** particle radius */
     double radius {0};
 
-    /** particle color */
-    colorRGB color;
-
     /** particle cluster */
     iterCluster cluster;
 

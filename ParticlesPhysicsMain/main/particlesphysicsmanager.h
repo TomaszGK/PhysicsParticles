@@ -345,19 +345,25 @@ public:
      *
      * Creates thread and calling function calculateNextPositionsLoop.
      * @return created thread
-     */
+     */    
     std::thread calculateNextPositionsInThread()
-    {
+    {        
         calculationState = ThreadCalculationState::RUNNING;
         Locator::provide(this);
         calculationStart = HRClock::now();
-        return std::thread( &ParticlesPhysicsManager::mainLoop , this );
+        switch( simulationType )
+        {
+         case SimulationType::BASIC           : return std::thread( &ParticlesPhysicsManager::mainLoop<SimulationType::BASIC> , this );
+         case SimulationType::DIFFUSION       : return std::thread( &ParticlesPhysicsManager::mainLoop<SimulationType::DIFFUSION> , this );
+         case SimulationType::BROWNIAN_MOTION : return std::thread( &ParticlesPhysicsManager::mainLoop<SimulationType::BROWNIAN_MOTION> , this );
+         case SimulationType::SANDBOX         : return std::thread( &ParticlesPhysicsManager::mainLoop<SimulationType::SANDBOX> , this );
+        }
     }
 
 protected:
 
     /** Simulation type */
-    SimulationType simulationType;
+    const SimulationType simulationType;
 
     /** Visualization type */
     VisualizationType visualizationType {VisualizationType::VELOCITY};
@@ -425,12 +431,14 @@ protected:
     iterCluster getClusterIter( const size_t& posx , const size_t& posy );
 
     /** Updates particles positions */
+    template< SimulationType type >
     void update();
 
     /** Calls updates in while() loop
      *
      * The following loop should be running in separate thread.
      */
+    template< SimulationType type >
     void mainLoop();
 
     /** Gets random color
