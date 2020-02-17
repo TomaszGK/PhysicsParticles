@@ -86,8 +86,7 @@ public:
      */
     void moveToNextPosition( const double& time = 1.0 )
     {        
-        position += (velocity*time);
-        modifiedVelocity = false;
+        position += (velocity*time);        
         if( isTracking )
         {
             savePosition();
@@ -123,9 +122,6 @@ public:
 
     /** particle cluster */
     iterCluster cluster;
-
-    /** true if particle velocity have been modified */
-    bool modifiedVelocity {false};
 
     /** true if position of particle is tracking */
     bool isTracking {false};

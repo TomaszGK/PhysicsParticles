@@ -356,8 +356,10 @@ public:
          case SimulationType::BASIC           : return std::thread( &ParticlesPhysicsManager::mainLoop<SimulationType::BASIC> , this );
          case SimulationType::DIFFUSION       : return std::thread( &ParticlesPhysicsManager::mainLoop<SimulationType::DIFFUSION> , this );
          case SimulationType::BROWNIAN_MOTION : return std::thread( &ParticlesPhysicsManager::mainLoop<SimulationType::BROWNIAN_MOTION> , this );
-         case SimulationType::SANDBOX         : return std::thread( &ParticlesPhysicsManager::mainLoop<SimulationType::SANDBOX> , this );
+         case SimulationType::SANDBOX         : return std::thread( &ParticlesPhysicsManager::mainLoop<SimulationType::SANDBOX> , this );         
         }
+
+        return std::thread( [](){} );
     }
 
 protected:
@@ -493,6 +495,7 @@ protected:
      * All collided particles are recalculated their vector velocities to comply rebound behavior.
      * @param particle    iterator to particle
      */
+    template< SimulationType type >
     void handleParticleCollisions( const iterParticle particle );
 
     /** @brief Handles particle collisions using alternative algorithm.
@@ -510,6 +513,7 @@ protected:
      * @param particle    iterator to particle
      * @return particle kinetic energy if collision occured or zero otherwise
      */
+    template< SimulationType type >
     double handleParticleCollisionWithPlaneBoundries( const iterParticle particle );
 
     /** @brief Checks if particle overlaped with others.

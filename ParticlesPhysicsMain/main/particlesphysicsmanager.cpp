@@ -27,6 +27,7 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
 
     Locator::provide(this);
 
+    // explicit instantiations of template function to know its definitions in other translate units - linker purpose
     mainLoop<SimulationType::BASIC>();
     mainLoop<SimulationType::DIFFUSION>();
     mainLoop<SimulationType::BROWNIAN_MOTION>();
@@ -436,11 +437,11 @@ void ParticlesPhysicsManager::update()
     for( auto particle=particles->begin() ; particle!=particles->end() ; ++particle )
     {       
 
-        handleParticleCollisions(particle);
+        handleParticleCollisions<type>(particle);
 
         if( particle->cluster->PLANE_BOUNDRY || planeArea->getXConstraint()>0 )
         {
-            analyzer->collect( handleParticleCollisionWithPlaneBoundries(particle) );
+            analyzer->collect( handleParticleCollisionWithPlaneBoundries<type>(particle) );
         }
 
         if constexpr( type == SimulationType::DIFFUSION ) planeArea->handleParticleCollisionWithPlaneDivider(particle);
@@ -619,13 +620,14 @@ void ParticlesPhysicsManager::handleParticleClusterTransition( const iterParticl
     }
 }
 
+template< SimulationType type >
 void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle particle )
 {
 
-    double dotProductV1V2 {0};
-    double dotProductV2V1 {0};
-    double distance {0};
-    double minDistance {0};
+    double dotProductV1V2 {0.0};
+    double dotProductV2V1 {0.0};
+    double distance {0.0};
+    double minDistance {0.0};
 
     for( auto &cluster : *particle->cluster->getAdjoinClusters() )
     {
@@ -639,8 +641,7 @@ void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle parti
             if( (otherParticle->position - particle->position)() <= minDistance ) continue;
 
             if( distance < minDistance )
-            {
-                particle->modifiedVelocity = otherParticle->modifiedVelocity = true;
+            {                
 
                 dotProductV1V2 = (particle->velocity-otherParticle->velocity)*(particle->position-otherParticle->position);
                 dotProductV2V1 = (otherParticle->velocity-particle->velocity)*(otherParticle->position-particle->position);
@@ -655,14 +656,17 @@ void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle parti
 
 
             }
-            else if( simulationType == SimulationType::SANDBOX && analyzer->physicsInfo.attractionForce!=0.0 )
-            {
-                particle->modifiedVelocity = otherParticle->modifiedVelocity = true;                
-                vect2D direction = (particle->position-otherParticle->position).setLength(1.0);
-                double factor    = analyzer->physicsInfo.attractionForce*calculationPeriod/distance;
 
-                particle->velocity += direction*factor*(-1.0)*otherParticle->mass;
-                otherParticle->velocity += direction*factor*particle->mass;
+            if constexpr ( type == SimulationType::SANDBOX )
+            {                
+                if( analyzer->physicsInfo.attractionForce!=0.0 )
+                {
+                    vect2D direction = (particle->position-otherParticle->position).setLength(1.0);
+                    double factor    = analyzer->physicsInfo.attractionForce*calculationPeriod/distance;
+
+                    particle->velocity += direction*factor*(-1.0)*otherParticle->mass;
+                    otherParticle->velocity += direction*factor*particle->mass;
+                }
             }
 
         }
@@ -693,8 +697,7 @@ void ParticlesPhysicsManager::handleParticleCollisionsAlternative( const iterPar
             minDistance = otherParticle->radius+particle->radius;
 
             if( distance < minDistance )
-            {
-                particle->modifiedVelocity = otherParticle->modifiedVelocity = true;
+            {                
 
                 if( ParticlesMath::cosAngle( particle->velocity , otherParticle->position - particle->position )>0 )
                 {
@@ -723,8 +726,7 @@ void ParticlesPhysicsManager::handleParticleCollisionsAlternative( const iterPar
 
             }
             else if( simulationType == SimulationType::SANDBOX && analyzer->physicsInfo.attractionForce!=0.0 )
-            {
-                particle->modifiedVelocity = otherParticle->modifiedVelocity = true;
+            {                
                 double distanceCut = ( distance<minDistance ) ? minDistance : distance ;
                 vect2D direction = (particle->position-otherParticle->position).setLength(1.0);
                 double factor    = analyzer->physicsInfo.attractionForce*calculationPeriod/distanceCut;
@@ -738,61 +740,56 @@ void ParticlesPhysicsManager::handleParticleCollisionsAlternative( const iterPar
 
 }
 
+template< SimulationType type >
 double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const iterParticle particle )
 {
     vect2D newPosition = particle->calculateNextPosition(timeContribution);
     double kineticEnergy {0.0};
     double temperature {0};
 
-    if( simulationType == SimulationType::BASIC )
+    if constexpr( type == SimulationType::BASIC )
     {
         temperature = analyzer->physicsInfo.temperature[PlanePart::WHOLE];
     }   
-    else if( simulationType == SimulationType::DIFFUSION )
+    if constexpr( type == SimulationType::DIFFUSION )
     {
-        if( newPosition.x < planeArea->getPlainDivider().getDividerPosX() ) temperature = analyzer->physicsInfo.temperature[PlanePart::LEFTBOX];
-        else temperature =  analyzer->physicsInfo.temperature[PlanePart::RIGHTBOX];
+        temperature = ( newPosition.x < planeArea->getPlainDivider().getDividerPosX() ) ? analyzer->physicsInfo.temperature[PlanePart::LEFTBOX] : analyzer->physicsInfo.temperature[PlanePart::RIGHTBOX];
     }
 
     if( newPosition.x - particle->radius <= planeArea->getXConstraint() )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::LEFT];
+        if constexpr ( type == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::LEFT];
         particle->position.x = particle->radius + planeArea->getXConstraint();
         kineticEnergy = abs(particle->velocity.x)*particle->mass*0.5;
-        particle->velocity.x = simulationType == SimulationType::BROWNIAN_MOTION ? (-1.0)*particle->velocity.x : temperature;
-        particle->modifiedVelocity = true;
-        return kineticEnergy;
+        if constexpr ( type == SimulationType::BROWNIAN_MOTION ) particle->velocity.x = (-1.0)*particle->velocity.x;
+        else particle->velocity.x = temperature;
     }
     if( newPosition.x + particle->radius >= planeArea->getWidth() - planeArea->getXConstraint() )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::RIGHT];
+        if constexpr ( type == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::RIGHT];
         particle->position.x = static_cast<double>(planeArea->getWidth()) - particle->radius - planeArea->getXConstraint();
         kineticEnergy = abs(particle->velocity.x)*particle->mass*0.5;
-        particle->velocity.x = (-1.0)*( simulationType == SimulationType::BROWNIAN_MOTION ? particle->velocity.x : temperature);
-        particle->modifiedVelocity = true;
-        return kineticEnergy;
+        if constexpr ( type == SimulationType::BROWNIAN_MOTION ) particle->velocity.x = (-1.0)*particle->velocity.x;
+        else particle->velocity.x = (-1.0)*temperature;
     }
-
     if( newPosition.y - particle->radius <= 0 )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::UP];
+        if constexpr ( type == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::UP];
         particle->position.y = particle->radius;
         kineticEnergy = abs(particle->velocity.y)*particle->mass*0.5;
-        particle->velocity.y = simulationType == SimulationType::BROWNIAN_MOTION ? (-1.0)*particle->velocity.y : temperature;
-        particle->modifiedVelocity = true;
-        return kineticEnergy;
+        if constexpr ( type == SimulationType::BROWNIAN_MOTION ) particle->velocity.y = (-1.0)*particle->velocity.y;
+        else particle->velocity.y = temperature;
     }
     if( newPosition.y + particle->radius >= planeArea->getHeight() )
     {
-        if( simulationType == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::DOWN];
+        if constexpr ( type == SimulationType::SANDBOX ) temperature = analyzer->physicsInfo.temperature[PlanePart::DOWN];
         particle->position.y = static_cast<double>(planeArea->getHeight()) - particle->radius;
         kineticEnergy = abs(particle->velocity.y)*particle->mass*0.5;
-        particle->velocity.y = (-1.0)*( simulationType == SimulationType::BROWNIAN_MOTION ? particle->velocity.y : temperature);
-        particle->modifiedVelocity = true;
-        return kineticEnergy;
+        if constexpr ( type == SimulationType::BROWNIAN_MOTION ) particle->velocity.y = (-1.0)*particle->velocity.y;
+        else particle->velocity.y = (-1.0)*temperature;
     }
 
-    return 0;
+    return kineticEnergy;
 }
 
 bool ParticlesPhysicsManager::isParticlesOverlap( const vect2D& particlePosition, double radius )
