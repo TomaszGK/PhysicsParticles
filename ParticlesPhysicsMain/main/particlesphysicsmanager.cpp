@@ -32,6 +32,7 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
     mainLoop<SimulationType::DIFFUSION>();
     mainLoop<SimulationType::BROWNIAN_MOTION>();
     mainLoop<SimulationType::SANDBOX>();
+
 }
 
 ParticlesPhysicsManager::~ParticlesPhysicsManager()
@@ -464,7 +465,7 @@ void ParticlesPhysicsManager::update()
         time = HRClock::now();       
         analyzer->update(simulationType);
         if( analyzer->simulationInfo.disjointParticles[simulationType] ) disjointPositions(0.9);        
-    }
+    }    
 
 }
 
@@ -476,10 +477,8 @@ void ParticlesPhysicsManager::mainLoop()
         if( calculationState.load() != ThreadCalculationState::PAUSE )
         {
             try
-            {
-                calculateNextPositionFlag.store(true);
-                update<type>();
-                calculateNextPositionFlag.store(false);
+            {                
+                update<type>();                
             }
             catch( const std::exception& ex )
             {
@@ -496,6 +495,11 @@ void ParticlesPhysicsManager::mainLoop()
                 return;
             }
 
+        }
+
+        if( calculationState.load() == ThreadCalculationState::PAUSE )
+        {
+            if( fUpdate.wait_for(std::chrono::seconds(0)) != std::future_status::ready ) pUpdate.set_value(true);
         }
     }
 }

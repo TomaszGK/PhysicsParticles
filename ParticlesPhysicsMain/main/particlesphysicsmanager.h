@@ -293,9 +293,11 @@ public:
     {
         if( calculationState.load() == ThreadCalculationState::RUNNING )
         {
+            pUpdate = std::promise<bool>();
+            fUpdate = pUpdate.get_future();
             calculationState.store(ThreadCalculationState::PAUSE);
-            if( userCall ) pauseByUserFlag = true;
-            while( calculateNextPositionFlag.load() ); // wait for the end of calculation step
+            if( userCall ) pauseByUserFlag = true;            
+            while( fUpdate.wait_for(std::chrono::milliseconds(1)) != std::future_status::ready );
         }
     }
 
@@ -318,7 +320,7 @@ public:
     /** Ends simulation by breaking loop in the caluclation thread. */
     void end()
     {
-        calculationState = ThreadCalculationState::END;
+        calculationState.store( ThreadCalculationState::END );
     }    
 
     /**
@@ -398,9 +400,6 @@ protected:
      */
     double timeContribution {0.0};
 
-    /** Atomic flag acts out like simple mutex to prevents particles modification before the end of calculation */
-    std::atomic<bool> calculateNextPositionFlag {false};
-
     /** Flag indicates if simulation was paused by user */
     bool pauseByUserFlag {false};
 
@@ -421,6 +420,12 @@ protected:
 
     /** Calculation state */
     std::atomic<ThreadCalculationState> calculationState { ThreadCalculationState::END };
+
+    /** Promise value used in synchronization of update process after pause invoke */
+    std::promise<bool> pUpdate;
+
+    /** Future value used in synchronization of update process after pause invoke */
+    std::future<bool> fUpdate;
 
     /** @brief Gets cluster iterator
      *
