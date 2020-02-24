@@ -312,8 +312,12 @@ public:
         if( calculationState.load() == ThreadCalculationState::PAUSE )
         {            
             if( userCall ) pauseByUserFlag = false;
-            calculationStart = HRClock::now();
-            calculationState.store( ThreadCalculationState::RUNNING );
+
+            if( !pauseByUserFlag )
+            {
+                calculationStart = HRClock::now();
+                calculationState.store( ThreadCalculationState::RUNNING );
+            }
         }
     }
 
@@ -435,7 +439,7 @@ protected:
      * @param posx        y position of point (x,y)
      * @return iterator to the cluster
      */
-    iterCluster getClusterIter( const size_t& posx , const size_t& posy );
+    inline iterCluster getClusterIter( const size_t& posx , const size_t& posy );
 
     /** Updates particles positions */
     template< SimulationType type >

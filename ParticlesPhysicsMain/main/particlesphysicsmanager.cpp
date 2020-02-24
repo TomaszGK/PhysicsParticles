@@ -45,13 +45,13 @@ void ParticlesPhysicsManager::reset()
     analyzer->reset();
     calculationStart = time = HRClock::now();
 
-    if( !pauseByUserFlag ) pause();
+    pause();
 
     removeAllParticles();
     removeParticlesFromClusters();
     createParticles();
 
-    if( !pauseByUserFlag ) run();
+    run();
 }
 
 void ParticlesPhysicsManager::createParticles()
@@ -91,7 +91,7 @@ void ParticlesPhysicsManager::createParticles()
 
 void ParticlesPhysicsManager::setVisualizationType( VisualizationType type )
 {    
-    if( !pauseByUserFlag ) pause();
+    pause();
 
     visualizationType = type;
 
@@ -100,7 +100,7 @@ void ParticlesPhysicsManager::setVisualizationType( VisualizationType type )
         particle.visualizationType = type;        
     }
 
-    if( !pauseByUserFlag ) run();
+    run();
 }
 
 bool ParticlesPhysicsManager::addParticles( ParticleType particleType, VisualizationType visualizationType, int quantity, int particleSize )
@@ -150,7 +150,7 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
         break;
     }
 
-    if( !pauseByUserFlag ) pause();
+    pause();
 
     for( int index=0 ; index<quantity ; ++index )
     {
@@ -173,7 +173,7 @@ bool ParticlesPhysicsManager::addParticles( ParticleType particleType, Visualiza
 
     analyzer->simulationInfo.numberOfParticles[particleType] += quantity;
 
-    if( !pauseByUserFlag ) run();
+    run();
 
     return true;
 }
@@ -183,7 +183,7 @@ bool ParticlesPhysicsManager::removeParticles( ParticleType particleType, int qu
 
     if( analyzer->simulationInfo.numberOfParticles[particleType] < quantity ) return false;
 
-    if( !pauseByUserFlag ) pause();
+    pause();
 
     auto iter = particles->begin();    
     bool erase = false;
@@ -208,7 +208,7 @@ bool ParticlesPhysicsManager::removeParticles( ParticleType particleType, int qu
     selectedParticle = particles->begin();
     selectedParticle->isTracking = isTrackingFlag;
 
-    if( !pauseByUserFlag ) run();
+    run();
 
     return true;
 }
@@ -289,7 +289,7 @@ void ParticlesPhysicsManager::setParticleSize( ParticleType type, DataFormat for
 
     analyzer->simulationInfo.particleSize[type] = newSize;
 
-    if( !pauseByUserFlag ) pause();
+    pause();
 
     for( auto iter=particles->begin() ; iter!=particles->end() ; ++iter )
     {
@@ -300,7 +300,7 @@ void ParticlesPhysicsManager::setParticleSize( ParticleType type, DataFormat for
         }
     }
 
-    if( !pauseByUserFlag ) run();
+    run();
 }
 
 void ParticlesPhysicsManager::setAttractionForceInPercent( int quantity )
