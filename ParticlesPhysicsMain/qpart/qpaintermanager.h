@@ -29,7 +29,7 @@ public:
      *    
      * @param parent                ponter to parent widget
      */
-    explicit QPainterManager( QWidget *parent = nullptr );
+    explicit QPainterManager( QWidget *parent = nullptr );   
 
     /**
      * @brief Sets vector paint flag.

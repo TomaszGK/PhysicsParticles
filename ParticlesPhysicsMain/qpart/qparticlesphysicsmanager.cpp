@@ -3,8 +3,8 @@
 QParticlesPhysicsManager::QParticlesPhysicsManager( SimulationType type, QHBoxLayout* layout )
 : ParticlesPhysicsManager(type,layout->parentWidget()->width(),layout->parentWidget()->height() )
 {
-    createParticlesPaintManager();    
-    layout->addWidget( particlesPaintManager.get() );
+    particlesPaintManager = new QPainterManager();
+    layout->addWidget( particlesPaintManager );
 }
 
 void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, ActionType actionType, BoxStyles style )
@@ -14,8 +14,8 @@ void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, Action
      case BoxType::BARCHART :
         if( analyzer->barCharts->count(actionType) != 0 )
         {
-            qBoxPainters[actionType] = std::make_unique<QBarChart>(actionType,sqrt(analyzer->physicsInfo.maxRapidity*2)/3,layout->parentWidget());
-            layout->addWidget( qBoxPainters[actionType].get() );
+            qBoxPainters[actionType] = new QBarChart(actionType,sqrt(analyzer->physicsInfo.maxRapidity*2)/3,layout->parentWidget());
+            layout->addWidget( qBoxPainters[actionType] );
             if( style != BoxStyles::DEFAULT ) qBoxPainters[actionType]->loadStyle(style);
         }
      break;
@@ -23,22 +23,22 @@ void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, Action
      case BoxType::BARDISPLAY :
         if( analyzer->barDisplays->count(actionType) != 0 )
         {
-            qBoxPainters[actionType] = std::make_unique<QBarDisplay>(actionType,layout->parentWidget());
-            layout->addWidget( qBoxPainters[actionType].get() );
+            qBoxPainters[actionType] = new QBarDisplay(actionType,layout->parentWidget());
+            layout->addWidget( qBoxPainters[actionType] );
         }
      break;
 
      case BoxType::HISTOGRAM1D :
         if( analyzer->histograms1D->count(actionType) != 0 )
         {
-            qBoxPainters[actionType] = std::make_unique<QHistogram1D>(actionType,160,layout->parentWidget());
-            layout->addWidget( qBoxPainters[actionType].get() );
+            qBoxPainters[actionType] = new QHistogram1D(actionType,160,layout->parentWidget());
+            layout->addWidget( qBoxPainters[actionType] );
         }
      break;
 
      case BoxType::TRACKINGPLOT :
-        qBoxPainters[actionType] = std::make_unique<QTrackingPlot2D>("Molecule Tracking Plot",layout->parentWidget());
-        layout->addWidget( qBoxPainters[actionType].get() );
+        qBoxPainters[actionType] = new QTrackingPlot2D("Molecule Tracking Plot",layout->parentWidget());
+        layout->addWidget( qBoxPainters[actionType] );
      break;
 
      case BoxType::GAUGE :
@@ -46,14 +46,14 @@ void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, Action
      break;
 
      case BoxType::CIRCLECONTROL :
-        qBoxPainters[actionType] = std::make_unique<QCircleControl>(layout->parentWidget());
+        qBoxPainters[actionType] = new QCircleControl(layout->parentWidget());
         controlBoxType[actionType] = ControlType::CIRCLE_CONTROL;
-        layout->addWidget( qBoxPainters[actionType].get() );
+        layout->addWidget( qBoxPainters[actionType] );
      break;
 
      case BoxType::INFODISPLAY :
-        qBoxPainters[actionType] = std::make_unique<QInfoDisplay>();
-        layout->addWidget( qBoxPainters[actionType].get() );
+        qBoxPainters[actionType] = new QInfoDisplay();
+        layout->addWidget( qBoxPainters[actionType] );
      break;
     }
 }
@@ -64,7 +64,7 @@ void QParticlesPhysicsManager::addQGauge( ActionType type, QHBoxLayout* layout )
 
     int range {1000};
 
-    qGauges[type].first = std::make_unique<QcGaugeWidget>();
+    qGauges[type].first = new QcGaugeWidget();
     qGauges[type].first->addArc(55);
     QcDegreesItem* degreeItem = qGauges[type].first->addDegrees(65);
     degreeItem->setValueRange(0,range);
@@ -78,7 +78,7 @@ void QParticlesPhysicsManager::addQGauge( ActionType type, QHBoxLayout* layout )
     gaugeNameLabel->setText(LangManager::translate(QString("Pressure")));
     QcLabelItem *lab = qGauges[type].first->addLabel(40);
     lab->setText("0");
-    qGauges[type].second.reset( qGauges[type].first->addNeedle(60) );
+    qGauges[type].second = qGauges[type].first->addNeedle(60);
     qGauges[type].second->setLabel(lab);
     qGauges[type].second->setColor(Qt::blue);
     qGauges[type].second->setValueRange(0,range);
@@ -87,12 +87,7 @@ void QParticlesPhysicsManager::addQGauge( ActionType type, QHBoxLayout* layout )
     // reset style sheet - needs default
     qGauges[type].first->setStyleSheet("");
 
-    layout->addWidget( qGauges[type].first.get() );
-}
-
-void QParticlesPhysicsManager::createParticlesPaintManager()
-{
-    particlesPaintManager = std::make_unique<QPainterManager>();
+    layout->addWidget( qGauges[type].first );
 }
 
 void QParticlesPhysicsManager::paintParticlesPlane()
@@ -117,7 +112,7 @@ void QParticlesPhysicsManager::handleControls()
     {
         if( control.second == ControlType::CIRCLE_CONTROL )
         {
-            QPoint forceOut = dynamic_cast<QCircleControl*>(qBoxPainters[control.first].get())->getIndicator();
+            QPoint forceOut = dynamic_cast<QCircleControl*>(qBoxPainters[control.first].data())->getIndicator();
             vect2D forceIn(0.00001*forceOut.x(),0.00001*forceOut.y());
             setForce(forceIn);
         }

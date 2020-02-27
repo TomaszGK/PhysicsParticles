@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QHBoxLayout>
+#include <QPoint>
 #include <type_traits>
 #include "qpaintermanager.h"
 #include "qbarchart.h"
@@ -36,7 +37,7 @@ enum class ControlType
     NO_CONTROL       /**< no control */
 };
 
-class QParticlesPhysicsManager : public ParticlesPhysicsManager
+class QParticlesPhysicsManager final : public ParticlesPhysicsManager
 {
 
 public:
@@ -90,9 +91,9 @@ public:
     {
         if( qBoxPainters.count(type) != 0 )
         {
-            if( dynamic_cast<QInfoDisplay*>(qBoxPainters[type].get()) != nullptr )
+            if( dynamic_cast<QInfoDisplay*>(qBoxPainters[type].data()) != nullptr )
             {
-                dynamic_cast<QInfoDisplay*>(qBoxPainters[type].get())->setDisplay(side,value);
+                dynamic_cast<QInfoDisplay*>(qBoxPainters[type].data())->setDisplay(side,value);
             }
         }
     }
@@ -165,16 +166,16 @@ public:
 private:
 
     /** Holds QPainterManager object. */
-    std::unique_ptr<QPainterManager> particlesPaintManager;
+    QPointer<QPainterManager> particlesPaintManager;
 
     /** Maps unique pointers to QBoxPainter derived objects. */
-    std::map<ActionType,std::unique_ptr<QBoxPainter>> qBoxPainters;
+    std::map<ActionType,QPointer<QBoxPainter>> qBoxPainters;
 
     /** Maps control types for QBoxPainter derived objects. */
     std::map<ActionType,ControlType> controlBoxType;
 
     /** Maps QGauges objects. */
-    std::map<ActionType,std::pair<std::unique_ptr<QcGaugeWidget>,std::unique_ptr<QcNeedleItem>>> qGauges;
+    std::map<ActionType,std::pair<QPointer<QcGaugeWidget>,QPointer<QcNeedleItem>>> qGauges;
 
     /** Gauge name label */
     QcLabelItem* gaugeNameLabel {nullptr};
@@ -186,10 +187,5 @@ private:
      * @param layout                a given layout for QGauge
      */
     void addQGauge( ActionType type, QHBoxLayout* layout );
-
-    /**
-     * @brief Creates particle paint manager.
-     */
-    void createParticlesPaintManager();   
 
 };
