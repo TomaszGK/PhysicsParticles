@@ -99,9 +99,9 @@ public:
     }
 
     /**
-     * @brief Paints particles plane.
+     * @brief Updates plane of particles.
      */
-    void paintParticlesPlane();
+    void updateParticlesPlane();
 
     /**
      * @brief Paints layouts for QGauge and QBoxPainter derived objects. Updates data for them.

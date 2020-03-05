@@ -278,6 +278,15 @@ bool ParticlesPhysicsManager::setNumberOfParticlesInPlane( ParticleType particle
     return ( analyzer->simulationInfo.numberOfParticles[particleType] < quantity ) ? addParticles( particleType, visualizationType, diff, analyzer->simulationInfo.particleSize[particleType] ) : removeParticles( particleType , diff );
 }
 
+bool ParticlesPhysicsManager::setParticlePosition( const iterParticle particle , vect2D position )
+{
+    if( calculationState.load() == ThreadCalculationState::RUNNING ) return false;
+    if( isParticleInPlane(particle) && isParticlesOverlap(particle->position,particle->radius) ) return false;
+
+    particle->position = position;
+    return true;
+}
+
 void ParticlesPhysicsManager::setParticleSize( ParticleType type, DataFormat format, int quantity )
 {
     Ensures( quantity>=0 && quantity<=100 );
@@ -397,6 +406,14 @@ void ParticlesPhysicsManager::preserveParticleInPlane( const iterParticle partic
 
     if( particle->position.y-particle->radius<=0 ) particle->position.y = particle->radius+1;
     else if( particle->position.y+particle->radius>=planeArea->getHeight() ) particle->position.y = static_cast<double>(planeArea->getHeight())-particle->radius-1;
+}
+
+bool ParticlesPhysicsManager::isParticleInPlane( const iterParticle particle )
+{
+    return ( particle->position.x-particle->radius<=0 ||
+             particle->position.x+particle->radius>=planeArea->getWidth() ||
+             particle->position.y-particle->radius<=0 ||
+             particle->position.y+particle->radius>=planeArea->getHeight()   ) ? false:true;
 }
 
 void ParticlesPhysicsManager::removeParticlesFromClusters()

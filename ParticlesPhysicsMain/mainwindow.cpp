@@ -97,7 +97,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::update()
-{    
+{
     simulation[current]->paintLayouts();
     simulation[current]->handleControls();
     ui->calculationCount->display(static_cast<int>(simulation[current]->getAvgCalculationCount()));
@@ -121,7 +121,7 @@ void MainWindow::animate()
 
 void MainWindow::paint()
 {
-    simulation[current]->paintParticlesPlane();
+    simulation[current]->updateParticlesPlane();
 }
 
 void MainWindow::about_action()

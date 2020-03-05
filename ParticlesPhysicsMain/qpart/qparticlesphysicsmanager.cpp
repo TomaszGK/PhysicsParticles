@@ -90,7 +90,7 @@ void QParticlesPhysicsManager::addQGauge( ActionType type, QHBoxLayout* layout )
     layout->addWidget( qGauges[type].first );
 }
 
-void QParticlesPhysicsManager::paintParticlesPlane()
+void QParticlesPhysicsManager::updateParticlesPlane()
 {
     particlesPaintManager->update();
 }

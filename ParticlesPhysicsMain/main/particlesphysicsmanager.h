@@ -76,6 +76,19 @@ public:
      */
     bool setNumberOfParticlesInPlane( ParticleType particleType, DataFormat format, int quantity );
 
+    /**
+     * @brief Tries to set a new particle position.
+     *
+     * Sets a given particle position only if
+     * (1) a new position does not overlap with others particle positions
+     * (2) a new position is place inside plane boundries
+     * (3) simulation is not running
+     * @param particle              particle iterator
+     * @param position              particle new position
+     * @return true if success otherwise false
+     */
+    bool setParticlePosition( const iterParticle particle , vect2D position );
+
     /** Updates all bar charts and displays, adds new physics values to chart boxes */
     void updateBars();
 
@@ -621,6 +634,13 @@ protected:
      * @param particle              iterator to particle
      */
     void preserveParticleInPlane( const iterParticle particle );
+
+    /** @brief Checks if particle position is inside plane.
+     *
+     * @param particle              iterator to particle
+     * @return true if position is inside plane boundries, otherwise false
+     */
+    bool isParticleInPlane( const iterParticle particle );
 
     /** Removes all particles from all clusters */
     void removeParticlesFromClusters();
