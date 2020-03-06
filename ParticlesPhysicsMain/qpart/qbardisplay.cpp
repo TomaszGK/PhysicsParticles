@@ -29,17 +29,17 @@ void QBarDisplay::init()
         {
             if( marginAdjustment % 2 == 0 )
             {
-                boxStyle.marginLeft += marginAdjustment/2;
-                boxStyle.marginRight += marginAdjustment/2;
+                boxStyle.values["marginLeft"] += marginAdjustment/2;
+                boxStyle.values["marginRight"] += marginAdjustment/2;
             }
             else
             {
-                boxStyle.marginLeft += (marginAdjustment-1)/2;
-                boxStyle.marginRight += ((marginAdjustment-1)/2+1);
+                boxStyle.values["marginLeft"] += (marginAdjustment-1)/2;
+                boxStyle.values["marginRight"] += ((marginAdjustment-1)/2+1);
             }
         }
 
-        barWidth = (width-(boxStyle.marginLeft+boxStyle.marginRight))/size;
+        barWidth = (width-(boxStyle.values["marginLeft"]+boxStyle.values["marginRight"]))/size;
     }
 }
 
@@ -61,19 +61,19 @@ void QBarDisplay::paint()
 
             posx = index*barWidth;
 
-            painter.setBrush(QBrush(boxStyle.cUpper));
-            painter.setPen(QPen(boxStyle.cUpper));
+            painter.setBrush(QBrush(boxStyle.colors["cUpper"]));
+            painter.setPen(QPen(boxStyle.colors["cUpper"]));
             percent =  static_cast<double>(barDisplay->getUpperBox(index))/barDisplay->getUpperBoxSum();
             value = static_cast<int>((height()/2.8)*percent);
-            if( value>0 ) painter.drawRect(boxStyle.marginLeft+posx,height()/2-value,barWidth-1,value);
-            painter.drawText(calculateCenterTextPosition(upperValue,boxStyle.marginLeft+posx,boxStyle.marginLeft+barWidth+posx),height()/2-value-5,upperValue);
+            if( value>0 ) painter.drawRect(boxStyle.values["marginLeft"]+posx,height()/2-value,barWidth-1,value);
+            painter.drawText(calculateCenterTextPosition(upperValue,boxStyle.values["marginLeft"]+posx,boxStyle.values["marginLeft"]+barWidth+posx),height()/2-value-5,upperValue);
 
-            painter.setBrush(QBrush(boxStyle.cLower));
-            painter.setPen(QPen(boxStyle.cLower));
+            painter.setBrush(QBrush(boxStyle.colors["cLower"]));
+            painter.setPen(QPen(boxStyle.colors["cLower"]));
             percent = static_cast<double>(barDisplay->getLowerBox(index))/barDisplay->getLowerBoxSum();
             value = static_cast<int>((height()/2.8)*percent);
-            if( value>0 ) painter.drawRect(boxStyle.marginLeft+posx,height()/2,barWidth-1,value);
-            painter.drawText(calculateCenterTextPosition(lowerValue,boxStyle.marginLeft+posx,boxStyle.marginLeft+barWidth+posx),height()/2+value+17,lowerValue);
+            if( value>0 ) painter.drawRect(boxStyle.values["marginLeft"]+posx,height()/2,barWidth-1,value);
+            painter.drawText(calculateCenterTextPosition(lowerValue,boxStyle.values["marginLeft"]+posx,boxStyle.values["marginLeft"]+barWidth+posx),height()/2+value+17,lowerValue);
         }
     }
 }

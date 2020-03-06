@@ -36,54 +36,29 @@ bool QBoxStyle::loadStyleFromFile( BoxStyles style )
 
     auto docElem = xmlBOM.documentElement();
 
-    buttonStyleSelected = load<QString>(docElem,"buttonStyleSelected");
-    buttonStyleUnselected = load<QString>(docElem,"buttonStyleUnselected");
-    buttonStyleReset = load<QString>(docElem,"buttonStyleReset");
+    for( auto &[name,sheet] : sheets ) load(docElem,name,sheet);
 
-    cPlaneBorder = load<QColor>(docElem,"cPlaneBorder");
-    cBackground = load<QColor>(docElem,"cBackground");
-    cAxesColor = load<QColor>(docElem,"cAxesColor");
-    cInnerFrameColor = load<QColor>(docElem,"cInnerFrameColor");
-    cLabelColor = load<QColor>(docElem,"cLabelColor");
-    cValue = load<QColor>(docElem,"cValue");
-    cButtonLabel = load<QColor>(docElem,"cButtonLabel");
-    cUpper = load<QColor>(docElem,"cUpper");
-    cLower = load<QColor>(docElem,"cLower");
-    cBigCirclePenColor = load<QColor>(docElem,"cBigCirclePenColor");
-    cSmallCircleColor = load<QColor>(docElem,"cSmallCircleColor");
-    cSmallCircleHookedColor = load<QColor>(docElem,"cSmallCircleHookedColor");
+    for( auto &[name,color] : colors ) load(docElem,name,color);
 
-    marginLeft = load<int>(docElem,"marginLeft");
-    marginRight = load<int>(docElem,"marginRight");
-    marginTop = load<int>(docElem,"marginTop");
-    marginBottom = load<int>(docElem,"marginBottom");
-    numberOfHorizontalAxes = load<int>(docElem,"numberOfHorizontalAxes");
-    numberOfVerticalAxes = load<int>(docElem,"numberOfVerticalAxes");
-    planeBorderWidth = load<int>(docElem,"planeBorderWidth");
-    buttonWidth = load<int>(docElem,"buttonWidth");
-    buttonHeight = load<int>(docElem,"buttonHeight");
-    buttonIndent = load<int>(docElem,"buttonIndent");
+    for( auto &[name,value] : values ) load(docElem,name,value);
 
-    isScalableUp = load<bool>(docElem,"isScalableUp");
-    isScalableDown = load<bool>(docElem,"isScalableDown");
-    isValueDisplay = load<bool>(docElem,"isValueDisplay");
+    for( auto &[name,logic] : logics ) load(docElem,name,logic);
+
 
     file.close();
     return true;
 }
 
 template<typename T>
-T QBoxStyle::load( const QDomElement &element , const QString &tagName )
+void QBoxStyle::load( const QDomElement &element , const QString &tagName , T& value )
 {
-    T value {};
-
     if constexpr( std::is_same<QString,T>::value )
     {
         auto findString = element.firstChildElement(tagName).firstChildElement("string");
 
         if( !findString.isNull() )
         {
-          value =  findString.text();
+            value =  findString.text();
         }
     }
     if constexpr( std::is_same<QColor,T>::value )
@@ -119,7 +94,5 @@ T QBoxStyle::load( const QDomElement &element , const QString &tagName )
         {
             value = findBool.text()=="true"?true:false;
         }
-    }
-
-    return value;
+    }    
 }

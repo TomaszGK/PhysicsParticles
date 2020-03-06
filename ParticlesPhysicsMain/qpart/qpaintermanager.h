@@ -136,14 +136,22 @@ private:
     void paintPlaneHit( citerParticle particle );
 
     /**
-     * @brief Paints particle inside the plane
+     * @brief Paints particle
      *
      * @param posx                  particle position along X axis
      * @param posx                  particle position along Y axis
      * @param size                  particle size
      * @param color                 particle color
      */
-    inline void paintParticle( int posx , int posy , int size , QColor color );
+    inline void paintParticle( int posx , int posy , int size , const QColor& color );
+
+    /**
+     * @brief Paints particle using its iterartor
+     *
+     * @param particle              particle iterator
+     * @param color                 particle color
+     */
+    inline void paintParticle( citerParticle particle , const QColor& color );
 
     /**
      * @brief Paints trace of a given particle.
@@ -157,14 +165,13 @@ private:
      */
     void handleCursorPosition();
 
-
     /**
      * @brief Updates a given particle color.
      *
      * Updates color corresponding to particle velocity.
      * Using when @ref VisualizationType is set on VisualizationType::VELOCITY.
      *
-     * @param particle              a given particle
+     * @param particle              particle iterator
      */
     void updateParticleColor( citerParticle particle );
 

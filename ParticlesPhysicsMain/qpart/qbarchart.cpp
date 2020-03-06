@@ -5,8 +5,8 @@ QBarChart::QBarChart( ActionType type, double max, QWidget* parent )
 {    
     setMaxOY(max);        
     setAutoFillBackground(false);
-    boxStyle.marginTop = 30;
-    boxStyle.marginRight = 30;
+    boxStyle.values["marginTop"] = 30;
+    boxStyle.values["marginRight"] = 30;
 
     qLabel  = barChart->getLabel().c_str();
     qLabelX = barChart->getLabelX().c_str();
@@ -15,7 +15,7 @@ QBarChart::QBarChart( ActionType type, double max, QWidget* parent )
     init();
 }
 
-bool QBarChart::loadStyle(BoxStyles style)
+bool QBarChart::loadStyle( BoxStyles style )
 {
     if( boxStyle.loadStyleFromFile(style) )
     {
@@ -26,7 +26,7 @@ bool QBarChart::loadStyle(BoxStyles style)
     else return false;
 }
 
-void QBarChart::changeEvent(QEvent *event)
+void QBarChart::changeEvent( QEvent *event )
 {
     if( event->type() == QEvent::LanguageChange )
     {
@@ -86,12 +86,12 @@ void QBarChart::paint()
 
         paintAxes();
 
-        if( (boxStyle.isScalableUp && maxValue<barChart->getMax()) || (boxStyle.isScalableDown && maxValue>2*barChart->getMax()) )
+        if( (boxStyle.logics["isScalableUp"] && maxValue<barChart->getMax()) || (boxStyle.logics["isScalableDown"] && maxValue>2*barChart->getMax()) )
         {
             if( barChart->getMax()>0 ) maxValue = 1.5*barChart->getMax();
         }
 
-        double scaleFactor = (height()-(boxStyle.marginLeft+boxStyle.marginRight))/maxValue;
+        double scaleFactor = (height()-(boxStyle.values["marginLeft"]+boxStyle.values["marginRight"]))/maxValue;
 
         for( const auto &barChartBin : barChart->getBins() )
         {
@@ -103,22 +103,22 @@ void QBarChart::paint()
 
             if( dataVisulization == DataVisualization::BARS )
             {               
-                painter.drawRect(boxStyle.marginLeft+index*barWidth,height()-value-boxStyle.marginBottom-2,barWidth-1,value);
+                painter.drawRect(boxStyle.values["marginLeft"]+index*barWidth,height()-value-boxStyle.values["marginBottom"]-2,barWidth-1,value);
             }
             else if( dataVisulization == DataVisualization::POINTS )
             {
-                painter.drawEllipse(boxStyle.marginLeft+index*barWidth,height()-value-boxStyle.marginBottom-2-barWidth,barWidth,barWidth);
+                painter.drawEllipse(boxStyle.values["marginLeft"]+index*barWidth,height()-value-boxStyle.values["marginBottom"]-2-barWidth,barWidth,barWidth);
             }
             else if( dataVisulization == DataVisualization::LINES )
             {
-                if(index!=binsSize) painter.drawLine(boxStyle.marginLeft+(index+1)*barWidth,height()-valueLast-boxStyle.marginBottom-2-barWidth,boxStyle.marginLeft+index*barWidth,height()-value-boxStyle.marginBottom-2-barWidth);
+                if(index!=binsSize) painter.drawLine(boxStyle.values["marginLeft"]+(index+1)*barWidth,height()-valueLast-boxStyle.values["marginBottom"]-2-barWidth,boxStyle.values["marginLeft"]+index*barWidth,height()-value-boxStyle.values["marginBottom"]-2-barWidth);
             }
 
             --index;
             valueLast = value;
         }
 
-        if( boxStyle.isValueDisplay ) drawCurrentValue();
+        if( boxStyle.logics["isValueDisplay"] ) drawCurrentValue();
         drawChartLabels();
     }
 
@@ -126,58 +126,58 @@ void QBarChart::paint()
 
 void QBarChart::drawCurrentValue()
 {
-    painter.setPen(QPen(boxStyle.cValue));
-    painter.drawText(boxStyle.marginLeft,boxStyle.marginTop-7,QString::number(100*barChart->getBins().back(),'f',2));
+    painter.setPen(QPen(boxStyle.colors["cValue"]));
+    painter.drawText(boxStyle.values["marginLeft"],boxStyle.values["marginTop"]-7,QString::number(100*barChart->getBins().back(),'f',2));
 }
 
 void QBarChart::drawChartLabels()
 {
-    painter.setPen(QPen(boxStyle.cLabelColor));
-    painter.drawText(calculateCenterTextPosition(LangManager::translate(qLabel),boxStyle.marginLeft,width()-boxStyle.marginRight),boxStyle.marginTop-7,LangManager::translate(qLabel));
-    painter.drawText(calculateCenterTextPosition(LangManager::translate(qLabelX),boxStyle.marginLeft,width()-boxStyle.marginRight),height()-10,LangManager::translate(qLabelX));
-    painter.drawText(boxStyle.marginLeft/2-4,calculateCenterTextPosition(LangManager::translate(qLabelY),boxStyle.marginTop,height()-boxStyle.marginBottom),LangManager::translate(qLabelY));
+    painter.setPen(QPen(boxStyle.colors["cLabelColor"]));
+    painter.drawText(calculateCenterTextPosition(LangManager::translate(qLabel),boxStyle.values["marginLeft"],width()-boxStyle.values["marginRight"]),boxStyle.values["marginTop"]-7,LangManager::translate(qLabel));
+    painter.drawText(calculateCenterTextPosition(LangManager::translate(qLabelX),boxStyle.values["marginLeft"],width()-boxStyle.values["marginRight"]),height()-10,LangManager::translate(qLabelX));
+    painter.drawText(boxStyle.values["marginLeft"]/2-4,calculateCenterTextPosition(LangManager::translate(qLabelY),boxStyle.values["marginTop"],height()-boxStyle.values["marginBottom"]),LangManager::translate(qLabelY));
 }
 
 void QBarChart::reconfigurateBarChartLayout()
 {
     int width {parentWidget()->width()};
     int size  {static_cast<int>(barChart->getBins().size())};
-    int marginAdjustment {(width-(boxStyle.marginLeft+boxStyle.marginRight)) - size*((width-(boxStyle.marginLeft+boxStyle.marginRight))/size)};
+    int marginAdjustment {(width-(boxStyle.values["marginLeft"]+boxStyle.values["marginRight"])) - size*((width-(boxStyle.values["marginLeft"]+boxStyle.values["marginRight"]))/size)};
 
     if( marginAdjustment>0 )
     {
         if( marginAdjustment % 2 == 0 )
         {
-            boxStyle.marginLeft += marginAdjustment/2;
-            boxStyle.marginRight += marginAdjustment/2;
+            boxStyle.values["marginLeft"] += marginAdjustment/2;
+            boxStyle.values["marginRight"] += marginAdjustment/2;
         }
         else
         {
-            boxStyle.marginLeft += (marginAdjustment-1)/2;
-            boxStyle.marginRight += ((marginAdjustment-1)/2+1);
+            boxStyle.values["marginLeft"] += (marginAdjustment-1)/2;
+            boxStyle.values["marginRight"] += ((marginAdjustment-1)/2+1);
         }
     }
 
-    barWidth = (width-(boxStyle.marginLeft+boxStyle.marginRight))/size;
+    barWidth = (width-(boxStyle.values["marginLeft"]+boxStyle.values["marginRight"]))/size;
 }
 
 void QBarChart::configureButtons()
 {
-    buttons[DataVisualization::BARS]->resize(boxStyle.buttonWidth+boxStyle.buttonIndent,boxStyle.buttonHeight);
-    buttons[DataVisualization::BARS]->move(parentWidget()->width()-boxStyle.buttonWidth-boxStyle.buttonIndent-5,5);
-    buttons[DataVisualization::BARS]->setStyleSheet(boxStyle.buttonStyleSelected);
+    buttons[DataVisualization::BARS]->resize(boxStyle.values["buttonWidth"]+boxStyle.values["buttonIndent"],boxStyle.values["buttonHeight"]);
+    buttons[DataVisualization::BARS]->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-boxStyle.values["buttonIndent"]-5,5);
+    buttons[DataVisualization::BARS]->setStyleSheet(boxStyle.sheets["buttonStyleSelected"]);
 
-    buttons[DataVisualization::POINTS]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
-    buttons[DataVisualization::POINTS]->move(parentWidget()->width()-boxStyle.buttonWidth-5,boxStyle.buttonHeight+6);
-    buttons[DataVisualization::POINTS]->setStyleSheet(boxStyle.buttonStyleUnselected);
+    buttons[DataVisualization::POINTS]->resize(boxStyle.values["buttonWidth"],boxStyle.values["buttonHeight"]);
+    buttons[DataVisualization::POINTS]->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-5,boxStyle.values["buttonHeight"]+6);
+    buttons[DataVisualization::POINTS]->setStyleSheet(boxStyle.sheets["buttonStyleUnselected"]);
 
-    buttons[DataVisualization::LINES]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
-    buttons[DataVisualization::LINES]->move(parentWidget()->width()-boxStyle.buttonWidth-5,2*boxStyle.buttonHeight+7);
-    buttons[DataVisualization::LINES]->setStyleSheet(boxStyle.buttonStyleUnselected);
+    buttons[DataVisualization::LINES]->resize(boxStyle.values["buttonWidth"],boxStyle.values["buttonHeight"]);
+    buttons[DataVisualization::LINES]->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-5,2*boxStyle.values["buttonHeight"]+7);
+    buttons[DataVisualization::LINES]->setStyleSheet(boxStyle.sheets["buttonStyleUnselected"]);
 
-    resetButton->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
-    resetButton->move(parentWidget()->width()-boxStyle.buttonWidth-5,parentWidget()->height()-boxStyle.buttonHeight-10);
-    resetButton->setStyleSheet(boxStyle.buttonStyleReset);
+    resetButton->resize(boxStyle.values["buttonWidth"],boxStyle.values["buttonHeight"]);
+    resetButton->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-5,parentWidget()->height()-boxStyle.values["buttonHeight"]-10);
+    resetButton->setStyleSheet(boxStyle.sheets["buttonStyleReset"]);
 }
 
 void QBarChart::onButtonClick()
@@ -191,9 +191,9 @@ void QBarChart::onButtonClick()
         }
         else
         {
-            buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleUnselected);
-            buttons[dataVisulization]->resize(boxStyle.buttonWidth,boxStyle.buttonHeight);
-            buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-5,buttons[dataVisulization]->pos().y());
+            buttons[dataVisulization]->setStyleSheet(boxStyle.sheets["buttonStyleUnselected"]);
+            buttons[dataVisulization]->resize(boxStyle.values["buttonWidth"],boxStyle.values["buttonHeight"]);
+            buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-5,buttons[dataVisulization]->pos().y());
 
             if( clickedButton->toolTip() == tr("Bars display") )
             {
@@ -208,9 +208,9 @@ void QBarChart::onButtonClick()
                 dataVisulization = DataVisualization::LINES;
             }
 
-            buttons[dataVisulization]->setStyleSheet(boxStyle.buttonStyleSelected);
-            buttons[dataVisulization]->resize(boxStyle.buttonWidth+boxStyle.buttonIndent,boxStyle.buttonHeight);
-            buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.buttonWidth-boxStyle.buttonIndent-5,buttons[dataVisulization]->pos().y());
+            buttons[dataVisulization]->setStyleSheet(boxStyle.sheets["buttonStyleSelected"]);
+            buttons[dataVisulization]->resize(boxStyle.values["buttonWidth"]+boxStyle.values["buttonIndent"],boxStyle.values["buttonHeight"]);
+            buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-boxStyle.values["buttonIndent"]-5,buttons[dataVisulization]->pos().y());
         }
     }
 }

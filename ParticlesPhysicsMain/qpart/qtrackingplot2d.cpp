@@ -8,7 +8,7 @@ QTrackingPlot2D::QTrackingPlot2D( QString _title, QWidget *parent )
     if( particles != nullptr )
     {
         trackingParticle = particles->begin();
-        boxStyle.marginTop = boxStyle.marginBottom = boxStyle.marginLeft = boxStyle.marginRight = 2*static_cast<int>(trackingParticle->radius);
+        boxStyle.values["marginTop"] = boxStyle.values["marginBottom"] = boxStyle.values["marginLeft"] = boxStyle.values["marginRight"] = 2*static_cast<int>(trackingParticle->radius);
     }
     plotPen.setWidth(2);
 }
@@ -32,22 +32,22 @@ void QTrackingPlot2D::paint()
 {
     paintAxes();
 
-    painter.setPen(QPen(boxStyle.cLabelColor));
-    painter.drawText(calculateCenterTextPosition(LangManager::translate(title),boxStyle.marginLeft,width()-boxStyle.marginRight),boxStyle.marginTop-12,LangManager::translate(title));
+    painter.setPen(QPen(boxStyle.colors["cLabelColor"]));
+    painter.drawText(calculateCenterTextPosition(LangManager::translate(title),boxStyle.values["marginLeft"],width()-boxStyle.values["marginRight"]),boxStyle.values["marginTop"]-12,LangManager::translate(title));
 
     if( trackingParticle->particlePositionsTracking.size()<2 ) return;
 
     coord2D pos1,pos2;
     double alpha {255};
 
-    double transformX { (width()-boxStyle.marginLeft-boxStyle.marginRight)/static_cast<double>(width()) };
-    double transformY { (height()-boxStyle.marginTop-boxStyle.marginBottom)/static_cast<double>(height()) };
+    double transformX { (width()-boxStyle.values["marginLeft"]-boxStyle.values["marginRight"])/static_cast<double>(width()) };
+    double transformY { (height()-boxStyle.values["marginTop"]-boxStyle.values["marginBottom"])/static_cast<double>(height()) };
 
     double step = 255.0/trackingParticle->particlePositionsTracking.size();
 
     for( auto position = --trackingParticle->particlePositionsTracking.cend() ; position != trackingParticle->particlePositionsTracking.cbegin() ; --position )
     {
-        pos1.set(boxStyle.marginLeft+static_cast<int>(position->x*transformX),boxStyle.marginTop+static_cast<int>(position->y*transformY));
+        pos1.set(boxStyle.values["marginLeft"]+static_cast<int>(position->x*transformX),boxStyle.values["marginTop"]+static_cast<int>(position->y*transformY));
         if( pos2() )
         {
             plotPen.setColor(QColor(120,120,120,static_cast<int>(alpha)));

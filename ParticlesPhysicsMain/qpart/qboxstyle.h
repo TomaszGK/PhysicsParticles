@@ -38,97 +38,52 @@ public:
     /**
      * @brief default constructor
      */
-    QBoxStyle();
+    QBoxStyle();   
 
-    // sheet styles
+    /** map of style sheets */
+    std::map<QString,QString> sheets  {
+                                         {"buttonStyleSelected","QPushButton {background-color: rgb(145,105,125);font-size: 16px;font: bold}"},
+                                         {"buttonStyleUnselected","QPushButton {background-color: rgb(200,200,200);font-size: 16px;}"},
+                                         {"buttonStyleReset","QPushButton {background-color: rgb(200,200,200);font-size: 16px;}"}
+                                      };
 
-    /** holds QT style sheet for selected button in bar chart */
-    QString buttonStyleSelected { "QPushButton {background-color: rgb(145,105,125);font-size: 16px;font: bold}" };
+    /** map of colors */
+    std::map<QString,QColor> colors  {
+                                       {"cPlaneBorder",{120,120,120}},
+                                       {"cBackground",{145,215,215}},
+                                       {"cAxesColor",{120,120,120}},
+                                       {"cInnerFrameColor",{100,100,100}},
+                                       {"cLabelColor",{100,20,20}},
+                                       {"cValue",{100,20,20}},
+                                       {"cButtonLabel",{15,15,15}},
+                                       {"cUpper",{0,0,255}},
+                                       {"cLower",{255,0,0}},
+                                       {"cBigCirclePenColor",{80,80,90}},
+                                       {"cSmallCircleColor",{155,155,155}},
+                                       {"cSmallCircleHookedColor",{100,100,255}}
+                                     };
 
-    /** holds QT style sheet for unselected button in bar chart */
-    QString buttonStyleUnselected { "QPushButton {background-color: rgb(200,200,200);font-size: 16px;}" };
+    /** map of integer values */
+    std::map<QString,int> values {
+                                   {"marginLeft",20},
+                                   {"marginRight",20},
+                                   {"marginTop",20},
+                                   {"marginBottom",20},
+                                   {"numberOfHorizontalAxes",5},
+                                   {"numberOfVerticalAxes",5},
+                                   {"planeBorderWidth",1},
+                                   {"buttonWidth",25},
+                                   {"buttonHeight",25},
+                                   {"buttonIndent",5}
+                                 };
 
-    /** holds QT style sheet for reset button in bar chart */
-    QString buttonStyleReset { "QPushButton {background-color: rgb(200,200,200);font-size: 16px;}" };
 
-    // colors
-
-    /** box(plane) border color */
-    QColor cPlaneBorder {120,120,120};
-
-    /** background color */
-    QColor cBackground {145,215,215};
-
-    /** axes color */
-    QColor cAxesColor {120,120,120};
-
-    /** inner frame color */
-    QColor cInnerFrameColor {100,100,100};
-
-    /** Label color in QHistogram1D */
-    QColor cLabelColor {100,20,20};
-
-    /** current value color in QBarChart */
-    QColor cValue {100,20,20};
-
-    /** button label color in QBarChart */
-    QColor cButtonLabel {15,15,15};
-
-    /**< upper bins color in QBarDisplay */
-    QColor cUpper {0,0,255};
-
-    /**< lower bins color in QBarDisplay */
-    QColor cLower {255,0,0};
-
-    /** big circle border color in QCircleControl */
-    QColor cBigCirclePenColor {80,80,90};
-
-    /** small circle color in QCircleControl */
-    QColor cSmallCircleColor {155,155,155};
-
-    /** small circle hooked color in QCircleControl */
-    QColor cSmallCircleHookedColor {100,100,255};
-
-    // other parameters
-
-    /** box margin left in pixels */
-    int marginLeft {20};
-
-    /** box margin right in pixels */
-    int marginRight {20};
-
-    /** box margin top in pixels */
-    int marginTop {20};
-
-    /** box margin bottom in pixels */
-    int marginBottom {20};
-
-    /** number of horizontal axes in grid */
-    int numberOfHorizontalAxes {5};
-
-    /** number of vertical axes in grid */
-    int numberOfVerticalAxes {5};
-
-    /** box(plane) border width */
-    int planeBorderWidth {1};
-
-    /** button width in box chart */
-    int buttonWidth {25};
-
-    /** button height in box chart */
-    int buttonHeight {25};
-
-    /** selected button indent in box chart */
-    int buttonIndent {5};
-
-    /** scalable up flag - if true then maxValue can increase , in QBarChart */
-    bool isScalableUp {true};
-
-    /** scalable down flag - if true then maxValue can decrease , in QBarChart */
-    bool isScalableDown {true};
-
-    /** if true then last bin value will be display in QBarChart */
-    bool isValueDisplay {true};
+    /** map of boolean values */
+    std::map<QString,bool> logics {
+                                    {"isScalableUp",true},
+                                    {"isScalableDown",true},
+                                    {"isValueDisplay",true},
+                                  };
 
     /** map of location of xml style files */
     std::map<BoxStyles,QString> styleFiles {
@@ -155,12 +110,15 @@ private:
     /**
      * @brief Loads value (string,color,int or bool) from a given tag name in QDomDocument.
      *
+     * Loads value of string,color,int or bool from a given tag name in QDomDocument.
+     * If a given tag name does not exist nothing happens.
      * @param element                 element of QDomElement from the search for a given tagName start
      * @param tagName                 name of value tag
+     * @param value                   value to upload
      * @return loaded value
      */
     template< typename T >
-    T load( const QDomElement& element, const QString& tagName );
+    void load( const QDomElement& element, const QString& tagName , T& value );
 
 };
 

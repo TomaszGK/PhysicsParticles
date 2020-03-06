@@ -26,17 +26,17 @@ void QCircleControl::init()
 
         bigCircleSize = ( parentWidget()->width() > parentWidget()->height() ) ?  origin.y()-1 :  origin.x()-1 ;
         indicatorPos = origin;        
-        boxStyle.cBackground = boxStyle.cPlaneBorder = parentWidget()->palette().window().color();
+        boxStyle.colors["cBackground"] = boxStyle.colors["cPlaneBorder"] = parentWidget()->palette().window().color();
     }
 }
 
 void QCircleControl::paint()
 {
     QPoint cursorPos = mapFromGlobal(QCursor::pos());
-    QColor currentSmallCircleColor {boxStyle.cSmallCircleColor};
+    QColor currentSmallCircleColor {boxStyle.colors["cSmallCircleColor"]};
     double distance {0};
 
-    if( smallCircleHooked || smallCircleHovered ) currentSmallCircleColor = boxStyle.cSmallCircleHookedColor;
+    if( smallCircleHooked || smallCircleHovered ) currentSmallCircleColor = boxStyle.colors["cSmallCircleHookedColor"];
 
     if( indicatorPos!=origin )
     {
@@ -53,13 +53,13 @@ void QCircleControl::paint()
     }
 
     painter.setBrush(Qt::NoBrush);
-    painter.setPen(QPen(QBrush(boxStyle.cBigCirclePenColor),2,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+    painter.setPen(QPen(QBrush(boxStyle.colors["cBigCirclePenColor"]),2,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
     painter.drawEllipse( origin, bigCircleSize, bigCircleSize );
 
     paintMarks();
 
     painter.setBrush(QBrush(currentSmallCircleColor));
-    painter.setPen(QPen(boxStyle.cBigCirclePenColor));
+    painter.setPen(QPen(boxStyle.colors["cBigCirclePenColor"]));
     painter.drawLine(origin.x(),origin.y(),indicatorPos.x(),indicatorPos.y());
     painter.drawEllipse( indicatorPos, smallCircleSize, smallCircleSize );
 
