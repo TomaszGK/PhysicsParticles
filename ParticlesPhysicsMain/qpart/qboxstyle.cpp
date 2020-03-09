@@ -36,13 +36,13 @@ bool QBoxStyle::loadStyleFromFile( BoxStyles style )
 
     auto docElem = xmlBOM.documentElement();
 
-    for( auto &[name,sheet] : sheets ) load(docElem,name,sheet);
+    for( auto &[name,sheet] : sheets ) load(docElem,sheet.tag,sheet.value);
 
-    for( auto &[name,color] : colors ) load(docElem,name,color);
+    for( auto &[name,color] : colors ) load(docElem,color.tag,color.value);
 
-    for( auto &[name,value] : values ) load(docElem,name,value);
+    for( auto &[name,value] : values ) load(docElem,name.toStdString(),value);
 
-    for( auto &[name,logic] : logics ) load(docElem,name,logic);
+    for( auto &[name,logic] : logics ) load(docElem,name.toStdString(),logic);
 
 
     file.close();
@@ -50,11 +50,11 @@ bool QBoxStyle::loadStyleFromFile( BoxStyles style )
 }
 
 template<typename T>
-void QBoxStyle::load( const QDomElement &element , const QString &tagName , T& value )
+void QBoxStyle::load( const QDomElement &element , const std::string &tagName , T& value )
 {
     if constexpr( std::is_same<QString,T>::value )
     {
-        auto findString = element.firstChildElement(tagName).firstChildElement("string");
+        auto findString = element.firstChildElement(QString::fromStdString(tagName)).firstChildElement("string");
 
         if( !findString.isNull() )
         {
@@ -63,7 +63,7 @@ void QBoxStyle::load( const QDomElement &element , const QString &tagName , T& v
     }
     if constexpr( std::is_same<QColor,T>::value )
     {
-        auto findColor = element.firstChildElement(tagName).firstChildElement("color");
+        auto findColor = element.firstChildElement(QString::fromStdString(tagName)).firstChildElement("color");
 
         if( !findColor.isNull() )
         {
@@ -79,7 +79,7 @@ void QBoxStyle::load( const QDomElement &element , const QString &tagName , T& v
     }
     if constexpr( std::is_same<int,T>::value )
     {
-        auto findInt = element.firstChildElement(tagName).firstChildElement("int");
+        auto findInt = element.firstChildElement(QString::fromStdString(tagName)).firstChildElement("int");
 
         if( !findInt.isNull() )
         {
@@ -88,7 +88,7 @@ void QBoxStyle::load( const QDomElement &element , const QString &tagName , T& v
     }
     if constexpr( std::is_same<bool,T>::value )
     {
-        auto findBool = element.firstChildElement(tagName).firstChildElement("bool");
+        auto findBool = element.firstChildElement(QString::fromStdString(tagName)).firstChildElement("bool");
 
         if( !findBool.isNull() )
         {

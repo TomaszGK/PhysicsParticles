@@ -3,7 +3,7 @@
 QHistogram1D::QHistogram1D( ActionType type, double maxValue, QWidget* parent )
 : QBoxPainter {parent}, histogram1D { Locator::getHistogram1D(type) }, maxValue {maxValue}
 {
-    boxStyle.colors["cBackground"] = QColor(145, 215, 215);
+    boxStyle.colors[BoxColors::BACKGROUND] = QColor(145, 215, 215);
     setAutoFillBackground(false);    
 
     boxStyle.values["marginTop"] = 30;
@@ -85,7 +85,7 @@ void QHistogram1D::paint()
 void QHistogram1D::drawHistogramName()
 {
     auto label = QString::fromStdString(histogram1D->getLabel());
-    painter.setPen(QPen(boxStyle.colors["cLabelColor"]));
+    painter.setPen(boxStyle.colors[BoxColors::LABEL]);
     painter.drawText(calculateCenterTextPosition(label,boxStyle.values["marginLeft"],width()-boxStyle.values["marginRight"]),boxStyle.values["marginTop"]-7,label);
 }
 

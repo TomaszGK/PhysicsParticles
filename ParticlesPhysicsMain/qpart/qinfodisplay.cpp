@@ -4,7 +4,7 @@
 QInfoDisplay::QInfoDisplay( QWidget *parentWidget )
 : QBoxPainter { parentWidget }
 {
-    boxStyle.colors["cBackground"] = QColor(145, 215, 215);
+    boxStyle.colors[BoxColors::BACKGROUND] = QColor(145, 215, 215);
     setAutoFillBackground(false);    
     boxStyle.values["marginLeft"] = boxStyle.values["marginRight"] = boxStyle.values["marginTop"] = boxStyle.values["marginBottom"] = 5;
 }
@@ -78,7 +78,7 @@ void QInfoDisplay::paint()
     painter.drawPolygon(poly);
     poly.clear();
 
-    painter.setPen(boxStyle.colors["cLabelColor"]);
+    painter.setPen(boxStyle.colors[BoxColors::LABEL]);
     painter.drawText(2*boxStyle.values["marginLeft"],height()/2+5,QString::number(value[PlanePart::LEFT])+" %");
     painter.drawText(width()-2*boxStyle.values["marginRight"]-textWidth[PlanePart::RIGHT],height()/2+5,QString::number(value[PlanePart::RIGHT])+" %");
     painter.drawText(boxStyle.values["marginLeft"] + (width()-(boxStyle.values["marginLeft"]+boxStyle.values["marginRight"])-textWidth[PlanePart::UP])/2,2*boxStyle.values["marginTop"]+20,QString::number(value[PlanePart::UP])+" %");

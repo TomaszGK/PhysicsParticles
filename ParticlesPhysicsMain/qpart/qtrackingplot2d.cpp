@@ -32,7 +32,7 @@ void QTrackingPlot2D::paint()
 {
     paintAxes();
 
-    painter.setPen(QPen(boxStyle.colors["cLabelColor"]));
+    painter.setPen(boxStyle.colors[BoxColors::LABEL]);
     painter.drawText(calculateCenterTextPosition(LangManager::translate(title),boxStyle.values["marginLeft"],width()-boxStyle.values["marginRight"]),boxStyle.values["marginTop"]-12,LangManager::translate(title));
 
     if( trackingParticle->particlePositionsTracking.size()<2 ) return;

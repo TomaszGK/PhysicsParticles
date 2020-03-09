@@ -69,9 +69,6 @@ private:
     /**< particle color */
     QColor particleColor;
 
-    /**< selected particle color */
-    QColor selectedParticleColor;
-
     /**< mouse current position */
     QPoint mousePos;
 
@@ -97,8 +94,17 @@ private:
     /** plane hits paint flag */
     bool toHandlePlaneHits {false};
 
-    /** map of particle colors */
-    std::map<ParticleType,QColor> color;
+    /** map of translations from ParticleType to BoxColors */
+    inline static const std::map<const ParticleType,const BoxColors> translation {
+                                                   {ParticleType::BLUE,BoxColors::BLUE_PARTICLE},
+                                                   {ParticleType::RED,BoxColors::RED_PARTICLE},
+                                                   {ParticleType::NORMAL,BoxColors::NORMAL_PARTICLE},
+                                                   {ParticleType::GAS1,BoxColors::GAS1_PARTICLE},
+                                                   {ParticleType::GAS2,BoxColors::GAS2_PARTICLE},
+                                                   {ParticleType::GAS3,BoxColors::GAS3_PARTICLE},
+                                                   {ParticleType::MINI,BoxColors::MINI_PARTICLE},
+                                                   {ParticleType::MACROSCOPIC,BoxColors::MACROSCOPIC_PARTICLE},
+                                                 };
 
     /**
      * @brief Paints the particle plane.

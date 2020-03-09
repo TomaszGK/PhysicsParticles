@@ -4,8 +4,7 @@
 QPainterManager::QPainterManager( QWidget* parent )
 : QBoxPainter { parent }
 {
-    boxStyle.colors["cBackground"] = QColor(235, 235, 235);
-    selectedParticleColor = QColor(32, 165, 56);
+    boxStyle.colors[BoxColors::BACKGROUND] = QColor(235,235,235);
     particlePen = QPen(Qt::NoPen);
     particlePen.setWidth(1);
     displayVelocityVector.first = false;    
@@ -13,16 +12,7 @@ QPainterManager::QPainterManager( QWidget* parent )
     setAutoFillBackground(false);
 
     particles = Locator::getParticles();
-    planeArea = Locator::getPlaneArea();
-
-    color[ParticleType::BLUE]        = {0,0,255};
-    color[ParticleType::RED]         = {255,0,0};
-    color[ParticleType::NORMAL]      = {255,0,255};
-    color[ParticleType::GAS1]        = {255,0,0};
-    color[ParticleType::GAS2]        = {0,85,80};
-    color[ParticleType::GAS3]        = {0,0,255};
-    color[ParticleType::MINI]        = {50,10,255};
-    color[ParticleType::MACROSCOPIC] = {50,10,95};
+    planeArea = Locator::getPlaneArea();   
 
     init();
 }
@@ -57,11 +47,11 @@ void QPainterManager::paint()
         {
             if( toTrackingPaint && particle->isTracking ) paintTracking(particle);            
 
-            if( toTrackingPaint && !particle->isTracking ) particleColor = QColor(200,200,200);
+            if( toTrackingPaint && !particle->isTracking ) particleColor = boxStyle.colors[BoxColors::DIM_PARTCILE];
             else
             {
                 if( particle->visualizationType == VisualizationType::VELOCITY ) updateParticleColor( particle );
-                else particleColor = color[particle->particleType];
+                else particleColor = boxStyle.colors[translation.at(particle->particleType)];
             }
 
             paintParticle(particle,particleColor);
@@ -81,13 +71,13 @@ void QPainterManager::paint()
 
 void QPainterManager::paintPlaneConstraintWalls()
 {
-    painter.setPen(QPen(boxStyle.colors["cPlaneBorder"]));
-    painter.setBrush(QBrush(boxStyle.colors["cPlaneBorder"]));
+    painter.setPen(boxStyle.colors[BoxColors::PLANE_BORDER]);
+    painter.setBrush(QColor(boxStyle.colors[BoxColors::PLANE_BORDER]));
     painter.drawRect(planeArea->getXConstraint(),boxStyle.values["planeBorderWidth"],boxStyle.values["planeBorderWidth"],height()-2*boxStyle.values["planeBorderWidth"]);
     painter.drawRect(width()-planeArea->getXConstraint()-boxStyle.values["planeBorderWidth"],boxStyle.values["planeBorderWidth"],boxStyle.values["planeBorderWidth"],height()-2*boxStyle.values["planeBorderWidth"]);
 
-    painter.setPen(QPen(boxStyle.colors["cBackground"]));
-    painter.setBrush(QBrush(boxStyle.colors["cBackground"]));
+    painter.setPen(boxStyle.colors[BoxColors::BACKGROUND]);
+    painter.setBrush(QBrush(boxStyle.colors[BoxColors::BACKGROUND]));
     painter.drawRect(0,0,planeArea->getXConstraint(),height());
     painter.drawRect(width()-planeArea->getXConstraint(),0,planeArea->getXConstraint(),height());
 
@@ -98,17 +88,17 @@ void QPainterManager::paintConstraintArrows()
 {
     vect2D position  { -150 , static_cast<double>(height()/2) };
     vect2D direction { 150 + static_cast<double>(planeArea->getXConstraint()) , 0 };
-    paintArrow( position , direction , 50 , 15 , QColor(100,60,250) );
+    paintArrow( position , direction , 50 , 15 , boxStyle.colors[BoxColors::CONSTRAINT_ARROW] );
 
     position.set( static_cast<double>(width()) + 150 , static_cast<double>(height()/2) );
     direction.set( (-1)*(150 + static_cast<double>(planeArea->getXConstraint())) , 0 );
-    paintArrow( position , direction , 50 , 15 , QColor(100,60,250) );
+    paintArrow( position , direction , 50 , 15 , boxStyle.colors[BoxColors::CONSTRAINT_ARROW] );
 }
 
 void QPainterManager::paintPlaneDivider()
 {    
-    painter.setPen(boxStyle.colors["cPlaneBorder"]);
-    painter.setBrush(boxStyle.colors["cPlaneBorder"]);
+    painter.setPen(boxStyle.colors[BoxColors::PLANE_BORDER]);
+    painter.setBrush(QColor(boxStyle.colors[BoxColors::PLANE_BORDER]));
     painter.drawRect( planeArea->getPlainDivider().getUpperRect().first.x+boxStyle.values["planeBorderWidth"], planeArea->getPlainDivider().getUpperRect().first.y+boxStyle.values["planeBorderWidth"], planeArea->getPlainDivider().getUpperRect().second.x, planeArea->getPlainDivider().getUpperRect().second.y );
     painter.drawRect( planeArea->getPlainDivider().getLowerRect().first.x+boxStyle.values["planeBorderWidth"], planeArea->getPlainDivider().getLowerRect().first.y+boxStyle.values["planeBorderWidth"], planeArea->getPlainDivider().getLowerRect().second.x, planeArea->getPlainDivider().getLowerRect().second.y );
 }
@@ -121,7 +111,7 @@ void QPainterManager::paintPlaneHit( citerParticle particle )
     auto posx = static_cast<int>(particle->position.x)+boxStyle.values["planeBorderWidth"];
     auto posy = static_cast<int>(particle->position.y)+boxStyle.values["planeBorderWidth"];
 
-    painter.setBrush(QColor(210,50,50));
+    painter.setBrush( QColor(boxStyle.colors[BoxColors::PLANE_HIT]) );
 
     if( particle->position.y-particle->radius<planeHitDiff )
     {
@@ -148,7 +138,7 @@ void QPainterManager::paintParticle( int posx , int posy, int size, const QColor
     gradient.setRadius(size/2);
     gradient.setCenter(posx,posy);
     gradient.setFocalPoint(posx,posy);
-    gradient.setColorAt(0, boxStyle.colors["cBackground"]);
+    gradient.setColorAt(0, boxStyle.colors[BoxColors::BACKGROUND]);
     gradient.setColorAt(1,color);
 
     painter.setBrush(QBrush(gradient));
@@ -167,7 +157,7 @@ void QPainterManager::paintParticle( citerParticle particle , const QColor& colo
     gradient.setRadius(size/2);
     gradient.setCenter(posx,posy);
     gradient.setFocalPoint(posx,posy);
-    gradient.setColorAt(0, boxStyle.colors["cBackground"]);
+    gradient.setColorAt(0, boxStyle.colors[BoxColors::BACKGROUND]);
     gradient.setColorAt(1,color);
 
     painter.setBrush(QBrush(gradient));
@@ -212,12 +202,12 @@ void QPainterManager::handleCursorPosition()
             int posx { static_cast<int>(particle->position.x)+boxStyle.values["planeBorderWidth"] };
             int posy { static_cast<int>(particle->position.y)+boxStyle.values["planeBorderWidth"] };
 
-            if(  QApplication::mouseButtons() == Qt::LeftButton ){ paintParticle(particle,QColor(132, 115, 156)); }
+            if(  QApplication::mouseButtons() == Qt::LeftButton ){ paintParticle( particle , boxStyle.colors[BoxColors::EDIT_SELECTED_PARTICLE] ); }
             else
             {
-                paintArrow( position + particle->velocity.getVectorOfLength(particle->radius) , particle->velocity.getVectorOfLength(100) , 25 , 6 , selectedParticleColor );
-                paintParticle(posx,posy,40,selectedParticleColor);
-                painter.setPen(QPen(QColor(10,15,10)));
+                paintArrow( position + particle->velocity.getVectorOfLength(particle->radius) , particle->velocity.getVectorOfLength(100) , 25 , 6 , boxStyle.colors[BoxColors::SELECTED_PARTICLE] );
+                paintParticle( posx , posy , 40 , boxStyle.colors[BoxColors::SELECTED_PARTICLE] );
+                painter.setPen( boxStyle.colors[BoxColors::SELECTED_PARTICLE_LABEL] );
                 painter.drawText(posx-QFontMetrics(this->font()).horizontalAdvance(QString::number(normVelocity))/2,posy+5,QString::number(normVelocity));
             }
         }       

@@ -61,15 +61,15 @@ void QBarDisplay::paint()
 
             posx = index*barWidth;
 
-            painter.setBrush(QBrush(boxStyle.colors["cUpper"]));
-            painter.setPen(QPen(boxStyle.colors["cUpper"]));
+            painter.setBrush(QColor(boxStyle.colors[BoxColors::UPPER]));
+            painter.setPen(boxStyle.colors[BoxColors::UPPER]);
             percent =  static_cast<double>(barDisplay->getUpperBox(index))/barDisplay->getUpperBoxSum();
             value = static_cast<int>((height()/2.8)*percent);
             if( value>0 ) painter.drawRect(boxStyle.values["marginLeft"]+posx,height()/2-value,barWidth-1,value);
             painter.drawText(calculateCenterTextPosition(upperValue,boxStyle.values["marginLeft"]+posx,boxStyle.values["marginLeft"]+barWidth+posx),height()/2-value-5,upperValue);
 
-            painter.setBrush(QBrush(boxStyle.colors["cLower"]));
-            painter.setPen(QPen(boxStyle.colors["cLower"]));
+            painter.setBrush(QColor(boxStyle.colors[BoxColors::LOWER]));
+            painter.setPen(boxStyle.colors[BoxColors::LOWER]);
             percent = static_cast<double>(barDisplay->getLowerBox(index))/barDisplay->getLowerBoxSum();
             value = static_cast<int>((height()/2.8)*percent);
             if( value>0 ) painter.drawRect(boxStyle.values["marginLeft"]+posx,height()/2,barWidth-1,value);

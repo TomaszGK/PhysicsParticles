@@ -126,13 +126,13 @@ void QBarChart::paint()
 
 void QBarChart::drawCurrentValue()
 {
-    painter.setPen(QPen(boxStyle.colors["cValue"]));
+    painter.setPen(boxStyle.colors[BoxColors::VALUE]);
     painter.drawText(boxStyle.values["marginLeft"],boxStyle.values["marginTop"]-7,QString::number(100*barChart->getBins().back(),'f',2));
 }
 
 void QBarChart::drawChartLabels()
 {
-    painter.setPen(QPen(boxStyle.colors["cLabelColor"]));
+    painter.setPen(boxStyle.colors[BoxColors::LABEL]);
     painter.drawText(calculateCenterTextPosition(LangManager::translate(qLabel),boxStyle.values["marginLeft"],width()-boxStyle.values["marginRight"]),boxStyle.values["marginTop"]-7,LangManager::translate(qLabel));
     painter.drawText(calculateCenterTextPosition(LangManager::translate(qLabelX),boxStyle.values["marginLeft"],width()-boxStyle.values["marginRight"]),height()-10,LangManager::translate(qLabelX));
     painter.drawText(boxStyle.values["marginLeft"]/2-4,calculateCenterTextPosition(LangManager::translate(qLabelY),boxStyle.values["marginTop"],height()-boxStyle.values["marginBottom"]),LangManager::translate(qLabelY));
@@ -165,19 +165,19 @@ void QBarChart::configureButtons()
 {
     buttons[DataVisualization::BARS]->resize(boxStyle.values["buttonWidth"]+boxStyle.values["buttonIndent"],boxStyle.values["buttonHeight"]);
     buttons[DataVisualization::BARS]->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-boxStyle.values["buttonIndent"]-5,5);
-    buttons[DataVisualization::BARS]->setStyleSheet(boxStyle.sheets["buttonStyleSelected"]);
+    buttons[DataVisualization::BARS]->setStyleSheet(boxStyle.sheets[BoxSheets::BUTTON_SELECTED]);
 
     buttons[DataVisualization::POINTS]->resize(boxStyle.values["buttonWidth"],boxStyle.values["buttonHeight"]);
     buttons[DataVisualization::POINTS]->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-5,boxStyle.values["buttonHeight"]+6);
-    buttons[DataVisualization::POINTS]->setStyleSheet(boxStyle.sheets["buttonStyleUnselected"]);
+    buttons[DataVisualization::POINTS]->setStyleSheet(boxStyle.sheets[BoxSheets::BUTTON_UNSELECTED]);
 
     buttons[DataVisualization::LINES]->resize(boxStyle.values["buttonWidth"],boxStyle.values["buttonHeight"]);
     buttons[DataVisualization::LINES]->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-5,2*boxStyle.values["buttonHeight"]+7);
-    buttons[DataVisualization::LINES]->setStyleSheet(boxStyle.sheets["buttonStyleUnselected"]);
+    buttons[DataVisualization::LINES]->setStyleSheet(boxStyle.sheets[BoxSheets::BUTTON_UNSELECTED]);
 
     resetButton->resize(boxStyle.values["buttonWidth"],boxStyle.values["buttonHeight"]);
     resetButton->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-5,parentWidget()->height()-boxStyle.values["buttonHeight"]-10);
-    resetButton->setStyleSheet(boxStyle.sheets["buttonStyleReset"]);
+    resetButton->setStyleSheet(boxStyle.sheets[BoxSheets::BUTTON_RESET]);
 }
 
 void QBarChart::onButtonClick()
@@ -191,7 +191,7 @@ void QBarChart::onButtonClick()
         }
         else
         {
-            buttons[dataVisulization]->setStyleSheet(boxStyle.sheets["buttonStyleUnselected"]);
+            buttons[dataVisulization]->setStyleSheet(boxStyle.sheets[BoxSheets::BUTTON_UNSELECTED]);
             buttons[dataVisulization]->resize(boxStyle.values["buttonWidth"],boxStyle.values["buttonHeight"]);
             buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-5,buttons[dataVisulization]->pos().y());
 
@@ -208,7 +208,7 @@ void QBarChart::onButtonClick()
                 dataVisulization = DataVisualization::LINES;
             }
 
-            buttons[dataVisulization]->setStyleSheet(boxStyle.sheets["buttonStyleSelected"]);
+            buttons[dataVisulization]->setStyleSheet(boxStyle.sheets[BoxSheets::BUTTON_SELECTED]);
             buttons[dataVisulization]->resize(boxStyle.values["buttonWidth"]+boxStyle.values["buttonIndent"],boxStyle.values["buttonHeight"]);
             buttons[dataVisulization]->move(parentWidget()->width()-boxStyle.values["buttonWidth"]-boxStyle.values["buttonIndent"]-5,buttons[dataVisulization]->pos().y());
         }

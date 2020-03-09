@@ -12,7 +12,7 @@ void QBoxPainter::paintEvent(QPaintEvent *event)
 {
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);    
-    painter.fillRect( event->rect(), QBrush(boxStyle.colors["cBackground"]) );
+    painter.fillRect( event->rect(), QBrush(boxStyle.colors[BoxColors::BACKGROUND]) );
     paintPlaneBorder();
     paint();
     painter.end();
@@ -20,12 +20,12 @@ void QBoxPainter::paintEvent(QPaintEvent *event)
 
 void QBoxPainter::paintAxes()
 {
-    QPen linePen(boxStyle.colors["cAxesColor"]);
+    QPen linePen(boxStyle.colors[BoxColors::AXES]);
     painter.setPen(linePen);
     painter.setBrush(QBrush(Qt::NoBrush));
     painter.drawRect(boxStyle.values["marginLeft"]-1,boxStyle.values["marginTop"]-1,width()-(boxStyle.values["marginLeft"]+boxStyle.values["marginRight"])+1,height()-(boxStyle.values["marginTop"]+boxStyle.values["marginBottom"])+1);
 
-    linePen.setColor(boxStyle.colors["cInnerFrameColor"]);
+    linePen.setColor(boxStyle.colors[BoxColors::INNER_FRAME]);
     linePen.setStyle(Qt::DashLine);
     painter.setPen(linePen);
 
@@ -95,8 +95,8 @@ int QBoxPainter::calculateCenterTextPosition( const QString &text , int begin , 
 
 void QBoxPainter::paintPlaneBorder()
 {
-    painter.setPen(QColor(boxStyle.colors["cPlaneBorder"]));
-    painter.setBrush(QBrush(boxStyle.colors["cPlaneBorder"]));
+    painter.setPen(boxStyle.colors[BoxColors::PLANE_BORDER]);
+    painter.setBrush(QColor(boxStyle.colors[BoxColors::PLANE_BORDER]));
     painter.drawRect(0,0,width(),boxStyle.values["planeBorderWidth"]);
     painter.drawRect(0,0,boxStyle.values["planeBorderWidth"],height());
     painter.drawRect(width()-boxStyle.values["planeBorderWidth"],0,boxStyle.values["planeBorderWidth"],height());
