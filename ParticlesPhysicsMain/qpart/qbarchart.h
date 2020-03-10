@@ -56,7 +56,7 @@ public:
      * @param _isScalableUp         scalable up flag
      * @param _isScalableDown       scalable down flag
      */
-    void setScalabality( bool isScalableUp , bool isScalableDown ) { boxStyle.logics["isScalableUp"] = isScalableUp ; boxStyle.logics["isScalableDown"] = isScalableDown; }
+    void setScalabality( bool isScalableUp , bool isScalableDown ) { boxStyle.logics[BoxLogics::SCALABLE_UP] = isScalableUp ; boxStyle.logics[BoxLogics::SCALABLE_DOWN] = isScalableDown; }
 
     /**
      * @brief Loads style type from xml file and recalulate box display values.

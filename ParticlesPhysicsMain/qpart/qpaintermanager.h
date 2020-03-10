@@ -7,6 +7,19 @@
  * @brief Class @ref QPainterManager
  */
 
+/** @enum PaintMode
+ *  @brief Represents painting mode.
+ */
+enum class PaintMode
+{
+   TRACKING,         /**< paint tracking particle */
+   PLANE_CONSTRAINT, /**< paint plane wall constraints */
+   DIVIDER,          /**< paint plane divider */
+   PLANE_HITS,       /**< paint plane hits */
+   VECTOR,           /**< paint velocity vector of selected particle */
+   EDIT              /**< paint selected particle in edit mode */
+};
+
 /**
  * @class QPainterManager
  * @brief Implements visualization of the particle plane.
@@ -85,6 +98,15 @@ private:
     /** Holds shared pointer to constant PlaneArea object. */
     cptrPlaneArea planeArea {nullptr};
 
+    const std::map<PaintMode,bool> paintMode {
+                                              { PaintMode::TRACKING,false },
+                                              { PaintMode::PLANE_CONSTRAINT,false },
+                                              { PaintMode::DIVIDER,false },
+                                              { PaintMode::PLANE_HITS,false },
+                                              { PaintMode::VECTOR,false },
+                                              { PaintMode::EDIT,false }
+                                             };
+
     /** vector paint flag */
     bool toVectorPaint {false};
 
@@ -94,8 +116,8 @@ private:
     /** plane hits paint flag */
     bool toHandlePlaneHits {false};
 
-    /** map of translations from ParticleType to BoxColors */
-    inline static const std::map<const ParticleType,const BoxColors> translation {
+    /** translation map from ParticleType to BoxColors */
+    inline static const std::map< const ParticleType , const BoxColors > translation {
                                                    {ParticleType::BLUE,BoxColors::BLUE_PARTICLE},
                                                    {ParticleType::RED,BoxColors::RED_PARTICLE},
                                                    {ParticleType::NORMAL,BoxColors::NORMAL_PARTICLE},

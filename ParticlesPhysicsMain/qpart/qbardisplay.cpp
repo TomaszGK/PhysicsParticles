@@ -29,17 +29,17 @@ void QBarDisplay::init()
         {
             if( marginAdjustment % 2 == 0 )
             {
-                boxStyle.values["marginLeft"] += marginAdjustment/2;
-                boxStyle.values["marginRight"] += marginAdjustment/2;
+                boxStyle.values[BoxValues::MARGIN_LEFT] += marginAdjustment/2;
+                boxStyle.values[BoxValues::MARGIN_RIGHT] += marginAdjustment/2;
             }
             else
             {
-                boxStyle.values["marginLeft"] += (marginAdjustment-1)/2;
-                boxStyle.values["marginRight"] += ((marginAdjustment-1)/2+1);
+                boxStyle.values[BoxValues::MARGIN_LEFT] += (marginAdjustment-1)/2;
+                boxStyle.values[BoxValues::MARGIN_RIGHT] += ((marginAdjustment-1)/2+1);
             }
         }
 
-        barWidth = (width-(boxStyle.values["marginLeft"]+boxStyle.values["marginRight"]))/size;
+        barWidth = (width-(boxStyle.values[BoxValues::MARGIN_LEFT]+boxStyle.values[BoxValues::MARGIN_RIGHT]))/size;
     }
 }
 
@@ -65,15 +65,15 @@ void QBarDisplay::paint()
             painter.setPen(boxStyle.colors[BoxColors::UPPER]);
             percent =  static_cast<double>(barDisplay->getUpperBox(index))/barDisplay->getUpperBoxSum();
             value = static_cast<int>((height()/2.8)*percent);
-            if( value>0 ) painter.drawRect(boxStyle.values["marginLeft"]+posx,height()/2-value,barWidth-1,value);
-            painter.drawText(calculateCenterTextPosition(upperValue,boxStyle.values["marginLeft"]+posx,boxStyle.values["marginLeft"]+barWidth+posx),height()/2-value-5,upperValue);
+            if( value>0 ) painter.drawRect(boxStyle.values[BoxValues::MARGIN_LEFT]+posx,height()/2-value,barWidth-1,value);
+            painter.drawText(calculateCenterTextPosition(upperValue,boxStyle.values[BoxValues::MARGIN_LEFT]+posx,boxStyle.values[BoxValues::MARGIN_LEFT]+barWidth+posx),height()/2-value-5,upperValue);
 
             painter.setBrush(QColor(boxStyle.colors[BoxColors::LOWER]));
             painter.setPen(boxStyle.colors[BoxColors::LOWER]);
             percent = static_cast<double>(barDisplay->getLowerBox(index))/barDisplay->getLowerBoxSum();
             value = static_cast<int>((height()/2.8)*percent);
-            if( value>0 ) painter.drawRect(boxStyle.values["marginLeft"]+posx,height()/2,barWidth-1,value);
-            painter.drawText(calculateCenterTextPosition(lowerValue,boxStyle.values["marginLeft"]+posx,boxStyle.values["marginLeft"]+barWidth+posx),height()/2+value+17,lowerValue);
+            if( value>0 ) painter.drawRect(boxStyle.values[BoxValues::MARGIN_LEFT]+posx,height()/2,barWidth-1,value);
+            painter.drawText(calculateCenterTextPosition(lowerValue,boxStyle.values[BoxValues::MARGIN_LEFT]+posx,boxStyle.values[BoxValues::MARGIN_LEFT]+barWidth+posx),height()/2+value+17,lowerValue);
         }
     }
 }

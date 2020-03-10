@@ -17,6 +17,16 @@
  * @brief Class @ref QParticlesPhysicsManager
  */
 
+
+/** @enum ControlType
+ *  @brief Represents form of control in QBoxPainter derived objects.
+ */
+enum class ControlType
+{
+    CIRCLE_CONTROL , /**< circle control - used in QCircleCotrol */
+    NO_CONTROL       /**< no control */
+};
+
 /**
  * @class QParticlesPhysicsManager
  * @brief Adapts ParticlesPhysicsManager to QT environment.
@@ -27,15 +37,6 @@
  * @author Tomasz Gburek
  * @date 2019
  */
-
-/** @enum ControlType
- *  @brief Represents form of control in QBoxPainter derived objects.
- */
-enum class ControlType
-{
-    CIRCLE_CONTROL , /**< circle control - used in QCircleCotrol */
-    NO_CONTROL       /**< no control */
-};
 
 class QParticlesPhysicsManager final : public ParticlesPhysicsManager
 {

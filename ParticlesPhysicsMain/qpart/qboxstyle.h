@@ -2,20 +2,27 @@
 
 #include <QPainter>
 #include <QtXml>
+#include <type_traits>
 
 /** @file
  * @brief Class @ref QBoxStyle
  */
 
 /** @struct boxValue
- *  @brief Defines box value with tag name used in QDomDocument.
+ *  @brief Defines box value with its tag name used in QDomDocument.
  */
 template< typename T >
 struct boxValue
 {
     operator T() { return value; }
-    operator std::string() { return tag; }
+
     boxValue& operator =( T _value ) { value=_value; return *this; }
+
+    boxValue& operator +=( T _value )
+    {
+        if constexpr( !std::is_same_v<T,QColor> ) value+=_value;
+        return *this;
+    }
 
     T value;
     std::string tag;
@@ -36,7 +43,7 @@ enum class BoxStyles
 };
 
 /** @enum BoxSheets
- *  @brief Represents box sheet styles.
+ *  @brief Represents box sheet style values.
  */
 enum class BoxSheets
 {
@@ -46,7 +53,7 @@ enum class BoxSheets
 };
 
 /** @enum BoxColors
- *  @brief Represents box colors.
+ *  @brief Represents box color values.
  */
 enum class BoxColors
 {
@@ -76,6 +83,33 @@ enum class BoxColors
     GAS3_PARTICLE,           /**< gas3 particle type color in QPainterManager */
     MINI_PARTICLE,           /**< mini particle type color in QPainterManager */
     MACROSCOPIC_PARTICLE     /**< macroscopic particle type color in QPainterManager */
+};
+
+/** @enum BoxValues
+ *  @brief Represents box integer values.
+ */
+enum class BoxValues
+{
+    MARGIN_LEFT,               /**< left margin in pixels */
+    MARGIN_RIGHT,              /**< right margin in pixels */
+    MARGIN_TOP,                /**< top margin in pixels */
+    MARGIN_BOTTOM,             /**< bottom margin in pixels */
+    NUMBER_OF_HORIZONTAL_AXES, /**< number of horizontal axes */
+    NUMBER_OF_VERTICAL_AXES,   /**< number of vertical axes */
+    PLANE_BORDER_WIDTH,        /**< plane border width in pixels */
+    BUTTON_WIDTH,              /**< QBarChart button width in pixels */
+    BUTTON_HEIGHT,             /**< QBarChart button height in pixels */
+    BUTTON_INDENT              /**< QBarChart button indent in pixels */
+};
+
+/** @enum BoxLogics
+ *  @brief Represents box logic values.
+ */
+enum class BoxLogics
+{
+    SCALABLE_UP,   /**< if true then maximum value in QBarChart may increase */
+    SCALABLE_DOWN, /**< if true then maximum value in QBarChart may decrease */
+    VALUE_DISPLAY  /**< if true then last bin value will be display as text in QBarChart */
 };
 
 /**
@@ -136,26 +170,26 @@ public:
                                                 };
 
     /** map of integer values */
-    std::map<QString,int> values {
-                                   {"marginLeft",20},
-                                   {"marginRight",20},
-                                   {"marginTop",20},
-                                   {"marginBottom",20},
-                                   {"numberOfHorizontalAxes",5},
-                                   {"numberOfVerticalAxes",5},
-                                   {"planeBorderWidth",1},
-                                   {"buttonWidth",25},
-                                   {"buttonHeight",25},
-                                   {"buttonIndent",5}
-                                 };
+    std::map<BoxValues,boxValue<int>> values {
+                                              { BoxValues::MARGIN_LEFT , {20,"marginLeft"} },
+                                              { BoxValues::MARGIN_RIGHT , {20,"marginRight"} },
+                                              { BoxValues::MARGIN_TOP , {20,"marginTop"} },
+                                              { BoxValues::MARGIN_BOTTOM , {20,"marginBottom"} },
+                                              { BoxValues::NUMBER_OF_HORIZONTAL_AXES , {5,"numberOfHorizontalAxes"} },
+                                              { BoxValues::NUMBER_OF_VERTICAL_AXES , {5,"numberOfVerticalAxes"} },
+                                              { BoxValues::PLANE_BORDER_WIDTH , {1,"planeBorderWidth"} },
+                                              { BoxValues::BUTTON_WIDTH , {25,"buttonWidth"} },
+                                              { BoxValues::BUTTON_HEIGHT , {25,"buttonHeight"} },
+                                              { BoxValues::BUTTON_INDENT , {5,"buttonIndent"} }
+                                             };
 
 
     /** map of boolean values */
-    std::map<QString,bool> logics {
-                                    {"isScalableUp",true},
-                                    {"isScalableDown",true},
-                                    {"isValueDisplay",true},
-                                  };
+    std::map<BoxLogics,boxValue<bool>> logics {
+                                               { BoxLogics::SCALABLE_UP , {true,"isScalableUp"} },
+                                               { BoxLogics::SCALABLE_DOWN , {true,"isScalableDown"} },
+                                               { BoxLogics::VALUE_DISPLAY , {true,"isValueDisplay"} }
+                                              };
 
     /** map of location of xml style files */
     std::map<BoxStyles,QString> styleFiles {

@@ -36,14 +36,13 @@ bool QBoxStyle::loadStyleFromFile( BoxStyles style )
 
     auto docElem = xmlBOM.documentElement();
 
-    for( auto &[name,sheet] : sheets ) load(docElem,sheet.tag,sheet.value);
+    for( auto &sheet : sheets ) load(docElem,sheet.second.tag,sheet.second.value);
 
-    for( auto &[name,color] : colors ) load(docElem,color.tag,color.value);
+    for( auto &color : colors ) load(docElem,color.second.tag,color.second.value);
 
-    for( auto &[name,value] : values ) load(docElem,name.toStdString(),value);
+    for( auto &value : values ) load(docElem,value.second.tag,value.second.value);
 
-    for( auto &[name,logic] : logics ) load(docElem,name.toStdString(),logic);
-
+    for( auto &logic : logics ) load(docElem,logic.second.tag,logic.second.value);
 
     file.close();
     return true;
