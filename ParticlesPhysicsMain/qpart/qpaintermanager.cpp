@@ -12,7 +12,7 @@ QPainterManager::QPainterManager( QWidget* parent )
     setAutoFillBackground(false);
 
     particles = Locator::getParticles();
-    planeArea = Locator::getPlaneArea();   
+    planeArea = Locator::getPlaneArea();
 
     init();
 }
@@ -32,41 +32,31 @@ void QPainterManager::init()
     if( planeArea != nullptr )
     {
         boxStyle.values[BoxValues::PLANE_BORDER_WIDTH] = static_cast<int>(planeArea->getPlaneBorderWidth());
+        paintMode[PaintMode::DIVIDER] = planeArea->getPlainDivider().isDividerInPlane();
     }
 }
 
 void QPainterManager::paint()
 {
+    painter.translate(0,0);
+    painter.save();
 
-    if( particles != nullptr )
+    for( auto particle = particles->cend() ; particle-- != particles->cbegin() ; )
     {
-        painter.translate(0,0);
-        painter.save();
+        attachParticleColor(particle);
 
-        for( auto particle = particles->cend() ; particle-- != particles->cbegin() ; )
-        {
-            if( toTrackingPaint && particle->isTracking ) paintTracking(particle);            
+        if( paintMode[PaintMode::TRACKING] && particle->isTracking ) paintTracking(particle);
 
-            if( toTrackingPaint && !particle->isTracking ) particleColor = boxStyle.colors[BoxColors::DIM_PARTCILE];
-            else
-            {
-                if( particle->visualizationType == VisualizationType::VELOCITY ) updateParticleColor( particle );
-                else particleColor = boxStyle.colors[translation.at(particle->particleType)];
-            }
+        paintParticle(particle,particleColor);
 
-            paintParticle(particle,particleColor);
+        if( paintMode[PaintMode::PLANE_HITS] ) paintPlaneHit(particle);
+     }
 
-            if( toHandlePlaneHits ) paintPlaneHit( particle );
-        }        
+     if( paintMode[PaintMode::DIVIDER] ) paintPlaneDivider();
+     if( paintMode[PaintMode::VECTOR] ) handleCursorPosition();
+     if( paintMode[PaintMode::PLANE_CONSTRAINT] ) paintPlaneConstraintWalls();
 
-        if( planeArea->getPlainDivider().isDividerInPlane() ) paintPlaneDivider();
-        if( toVectorPaint ) handleCursorPosition();
-
-        if( static_cast<int>(planeArea->getXConstraint()) > boxStyle.values[BoxValues::PLANE_BORDER_WIDTH] ) paintPlaneConstraintWalls();
-
-        painter.restore();
-    }
-
+     painter.restore();
 }
 
 void QPainterManager::paintPlaneConstraintWalls()
@@ -202,7 +192,10 @@ void QPainterManager::handleCursorPosition()
             int posx { static_cast<int>(particle->position.x)+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH] };
             int posy { static_cast<int>(particle->position.y)+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH] };
 
-            if(  QApplication::mouseButtons() == Qt::LeftButton ){ paintParticle( particle , boxStyle.colors[BoxColors::EDIT_SELECTED_PARTICLE] ); }
+            if(  QApplication::mouseButtons() == Qt::LeftButton )
+            {
+                paintParticle( particle , boxStyle.colors[BoxColors::EDIT_SELECTED_PARTICLE] );
+            }
             else
             {
                 paintArrow( position + particle->velocity.getVectorOfLength(particle->radius) , particle->velocity.getVectorOfLength(100) , 25 , 6 , boxStyle.colors[BoxColors::SELECTED_PARTICLE] );
@@ -214,8 +207,19 @@ void QPainterManager::handleCursorPosition()
     }
 }
 
-void QPainterManager::updateParticleColor( citerParticle particle )
+void QPainterManager::attachParticleColor( citerParticle particle )
 {
-    unsigned char intensity = static_cast<unsigned char>(255.0*particle->velocity())%255;
-    particleColor.setRgb( intensity, 0, 255-intensity );
+    if( paintMode[PaintMode::TRACKING] && !particle->isTracking )
+    {
+         particleColor = boxStyle.colors[BoxColors::DIM_PARTCILE];
+    }
+    else
+    {
+        if( particle->visualizationType == VisualizationType::VELOCITY )
+        {
+            unsigned char intensity = static_cast<unsigned char>(255.0*particle->velocity())%255;
+            particleColor.setRgb(intensity,0,255-intensity);
+        }
+        else particleColor = boxStyle.colors[translation.at(particle->particleType)];
+    }
 }

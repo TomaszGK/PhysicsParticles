@@ -270,7 +270,7 @@ public:
      * @brief Sets percent value of plane width.
      * @param quantity              new percent value of plane width
      */
-    void setPlaneWidthInPercent( int quantity );
+    virtual void setPlaneWidthInPercent( int quantity );
 
     /** Gets simulation information. */
     const SimulationInfo& getSimulationInfo() const noexcept { return analyzer->simulationInfo; }
@@ -282,10 +282,10 @@ public:
     const PhysicsInfo& getPhysicsInfo() const noexcept { return analyzer->physicsInfo; }
 
     /** Enables tracking of selected particle. */
-    void enableTracking();
+    virtual void enableTracking();
 
     /** Disables tracking of selected particle. */
-    void disableTracking();
+    virtual void disableTracking();
 
     /** Resets the simulation to the initial state */
     void reset();
@@ -302,7 +302,7 @@ public:
      * Value userCall have to be true if pause is called from a user action.
      * @param userCall              use call flag
      */
-    void pause( bool userCall = false )
+    virtual void pause( bool userCall = false )
     {
         if( calculationState.load() == ThreadCalculationState::RUNNING )
         {
@@ -320,7 +320,7 @@ public:
      * Value userCall have to be true if run is called from a user action.
      * @param userCall              use call flag
      */
-    void run( bool userCall = false )
+    virtual void run( bool userCall = false )
     {
         if( calculationState.load() == ThreadCalculationState::PAUSE )
         {            

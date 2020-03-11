@@ -40,30 +40,17 @@ public:
     /**
      * @brief Constructor
      *    
-     * @param parent                ponter to parent widget
+     * @param parent                pointer to parent widget
      */
-    explicit QPainterManager( QWidget *parent = nullptr );   
+    explicit QPainterManager( QWidget *parent = nullptr );
 
     /**
-     * @brief Sets vector paint flag.
+     * @brief Overload operator[]
      *
-     * @param _toVectorPaint        new vector paint flag
+     * @param mode                  painting mode
+     * @return referenced value of a given painting mode
      */
-    void setVectorPaint( bool _toVectorPaint ) noexcept { toVectorPaint = _toVectorPaint; }
-
-    /**
-     * @brief Sets tracking paint flag.
-     *
-     * @param _toTrackingPaint      new tracking paint flag
-     */
-    void setTrackingPaint( bool _toTrackingPaint ) noexcept { toTrackingPaint = _toTrackingPaint; }
-
-    /**
-     * @brief Sets plane hits flag.
-     *
-     * @param _toTrackingPaint      new plane hits flag
-     */
-    void setPlaneHitsPaint( bool _toHandlePlaneHits ) noexcept { toHandlePlaneHits = _toHandlePlaneHits; }
+    bool& operator []( PaintMode mode ){ return paintMode[mode]; }
 
     /**
      * @brief Loads style type from xml file and /to complete/.
@@ -98,23 +85,15 @@ private:
     /** Holds shared pointer to constant PlaneArea object. */
     cptrPlaneArea planeArea {nullptr};
 
-    const std::map<PaintMode,bool> paintMode {
-                                              { PaintMode::TRACKING,false },
-                                              { PaintMode::PLANE_CONSTRAINT,false },
-                                              { PaintMode::DIVIDER,false },
-                                              { PaintMode::PLANE_HITS,false },
-                                              { PaintMode::VECTOR,false },
-                                              { PaintMode::EDIT,false }
-                                             };
-
-    /** vector paint flag */
-    bool toVectorPaint {false};
-
-    /** tracking paint flag */
-    bool toTrackingPaint {false};
-
-    /** plane hits paint flag */
-    bool toHandlePlaneHits {false};
+    /** Map of painting modes. */
+    std::map<PaintMode,bool> paintMode {
+                                        { PaintMode::TRACKING,false },
+                                        { PaintMode::PLANE_CONSTRAINT,false },
+                                        { PaintMode::DIVIDER,false },
+                                        { PaintMode::PLANE_HITS,false },
+                                        { PaintMode::VECTOR,false },
+                                        { PaintMode::EDIT,false }
+                                       };
 
     /** translation map from ParticleType to BoxColors */
     inline static const std::map< const ParticleType , const BoxColors > translation {
@@ -132,7 +111,7 @@ private:
      * @brief Paints the particle plane.
      *
      * Paint particles nad plane border but may paints also particle velocity vector, trace of tracking particle
-     * and particle hits to the plane which is depended on toVectorPaint, toTrackingPaint and toHandlePlaneHits flags.
+     * and particle hits to the plane which is depended on paintMode map.
      */
     void paint() override;
 
@@ -194,13 +173,13 @@ private:
     void handleCursorPosition();
 
     /**
-     * @brief Updates a given particle color.
+     * @brief Attaches color for a given particle.
      *
-     * Updates color corresponding to particle velocity.
-     * Using when @ref VisualizationType is set on VisualizationType::VELOCITY.
+     * Using color corresponding to particle velocity when @ref VisualizationType
+     * is set on VisualizationType::VELOCITY. Otherwise using colors defined in box style.
      *
-     * @param particle              particle iterator
+     * @param particle              particle iterator    
      */
-    void updateParticleColor( citerParticle particle );
+    void attachParticleColor( citerParticle particle );
 
 };

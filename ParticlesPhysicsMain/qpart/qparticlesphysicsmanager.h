@@ -121,9 +121,9 @@ public:
      * Enables velocity vector paint for each particle.
      * @param userCall              use call flag
      */
-    void pause( bool userCall = false )
+    void pause( bool userCall = false ) override
     {
-        particlesPaintManager->setVectorPaint(true);
+        (*particlesPaintManager)[PaintMode::VECTOR] = true;
         ParticlesPhysicsManager::pause(userCall);
     }
 
@@ -134,24 +134,34 @@ public:
      * Disables velocity vector paint for each particle.
      * @param userCall              use call flag
      */
-    void run( bool userCall = false )
+    void run( bool userCall = false ) override
     {
-        particlesPaintManager->setVectorPaint(false);
+        (*particlesPaintManager)[PaintMode::VECTOR] = false;
         ParticlesPhysicsManager::run(userCall);
     }
 
     /** Enables tracking of selected particle. */
-    void enableTracking()
+    void enableTracking() override
     {
-        particlesPaintManager->setTrackingPaint(true);
+        (*particlesPaintManager)[PaintMode::TRACKING] = true;
         ParticlesPhysicsManager::enableTracking();
     }
 
     /** Disables tracking of selected particle. */
-    void disableTracking()
+    void disableTracking() override
     {
-        particlesPaintManager->setTrackingPaint(false);
+        (*particlesPaintManager)[PaintMode::TRACKING] = false;
         ParticlesPhysicsManager::disableTracking();
+    }
+
+    /**
+     * @brief Sets percent value of plane width.
+     * @param quantity              new percent value of plane width
+     */
+    virtual void setPlaneWidthInPercent( int quantity ) override
+    {
+        ParticlesPhysicsManager::setPlaneWidthInPercent(quantity);
+        (*particlesPaintManager)[PaintMode::PLANE_CONSTRAINT] = (static_cast<int>(planeArea->getXConstraint())>0)?true:false;
     }
 
     /**
@@ -161,7 +171,7 @@ public:
      */
     void setPlaneHitsPaint( bool value )
     {
-        particlesPaintManager->setPlaneHitsPaint(value);
+        (*particlesPaintManager)[PaintMode::PLANE_HITS] = value;
     }
 
 private:
