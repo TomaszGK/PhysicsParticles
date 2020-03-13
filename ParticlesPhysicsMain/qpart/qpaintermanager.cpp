@@ -4,15 +4,17 @@
 QPainterManager::QPainterManager( QWidget* parent )
 : QBoxPainter { parent }
 {
+    setMouseTracking(true);
+    setAttribute(Qt::WA_TransparentForMouseEvents);
+
     boxStyle.colors[BoxColors::BACKGROUND] = QColor(235,235,235);
     particlePen = QPen(Qt::NoPen);
     particlePen.setWidth(1);
-    displayVelocityVector.first = false;    
 
     setAutoFillBackground(false);
 
     particles = Locator::getParticles();
-    planeArea = Locator::getPlaneArea();
+    planeArea = Locator::getPlaneArea();    
 
     init();
 }
@@ -50,13 +52,18 @@ void QPainterManager::paint()
         paintParticle(particle,particleColor);
 
         if( paintMode[PaintMode::PLANE_HITS] ) paintPlaneHit(particle);
-     }
+    }
 
-     if( paintMode[PaintMode::DIVIDER] ) paintPlaneDivider();
-     if( paintMode[PaintMode::VECTOR] ) handleCursorPosition();
-     if( paintMode[PaintMode::PLANE_CONSTRAINT] ) paintPlaneConstraintWalls();
+    if( paintMode[PaintMode::DIVIDER] ) paintPlaneDivider();        
+    if( paintMode[PaintMode::PLANE_CONSTRAINT] ) paintPlaneConstraintWalls();
 
-     painter.restore();
+    if( !testAttribute(Qt::WA_TransparentForMouseEvents) )
+    {
+        if( paintMode[PaintMode::PARTICLE_VECTOR] ) paintParticleVelocityVector(selectedParticle.value());
+        if( paintMode[PaintMode::EDIT] ) paintEditParticle();
+    }
+
+    painter.restore();
 }
 
 void QPainterManager::paintPlaneConstraintWalls()
@@ -169,42 +176,23 @@ void QPainterManager::paintTracking( citerParticle particle )
         painter.setBrush(QColor(120+alpha,120+alpha,120+alpha));
         painter.drawEllipse(posx-size/2,posy-size/2,size,size);                
         if( ++alpha>100 ) alpha = 100;
-    }    
+    }
 }
 
-void QPainterManager::handleCursorPosition()
+void QPainterManager::paintParticleVelocityVector( citerParticle particle )
 {
-    QPoint cursorPos = mapFromGlobal(QCursor::pos());
-    vect2D position;
+    auto position = particle->position + vect2D(boxStyle.values[BoxValues::PLANE_BORDER_WIDTH],boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]);
+    auto normVelocity = static_cast<int>(100*particle->velocity());
 
-    displayVelocityVector.first = false;
+    paintArrow( position + particle->velocity.getVectorOfLength(particle->radius) , particle->velocity.getVectorOfLength(100) , 25 , 6 , boxStyle.colors[BoxColors::SELECTED_PARTICLE] );
+    paintParticle( static_cast<int>(position.x) , static_cast<int>(position.y) , 40 , boxStyle.colors[BoxColors::SELECTED_PARTICLE] );
+    painter.setPen( boxStyle.colors[BoxColors::SELECTED_PARTICLE_LABEL] );
+    painter.drawText(static_cast<int>(position.x)-QFontMetrics(this->font()).horizontalAdvance(QString::number(normVelocity))/2,static_cast<int>(position.y)+5,QString::number(normVelocity));
+}
 
-    for( auto particle = particles->begin() ; particle !=  particles->end() ; ++particle )
-    {
-        position = particle->position + vect2D(boxStyle.values[BoxValues::PLANE_BORDER_WIDTH],boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]);
-
-        if( abs(position.x-cursorPos.x())<particle->radius && abs(position.y-cursorPos.y())<particle->radius )
-        {           
-            displayVelocityVector.first = true;
-            displayVelocityVector.second = particle;
-
-            auto normVelocity = static_cast<int>(100*particle->velocity());
-            int posx { static_cast<int>(particle->position.x)+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH] };
-            int posy { static_cast<int>(particle->position.y)+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH] };
-
-            if(  QApplication::mouseButtons() == Qt::LeftButton )
-            {
-                paintParticle( particle , boxStyle.colors[BoxColors::EDIT_SELECTED_PARTICLE] );
-            }
-            else
-            {
-                paintArrow( position + particle->velocity.getVectorOfLength(particle->radius) , particle->velocity.getVectorOfLength(100) , 25 , 6 , boxStyle.colors[BoxColors::SELECTED_PARTICLE] );
-                paintParticle( posx , posy , 40 , boxStyle.colors[BoxColors::SELECTED_PARTICLE] );
-                painter.setPen( boxStyle.colors[BoxColors::SELECTED_PARTICLE_LABEL] );
-                painter.drawText(posx-QFontMetrics(this->font()).horizontalAdvance(QString::number(normVelocity))/2,posy+5,QString::number(normVelocity));
-            }
-        }       
-    }
+void QPainterManager::paintEditParticle()
+{
+    paintParticle( selectedParticle.value() , boxStyle.colors[BoxColors::EDIT_SELECTED_PARTICLE] );
 }
 
 void QPainterManager::attachParticleColor( citerParticle particle )
@@ -222,4 +210,44 @@ void QPainterManager::attachParticleColor( citerParticle particle )
         }
         else particleColor = boxStyle.colors[translation.at(particle->particleType)];
     }
+}
+
+bool QPainterManager::setOverlapParticle( const QPointF& moseposition )
+{
+    for( auto particle = particles->begin() ; particle !=  particles->end() ; ++particle )
+    {
+        auto position = particle->position + vect2D(boxStyle.values[BoxValues::PLANE_BORDER_WIDTH],boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]);
+
+        if( abs(position.x-moseposition.x())<particle->radius && abs(position.y-moseposition.y())<particle->radius )
+        {
+            selectedParticle = particle;
+            return true;
+        }
+    }
+    return false;
+}
+
+void QPainterManager::mouseMoveEvent( QMouseEvent *event )
+{
+    if( paintMode[PaintMode::EDIT] ) return;
+    paintMode[PaintMode::PARTICLE_VECTOR] = setOverlapParticle(event->localPos());
+}
+
+void QPainterManager::mousePressEvent( QMouseEvent *event )
+{
+    if( event->buttons()&Qt::LeftButton && setOverlapParticle(event->localPos()) )
+    {
+        paintMode[PaintMode::EDIT] = true;
+        paintMode[PaintMode::PARTICLE_VECTOR] = false;
+    }
+    if( event->buttons()&Qt::RightButton )
+    {
+        paintMode[PaintMode::EDIT] = false;
+        paintMode[PaintMode::PARTICLE_VECTOR] = false;
+    }
+}
+
+void QPainterManager::mouseReleaseEvent( QMouseEvent *event )
+{
+
 }

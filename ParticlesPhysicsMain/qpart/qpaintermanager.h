@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include "qboxpainter.h"
 #include "planearea.h"
 
@@ -16,7 +17,7 @@ enum class PaintMode
    PLANE_CONSTRAINT, /**< paint plane wall constraints */
    DIVIDER,          /**< paint plane divider */
    PLANE_HITS,       /**< paint plane hits */
-   VECTOR,           /**< paint velocity vector of selected particle */
+   PARTICLE_VECTOR,  /**< paint velocity vector of selected particle */
    EDIT              /**< paint selected particle in edit mode */
 };
 
@@ -73,11 +74,9 @@ private:
     QPoint mousePos;
 
     /**
-     * Stores constant iterator to particle on which hovering mouse cursor.
-     * If mouse cursor does not hover of any particles then
-     * first pair value is set to false, otherwise is set to true.
+     * Stores constant iterator to selected particle.
      */
-    std::pair<bool,std::vector<Particle>::const_iterator> displayVelocityVector;
+    std::optional<std::vector<Particle>::const_iterator> selectedParticle {};
 
     /** Holds shared pointer to constant vector of Particle objects. */
     cptrParticlesContainer particles {nullptr};
@@ -91,7 +90,7 @@ private:
                                         { PaintMode::PLANE_CONSTRAINT,false },
                                         { PaintMode::DIVIDER,false },
                                         { PaintMode::PLANE_HITS,false },
-                                        { PaintMode::VECTOR,false },
+                                        { PaintMode::PARTICLE_VECTOR,false },
                                         { PaintMode::EDIT,false }
                                        };
 
@@ -168,9 +167,17 @@ private:
     void paintTracking( citerParticle particle );
 
     /**
-     * @brief Handles by checking if mouse cursor position is hovering on some particle.
+     * @brief Paints velocity vector and its text value for a given particle.
+     *
+     * @param particle              a given particle that is tracking
      */
-    void handleCursorPosition();
+    void paintParticleVelocityVector( citerParticle particle );
+
+    /**
+     * @brief Paints edited particle @ref editParticle.
+     *
+     */
+    void paintEditParticle();
 
     /**
      * @brief Attaches color for a given particle.
@@ -181,5 +188,37 @@ private:
      * @param particle              particle iterator    
      */
     void attachParticleColor( citerParticle particle );
+
+
+    /**
+     * @brief Tries to set selectedParticle if a particle is overlap by mouse cursor.
+     *
+     * @param moseposition          mouse cursor position
+     * @return true if selectedParticle is set otherwise false
+     */
+    bool setOverlapParticle( const QPointF& moseposition );
+
+private slots:
+
+    /**
+     * @brief Mouse move handler.
+     *
+     * @param event                 pointer to mouse event
+     */
+    void mouseMoveEvent( QMouseEvent *event ) override;
+
+    /**
+     * @brief Mouse press button handler.
+     *
+     * @param event                 pointer to mouse event
+     */
+    void mousePressEvent( QMouseEvent *event ) override;
+
+    /**
+     * @brief Mouse realease button handler.
+     *
+     * @param event                 pointer to mouse event
+     */
+    void mouseReleaseEvent( QMouseEvent *event ) override;
 
 };

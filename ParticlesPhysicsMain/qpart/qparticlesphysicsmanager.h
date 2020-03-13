@@ -123,7 +123,7 @@ public:
      */
     void pause( bool userCall = false ) override
     {
-        (*particlesPaintManager)[PaintMode::VECTOR] = true;
+        if( userCall ) particlesPaintManager->setAttribute(Qt::WA_TransparentForMouseEvents,false);
         ParticlesPhysicsManager::pause(userCall);
     }
 
@@ -136,7 +136,7 @@ public:
      */
     void run( bool userCall = false ) override
     {
-        (*particlesPaintManager)[PaintMode::VECTOR] = false;
+        if( userCall ) particlesPaintManager->setAttribute(Qt::WA_TransparentForMouseEvents);
         ParticlesPhysicsManager::run(userCall);
     }
 
