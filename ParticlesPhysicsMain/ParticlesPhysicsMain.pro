@@ -36,10 +36,10 @@ INCLUDEPATH += \
                qpart
 
 SOURCES += \
-    main.cpp \
-    main/simulationanalyzer.cpp \
+    main.cpp \   
     mainwindow.cpp \
     extern/qcgaugewidget.cpp \
+    qpart/qboxedit.cpp \
     qpart/qboxstyle.cpp \
     qpart/qpaintermanager.cpp \    
     qpart/qbarchart.cpp \
@@ -61,14 +61,15 @@ SOURCES += \
     main/bardisplay.cpp \     
     main/planearea.cpp \
     main/langmanager.cpp \
+    main/simulationanalyzer.cpp \
     dialogabout.cpp
 
    
-HEADERS += \
-    main/simulationanalyzer.h \
+HEADERS += \    
     mainwindow.h \
     extern/random.hpp \
     extern/qcgaugewidget.h \
+    qpart/qboxedit.h \
     qpart/qboxstyle.h \
     qpart/qpaintermanager.h \
     qpart/qbardisplay.h \    
@@ -80,7 +81,7 @@ HEADERS += \
     qpart/qtextanimation.h \
     qpart/qtrackingplot2d.h \
     qpart/qinteractivelabel.h \
-    qpart/qcirclecontrol.h \
+    qpart/qcirclecontrol.h \    
     main/definitions.h \
     main/particlesphysicsmanager.h \    
     main/vector2d.h \
@@ -94,6 +95,7 @@ HEADERS += \
     main/bardisplay.h \  
     main/planearea.h \
     main/langmanager.h \
+    main/simulationanalyzer.h \
     dialogabout.h
     
     

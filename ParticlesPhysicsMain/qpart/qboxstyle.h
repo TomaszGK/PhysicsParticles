@@ -99,7 +99,8 @@ enum class BoxValues
     PLANE_BORDER_WIDTH,        /**< plane border width in pixels */
     BUTTON_WIDTH,              /**< QBarChart button width in pixels */
     BUTTON_HEIGHT,             /**< QBarChart button height in pixels */
-    BUTTON_INDENT              /**< QBarChart button indent in pixels */
+    BUTTON_INDENT,             /**< QBarChart button indent in pixels */
+    BOX_EDIT_INDENT            /**< QPaintManager edit box indent in pixels */
 };
 
 /** @enum BoxLogics
@@ -180,7 +181,8 @@ public:
                                               { BoxValues::PLANE_BORDER_WIDTH , {1,"planeBorderWidth"} },
                                               { BoxValues::BUTTON_WIDTH , {25,"buttonWidth"} },
                                               { BoxValues::BUTTON_HEIGHT , {25,"buttonHeight"} },
-                                              { BoxValues::BUTTON_INDENT , {5,"buttonIndent"} }
+                                              { BoxValues::BUTTON_INDENT , {5,"buttonIndent"} },
+                                              { BoxValues::BOX_EDIT_INDENT , {10,"boxEditIndent"} },
                                              };
 
 

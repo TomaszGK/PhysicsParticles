@@ -1,7 +1,7 @@
 #pragma once
 
 #include <optional>
-#include "qboxpainter.h"
+#include "qboxedit.h"
 #include "planearea.h"
 
 /** @file
@@ -64,7 +64,8 @@ public:
 
 private:
 
-    QPointer<QWidget> editBox;
+    /**< box for particle velocity vector edition */
+    QPointer<QBoxEdit> editBox;
 
     /**< particle pen */
     QPen particlePen;
@@ -75,9 +76,7 @@ private:
     /**< mouse current position */
     QPoint mousePos;
 
-    /**
-     * Stores constant iterator to selected particle.
-     */
+    /** Stores constant iterator to selected particle. */
     std::optional<std::vector<Particle>::const_iterator> selectedParticle {std::nullopt};
 
     /** Holds shared pointer to constant vector of Particle objects. */
@@ -182,12 +181,6 @@ private:
     void paintEditParticle();
 
     /**
-     * @brief Paints box for edited particle where its velocity vector may be modified.
-     *
-     */
-    void paintEditBox();
-
-    /**
      * @brief Attaches color for a given particle.
      *
      * Using color corresponding to particle velocity when @ref VisualizationType
@@ -197,7 +190,6 @@ private:
      */
     void attachParticleColor( citerParticle particle );
 
-
     /**
      * @brief Tries to set selectedParticle if a particle is overlap by mouse cursor.
      *
@@ -205,6 +197,12 @@ private:
      * @return true if selectedParticle is set otherwise false
      */
     bool setOverlapParticle( const QPointF& moseposition );
+
+    /**
+     * @brief Ajusts edit box orientation for edited particle @ref editParticle.
+     *
+     */
+    void adjustBoxEditOrientation();
 
 private slots:
 
