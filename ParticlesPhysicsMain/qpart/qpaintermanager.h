@@ -64,6 +64,8 @@ public:
 
 private:
 
+    QPointer<QWidget> editBox;
+
     /**< particle pen */
     QPen particlePen;
 
@@ -76,7 +78,7 @@ private:
     /**
      * Stores constant iterator to selected particle.
      */
-    std::optional<std::vector<Particle>::const_iterator> selectedParticle {};
+    std::optional<std::vector<Particle>::const_iterator> selectedParticle {std::nullopt};
 
     /** Holds shared pointer to constant vector of Particle objects. */
     cptrParticlesContainer particles {nullptr};
@@ -180,6 +182,12 @@ private:
     void paintEditParticle();
 
     /**
+     * @brief Paints box for edited particle where its velocity vector may be modified.
+     *
+     */
+    void paintEditBox();
+
+    /**
      * @brief Attaches color for a given particle.
      *
      * Using color corresponding to particle velocity when @ref VisualizationType
@@ -220,5 +228,12 @@ private slots:
      * @param event                 pointer to mouse event
      */
     void mouseReleaseEvent( QMouseEvent *event ) override;
+
+    /**
+     * @brief Mouse leave from widget area event handler.
+     *
+     * @param event                 pointer to event
+     */
+    void leaveEvent( QEvent *event ) override;    
 
 };

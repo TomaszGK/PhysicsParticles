@@ -83,10 +83,10 @@ private:
     ptrBarChart barChart;
 
     /** Maps buttons changing state of data visualization. */
-    std::map<DataVisualization,std::unique_ptr<QPushButton>> buttons;
+    std::map<DataVisualization,QPointer<QPushButton>> buttons;
 
     /** Resets bar chart bin. */
-    std::unique_ptr<QPushButton> resetButton;
+    QPointer<QPushButton> resetButton;
 
     /** Data visuzalization type */
     DataVisualization dataVisulization { DataVisualization::BARS };

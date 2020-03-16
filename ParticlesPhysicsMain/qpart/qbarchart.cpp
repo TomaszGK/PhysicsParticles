@@ -47,28 +47,28 @@ void QBarChart::init()
     {
         reconfigurateBarChartLayout();
 
-        buttons[DataVisualization::BARS] = std::make_unique<QPushButton>("",this);
+        buttons[DataVisualization::BARS] = new QPushButton("",this);
         buttons[DataVisualization::BARS]->setIcon(QIcon(QPixmap(":/new/icons/images/bars.png")));
         buttons[DataVisualization::BARS]->setToolTip(tr("Bars display"));
 
-        buttons[DataVisualization::POINTS] = std::make_unique<QPushButton>("",this);
+        buttons[DataVisualization::POINTS] = new QPushButton("",this);
         buttons[DataVisualization::POINTS]->setIcon(QIcon(QPixmap(":/new/icons/images/points.png")));
         buttons[DataVisualization::POINTS]->setToolTip(tr("Points display"));
 
-        buttons[DataVisualization::LINES] = std::make_unique<QPushButton>("",this);
+        buttons[DataVisualization::LINES] = new QPushButton("",this);
         buttons[DataVisualization::LINES]->setIcon(QIcon(QPixmap(":/new/icons/images/lines.png")));
         buttons[DataVisualization::LINES]->setToolTip(tr("Lines display"));
 
-        resetButton = std::make_unique<QPushButton>("",this);
+        resetButton = new QPushButton("",this);
         resetButton->setIcon(QIcon(QPixmap(":/new/icons/images/reset_barchart.png")));
         resetButton->setToolTip(tr("Reset"));
 
         configureButtons();
 
-        connect( buttons[DataVisualization::BARS].get()   , &QPushButton::clicked , this, &QBarChart::onButtonClick );
-        connect( buttons[DataVisualization::POINTS].get() , &QPushButton::clicked , this, &QBarChart::onButtonClick );
-        connect( buttons[DataVisualization::LINES].get()  , &QPushButton::clicked , this, &QBarChart::onButtonClick );
-        connect( resetButton.get()                        , &QPushButton::clicked , this, &QBarChart::onButtonClick );
+        connect( buttons[DataVisualization::BARS]   , &QPushButton::clicked , this , &QBarChart::onButtonClick );
+        connect( buttons[DataVisualization::POINTS] , &QPushButton::clicked , this , &QBarChart::onButtonClick );
+        connect( buttons[DataVisualization::LINES]  , &QPushButton::clicked , this , &QBarChart::onButtonClick );
+        connect( resetButton                        , &QPushButton::clicked , this , &QBarChart::onButtonClick );
     }
 }
 

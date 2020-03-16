@@ -7,6 +7,11 @@ QPainterManager::QPainterManager( QWidget* parent )
     setMouseTracking(true);
     setAttribute(Qt::WA_TransparentForMouseEvents);
 
+    editBox = new QWidget(this);
+    editBox->resize(100,100);
+    editBox->setStyleSheet("background:green;");
+    editBox->hide();
+
     boxStyle.colors[BoxColors::BACKGROUND] = QColor(235,235,235);
     particlePen = QPen(Qt::NoPen);
     particlePen.setWidth(1);
@@ -192,7 +197,23 @@ void QPainterManager::paintParticleVelocityVector( citerParticle particle )
 
 void QPainterManager::paintEditParticle()
 {
+    if( !selectedParticle ) return;
     paintParticle( selectedParticle.value() , boxStyle.colors[BoxColors::EDIT_SELECTED_PARTICLE] );
+    paintEditBox();
+}
+
+void QPainterManager::paintEditBox()
+{
+    if( !selectedParticle ) return;
+    //painter.setPen(QColor(150,150,150));
+    //painter.setBrush(QColor(250,250,250));
+
+    auto posx = static_cast<int>( selectedParticle.value()->position.x );
+    auto posy = static_cast<int>( selectedParticle.value()->position.y );
+    editBox->move(posx+25,posy);
+    editBox->show();
+
+    //painter.drawRect(posx+30,posy,100,100);
 }
 
 void QPainterManager::attachParticleColor( citerParticle particle )
@@ -235,6 +256,8 @@ void QPainterManager::mouseMoveEvent( QMouseEvent *event )
 
 void QPainterManager::mousePressEvent( QMouseEvent *event )
 {
+    if( paintMode[PaintMode::TRACKING] ) return;
+
     if( event->buttons()&Qt::LeftButton && setOverlapParticle(event->localPos()) )
     {
         paintMode[PaintMode::EDIT] = true;
@@ -244,10 +267,19 @@ void QPainterManager::mousePressEvent( QMouseEvent *event )
     {
         paintMode[PaintMode::EDIT] = false;
         paintMode[PaintMode::PARTICLE_VECTOR] = false;
+        editBox->hide();
     }
 }
 
-void QPainterManager::mouseReleaseEvent( QMouseEvent *event )
+void QPainterManager::mouseReleaseEvent( QMouseEvent* )
 {
 
+}
+
+void QPainterManager::leaveEvent( QEvent* )
+{
+    paintMode[PaintMode::EDIT] = false;
+    paintMode[PaintMode::PARTICLE_VECTOR] = false;
+    editBox->hide();
+    selectedParticle = std::nullopt;
 }
