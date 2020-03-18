@@ -27,7 +27,7 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
 
     Locator::provide(this);
 
-    // explicit instantiations of template function to know its definitions in other translate units - linker purpose
+    // explicit instantiations of template functions to know its definitions in other translate units - linker purpose
     mainLoop<SimulationType::BASIC>();
     mainLoop<SimulationType::DIFFUSION>();
     mainLoop<SimulationType::BROWNIAN_MOTION>();

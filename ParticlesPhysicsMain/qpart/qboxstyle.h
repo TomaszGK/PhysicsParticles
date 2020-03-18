@@ -159,7 +159,7 @@ public:
                                                  { BoxColors::PLANE_HIT , {{210,50,50},"cPlaneHit"} },
                                                  { BoxColors::SELECTED_PARTICLE , {{32,165,56},"cSelectedParticle"} },
                                                  { BoxColors::SELECTED_PARTICLE_LABEL , {{10,15,10},"cSelectedParticleLabel"} },
-                                                 { BoxColors::EDIT_SELECTED_PARTICLE , {{150,150,145},"cEditSelectedParticle"} },
+                                                 { BoxColors::EDIT_SELECTED_PARTICLE , {{250,60,65},"cEditSelectedParticle"} },
                                                  { BoxColors::BLUE_PARTICLE , {{0,0,255},"cBlueParticle"} },
                                                  { BoxColors::RED_PARTICLE , {{255,0,0},"cRedParticle"} },
                                                  { BoxColors::NORMAL_PARTICLE , {{255,0,255},"cNormalParticle"} },

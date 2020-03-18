@@ -3,6 +3,19 @@
 #include <QObject>
 #include "qboxpainter.h"
 
+/** @file
+ * @brief Class @ref QBoxEdit
+ */
+
+/**
+ * @class QBoxEdit
+ * @brief Implements visualisation of edit box.
+ *
+ * Paints edit box where some particle quantities can be modified.
+ * @author Tomasz Gburek
+ * @date 2020
+ */
+
 class QBoxEdit : public QBoxPainter
 {
 
@@ -27,6 +40,16 @@ public:
      */
     bool loadStyle( BoxStyles style ) override;
 
+    /**
+     * @brief Sets iterator to edited particle
+     *
+     * @param editedParticle_       particle iterator
+     */
+    void setEditedParticle( std::optional<citerParticle> editedParticle_ )
+    {
+       editedParticle = editedParticle_;
+    }
+
 private:
 
     /**
@@ -38,5 +61,8 @@ private:
      * @brief Inits and calculates QEditBox state.
      */
     void init() override;
+
+    /** Stores constant iterator to edited particle. */
+    std::optional<citerParticle> editedParticle {std::nullopt};
 
 };

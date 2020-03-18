@@ -8,7 +8,7 @@ QPainterManager::QPainterManager( QWidget* parent )
     setAttribute(Qt::WA_TransparentForMouseEvents);
 
     editBox = new QBoxEdit(this);
-    editBox->resize(100,100);
+    editBox->resize(150,150);
     editBox->hide();
 
     boxStyle.colors[BoxColors::BACKGROUND] = QColor(235,235,235);
@@ -18,7 +18,9 @@ QPainterManager::QPainterManager( QWidget* parent )
     setAutoFillBackground(false);
 
     particles = Locator::getParticles();
-    planeArea = Locator::getPlaneArea();    
+    planeArea = Locator::getPlaneArea();
+
+    if( !particles || !planeArea ) throw std::invalid_argument("Particles or planeArea has nullptr");
 
     init();
 }
@@ -34,12 +36,9 @@ bool QPainterManager::loadStyle( BoxStyles style )
 }
 
 void QPainterManager::init()
-{    
-    if( planeArea != nullptr )
-    {
-        boxStyle.values[BoxValues::PLANE_BORDER_WIDTH] = static_cast<int>(planeArea->getPlaneBorderWidth());
-        paintMode[PaintMode::DIVIDER] = planeArea->getPlainDivider().isDividerInPlane();
-    }
+{
+    boxStyle.values[BoxValues::PLANE_BORDER_WIDTH] = static_cast<int>(planeArea->getPlaneBorderWidth());
+    paintMode[PaintMode::DIVIDER] = planeArea->getPlainDivider().isDividerInPlane();
 }
 
 void QPainterManager::paint()
@@ -47,12 +46,11 @@ void QPainterManager::paint()
     painter.translate(0,0);
     painter.save();
 
+    if( paintMode[PaintMode::TRACKING] ) paintTracking();
+
     for( auto particle = particles->cend() ; particle-- != particles->cbegin() ; )
     {
         attachParticleColor(particle);
-
-        if( paintMode[PaintMode::TRACKING] && particle->isTracking ) paintTracking(particle);
-
         paintParticle(particle,particleColor);
 
         if( paintMode[PaintMode::PLANE_HITS] ) paintPlaneHit(particle);
@@ -166,14 +164,26 @@ void QPainterManager::paintParticle( citerParticle particle , const QColor& colo
     painter.drawEllipse(posx-size/2,posy-size/2,size,size);
 }
 
-void QPainterManager::paintTracking( citerParticle particle )
-{
-    int size  {static_cast<int>(particle->radius/2)+1};
+void QPainterManager::paintTracking()
+{   
+    if( trackingParticle == std::nullopt )
+    {
+        for( auto particle = particles->begin() ; particle !=  particles->end() ; ++particle )
+        {
+            if( particle->isTracking )
+            {
+                trackingParticle = particle;
+                break;
+            }
+        }
+    }
+
+    int size  {static_cast<int>(trackingParticle.value()->radius/2)+1};
     int posx  {0};
     int posy  {0};
     int alpha {0};
 
-    for( auto position = --particle->particlePositionsTracking.cend() ; position != particle->particlePositionsTracking.cbegin() ; --position )
+    for( auto position = --trackingParticle.value()->particlePositionsTracking.cend() ; position != trackingParticle.value()->particlePositionsTracking.cbegin() ; --position )
     {
         posx = static_cast<int>(position->x+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]);
         posy = static_cast<int>(position->y+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]);
@@ -202,9 +212,9 @@ void QPainterManager::paintEditParticle()
 
 void QPainterManager::attachParticleColor( citerParticle particle )
 {
-    if( paintMode[PaintMode::TRACKING] && !particle->isTracking )
+    if( ( paintMode[PaintMode::TRACKING] && ( trackingParticle != std::nullopt && trackingParticle.value()!=particle ) ) || paintMode[PaintMode::EDIT] )
     {
-         particleColor = boxStyle.colors[BoxColors::DIM_PARTCILE];
+        particleColor = boxStyle.colors[BoxColors::DIM_PARTCILE];
     }
     else
     {
@@ -276,6 +286,7 @@ void QPainterManager::mousePressEvent( QMouseEvent *event )
         paintMode[PaintMode::EDIT] = true;
         paintMode[PaintMode::PARTICLE_VECTOR] = false;
         adjustBoxEditOrientation();
+        editBox->setEditedParticle(selectedParticle);
         editBox->show();
     }
     if( event->buttons()&Qt::RightButton )

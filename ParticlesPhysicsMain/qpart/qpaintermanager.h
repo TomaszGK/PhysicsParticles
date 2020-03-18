@@ -77,7 +77,10 @@ private:
     QPoint mousePos;
 
     /** Stores constant iterator to selected particle. */
-    std::optional<std::vector<Particle>::const_iterator> selectedParticle {std::nullopt};
+    std::optional<citerParticle> selectedParticle {std::nullopt};
+
+    /** Stores constant iterator to tracking particle. */
+    std::optional<citerParticle> trackingParticle {std::nullopt};
 
     /** Holds shared pointer to constant vector of Particle objects. */
     cptrParticlesContainer particles {nullptr};
@@ -161,11 +164,10 @@ private:
     inline void paintParticle( citerParticle particle , const QColor& color );
 
     /**
-     * @brief Paints trace of a given particle.
-     *
-     * @param particle              a given particle that is tracking
+     * @brief Paints trace of tracking particle @ref trackingParticle.
+     *    
      */
-    void paintTracking( citerParticle particle );
+    void paintTracking();
 
     /**
      * @brief Paints velocity vector and its text value for a given particle.
