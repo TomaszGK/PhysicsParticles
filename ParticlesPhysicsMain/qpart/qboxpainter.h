@@ -97,13 +97,24 @@ protected:
     /**
      * @brief Paints arrow.
      *
-     * @param position              base arrow position
-     * @param direction             arrow direction
+     * @param position              base arrow position vetc2D
+     * @param direction             arrow direction vect2D
      * @param arrowSize             arrow head size
      * @param arrowThick            arrow border thick (pen size)
      * @param arrowColor            arrow color
      */
     void paintArrow( const vect2D& position, const vect2D& direction, const qreal& arrowSize, int arrowThick, const QColor& arrowColor );
+
+    /**
+     * @brief Paints arrow.
+     *
+     * @param position              base arrow position QPoint
+     * @param direction             arrow direction QPoint
+     * @param arrowSize             arrow head size
+     * @param arrowThick            arrow border thick (pen size)
+     * @param arrowColor            arrow color
+     */
+    void paintArrow( const QPoint& position, const QPoint& direction, const qreal& arrowSize, int arrowThick, const QColor& arrowColor );
 
     /**
      * @brief Paints triangle defines by {a,b,c} points.

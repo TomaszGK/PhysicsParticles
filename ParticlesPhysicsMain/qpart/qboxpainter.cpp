@@ -71,6 +71,11 @@ void QBoxPainter::paintArrow( const vect2D& position, const vect2D& direction, c
     painter.drawPolygon(arrowHead);
 }
 
+void QBoxPainter::paintArrow( const QPoint &position, const QPoint &direction, const qreal &arrowSize, int arrowThick, const QColor &arrowColor )
+{
+    paintArrow(vect2D(position.x(),position.y()),vect2D(direction.x(),direction.y()),arrowSize,arrowThick,arrowColor);
+}
+
 void QBoxPainter::paintTriangle( const vect2D &a, const vect2D &b, const vect2D &c, const QColor& color )
 {
     QPainterPath path;

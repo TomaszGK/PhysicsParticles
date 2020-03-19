@@ -7,6 +7,16 @@
  * @brief Class @ref QBoxEdit
  */
 
+
+/** @enum EditBoxPaintMode
+ *  @brief Represents edit box paint mode.
+ */
+enum class EditBoxPaintMode
+{
+   HANDLER_HOVER,  /**< mouse is hover over handler */
+   HANDLER_SELECT  /**< handler is selected */
+};
+
 /**
  * @class QBoxEdit
  * @brief Implements visualisation of edit box.
@@ -45,12 +55,27 @@ public:
      *
      * @param editedParticle_       particle iterator
      */
-    void setEditedParticle( std::optional<citerParticle> editedParticle_ )
-    {
-       editedParticle = editedParticle_;
-    }
+    void setEditedParticle( std::optional<citerParticle> editedParticle_ );
 
-private:
+private:    
+
+    /** map of paint modes for edit box */
+    std::map<EditBoxPaintMode,bool> editBoxPaintMode {
+                                                       { EditBoxPaintMode::HANDLER_HOVER , false },
+                                                       { EditBoxPaintMode::HANDLER_SELECT , false }
+                                                     };
+
+    /** position of handler operating direction of velocity vector */
+    QPoint handlerPosition;
+
+    /** circle origin */
+    QPoint origin;
+
+    /** handler size */
+    int handlerSize {10};
+
+    /** Stores constant iterator to edited particle. */
+    std::optional<citerParticle> editedParticle {std::nullopt};
 
     /**
      * @brief Paints edit box.
@@ -60,9 +85,29 @@ private:
     /**
      * @brief Inits and calculates QEditBox state.
      */
-    void init() override;
+    void init() override;    
 
-    /** Stores constant iterator to edited particle. */
-    std::optional<citerParticle> editedParticle {std::nullopt};
+private slots:
+
+    /**
+     * @brief Mouse move handler.
+     *
+     * @param event                 pointer to mouse event
+     */
+    void mouseMoveEvent( QMouseEvent *event ) override;
+
+    /**
+     * @brief Mouse press button handler.
+     *
+     * @param event                 pointer to mouse event
+     */
+    void mousePressEvent( QMouseEvent *event ) override;
+
+    /**
+     * @brief Mouse realease button handler.
+     *
+     * @param event                 pointer to mouse event
+     */
+    void mouseReleaseEvent( QMouseEvent *event ) override;
 
 };
