@@ -432,7 +432,12 @@ private:
     inline static cptrMapHistogram1D histogram1DMap {nullptr};
 };
 
-
+// C++11 remove iterator constness
+template <typename Container, typename ConstIterator>
+typename Container::iterator remove_constness(Container& c, ConstIterator it)
+{
+    return c.erase(it, it);
+}
 
 // C++14 make_unique
 template<typename T, typename... Args>

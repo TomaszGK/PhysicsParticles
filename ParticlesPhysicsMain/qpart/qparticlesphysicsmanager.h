@@ -38,8 +38,10 @@ enum class ControlType
  * @date 2019
  */
 
-class QParticlesPhysicsManager final : public ParticlesPhysicsManager
+class QParticlesPhysicsManager final : public QObject , public ParticlesPhysicsManager
 {
+
+    Q_OBJECT
 
 public:
 
@@ -49,7 +51,7 @@ public:
      * @param type                  simulation type
      * @param layout                QT layout for the particle plane
      */
-    QParticlesPhysicsManager( SimulationType type, QHBoxLayout* layout );
+    explicit QParticlesPhysicsManager( SimulationType type, QHBoxLayout* layout );
 
     /**
      * @brief Copy constructor is deleted.
@@ -198,5 +200,17 @@ private:
      * @param layout                a given layout for QGauge
      */
     void addQGauge( ActionType type, QHBoxLayout* layout );
+
+
+private slots:
+
+    /**
+     * @brief Handles change of particle position.
+     *
+     * @param particle              particle iteartor
+     * @param newPosition           new particle position
+     */
+    void particlePositionChanged( citerParticle particle , vect2D newPosition );
+
 
 };

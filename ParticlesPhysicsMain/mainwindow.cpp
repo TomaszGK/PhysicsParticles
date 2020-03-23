@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create BASIC simulation [ TAB 0 ]
     simulationTab[0] = SimulationType::BASIC;
-    simulation[SimulationType::BASIC] = std::make_unique<QParticlesPhysicsManager>(SimulationType::BASIC,ui->ParticlesLayout_Tab0);
+    simulation[SimulationType::BASIC] = new QParticlesPhysicsManager(SimulationType::BASIC,ui->ParticlesLayout_Tab0);
     simulation[SimulationType::BASIC]->add( ui->Layout1_Tab0 , BoxType::BARCHART , ActionType::M_VELOCITY , BoxStyles::BAR_CHART1 );
     simulation[SimulationType::BASIC]->add( ui->Layout2_Tab0 , BoxType::BARCHART , ActionType::M_KINETIC ,  BoxStyles::BAR_CHART2 );
     simulation[SimulationType::BASIC]->add( ui->Layout3_Tab0 , BoxType::HISTOGRAM1D , ActionType::M_VELOCITY_DIST );
@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create DIFFIUSION simulation [ TAB 1 ]
     simulationTab[1] = SimulationType::DIFFUSION;
-    simulation[SimulationType::DIFFUSION] = std::make_unique<QParticlesPhysicsManager>(SimulationType::DIFFUSION,ui->ParticlesLayout_Tab1);
+    simulation[SimulationType::DIFFUSION] = new QParticlesPhysicsManager(SimulationType::DIFFUSION,ui->ParticlesLayout_Tab1);
     simulation[SimulationType::DIFFUSION]->add( ui->Layout1_Tab1 , BoxType::BARCHART , ActionType::M_VELOCITY_BLUE , BoxStyles::BAR_CHART3 );
     simulation[SimulationType::DIFFUSION]->add( ui->Layout2_Tab1 , BoxType::BARCHART , ActionType::M_VELOCITY_RED , BoxStyles::BAR_CHART3 );
     simulation[SimulationType::DIFFUSION]->add( ui->Layout3_Tab1 , BoxType::BARDISPLAY , ActionType::M_DIFFIUSION );
@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create BROWNIAN_MOTION simulation [ TAB 2 ]
     simulationTab[2] = SimulationType::BROWNIAN_MOTION;
-    simulation[SimulationType::BROWNIAN_MOTION] = std::make_unique<QParticlesPhysicsManager>(SimulationType::BROWNIAN_MOTION,ui->ParticlesLayout_Tab2);
+    simulation[SimulationType::BROWNIAN_MOTION] = new QParticlesPhysicsManager(SimulationType::BROWNIAN_MOTION,ui->ParticlesLayout_Tab2);
     simulation[SimulationType::BROWNIAN_MOTION]->add( ui->Layout1_Tab2 , BoxType::CIRCLECONTROL , ActionType::C_PARTICLES_FLOW );
     simulation[SimulationType::BROWNIAN_MOTION]->add( ui->Layout2_Tab2 , BoxType::TRACKINGPLOT , ActionType::M_POSITION );
     simulation[SimulationType::BROWNIAN_MOTION]->add( ui->Layout3_Tab2 , BoxType::HISTOGRAM1D , ActionType::M_VELOCITY_DIST );
@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create SANDBOX simulation [ TAB 3 ]
     simulationTab[3] = SimulationType::SANDBOX;
-    simulation[SimulationType::SANDBOX] = std::make_unique<QParticlesPhysicsManager>(SimulationType::SANDBOX,ui->ParticlesLayout_Tab3);
+    simulation[SimulationType::SANDBOX] = new QParticlesPhysicsManager(SimulationType::SANDBOX,ui->ParticlesLayout_Tab3);
     simulation[SimulationType::SANDBOX]->add( ui->Layout1_Tab3 , BoxType::INFODISPLAY , ActionType::D_TEMPERATURE );
     simulation[SimulationType::SANDBOX]->add( ui->Layout2_Tab3 , BoxType::HISTOGRAM1D , ActionType::M_VELOCITY_DIST );
     simulation[SimulationType::SANDBOX]->add( ui->Layout3_Tab3 , BoxType::HISTOGRAM1D , ActionType::M_MOMENTUM_DIST );

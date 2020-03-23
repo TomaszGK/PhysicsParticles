@@ -278,15 +278,6 @@ bool ParticlesPhysicsManager::setNumberOfParticlesInPlane( ParticleType particle
     return ( analyzer->simulationInfo.numberOfParticles[particleType] < quantity ) ? addParticles( particleType, visualizationType, diff, analyzer->simulationInfo.particleSize[particleType] ) : removeParticles( particleType , diff );
 }
 
-bool ParticlesPhysicsManager::setParticlePosition( const iterParticle particle , vect2D position )
-{
-    if( calculationState.load() == ThreadCalculationState::RUNNING ) return false;
-    if( isParticleInPlane(particle) && isParticlesOverlap(particle->position,particle->radius) ) return false;
-
-    particle->position = position;
-    return true;
-}
-
 void ParticlesPhysicsManager::setParticleSize( ParticleType type, DataFormat format, int quantity )
 {
     Ensures( quantity>=0 && quantity<=100 );
@@ -408,12 +399,12 @@ void ParticlesPhysicsManager::preserveParticleInPlane( const iterParticle partic
     else if( particle->position.y+particle->radius>=planeArea->getHeight() ) particle->position.y = static_cast<double>(planeArea->getHeight())-particle->radius-1;
 }
 
-bool ParticlesPhysicsManager::isParticleInPlane( const iterParticle particle )
+bool ParticlesPhysicsManager::isParticleInPlane( const vect2D& position , double radius ) const
 {
-    return ( particle->position.x-particle->radius<=0 ||
-             particle->position.x+particle->radius>=planeArea->getWidth() ||
-             particle->position.y-particle->radius<=0 ||
-             particle->position.y+particle->radius>=planeArea->getHeight()   ) ? false:true;
+    return ( position.x-radius<=0 ||
+             position.x+radius>=planeArea->getWidth() ||
+             position.y-radius<=0 ||
+             position.y+radius>=planeArea->getHeight()   ) ? false:true;
 }
 
 void ParticlesPhysicsManager::removeParticlesFromClusters()
@@ -630,6 +621,21 @@ vect2D ParticlesPhysicsManager::getDisjointRandomParticlePositionTries( double m
     return position;
 }
 
+bool ParticlesPhysicsManager::setParticlePosition( const iterParticle particle , const vect2D& position )
+{
+    if( calculationState.load() == ThreadCalculationState::RUNNING || !isValidParticlePosition(particle,position) ) return false;
+
+    particle->position = position;
+    handleParticleClusterTransition(particle);
+
+    return true;
+}
+
+bool ParticlesPhysicsManager::isValidParticlePosition( citerParticle particle , const vect2D& position ) const
+{
+    return ( !isParticleInPlane(position,particle->radius) || isParticlesOverlap(particle,position) ) ? false:true;
+}
+
 void ParticlesPhysicsManager::handleParticleClusterTransition( const iterParticle particle )
 {
     auto iterCurrent = getClusterIter(static_cast<size_t>(particle->position.x),static_cast<size_t>(particle->position.y));
@@ -824,6 +830,23 @@ bool ParticlesPhysicsManager::isParticlesOverlap( const vect2D& particlePosition
         {
             distance = (particlePosition-particle->position)();
             if( distance<(radius+particle->radius+2) ) return true;
+        }
+    }
+
+    return false;
+}
+
+bool ParticlesPhysicsManager::isParticlesOverlap( const citerParticle particle , const vect2D& newPosition ) const
+{
+    double distance {0};
+
+    for( auto &cluster : *particle->cluster->getAdjoinClusters() )
+    {
+        for( auto &otherParticle : *cluster->getParticlesInCluster() )
+        {
+            if( particle == otherParticle ) continue;
+            distance = (newPosition-otherParticle->position)();
+            if( distance<(particle->radius+otherParticle->radius) ) return true;
         }
     }
 

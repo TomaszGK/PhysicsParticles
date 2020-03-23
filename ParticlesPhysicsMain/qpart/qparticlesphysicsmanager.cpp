@@ -1,10 +1,12 @@
 #include "qparticlesphysicsmanager.h"
 
 QParticlesPhysicsManager::QParticlesPhysicsManager( SimulationType type, QHBoxLayout* layout )
-: ParticlesPhysicsManager(type,layout->parentWidget()->width(),layout->parentWidget()->height() )
+: QObject {layout}, ParticlesPhysicsManager(type,layout->parentWidget()->width(),layout->parentWidget()->height() )
 {
     particlesPaintManager = new QPainterManager();
     layout->addWidget( particlesPaintManager );
+
+    connect(particlesPaintManager,&QPainterManager::particlePositionChanged,this,&QParticlesPhysicsManager::particlePositionChanged);
 }
 
 void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, ActionType actionType, BoxStyles style )
@@ -117,4 +119,9 @@ void QParticlesPhysicsManager::handleControls()
             setForce(forceIn);
         }
     }
+}
+
+void QParticlesPhysicsManager::particlePositionChanged( citerParticle particle , vect2D newPosition )
+{
+   setParticlePosition(remove_constness(*particles,particle),newPosition);
 }

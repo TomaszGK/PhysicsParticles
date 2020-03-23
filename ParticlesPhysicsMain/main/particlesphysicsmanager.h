@@ -76,19 +76,6 @@ public:
      */
     bool setNumberOfParticlesInPlane( ParticleType particleType, DataFormat format, int quantity );
 
-    /**
-     * @brief Tries to set a new particle position.
-     *
-     * Sets a given particle position only if
-     * (1) a new position does not overlap with others particle positions
-     * (2) a new position is place inside plane boundries
-     * (3) simulation is not running
-     * @param particle              particle iterator
-     * @param position              particle new position
-     * @return true if success otherwise false
-     */
-    bool setParticlePosition( const iterParticle particle , vect2D position );
-
     /** Updates all bar charts and displays, adds new physics values to chart boxes */
     void updateBars();
 
@@ -503,6 +490,30 @@ protected:
      */
     vect2D getDisjointRandomParticlePositionTries( double minx, double maxx, double miny, double maxy, double radius, int tries );
 
+    /**
+     * @brief Tries to set a new particle position.
+     *
+     * Sets a given particle position only if
+     * (1) a new position does not overlap with others particle positions
+     * (2) a new position is place inside plane boundries
+     * (3) simulation is not running
+     * @param particle              iterator to particle
+     * @param position              particle new position
+     * @return true if success otherwise false
+     */
+    bool setParticlePosition( const iterParticle particle , const vect2D& position );
+
+    /**
+     * @brief Checks if a new particle position is valid.
+     *
+     * Checks if a new particle positis is inside particle plane
+     * and if is not overlaped with others particles.
+     * @param particle              particle iterator
+     * @param position              particle new position
+     * @return true if success otherwise false
+     */
+    bool isValidParticlePosition( citerParticle particle , const vect2D& position ) const;
+
     /** @brief Handles particle transition between clusters.
      *
      * Checks if particle have been transfered between clusters,
@@ -538,7 +549,7 @@ protected:
     template< SimulationType type >
     double handleParticleCollisionWithPlaneBoundries( const iterParticle particle );
 
-    /** @brief Checks if particle overlaped with others.
+    /** @brief Checks if particle is overlaped with others.
      *
      * Checks if particle defined by position and radius is overlaped with other particles.
      * @param particlePosition    position of particle
@@ -546,6 +557,15 @@ protected:
      * @return true if overlap
      */
     bool isParticlesOverlap( const vect2D& particlePosition, double radius );
+
+    /** @brief Checks if particle is overlaped with others.
+     *
+     * Checks if particle is overlaped with other particles.
+     * @param particle            particle iterator
+     * @param newPosition         particle new position
+     * @return true if overlap
+     */
+    bool isParticlesOverlap( const citerParticle particle , const vect2D& newPosition ) const;
 
     /** @brief Checks if particle type is gas.
      *
@@ -635,12 +655,13 @@ protected:
      */
     void preserveParticleInPlane( const iterParticle particle );
 
-    /** @brief Checks if particle position is inside plane.
+    /** @brief Checks if a given particle position is inside plane.
      *
-     * @param particle              iterator to particle
+     * @param position              particle position
+     * @param radius                particle radius
      * @return true if position is inside plane boundries, otherwise false
      */
-    bool isParticleInPlane( const iterParticle particle );
+    bool isParticleInPlane( const vect2D& position , double radius ) const;
 
     /** Removes all particles from all clusters */
     void removeParticlesFromClusters();

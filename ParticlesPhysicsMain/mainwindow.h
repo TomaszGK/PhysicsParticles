@@ -134,7 +134,7 @@ private:
 
     DialogAbout dialogAboutWindow;
 
-    std::map<SimulationType,std::unique_ptr<QParticlesPhysicsManager>> simulation;
+    std::map<SimulationType,QPointer<QParticlesPhysicsManager>> simulation;
     std::map<int,SimulationType> simulationTab;
 
     QTimer paintTimer;

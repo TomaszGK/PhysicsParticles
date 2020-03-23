@@ -76,6 +76,9 @@ private:
     /**< mouse current position */
     QPoint mousePos;
 
+    /**< particle shift from the center */
+    vect2D particleShift;
+
     /** Stores constant iterator to selected particle. */
     std::optional<citerParticle> selectedParticle {std::nullopt};
 
@@ -234,6 +237,16 @@ private slots:
      *
      * @param event                 pointer to event
      */
-    void leaveEvent( QEvent *event ) override;    
+    void leaveEvent( QEvent *event ) override;
+
+signals:
+
+    /**
+     * @brief Signal emitted when particle position has changed.
+     *
+     * @param particle              particle iteartor
+     * @param newPosition           new particle position
+     */
+    void particlePositionChanged( citerParticle particle , vect2D newPosition );
 
 };

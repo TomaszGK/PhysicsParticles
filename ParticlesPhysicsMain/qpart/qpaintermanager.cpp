@@ -236,6 +236,7 @@ bool QPainterManager::setOverlapParticle( const QPointF& moseposition )
         if( abs(position.x-moseposition.x())<particle->radius && abs(position.y-moseposition.y())<particle->radius )
         {
             selectedParticle = particle;
+            particleShift.set( moseposition.x() - selectedParticle.value()->position.x , moseposition.y() - selectedParticle.value()->position.y );
             return true;
         }
     }
@@ -273,8 +274,16 @@ void QPainterManager::adjustBoxEditOrientation()
 
 void QPainterManager::mouseMoveEvent( QMouseEvent *event )
 {
-    if( paintMode[PaintMode::EDIT] ) return;
-    paintMode[PaintMode::PARTICLE_VECTOR] = setOverlapParticle(event->localPos());
+    if( paintMode[PaintMode::EDIT] )
+    {
+        if( !selectedParticle ) return;
+        if( event->buttons()&Qt::LeftButton )
+        {
+           vect2D newPosition {event->localPos().x()-particleShift.x,event->localPos().y()-particleShift.y};
+           particlePositionChanged( selectedParticle.value() , newPosition );
+        }
+    }
+    else paintMode[PaintMode::PARTICLE_VECTOR] = setOverlapParticle(event->localPos());
 }
 
 void QPainterManager::mousePressEvent( QMouseEvent *event )
@@ -285,7 +294,7 @@ void QPainterManager::mousePressEvent( QMouseEvent *event )
     {
         paintMode[PaintMode::EDIT] = true;
         paintMode[PaintMode::PARTICLE_VECTOR] = false;
-        adjustBoxEditOrientation();
+        adjustBoxEditOrientation();        
         editBox->setEditedParticle(selectedParticle);
         editBox->show();
     }
