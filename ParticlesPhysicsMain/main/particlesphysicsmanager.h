@@ -504,6 +504,16 @@ protected:
     bool setParticlePosition( const iterParticle particle , const vect2D& position );
 
     /**
+     * @brief Sets a new particle velocity.
+     *
+     * Sets a given particle velocity only if simulation is not running
+     * @param particle              iterator to particle
+     * @param velocity              particle new velocity
+     * @return true if success otherwise false
+     */
+    bool setParticleVelocity( const iterParticle particle , const vect2D& velocity );
+
+    /**
      * @brief Checks if a new particle position is valid.
      *
      * Checks if a new particle positis is inside particle plane

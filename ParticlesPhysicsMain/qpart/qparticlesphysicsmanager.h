@@ -212,5 +212,12 @@ private slots:
      */
     void particlePositionChanged( citerParticle particle , vect2D newPosition );
 
+    /**
+     * @brief Handles change of particle velocity.
+     *
+     * @param particle              particle iteartor
+     * @param newVelocity           new particle velocity
+     */
+    void particleVelocityChanged( citerParticle particle , vect2D newVelocity );
 
 };

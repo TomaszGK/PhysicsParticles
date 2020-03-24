@@ -455,7 +455,7 @@ void MainWindow::on_visualizationTypeVelocityRadioButtonTab2_toggled( bool check
 void MainWindow::on_attractionForceTab2_valueChanged( int value )
 {
     simulation[SimulationType::SANDBOX]->setAttractionForceInPercent( value );
-    ui->atractionForceSizeLabelTab2->setText(QString::number(value));
+    ui->atractionForceSizeLabelTab2->setText( QString::number(value) );
 }
 
 void MainWindow::on_runButtonTab4_clicked()

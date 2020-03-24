@@ -7,8 +7,7 @@ QPainterManager::QPainterManager( QWidget* parent )
     setMouseTracking(true);
     setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    editBox = new QBoxEdit(this);
-    editBox->resize(150,150);
+    editBox = new QBoxEdit(this);    
     editBox->hide();
 
     boxStyle.colors[BoxColors::BACKGROUND] = QColor(235,235,235);
@@ -62,7 +61,11 @@ void QPainterManager::paint()
     if( !testAttribute(Qt::WA_TransparentForMouseEvents) )
     {
         if( paintMode[PaintMode::PARTICLE_VECTOR] ) paintParticleVelocityVector(selectedParticle.value());
-        if( paintMode[PaintMode::EDIT] ) paintEditParticle();
+        if( paintMode[PaintMode::EDIT] )
+        {
+            paintEditParticle();
+            adjustBoxEditOrientation();
+        }
     }
 
     painter.restore();
@@ -272,16 +275,17 @@ void QPainterManager::adjustBoxEditOrientation()
     editBox->move(posx,posy);
 }
 
+void QPainterManager::tryChangeParticlePosition( QPointF newPosition )
+{
+    if( !selectedParticle ) return;
+    particlePositionChanged( selectedParticle.value() , {newPosition.x()-particleShift.x,newPosition.y()-particleShift.y} );
+}
+
 void QPainterManager::mouseMoveEvent( QMouseEvent *event )
 {
     if( paintMode[PaintMode::EDIT] )
-    {
-        if( !selectedParticle ) return;
-        if( event->buttons()&Qt::LeftButton )
-        {
-           vect2D newPosition {event->localPos().x()-particleShift.x,event->localPos().y()-particleShift.y};
-           particlePositionChanged( selectedParticle.value() , newPosition );
-        }
+    {        
+        if( event->buttons()&Qt::LeftButton ) tryChangeParticlePosition( event->localPos() );
     }
     else paintMode[PaintMode::PARTICLE_VECTOR] = setOverlapParticle(event->localPos());
 }
@@ -290,13 +294,19 @@ void QPainterManager::mousePressEvent( QMouseEvent *event )
 {
     if( paintMode[PaintMode::TRACKING] ) return;
 
-    if( event->buttons()&Qt::LeftButton && setOverlapParticle(event->localPos()) )
+    if( event->buttons()&Qt::LeftButton )
     {
-        paintMode[PaintMode::EDIT] = true;
-        paintMode[PaintMode::PARTICLE_VECTOR] = false;
-        adjustBoxEditOrientation();        
-        editBox->setEditedParticle(selectedParticle);
-        editBox->show();
+        if( setOverlapParticle(event->localPos()) )
+        {
+            paintMode[PaintMode::EDIT] = true;
+            paintMode[PaintMode::PARTICLE_VECTOR] = false;
+            editBox->setEditedParticle(selectedParticle);
+            editBox->show();
+        }
+        else
+        {
+            if( paintMode[PaintMode::EDIT] ) tryChangeParticlePosition( event->localPos() );
+        }
     }
     if( event->buttons()&Qt::RightButton )
     {

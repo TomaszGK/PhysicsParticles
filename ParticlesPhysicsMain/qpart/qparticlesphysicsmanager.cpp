@@ -7,6 +7,7 @@ QParticlesPhysicsManager::QParticlesPhysicsManager( SimulationType type, QHBoxLa
     layout->addWidget( particlesPaintManager );
 
     connect(particlesPaintManager,&QPainterManager::particlePositionChanged,this,&QParticlesPhysicsManager::particlePositionChanged);
+    connect(particlesPaintManager->findChild<QBoxEdit*>("EditBox"),&QBoxEdit::particleVelocityChanged,this,&QParticlesPhysicsManager::particleVelocityChanged);
 }
 
 void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, ActionType actionType, BoxStyles style )
@@ -123,5 +124,10 @@ void QParticlesPhysicsManager::handleControls()
 
 void QParticlesPhysicsManager::particlePositionChanged( citerParticle particle , vect2D newPosition )
 {
-   setParticlePosition(remove_constness(*particles,particle),newPosition);
+    setParticlePosition(remove_constness(*particles,particle),newPosition);
+}
+
+void QParticlesPhysicsManager::particleVelocityChanged( citerParticle particle , vect2D newVelocity )
+{
+    setParticleVelocity(remove_constness(*particles,particle),newVelocity);
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QSlider>
 #include "qboxpainter.h"
 
 /** @file
@@ -59,6 +60,9 @@ public:
 
 private:    
 
+    /** slider to set velocity magnitude */
+    QPointer<QSlider> velocityMagnitude;
+
     /** map of paint modes for edit box */
     std::map<EditBoxPaintMode,bool> editBoxPaintMode {
                                                        { EditBoxPaintMode::HANDLER_HOVER , false },
@@ -109,5 +113,22 @@ private slots:
      * @param event                 pointer to mouse event
      */
     void mouseReleaseEvent( QMouseEvent *event ) override;
+
+    /**
+     * @brief Handles value changed signal from velocityMagnitude slider
+     *
+     * @param value                 new value
+     */
+    void on_velocityMagnitude_valueChanged( int value );
+
+signals:
+
+    /**
+     * @brief Signal emitted when particle velocity has changed.
+     *
+     * @param particle              particle iteartor
+     * @param newVelocity           new particle velocity
+     */
+    void particleVelocityChanged( citerParticle particle , vect2D newVelocity );
 
 };

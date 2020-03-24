@@ -209,6 +209,13 @@ private:
      */
     void adjustBoxEditOrientation();
 
+    /**
+     * @brief Tries to change particle position.
+     *
+     * @param newPosition           new particle position
+     */
+    void tryChangeParticlePosition( QPointF newPosition );
+
 private slots:
 
     /**

@@ -631,6 +631,14 @@ bool ParticlesPhysicsManager::setParticlePosition( const iterParticle particle ,
     return true;
 }
 
+bool ParticlesPhysicsManager::setParticleVelocity( const iterParticle particle , const vect2D& velocity )
+{
+    if( calculationState.load() == ThreadCalculationState::RUNNING ) return false;
+
+    particle->velocity = velocity;
+    return true;
+}
+
 bool ParticlesPhysicsManager::isValidParticlePosition( citerParticle particle , const vect2D& position ) const
 {
     return ( !isParticleInPlane(position,particle->radius) || isParticlesOverlap(particle,position) ) ? false:true;
