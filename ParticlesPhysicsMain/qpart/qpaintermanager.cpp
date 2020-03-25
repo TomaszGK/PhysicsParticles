@@ -90,11 +90,11 @@ void QPainterManager::paintConstraintArrows()
 {
     vect2D position  { -150 , static_cast<double>(height()/2) };
     vect2D direction { 150 + static_cast<double>(planeArea->getXConstraint()) , 0 };
-    paintArrow( position , direction , 50 , 15 , boxStyle.colors[BoxColors::CONSTRAINT_ARROW] );
+    paintArrow( position , direction , boxStyle.colors[BoxColors::CONSTRAINT_ARROW] , {50,50,15} );
 
     position.set( static_cast<double>(width()) + 150 , static_cast<double>(height()/2) );
     direction.set( (-1)*(150 + static_cast<double>(planeArea->getXConstraint())) , 0 );
-    paintArrow( position , direction , 50 , 15 , boxStyle.colors[BoxColors::CONSTRAINT_ARROW] );
+    paintArrow( position , direction , boxStyle.colors[BoxColors::CONSTRAINT_ARROW] , {50,50,15} );
 }
 
 void QPainterManager::paintPlaneDivider()
@@ -201,7 +201,7 @@ void QPainterManager::paintParticleVelocityVector( citerParticle particle )
     auto position = particle->position + vect2D(boxStyle.values[BoxValues::PLANE_BORDER_WIDTH],boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]);
     auto normVelocity = static_cast<int>(100*particle->velocity());
 
-    paintArrow( position + particle->velocity.getVectorOfLength(particle->radius) , particle->velocity.getVectorOfLength(100) , 25 , 6 , boxStyle.colors[BoxColors::SELECTED_PARTICLE] );
+    paintArrow( position + particle->velocity.getVectorOfLength(particle->radius) , particle->velocity.getVectorOfLength(100) , boxStyle.colors[BoxColors::SELECTED_PARTICLE] , {25,25,6} );
     paintParticle( static_cast<int>(position.x) , static_cast<int>(position.y) , 40 , boxStyle.colors[BoxColors::SELECTED_PARTICLE] );
     painter.setPen( boxStyle.colors[BoxColors::SELECTED_PARTICLE_LABEL] );
     painter.drawText(static_cast<int>(position.x)-QFontMetrics(this->font()).horizontalAdvance(QString::number(normVelocity))/2,static_cast<int>(position.y)+5,QString::number(normVelocity));
@@ -269,7 +269,7 @@ void QPainterManager::adjustBoxEditOrientation()
     }
     else
     {
-        posy -= (selectedParticle.value()->size/2+editBox->height());
+        posy -= (editBox->height()-selectedParticle.value()->size/2);
     }
 
     editBox->move(posx,posy);

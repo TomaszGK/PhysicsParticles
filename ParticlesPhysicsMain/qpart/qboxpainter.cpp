@@ -48,32 +48,28 @@ void QBoxPainter::paintAxes()
     }
 }
 
-void QBoxPainter::paintArrow( const vect2D& position, const vect2D& direction, const qreal& arrowSize, int arrowThick, const QColor& arrowColor )
+void QBoxPainter::paintArrow( const vect2D& position, const vect2D& direction, const QColor& arrowColor, const ArrowShapeParameters& parameters )
 {
     QPolygonF arrowHead;
 
-    painter.setPen(QPen(QBrush(arrowColor),arrowThick));
+    painter.setPen(QPen(QBrush(arrowColor),parameters.arrowThick));
     painter.setBrush(QBrush(arrowColor));
 
-    vect2D directionCut = direction.getVectorOfLength( direction()-arrowSize );
+    vect2D directionCut = direction.getVectorOfLength( direction()-parameters.headLength );
 
-    QPointF end { position.x+direction.x , position.y+direction.y };
-    QLineF line { position.x+directionCut.x , position.y+directionCut.y , position.x , position.y };
+    vect2D side = (!direction).getVectorOfLength(parameters.headThick/2);
+    vect2D h { position.x+directionCut.x , position.y+directionCut.y };
 
-    double angle = std::atan2(-line.dy(), line.dx());
+    arrowHead << QPointF(position.x+direction.x,position.y+direction.y) << QPointF(h.x,h.y) + QPointF(side.x,side.y) << QPointF(h.x,h.y) - QPointF(side.x,side.y);
 
-    QPointF arrowP1 = end + QPointF(sin(angle + M_PI / 3) * arrowSize, cos(angle + M_PI / 3) * arrowSize);
-    QPointF arrowP2 = end + QPointF(sin(angle + M_PI - M_PI / 3) * arrowSize, cos(angle + M_PI - M_PI / 3) * arrowSize);
-
-    arrowHead << end << arrowP1 << arrowP2;
-    painter.drawLine(line);
-    painter.setPen(QPen(QBrush(arrowColor),3));
+    painter.drawLine(QLineF(position.x+directionCut.x,position.y+directionCut.y,position.x,position.y));
+    painter.setPen(QPen(QBrush(arrowColor),2));
     painter.drawPolygon(arrowHead);
 }
 
-void QBoxPainter::paintArrow( const QPoint &position, const QPoint &direction, const qreal &arrowSize, int arrowThick, const QColor &arrowColor )
+void QBoxPainter::paintArrow( const QPoint &position, const QPoint &direction, const QColor& arrowColor, const ArrowShapeParameters& parameters )
 {
-    paintArrow(vect2D(position.x(),position.y()),vect2D(direction.x(),direction.y()),arrowSize,arrowThick,arrowColor);
+    paintArrow(vect2D(position.x(),position.y()),vect2D(direction.x(),direction.y()),arrowColor,parameters);
 }
 
 void QBoxPainter::paintTriangle( const vect2D &a, const vect2D &b, const vect2D &c, const QColor& color )

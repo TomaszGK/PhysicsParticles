@@ -53,13 +53,14 @@ void QBoxEdit::paint()
     painter.setPen(boxStyle.colors[BoxColors::BIG_CIRCLE_PEN]);
     painter.drawEllipse( origin , width()/2-2*handlerSize , width()/2-2*handlerSize );
 
-    paintArrow( vect2D(origin.x(),origin.y()) , editedParticle.value()->velocity.getVectorOfLength(width()/2-3*handlerSize) , 20 , 5 , boxStyle.colors[BoxColors::SELECTED_PARTICLE] );
+    paintArrow( vect2D(origin.x(),origin.y()) , editedParticle.value()->velocity.getVectorOfLength(width()/2-3*handlerSize) , boxStyle.colors[BoxColors::SELECTED_PARTICLE] , {20,15,5} );
 
     painter.setBrush(QBrush(boxStyle.colors[BoxColors::SELECTED_PARTICLE]));
-    painter.drawEllipse( origin , 5,5 );
+    painter.drawEllipse( origin , 4,4 );
 
-    if( editBoxPaintMode[EditBoxPaintMode::HANDLER_HOVER] ) painter.setBrush(QColor(50,50,195));
-    else painter.setBrush(QColor(10,10,105));
+    if( editBoxPaintMode[EditBoxPaintMode::HANDLER_HOVER] ) painter.setBrush(QColor(10,10,105));
+    else painter.setBrush(QColor(80,80,230));
+
     painter.setPen(QColor(50,50,195));
     painter.drawEllipse( handlerPosition, handlerSize,handlerSize );
 

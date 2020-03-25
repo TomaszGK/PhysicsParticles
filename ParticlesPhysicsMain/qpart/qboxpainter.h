@@ -11,6 +11,17 @@
  * @brief Class @ref QBoxPainter
  */
 
+/** @struct ArrowShapeParameters
+ *  @brief Defines basic arrow shape parameters
+ */
+struct ArrowShapeParameters
+{
+    int headLength {20}; /**< arrow head length */
+    int headThick  {20}; /**< arrow head thick */
+    int arrowThick  {5}; /**< arrow thick */
+};
+
+
 /**
  * @class QBoxPainter
  * @brief Base class for all box painters.
@@ -99,22 +110,20 @@ protected:
      *
      * @param position              base arrow position vetc2D
      * @param direction             arrow direction vect2D
-     * @param arrowSize             arrow head size
-     * @param arrowThick            arrow border thick (pen size)
      * @param arrowColor            arrow color
+     * @param parameters            arrow shape parameters
      */
-    void paintArrow( const vect2D& position, const vect2D& direction, const qreal& arrowSize, int arrowThick, const QColor& arrowColor );
+    void paintArrow( const vect2D& position, const vect2D& direction, const QColor& arrowColor, const ArrowShapeParameters& parameters = {} );
 
     /**
      * @brief Paints arrow.
      *
      * @param position              base arrow position QPoint
      * @param direction             arrow direction QPoint
-     * @param arrowSize             arrow head size
-     * @param arrowThick            arrow border thick (pen size)
      * @param arrowColor            arrow color
+     * @param parameters            arrow shape parameters
      */
-    void paintArrow( const QPoint& position, const QPoint& direction, const qreal& arrowSize, int arrowThick, const QColor& arrowColor );
+    void paintArrow( const QPoint& position, const QPoint& direction, const QColor& arrowColor, const ArrowShapeParameters& parameters = {} );
 
     /**
      * @brief Paints triangle defines by {a,b,c} points.
