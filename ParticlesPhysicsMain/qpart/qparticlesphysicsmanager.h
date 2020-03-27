@@ -176,6 +176,22 @@ public:
         (*particlesPaintManager)[PaintMode::PLANE_HITS] = value;
     }
 
+    /**
+     * @brief Saves current state of particle plane to a given file name.
+     *
+     * Saves main state of particles ( e.g. positions and velocities ), plane temperatures and force values.
+     * @param filename               file name
+     */
+    void saveState( QString filename );
+
+    /**
+     * @brief Loads current state of particle plane from a given file name.
+     *
+     * Loads main state of particles ( e.g. positions and velocities ), plane temperatures and force values.
+     * @param filename               file name
+     */
+    void loadState( QString filename );
+
 private:
 
     /** Holds QPainterManager object. */

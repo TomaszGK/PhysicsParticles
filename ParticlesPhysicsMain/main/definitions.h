@@ -62,7 +62,7 @@ enum class ParticleType
 };
 
 /** @enum PlanePart
- *  @brief Representing some part of particle plane
+ *  @brief Representing part of the particle plane
  */
 enum class PlanePart
 {

@@ -395,7 +395,7 @@ void MainWindow::on_pauseButtonTab2_clicked()
 {
     simulation[SimulationType::SANDBOX]->pause(true);
     ui->pauseButtonTab2->setEnabled(false);
-    ui->runButtonTab2->setEnabled(true);
+    ui->runButtonTab2->setEnabled(true);    
 }
 
 void MainWindow::on_blueParticlesSliderTab2_valueChanged( int value )
@@ -469,7 +469,7 @@ void MainWindow::on_pauseButtonTab4_clicked()
 {
     simulation[SimulationType::BROWNIAN_MOTION]->pause(true);
     ui->pauseButtonTab4->setEnabled(false);
-    ui->runButtonTab4->setEnabled(true);
+    ui->runButtonTab4->setEnabled(true);    
 }
 
 void MainWindow::on_massMoleculeSliderTab4_valueChanged( int value )

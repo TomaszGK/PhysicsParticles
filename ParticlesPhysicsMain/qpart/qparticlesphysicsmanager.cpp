@@ -122,6 +122,84 @@ void QParticlesPhysicsManager::handleControls()
     }
 }
 
+void QParticlesPhysicsManager::saveState( QString filename )
+{
+    QDir pathDir {qApp->applicationDirPath()+"/templates/"};
+    QString filepath {};
+
+    filepath = pathDir.exists()?pathDir.path()+"/":"D:/Programming/GitHub/Qt/ParticlesPhysics/ParticlesPhysicsMain/templates/";
+    filepath += filename+QStringLiteral(".json");
+
+    QFile file {filepath};
+
+    if( !file.open(QIODevice::WriteOnly) )
+    {
+       qWarning("Couldn't open save file");
+       return;
+    }
+
+    QJsonObject jsonMain;
+
+    jsonMain["temperatureUP"] = getTemperature( PlanePart::UP , DataFormat::SCALAR );
+    jsonMain["temperatureDown"] = getTemperature( PlanePart::DOWN , DataFormat::SCALAR );
+    jsonMain["temperatureLeft"] = getTemperature( PlanePart::LEFT , DataFormat::SCALAR );
+    jsonMain["temperatureRight"] = getTemperature( PlanePart::RIGHT , DataFormat::SCALAR );
+
+    jsonMain["verticalForce"] = getForce( Axis::VERTICAL , DataFormat::SCALAR );
+    jsonMain["horizontalForce"] = getForce( Axis::HORIZONTAL , DataFormat::SCALAR );
+    jsonMain["attractionForce"] = analyzer->physicsInfo.attractionForce;
+
+    QJsonArray jsonArray;
+    for( const auto& particle : *particles )
+    {
+       QJsonObject jsonParticle;
+
+       jsonParticle["positionX"] = particle.position.x;
+       jsonParticle["positionY"] = particle.position.y;
+       jsonParticle["velocityX"] = particle.velocity.x;
+       jsonParticle["velocityY"] = particle.velocity.y;
+       jsonParticle["radius"] = particle.radius;
+       jsonParticle["type"] = static_cast<int>(particle.particleType);
+
+       jsonArray.append(jsonParticle);
+    }
+
+    jsonMain["Particles"] = jsonArray;
+    QJsonDocument saveDoc(jsonMain);
+    file.write(saveDoc.toJson());
+}
+
+void QParticlesPhysicsManager::loadState( QString filename )
+{
+    QDir pathDir {qApp->applicationDirPath()+"/templates/"};
+    QString filepath {};
+
+    filepath = pathDir.exists()?pathDir.path()+"/":"D:/Programming/GitHub/Qt/ParticlesPhysics/ParticlesPhysicsMain/templates/";
+    filepath += filename;
+
+    QFile file {filepath};
+
+    if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
+    {
+        qDebug() << "Wrong file name\n";
+        return;
+    }
+
+    QJsonDocument loadDoc( QJsonDocument::fromJson(file.readAll()) );
+    auto jsonMain = loadDoc.object();
+
+    setTemperature( PlanePart::UP , DataFormat::SCALAR , jsonMain["temperatureUP"].toDouble() );
+    setTemperature( PlanePart::DOWN , DataFormat::SCALAR , jsonMain["temperatureDOWN"].toDouble() );
+    setTemperature( PlanePart::LEFT , DataFormat::SCALAR , jsonMain["temperatureLEFT"].toDouble() );
+    setTemperature( PlanePart::RIGHT , DataFormat::SCALAR , jsonMain["temperatureRIGHT"].toDouble() );
+
+    setForce( Axis::VERTICAL , DataFormat::SCALAR , jsonMain["verticalForce"].toDouble() );
+    setForce( Axis::HORIZONTAL , DataFormat::SCALAR , jsonMain["horizontalForce"].toDouble() );
+    analyzer->physicsInfo.attractionForce = jsonMain["attractionForce"].toDouble();
+
+    QJsonArray jsonArray = jsonMain["Particles"].toArray();
+}
+
 void QParticlesPhysicsManager::particlePositionChanged( citerParticle particle , vect2D newPosition )
 {
     setParticlePosition(remove_constness(*particles,particle),newPosition);
