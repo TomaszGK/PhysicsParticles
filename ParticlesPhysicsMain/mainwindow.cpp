@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <thread>
 #include <QRandomGenerator>
+#include <QFileSystemModel>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -68,6 +69,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->blueParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS1,DataFormat::PERCENT));
     ui->redParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS2,DataFormat::PERCENT));
     ui->greenParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS3,DataFormat::PERCENT));
+
+
+    QDir pathDir {qApp->applicationDirPath()+"/templates/"};
+    QString filepath {pathDir.exists()?pathDir.path()+"/":"D:/Programming/GitHub/Qt/ParticlesPhysics/ParticlesPhysicsMain/templates/"};
+    QFileSystemModel *model = new QFileSystemModel;
+    model->setRootPath(filepath);
+    ui->listViewTemplates_tab3->setModel(model);
+    ui->listViewTemplates_tab3->setRootIndex(model->index(filepath));
 
     // connect menu actions
     connect( ui->actionAbout, &QAction::triggered, this, &MainWindow::about_action );
