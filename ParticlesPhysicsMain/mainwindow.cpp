@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowState(Qt::WindowMaximized);
 
     // create BASIC simulation [ TAB 0 ]
-    simulationTab[0] = SimulationType::BASIC;
+    simulationTab[0] = SimulationType::BASIC;   
     simulation[SimulationType::BASIC] = new QParticlesPhysicsManager(SimulationType::BASIC,ui->ParticlesLayout_Tab0);
     simulation[SimulationType::BASIC]->add( ui->Layout1_Tab0 , BoxType::BARCHART , ActionType::M_VELOCITY , BoxStyles::BAR_CHART1 );
     simulation[SimulationType::BASIC]->add( ui->Layout2_Tab0 , BoxType::BARCHART , ActionType::M_KINETIC ,  BoxStyles::BAR_CHART2 );
@@ -70,13 +70,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->redParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS2,DataFormat::PERCENT));
     ui->greenParticlesSizeSliderTab2->setValue(simulation[SimulationType::SANDBOX]->getParticleSize(ParticleType::GAS3,DataFormat::PERCENT));
 
-
+    // load templates
     QDir pathDir {qApp->applicationDirPath()+"/templates/"};
     QString filepath {pathDir.exists()?pathDir.path()+"/":"D:/Programming/GitHub/Qt/ParticlesPhysics/ParticlesPhysicsMain/templates/"};
     QFileSystemModel *model = new QFileSystemModel;
     model->setRootPath(filepath);
     ui->listViewTemplates_tab3->setModel(model);
-    ui->listViewTemplates_tab3->setRootIndex(model->index(filepath));
+    ui->listViewTemplates_tab3->setRootIndex(model->index(filepath));              
 
     // connect menu actions
     connect( ui->actionAbout, &QAction::triggered, this, &MainWindow::about_action );
@@ -84,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( ui->actionScheme2, &QAction::triggered, this, &MainWindow::load_scheme );
     connect( ui->actionScheme3, &QAction::triggered, this, &MainWindow::load_scheme );
     connect( ui->actionSetPolish, &QAction::triggered, this, &MainWindow::change_language );
-    connect( ui->actionSetEnglish, &QAction::triggered, this, &MainWindow::change_language );
+    connect( ui->actionSetEnglish, &QAction::triggered, this, &MainWindow::change_language );                  
 
     // connect main timers
     connect(&paintTimer, &QTimer::timeout, this, &MainWindow::paint);
@@ -546,4 +546,9 @@ void MainWindow::on_resetForcesSandbox_clicked()
     ui->verticalForceTab2->setValue(0);
     ui->horizontalForceTab2->setValue(0);
     ui->attractionForceTab2->setValue(0);
+}
+
+void MainWindow::on_SaveTemplate_Tab3_clicked()
+{
+    simulation[SimulationType::SANDBOX]->saveState();
 }

@@ -2,7 +2,7 @@
 #include <QApplication>
 
 QPainterManager::QPainterManager( QWidget* parent )
-: QBoxPainter { parent }
+: QBoxPainter {parent}
 {
     setMouseTracking(true);
     setAttribute(Qt::WA_TransparentForMouseEvents);

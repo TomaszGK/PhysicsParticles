@@ -128,6 +128,8 @@ private slots:
 
     void on_resetForcesSandbox_clicked();
 
+    void on_SaveTemplate_Tab3_clicked();
+
 private:
 
     Ui::MainWindow *ui;

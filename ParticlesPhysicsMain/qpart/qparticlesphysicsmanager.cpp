@@ -124,6 +124,11 @@ void QParticlesPhysicsManager::handleControls()
 
 void QParticlesPhysicsManager::saveState( QString filename )
 {
+    if( filename.isEmpty() )
+    {
+        filename = "save"+ QString::number(QRandomGenerator::global()->bounded(100));
+    }
+
     QDir pathDir {qApp->applicationDirPath()+"/templates/"};
     QString filepath {};
 
@@ -138,7 +143,12 @@ void QParticlesPhysicsManager::saveState( QString filename )
        return;
     }
 
+    pause();
+
     QJsonObject jsonMain;
+
+    jsonMain["planeWidth"] = planeArea->getWidth();
+    jsonMain["planeHeight"] = planeArea->getHeight();
 
     jsonMain["temperatureUP"] = getTemperature( PlanePart::UP , DataFormat::SCALAR );
     jsonMain["temperatureDown"] = getTemperature( PlanePart::DOWN , DataFormat::SCALAR );
@@ -167,6 +177,8 @@ void QParticlesPhysicsManager::saveState( QString filename )
     jsonMain["Particles"] = jsonArray;
     QJsonDocument saveDoc(jsonMain);
     file.write(saveDoc.toJson());
+
+    run();
 }
 
 void QParticlesPhysicsManager::loadState( QString filename )
