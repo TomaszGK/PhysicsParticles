@@ -197,9 +197,14 @@ void QParticlesPhysicsManager::loadState( QString filename )
         return;
     }
 
+    pause();
+
     QJsonDocument loadDoc( QJsonDocument::fromJson(file.readAll()) );
     auto jsonMain = loadDoc.object();
 
+    double scale = jsonMain["planeWidth"].toDouble()/planeArea->getWidth();
+
+    analyzer->reset();
     setTemperature( PlanePart::UP , DataFormat::SCALAR , jsonMain["temperatureUP"].toDouble() );
     setTemperature( PlanePart::DOWN , DataFormat::SCALAR , jsonMain["temperatureDOWN"].toDouble() );
     setTemperature( PlanePart::LEFT , DataFormat::SCALAR , jsonMain["temperatureLEFT"].toDouble() );
@@ -210,6 +215,26 @@ void QParticlesPhysicsManager::loadState( QString filename )
     analyzer->physicsInfo.attractionForce = jsonMain["attractionForce"].toDouble();
 
     QJsonArray jsonArray = jsonMain["Particles"].toArray();
+
+    calculationStart = time = HRClock::now();
+    removeAllParticles();
+    removeParticlesFromClusters();
+
+    foreach( const QJsonValue& value , jsonArray )
+    {
+        QJsonObject particle = value.toObject();
+        vect2D position { particle["positionX"].toDouble()*scale , particle["positionY"].toDouble()*scale };
+        vect2D velocity { particle["velocityX"].toDouble() , particle["velocityY"].toDouble() };
+        ParticleType particleType = static_cast<ParticleType>(particle["type"].toInt());
+
+        auto iterCluster = getClusterIter(static_cast<size_t>(position.x),static_cast<size_t>(position.y));
+        particles->push_back(Particle(particleType,visualizationType,position,velocity,static_cast<int>(2.0*particle["radius"].toDouble()*scale),iterCluster));
+        iterCluster->addParticle( std::prev(particles->end()) );
+
+        analyzer->simulationInfo.numberOfParticles[particleType]++;
+    }
+
+    run();
 }
 
 void QParticlesPhysicsManager::particlePositionChanged( citerParticle particle , vect2D newPosition )
