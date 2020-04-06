@@ -28,8 +28,9 @@ public:
      * @brief Constructor
      *     
      * Creates histograms, bar chart and bar display objects.
+     * @param particles_          pointer to particles
      */
-    SimulationAnalyzer();
+    SimulationAnalyzer( cptrParticlesContainer particles_ );
 
     /**
      * @brief Resets simulationInfo and physicsInfo to its initial values.
@@ -98,6 +99,9 @@ public:
     ptrMapHistogram1D histograms1D;
 
 private:    
+
+    /** Holds shared pointer to constant vector of Particle objects. */
+    cptrParticlesContainer particles {nullptr};
 
     /** Map of velocity sum */
     std::map<ParticleType,double> velocitySum;

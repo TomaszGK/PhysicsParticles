@@ -1,8 +1,8 @@
 #include "qpaintermanager.h"
 #include <QApplication>
 
-QPainterManager::QPainterManager( QWidget* parent )
-: QBoxPainter {parent}
+QPainterManager::QPainterManager( cptrParticlesContainer particles_ , cptrPlaneArea planeArea_ , QWidget *parent )
+: QBoxPainter {parent}, particles {particles_}, planeArea { planeArea_ }
 {
     setMouseTracking(true);
     setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -14,10 +14,7 @@ QPainterManager::QPainterManager( QWidget* parent )
     particlePen = QPen(Qt::NoPen);
     particlePen.setWidth(1);
 
-    setAutoFillBackground(false);
-
-    particles = Locator::getParticles();
-    planeArea = Locator::getPlaneArea();
+    setAutoFillBackground(false);   
 
     if( !particles || !planeArea ) throw std::invalid_argument("Particles or planeArea has nullptr");
 

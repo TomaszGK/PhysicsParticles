@@ -1,10 +1,9 @@
 #include "qtrackingplot2d.h"
 #include "langmanager.h"
 
-QTrackingPlot2D::QTrackingPlot2D( QString _title, QWidget *parent )
-: QBoxPainter { parent }, title { std::move(_title) }
-{
-    particles = Locator::getParticles();
+QTrackingPlot2D::QTrackingPlot2D( cptrParticlesContainer particles_, QString _title, QWidget *parent )
+    : QBoxPainter { parent }, particles { particles_ }, title { std::move(_title) }
+{   
     if( particles != nullptr )
     {
         trackingParticle = particles->begin();

@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include <thread>
 #include <QRandomGenerator>
-#include <QFileSystemModel>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -17,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // create BASIC simulation [ TAB 0 ]
     simulationTab[0] = SimulationType::BASIC;   
     simulation[SimulationType::BASIC] = new QParticlesPhysicsManager(SimulationType::BASIC,ui->ParticlesLayout_Tab0);
-    simulation[SimulationType::BASIC]->add( ui->Layout1_Tab0 , BoxType::BARCHART , ActionType::M_VELOCITY , BoxStyles::BAR_CHART1 );
+    simulation[SimulationType::BASIC]->add( ui->Layout1_Tab0 , BoxType::BARCHART , ActionType::M_VELOCITY , BoxStyles::BAR_CHART1 );    
     simulation[SimulationType::BASIC]->add( ui->Layout2_Tab0 , BoxType::BARCHART , ActionType::M_KINETIC ,  BoxStyles::BAR_CHART2 );
     simulation[SimulationType::BASIC]->add( ui->Layout3_Tab0 , BoxType::HISTOGRAM1D , ActionType::M_VELOCITY_DIST );
     simulation[SimulationType::BASIC]->add( ui->Layout4_Tab0 , BoxType::GAUGE , ActionType::M_PRESSURE );
@@ -51,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // create SANDBOX simulation [ TAB 3 ]
-    simulationTab[3] = SimulationType::SANDBOX;
+    simulationTab[3] = SimulationType::SANDBOX;   
     simulation[SimulationType::SANDBOX] = new QParticlesPhysicsManager(SimulationType::SANDBOX,ui->ParticlesLayout_Tab3);
     simulation[SimulationType::SANDBOX]->add( ui->Layout1_Tab3 , BoxType::INFODISPLAY , ActionType::D_TEMPERATURE );
     simulation[SimulationType::SANDBOX]->add( ui->Layout2_Tab3 , BoxType::HISTOGRAM1D , ActionType::M_VELOCITY_DIST );
@@ -73,10 +72,20 @@ MainWindow::MainWindow(QWidget *parent) :
     // load templates
     QDir pathDir {qApp->applicationDirPath()+"/templates/"};
     QString filepath {pathDir.exists()?pathDir.path()+"/":"D:/Programming/GitHub/Qt/ParticlesPhysics/ParticlesPhysicsMain/templates/"};
-    QFileSystemModel *model = new QFileSystemModel;
-    model->setRootPath(filepath);
-    ui->listViewTemplates_tab3->setModel(model);
-    ui->listViewTemplates_tab3->setRootIndex(model->index(filepath));              
+    fileSystemModel = new QFileSystemModel;
+    fileSystemModel->setRootPath(filepath);
+    ui->listViewTemplates_tab3->setModel(fileSystemModel);
+    ui->listViewTemplates_tab3->setRootIndex(fileSystemModel->index(filepath));
+    auto md = fileSystemModel->index(0, 0);
+    ui->listViewTemplates_tab3->setCurrentIndex(md);
+
+    connect( ui->listViewTemplates_tab3->selectionModel(), &QItemSelectionModel::currentChanged, this, &MainWindow::changeListViewTemplates);
+
+    // load plane preview
+    sandboxPlanePreview = new QParticlesPhysicsManager(SimulationType::SANDBOX,ui->Layout4_Tab3);
+    QModelIndex index = ui->listViewTemplates_tab3->currentIndex();
+    QString itemText = index.data(Qt::DisplayRole).toString();
+    sandboxPlanePreview->loadState(itemText);
 
     // connect menu actions
     connect( ui->actionAbout, &QAction::triggered, this, &MainWindow::about_action );
@@ -551,4 +560,9 @@ void MainWindow::on_resetForcesSandbox_clicked()
 void MainWindow::on_SaveTemplate_Tab3_clicked()
 {
     simulation[SimulationType::SANDBOX]->saveState();
+}
+
+void MainWindow::changeListViewTemplates( const QModelIndex& current , const QModelIndex & )
+{
+    sandboxPlanePreview->loadState(fileSystemModel->fileInfo(current).fileName());
 }

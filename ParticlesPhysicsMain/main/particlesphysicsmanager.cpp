@@ -6,7 +6,10 @@
 ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int planeWidth, int planeHeight )
 : simulationType {type}
 {
-    analyzer = std::make_unique<SimulationAnalyzer>();
+    particles = std::make_shared<std::vector<Particle>>();
+    clusters = std::make_unique<std::vector<Cluster>>();
+
+    analyzer = std::make_unique<SimulationAnalyzer>(particles);
 
     planeArea = std::make_shared<PlaneArea>(planeWidth,planeHeight,analyzer->simulationInfo.planeBorderSize[type]);
 
@@ -14,25 +17,21 @@ ParticlesPhysicsManager::ParticlesPhysicsManager( SimulationType type, int plane
 
     clustersInfo.clusterSize = static_cast<int>(analyzer->simulationInfo.maxSizeOfParticle[type]*analyzer->simulationInfo.clusterRatio[type]);
 
-    particles = std::make_shared<std::vector<Particle>>();
-    clusters = std::make_unique<std::vector<Cluster>>();
     particles->reserve(static_cast<size_t>(analyzer->simulationInfo.maxParticles[type]));
+
     clusters->reserve(static_cast<size_t>((planeWidth*planeHeight)/(clustersInfo.clusterSize*clustersInfo.clusterSize)+10));
 
     createClusters();
 
     createParticles();    
 
-    selectedParticle = particles->begin();
-
-    Locator::provide(this);
+    selectedParticle = particles->begin();   
 
     // explicit instantiations of template functions to know its definitions in other translate units - linker purpose
     mainLoop<SimulationType::BASIC>();
     mainLoop<SimulationType::DIFFUSION>();
     mainLoop<SimulationType::BROWNIAN_MOTION>();
-    mainLoop<SimulationType::SANDBOX>();
-
+    mainLoop<SimulationType::SANDBOX>();    
 }
 
 ParticlesPhysicsManager::~ParticlesPhysicsManager()
@@ -425,12 +424,6 @@ void ParticlesPhysicsManager::recalculateParticlesInClusters()
         iterCurrent->addParticle( particle );
         particle->cluster = iterCurrent;
     }
-}
-
-iterCluster ParticlesPhysicsManager::getClusterIter( const size_t& posx, const size_t& posy )
-{
-    // if position is out of range then exception is thrown
-    return clusterIters.at(posx).at(posy);
 }
 
 template< SimulationType type >

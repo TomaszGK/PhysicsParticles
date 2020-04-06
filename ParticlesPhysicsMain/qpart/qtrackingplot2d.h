@@ -26,9 +26,10 @@ public:
     /**
      * @brief Constructor
      *     
-     * @param parent                ponter to parent widget
+     * @param particles_            pointer to particles
+     * @param parent                pointer to parent widget
      */
-    explicit QTrackingPlot2D( QString _title = "", QWidget *parent = nullptr );
+    explicit QTrackingPlot2D( cptrParticlesContainer particles_, QString _title = "", QWidget *parent = nullptr );
 
     /**
      * @brief Loads style type from xml file and /to complete/.

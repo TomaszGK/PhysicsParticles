@@ -8,11 +8,11 @@ QBoxPainter::QBoxPainter( QWidget* parentWidget )
     this->setFont(font);
 }
 
-void QBoxPainter::paintEvent(QPaintEvent *event)
+void QBoxPainter::paintEvent( QPaintEvent *event )
 {
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);    
-    painter.fillRect( event->rect(), QBrush(boxStyle.colors[BoxColors::BACKGROUND]) );
+    painter.fillRect( event->rect() , QBrush(boxStyle.colors[BoxColors::BACKGROUND]) );
     paintPlaneBorder();
     paint();
     painter.end();

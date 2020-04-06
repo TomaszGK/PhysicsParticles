@@ -1,7 +1,7 @@
 #include "qhistogram1d.h"
 
-QHistogram1D::QHistogram1D( ActionType type, double maxValue, QWidget* parent )
-: QBoxPainter {parent}, histogram1D { Locator::getHistogram1D(type) }, maxValue {maxValue}
+QHistogram1D::QHistogram1D( cptrHistogram1D histogram1D_, double maxValue, QWidget* parent )
+: QBoxPainter {parent}, histogram1D { histogram1D_ }, maxValue {maxValue}
 {
     boxStyle.colors[BoxColors::BACKGROUND] = QColor(145, 215, 215);
     setAutoFillBackground(false);    

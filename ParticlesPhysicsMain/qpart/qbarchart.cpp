@@ -1,7 +1,7 @@
 #include "qbarchart.h"
 
-QBarChart::QBarChart( ActionType type, double max, QWidget* parent )
-: QBoxPainter { parent }, barChart { Locator::getBarChart(type) }
+QBarChart::QBarChart( ptrBarChart barChart_, double max, QWidget* parent )
+: QBoxPainter {parent}, barChart {barChart_}
 {    
     setMaxOY(max);        
     setAutoFillBackground(false);

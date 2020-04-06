@@ -1,7 +1,7 @@
 #include "qbardisplay.h"
 
-QBarDisplay::QBarDisplay( ActionType type, QWidget* parentWidget )
-: QBoxPainter { parentWidget } , barDisplay { Locator::getBarDisplay(type) }
+QBarDisplay::QBarDisplay( cptrBarDisplay barDisplay_ , QWidget* parentWidget )
+: QBoxPainter { parentWidget } , barDisplay { barDisplay_ }
 {    
     setAutoFillBackground(false);
     init();

@@ -24,8 +24,6 @@ class ParticlesPhysicsManager
 
 public:
 
-    friend Locator;
-
     /**
      * @brief Constructor
      *
@@ -353,9 +351,8 @@ public:
      * @return created thread
      */    
     std::thread calculateNextPositionsInThread()
-    {        
-        calculationState = ThreadCalculationState::RUNNING;
-        Locator::provide(this);
+    {
+        calculationState = ThreadCalculationState::RUNNING;        
         calculationStart = HRClock::now();
         switch( simulationType )
         {
@@ -439,7 +436,11 @@ protected:
      * @param posx        y position of point (x,y)
      * @return iterator to the cluster
      */
-    inline iterCluster getClusterIter( const size_t& posx , const size_t& posy );
+    iterCluster getClusterIter( const size_t& posx , const size_t& posy )
+    {
+        // if position is out of range then exception is thrown
+        return clusterIters.at(posx).at(posy);
+    }
 
     /** Updates particles positions */
     template< SimulationType type >

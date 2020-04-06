@@ -41,9 +41,11 @@ public:
     /**
      * @brief Constructor
      *    
+     * @param particles_            const shared pointer to particles
+     * @param planeArea_            const shared pointer to plane area
      * @param parent                pointer to parent widget
      */
-    explicit QPainterManager( QWidget *parent = nullptr );
+    explicit QPainterManager( cptrParticlesContainer particles_ , cptrPlaneArea planeArea_ , QWidget *parent = nullptr );
 
     /**
      * @brief Overload operator[]

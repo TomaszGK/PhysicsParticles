@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QTranslator>
+#include <QFileSystemModel>
 #include <dialogabout.h>
 #include <qparticlesphysicsmanager.h>
 
@@ -130,6 +131,8 @@ private slots:
 
     void on_SaveTemplate_Tab3_clicked();
 
+    void changeListViewTemplates( const QModelIndex& , const QModelIndex& );
+
 private:
 
     Ui::MainWindow *ui;
@@ -137,6 +140,11 @@ private:
     DialogAbout dialogAboutWindow;
 
     std::map<SimulationType,QPointer<QParticlesPhysicsManager>> simulation;
+
+    QPointer<QParticlesPhysicsManager> sandboxPlanePreview;
+
+    QPointer<QFileSystemModel> fileSystemModel;
+
     std::map<int,SimulationType> simulationTab;
 
     QTimer paintTimer;

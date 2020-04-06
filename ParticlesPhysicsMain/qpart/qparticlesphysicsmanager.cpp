@@ -3,7 +3,7 @@
 QParticlesPhysicsManager::QParticlesPhysicsManager( SimulationType type, QHBoxLayout* layout )
 : QObject {layout}, ParticlesPhysicsManager(type,layout->parentWidget()->width(),layout->parentWidget()->height() )
 {
-    particlesPaintManager = new QPainterManager();
+    particlesPaintManager = new QPainterManager(particles,planeArea);
     layout->addWidget( particlesPaintManager );
 
     connect(particlesPaintManager,&QPainterManager::particlePositionChanged,this,&QParticlesPhysicsManager::particlePositionChanged);
@@ -17,7 +17,7 @@ void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, Action
      case BoxType::BARCHART :
         if( analyzer->barCharts->count(actionType) != 0 )
         {
-            qBoxPainters[actionType] = new QBarChart(actionType,sqrt(analyzer->physicsInfo.maxRapidity*2)/3,layout->parentWidget());
+            qBoxPainters[actionType] = new QBarChart(analyzer->barCharts->at(actionType),sqrt(analyzer->physicsInfo.maxRapidity*2)/3,layout->parentWidget());
             layout->addWidget( qBoxPainters[actionType] );
             if( style != BoxStyles::DEFAULT ) qBoxPainters[actionType]->loadStyle(style);
         }
@@ -26,7 +26,7 @@ void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, Action
      case BoxType::BARDISPLAY :
         if( analyzer->barDisplays->count(actionType) != 0 )
         {
-            qBoxPainters[actionType] = new QBarDisplay(actionType,layout->parentWidget());
+            qBoxPainters[actionType] = new QBarDisplay(analyzer->barDisplays->at(actionType),layout->parentWidget());
             layout->addWidget( qBoxPainters[actionType] );
         }
      break;
@@ -34,13 +34,13 @@ void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, Action
      case BoxType::HISTOGRAM1D :
         if( analyzer->histograms1D->count(actionType) != 0 )
         {
-            qBoxPainters[actionType] = new QHistogram1D(actionType,160,layout->parentWidget());
+            qBoxPainters[actionType] = new QHistogram1D(analyzer->histograms1D->at(actionType),160,layout->parentWidget());
             layout->addWidget( qBoxPainters[actionType] );
         }
      break;
 
      case BoxType::TRACKINGPLOT :
-        qBoxPainters[actionType] = new QTrackingPlot2D("Molecule Tracking Plot",layout->parentWidget());
+        qBoxPainters[actionType] = new QTrackingPlot2D(particles,"Molecule Tracking Plot",layout->parentWidget());
         layout->addWidget( qBoxPainters[actionType] );
      break;
 
@@ -202,7 +202,8 @@ void QParticlesPhysicsManager::loadState( QString filename )
     QJsonDocument loadDoc( QJsonDocument::fromJson(file.readAll()) );
     auto jsonMain = loadDoc.object();
 
-    double scale = jsonMain["planeWidth"].toDouble()/planeArea->getWidth();
+    double scaleX = planeArea->getWidth()/jsonMain["planeWidth"].toDouble();
+    double scaleY = planeArea->getHeight()/jsonMain["planeHeight"].toDouble();
 
     analyzer->reset();
     setTemperature( PlanePart::UP , DataFormat::SCALAR , jsonMain["temperatureUP"].toDouble() );
@@ -220,21 +221,29 @@ void QParticlesPhysicsManager::loadState( QString filename )
     removeAllParticles();
     removeParticlesFromClusters();
 
+    qDebug() << "scaleX = " << scaleX << " , sclaeY = " << scaleY;
+    qDebug() << "width = " << planeArea->getWidth();
+    qDebug() << "height = " << planeArea->getHeight();
     foreach( const QJsonValue& value , jsonArray )
     {
         QJsonObject particle = value.toObject();
-        vect2D position { particle["positionX"].toDouble()*scale , particle["positionY"].toDouble()*scale };
+        vect2D position { particle["positionX"].toDouble()*scaleX , particle["positionY"].toDouble()*scaleY };
         vect2D velocity { particle["velocityX"].toDouble() , particle["velocityY"].toDouble() };
         ParticleType particleType = static_cast<ParticleType>(particle["type"].toInt());
+        auto size = static_cast<int>(2.0*particle["radius"].toDouble()*scaleX);
+        if( size < analyzer->simulationInfo.particleSizeInit[ParticleType::MINI] ) size = analyzer->simulationInfo.particleSizeInit[ParticleType::MINI];
 
+        qDebug() << position.x << " : " << position.y;
         auto iterCluster = getClusterIter(static_cast<size_t>(position.x),static_cast<size_t>(position.y));
-        particles->push_back(Particle(particleType,visualizationType,position,velocity,static_cast<int>(2.0*particle["radius"].toDouble()*scale),iterCluster));
+        particles->push_back(Particle(particleType,visualizationType,position,velocity,size,iterCluster));
         iterCluster->addParticle( std::prev(particles->end()) );
 
         analyzer->simulationInfo.numberOfParticles[particleType]++;
     }
 
     run();
+
+    particlesPaintManager->update();
 }
 
 void QParticlesPhysicsManager::particlePositionChanged( citerParticle particle , vect2D newPosition )

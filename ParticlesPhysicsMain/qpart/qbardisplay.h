@@ -26,10 +26,10 @@ public:
     /**
      * @brief Constructor
      *     
-     * @param type                  action type
-     * @param parent                ponter to parent widget
+     * @param barDisplay_           pointer to BarDisplay
+     * @param parent                pointer to parent widget
      */
-    explicit QBarDisplay( ActionType type, QWidget* parentWidget = nullptr );
+    explicit QBarDisplay( cptrBarDisplay barDisplay_ , QWidget* parentWidget = nullptr );
 
     /**
      * @brief Loads style type from xml file and /to complete/.

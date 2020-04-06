@@ -1,6 +1,7 @@
 #include "simulationanalyzer.h"
 
-SimulationAnalyzer::SimulationAnalyzer()
+SimulationAnalyzer::SimulationAnalyzer( cptrParticlesContainer particles_ )
+: particles {particles_}
 {
     barDisplays = std::make_shared<MapBarDisplay>();
     barCharts = std::make_shared<MapBarChart>();
@@ -52,7 +53,7 @@ void SimulationAnalyzer::update( SimulationType simulationType )
      break;
 
      case SimulationType::BROWNIAN_MOTION :
-        (*histograms1D)[ActionType::M_VELOCITY_DIST]->markBin( Locator::getParticles()->begin()->velocity() );
+        (*histograms1D)[ActionType::M_VELOCITY_DIST]->markBin( particles->begin()->velocity() );
      [[fallthrough]];
 
      default :
