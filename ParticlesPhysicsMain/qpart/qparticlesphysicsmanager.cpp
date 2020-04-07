@@ -221,19 +221,16 @@ void QParticlesPhysicsManager::loadState( QString filename )
     removeAllParticles();
     removeParticlesFromClusters();
 
-    qDebug() << "scaleX = " << scaleX << " , sclaeY = " << scaleY;
-    qDebug() << "width = " << planeArea->getWidth();
-    qDebug() << "height = " << planeArea->getHeight();
     foreach( const QJsonValue& value , jsonArray )
     {
         QJsonObject particle = value.toObject();
         vect2D position { particle["positionX"].toDouble()*scaleX , particle["positionY"].toDouble()*scaleY };
         vect2D velocity { particle["velocityX"].toDouble() , particle["velocityY"].toDouble() };
         ParticleType particleType = static_cast<ParticleType>(particle["type"].toInt());
+
         auto size = static_cast<int>(2.0*particle["radius"].toDouble()*scaleX);
         if( size < analyzer->simulationInfo.particleSizeInit[ParticleType::MINI] ) size = analyzer->simulationInfo.particleSizeInit[ParticleType::MINI];
 
-        qDebug() << position.x << " : " << position.y;
         auto iterCluster = getClusterIter(static_cast<size_t>(position.x),static_cast<size_t>(position.y));
         particles->push_back(Particle(particleType,visualizationType,position,velocity,size,iterCluster));
         iterCluster->addParticle( std::prev(particles->end()) );

@@ -76,16 +76,12 @@ MainWindow::MainWindow(QWidget *parent) :
     fileSystemModel->setRootPath(filepath);
     ui->listViewTemplates_tab3->setModel(fileSystemModel);
     ui->listViewTemplates_tab3->setRootIndex(fileSystemModel->index(filepath));
-    auto md = fileSystemModel->index(0, 0);
-    ui->listViewTemplates_tab3->setCurrentIndex(md);
 
+    connect( fileSystemModel , &QFileSystemModel::directoryLoaded , this , &MainWindow::activateTemplateList );
     connect( ui->listViewTemplates_tab3->selectionModel(), &QItemSelectionModel::currentChanged, this, &MainWindow::changeListViewTemplates);
 
-    // load plane preview
+    // plane preview
     sandboxPlanePreview = new QParticlesPhysicsManager(SimulationType::SANDBOX,ui->Layout4_Tab3);
-    QModelIndex index = ui->listViewTemplates_tab3->currentIndex();
-    QString itemText = index.data(Qt::DisplayRole).toString();
-    sandboxPlanePreview->loadState(itemText);
 
     // connect menu actions
     connect( ui->actionAbout, &QAction::triggered, this, &MainWindow::about_action );
@@ -507,7 +503,7 @@ void MainWindow::on_clearTrackMoleculePushButtonTab4_clicked()
 }
 
 void MainWindow::on_resetPushButton_tab2_clicked()
-{
+{    
     simulation[SimulationType::SANDBOX]->reset();
 
     ui->verticalForceTab2->setValue(0);
@@ -529,24 +525,24 @@ void MainWindow::on_resetPushButton_tab2_clicked()
 }
 
 void MainWindow::on_randomPushButton_tab2_clicked()
-{
-     simulation[SimulationType::SANDBOX]->reset();
+{    
+    simulation[SimulationType::SANDBOX]->reset();
 
-     ui->blueParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(simulation[SimulationType::SANDBOX]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
-     ui->redParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(simulation[SimulationType::SANDBOX]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
-     ui->greenParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(simulation[SimulationType::SANDBOX]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
+    ui->blueParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(simulation[SimulationType::SANDBOX]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
+    ui->redParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(simulation[SimulationType::SANDBOX]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
+    ui->greenParticlesSizeSliderTab2->setValue(QRandomGenerator::global()->bounded(simulation[SimulationType::SANDBOX]->getSimulationInfo().maxSizeOfParticle.at(SimulationType::SANDBOX)));
 
-     ui->blueParticlesSliderTab2->setValue(QRandomGenerator::global()->bounded(ui->blueParticlesSliderTab2->maximum()));
-     ui->redParticlesSliderTab2->setValue(QRandomGenerator::global()->bounded(ui->redParticlesSliderTab2->maximum()));
-     ui->greenParticlesSliderTab2->setValue(QRandomGenerator::global()->bounded(ui->greenParticlesSliderTab2->maximum()));
+    ui->blueParticlesSliderTab2->setValue(QRandomGenerator::global()->bounded(ui->blueParticlesSliderTab2->maximum()));
+    ui->redParticlesSliderTab2->setValue(QRandomGenerator::global()->bounded(ui->redParticlesSliderTab2->maximum()));
+    ui->greenParticlesSliderTab2->setValue(QRandomGenerator::global()->bounded(ui->greenParticlesSliderTab2->maximum()));
 
-     ui->verticalForceTab2->setValue(100 - QRandomGenerator::global()->bounded(200));
-     ui->horizontalForceTab2->setValue(100 - QRandomGenerator::global()->bounded(200));
-     ui->attractionForceTab2->setValue(100 - QRandomGenerator::global()->bounded(200));
-     ui->temperatureUpSliderTab2->setValue(QRandomGenerator::global()->bounded(100));
-     ui->temperatureDownSliderTab2->setValue(QRandomGenerator::global()->bounded(100));
-     ui->temperatureLeftSliderTab2->setValue(QRandomGenerator::global()->bounded(100));
-     ui->temperatureRightSliderTab2->setValue(QRandomGenerator::global()->bounded(100));
+    ui->verticalForceTab2->setValue(100 - QRandomGenerator::global()->bounded(200));
+    ui->horizontalForceTab2->setValue(100 - QRandomGenerator::global()->bounded(200));
+    ui->attractionForceTab2->setValue(100 - QRandomGenerator::global()->bounded(200));
+    ui->temperatureUpSliderTab2->setValue(QRandomGenerator::global()->bounded(100));
+    ui->temperatureDownSliderTab2->setValue(QRandomGenerator::global()->bounded(100));
+    ui->temperatureLeftSliderTab2->setValue(QRandomGenerator::global()->bounded(100));
+    ui->temperatureRightSliderTab2->setValue(QRandomGenerator::global()->bounded(100));
 }
 
 
@@ -562,7 +558,18 @@ void MainWindow::on_SaveTemplate_Tab3_clicked()
     simulation[SimulationType::SANDBOX]->saveState();
 }
 
-void MainWindow::changeListViewTemplates( const QModelIndex& current , const QModelIndex & )
+void MainWindow::on_LoadTemplate_Tab3_clicked()
 {
+    simulation[SimulationType::SANDBOX]->loadState(fileSystemModel->fileInfo(ui->listViewTemplates_tab3->currentIndex()).fileName());
+}
+
+void MainWindow::changeListViewTemplates( const QModelIndex& current , const QModelIndex & )
+{    
     sandboxPlanePreview->loadState(fileSystemModel->fileInfo(current).fileName());
+}
+
+void MainWindow::activateTemplateList( const QString& path )
+{
+    auto md = fileSystemModel->index(0,0,fileSystemModel->index(path));
+    ui->listViewTemplates_tab3->setCurrentIndex(md);
 }
