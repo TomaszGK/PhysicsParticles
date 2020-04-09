@@ -1,4 +1,5 @@
 #include "qparticlesphysicsmanager.h"
+#include <cmath>
 
 QParticlesPhysicsManager::QParticlesPhysicsManager( SimulationType type, QHBoxLayout* layout )
 : QObject {layout}, ParticlesPhysicsManager(type,layout->parentWidget()->width(),layout->parentWidget()->height() )
@@ -12,6 +13,8 @@ QParticlesPhysicsManager::QParticlesPhysicsManager( SimulationType type, QHBoxLa
 
 void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, ActionType actionType, BoxStyles style )
 {
+    if( layout->count()>0 ) return;
+
     switch( boxType )
     {
      case BoxType::BARCHART :
@@ -150,14 +153,18 @@ void QParticlesPhysicsManager::saveState( QString filename )
     jsonMain["planeWidth"] = planeArea->getWidth();
     jsonMain["planeHeight"] = planeArea->getHeight();
 
-    jsonMain["temperatureUP"] = getTemperature( PlanePart::UP , DataFormat::SCALAR );
-    jsonMain["temperatureDown"] = getTemperature( PlanePart::DOWN , DataFormat::SCALAR );
-    jsonMain["temperatureLeft"] = getTemperature( PlanePart::LEFT , DataFormat::SCALAR );
-    jsonMain["temperatureRight"] = getTemperature( PlanePart::RIGHT , DataFormat::SCALAR );
+    jsonMain["temperatureUP"] = static_cast<int>(round(getTemperature( PlanePart::UP , DataFormat::PERCENT )));
+    jsonMain["temperatureDOWN"] = static_cast<int>(round(getTemperature( PlanePart::DOWN , DataFormat::PERCENT )));
+    jsonMain["temperatureLEFT"] = static_cast<int>(round(getTemperature( PlanePart::LEFT , DataFormat::PERCENT )));
+    jsonMain["temperatureRIGHT"] = static_cast<int>(round(getTemperature( PlanePart::RIGHT , DataFormat::PERCENT )));
 
-    jsonMain["verticalForce"] = getForce( Axis::VERTICAL , DataFormat::SCALAR );
-    jsonMain["horizontalForce"] = getForce( Axis::HORIZONTAL , DataFormat::SCALAR );
-    jsonMain["attractionForce"] = analyzer->physicsInfo.attractionForce;
+    jsonMain["verticalForce"] = static_cast<int>(round(getForce( Axis::VERTICAL , DataFormat::PERCENT )));
+    jsonMain["horizontalForce"] = static_cast<int>(round(getForce( Axis::HORIZONTAL , DataFormat::PERCENT )));
+    jsonMain["attractionForce"] = static_cast<int>(round(getAttractionForceInPercent()));
+
+    jsonMain["particleSizeGAS1"] = analyzer->simulationInfo.particleSize[ParticleType::GAS1];
+    jsonMain["particleSizeGAS2"] = analyzer->simulationInfo.particleSize[ParticleType::GAS2];
+    jsonMain["particleSizeGAS3"] = analyzer->simulationInfo.particleSize[ParticleType::GAS3];
 
     QJsonArray jsonArray;
     for( const auto& particle : *particles )
@@ -206,14 +213,21 @@ void QParticlesPhysicsManager::loadState( QString filename )
     double scaleY = planeArea->getHeight()/jsonMain["planeHeight"].toDouble();
 
     analyzer->reset();
-    setTemperature( PlanePart::UP , DataFormat::SCALAR , jsonMain["temperatureUP"].toDouble() );
-    setTemperature( PlanePart::DOWN , DataFormat::SCALAR , jsonMain["temperatureDOWN"].toDouble() );
-    setTemperature( PlanePart::LEFT , DataFormat::SCALAR , jsonMain["temperatureLEFT"].toDouble() );
-    setTemperature( PlanePart::RIGHT , DataFormat::SCALAR , jsonMain["temperatureRIGHT"].toDouble() );
 
-    setForce( Axis::VERTICAL , DataFormat::SCALAR , jsonMain["verticalForce"].toDouble() );
-    setForce( Axis::HORIZONTAL , DataFormat::SCALAR , jsonMain["horizontalForce"].toDouble() );
-    analyzer->physicsInfo.attractionForce = jsonMain["attractionForce"].toDouble();
+
+    setTemperature( PlanePart::UP , DataFormat::PERCENT , jsonMain["temperatureUP"].toInt() );
+    setTemperature( PlanePart::DOWN , DataFormat::PERCENT , jsonMain["temperatureDOWN"].toInt() );
+    setTemperature( PlanePart::LEFT , DataFormat::PERCENT , jsonMain["temperatureLEFT"].toInt() );
+    setTemperature( PlanePart::RIGHT , DataFormat::PERCENT , jsonMain["temperatureRIGHT"].toInt() );
+
+
+    setForce( Axis::VERTICAL , DataFormat::PERCENT , jsonMain["verticalForce"].toInt() );
+    setForce( Axis::HORIZONTAL , DataFormat::PERCENT , jsonMain["horizontalForce"].toInt() );
+    analyzer->physicsInfo.attractionForce = jsonMain["attractionForce"].toInt();
+
+    analyzer->simulationInfo.particleSize[ParticleType::GAS1] = jsonMain["particleSizeGAS1"].toInt();
+    analyzer->simulationInfo.particleSize[ParticleType::GAS2] = jsonMain["particleSizeGAS2"].toInt();
+    analyzer->simulationInfo.particleSize[ParticleType::GAS3] = jsonMain["particleSizeGAS3"].toInt();
 
     QJsonArray jsonArray = jsonMain["Particles"].toArray();
 

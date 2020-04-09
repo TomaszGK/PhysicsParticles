@@ -99,7 +99,7 @@ public:
      */
     double getTemperature( PlanePart part, DataFormat format ) const noexcept
     {
-        return ( format == DataFormat::PERCENT ) ? analyzer->physicsInfo.temperature.at(part)*100.0/analyzer->physicsInfo.maxRapidity : analyzer->physicsInfo.temperature.at(part);
+        return ( format == DataFormat::PERCENT ) ? analyzer->physicsInfo.temperature.at(part)*100.0/(sqrt(analyzer->physicsInfo.maxRapidity*2.0)/2.0) : analyzer->physicsInfo.temperature.at(part);
     }
 
     /**
@@ -250,6 +250,15 @@ public:
      * @param quantity              new percent value of attraction force [-100,100]
      */
     void setAttractionForceInPercent( int quantity );
+
+    /**
+     * @brief Gets percent value of attraction force.
+     * @return percent value of attraction force [-100,100]
+     */
+    double getAttractionForceInPercent() const noexcept
+    {
+        return analyzer->physicsInfo.attractionForce*100/analyzer->physicsInfo.maxAttractionForce;
+    }
 
     /**
      * @brief Sets percent value of plane width.

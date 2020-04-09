@@ -165,5 +165,6 @@ private:
     std::thread calculationThread;
 
     bool checkActionItem( QAction* menuItem , QMenu *menu );
+    void loadStateControls();
 
 };

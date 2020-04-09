@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // create BASIC simulation [ TAB 0 ]
     simulationTab[0] = SimulationType::BASIC;   
     simulation[SimulationType::BASIC] = new QParticlesPhysicsManager(SimulationType::BASIC,ui->ParticlesLayout_Tab0);
-    simulation[SimulationType::BASIC]->add( ui->Layout1_Tab0 , BoxType::BARCHART , ActionType::M_VELOCITY , BoxStyles::BAR_CHART1 );    
+    simulation[SimulationType::BASIC]->add( ui->Layout1_Tab0 , BoxType::BARCHART , ActionType::M_VELOCITY , BoxStyles::BAR_CHART1 );        
     simulation[SimulationType::BASIC]->add( ui->Layout2_Tab0 , BoxType::BARCHART , ActionType::M_KINETIC ,  BoxStyles::BAR_CHART2 );
     simulation[SimulationType::BASIC]->add( ui->Layout3_Tab0 , BoxType::HISTOGRAM1D , ActionType::M_VELOCITY_DIST );
     simulation[SimulationType::BASIC]->add( ui->Layout4_Tab0 , BoxType::GAUGE , ActionType::M_PRESSURE );
@@ -505,15 +505,19 @@ void MainWindow::on_clearTrackMoleculePushButtonTab4_clicked()
 void MainWindow::on_resetPushButton_tab2_clicked()
 {    
     simulation[SimulationType::SANDBOX]->reset();
+    loadStateControls();
+}
 
-    ui->verticalForceTab2->setValue(0);
-    ui->horizontalForceTab2->setValue(0);
-    ui->attractionForceTab2->setValue(0);
+void MainWindow::loadStateControls()
+{
+    ui->verticalForceTab2->setValue( static_cast<int>(round(simulation[SimulationType::SANDBOX]->getForce(Axis::VERTICAL,DataFormat::PERCENT))));
+    ui->horizontalForceTab2->setValue( static_cast<int>(round(simulation[SimulationType::SANDBOX]->getForce(Axis::HORIZONTAL,DataFormat::PERCENT))));
+    ui->attractionForceTab2->setValue(static_cast<int>(round(simulation[SimulationType::SANDBOX]->getAttractionForceInPercent())));
 
-    ui->temperatureUpSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::UP,DataFormat::PERCENT)));
-    ui->temperatureDownSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::DOWN,DataFormat::PERCENT)));
-    ui->temperatureLeftSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::LEFT,DataFormat::PERCENT)));
-    ui->temperatureRightSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::RIGHT,DataFormat::PERCENT)));
+    ui->temperatureUpSliderTab2->setValue(static_cast<int>(round(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::UP,DataFormat::PERCENT))));
+    ui->temperatureDownSliderTab2->setValue(static_cast<int>(round(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::DOWN,DataFormat::PERCENT))));
+    ui->temperatureLeftSliderTab2->setValue(static_cast<int>(round(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::LEFT,DataFormat::PERCENT))));
+    ui->temperatureRightSliderTab2->setValue(static_cast<int>(round(simulation[SimulationType::SANDBOX]->getTemperature(PlanePart::RIGHT,DataFormat::PERCENT))));
 
     ui->blueParticlesSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getNumberOfParticlesInPlane(ParticleType::GAS1,DataFormat::SCALAR)));
     ui->redParticlesSliderTab2->setValue(static_cast<int>(simulation[SimulationType::SANDBOX]->getNumberOfParticlesInPlane(ParticleType::GAS2,DataFormat::SCALAR)));
@@ -561,15 +565,15 @@ void MainWindow::on_SaveTemplate_Tab3_clicked()
 void MainWindow::on_LoadTemplate_Tab3_clicked()
 {
     simulation[SimulationType::SANDBOX]->loadState(fileSystemModel->fileInfo(ui->listViewTemplates_tab3->currentIndex()).fileName());
+    loadStateControls();
 }
 
 void MainWindow::changeListViewTemplates( const QModelIndex& current , const QModelIndex & )
 {    
-    sandboxPlanePreview->loadState(fileSystemModel->fileInfo(current).fileName());
+    sandboxPlanePreview->loadState(fileSystemModel->fileInfo(current).fileName());    
 }
 
 void MainWindow::activateTemplateList( const QString& path )
-{
-    auto md = fileSystemModel->index(0,0,fileSystemModel->index(path));
-    ui->listViewTemplates_tab3->setCurrentIndex(md);
+{    
+    ui->listViewTemplates_tab3->setCurrentIndex(fileSystemModel->index(0,0,fileSystemModel->index(path)));
 }
