@@ -3941,6 +3941,9 @@ margin-top: 0.5em;</string>
         <property name="frameShape">
          <enum>QFrame::Box</enum>
         </property>
+        <property name="defaultDropAction">
+         <enum>Qt::IgnoreAction</enum>
+        </property>
        </widget>
        <widget class="QPushButton" name="LoadTemplate_Tab3">
         <property name="geometry">

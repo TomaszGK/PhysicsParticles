@@ -73,7 +73,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QDir pathDir {qApp->applicationDirPath()+"/templates/"};
     QString filepath {pathDir.exists()?pathDir.path()+"/":"D:/Programming/GitHub/Qt/ParticlesPhysics/ParticlesPhysicsMain/templates/"};
     fileSystemModel = new QFileSystemModel;
+    fileSystemModel->setReadOnly(false);
     fileSystemModel->setRootPath(filepath);
+    fileSystemModel->setFilter( QDir::NoDotAndDotDot | QDir::Files );
+    fileSystemModel->setNameFilters(QStringList("*.json"));
+    fileSystemModel->setNameFilterDisables(false);
     ui->listViewTemplates_tab3->setModel(fileSystemModel);
     ui->listViewTemplates_tab3->setRootIndex(fileSystemModel->index(filepath));
 
@@ -568,7 +572,7 @@ void MainWindow::on_LoadTemplate_Tab3_clicked()
     loadStateControls();
 }
 
-void MainWindow::changeListViewTemplates( const QModelIndex& current , const QModelIndex & )
+void MainWindow::changeListViewTemplates( const QModelIndex& current , const QModelIndex& )
 {    
     sandboxPlanePreview->loadState(fileSystemModel->fileInfo(current).fileName());    
 }

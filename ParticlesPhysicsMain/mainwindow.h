@@ -135,7 +135,7 @@ private slots:
 
     void activateTemplateList( const QString& );
 
-    void on_LoadTemplate_Tab3_clicked();
+    void on_LoadTemplate_Tab3_clicked();    
 
 private:
 
