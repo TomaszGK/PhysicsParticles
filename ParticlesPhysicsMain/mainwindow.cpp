@@ -78,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
     fileSystemModel->setFilter( QDir::NoDotAndDotDot | QDir::Files );
     fileSystemModel->setNameFilters(QStringList("*.json"));
     fileSystemModel->setNameFilterDisables(false);
+    fileSystemModel->sort(3); // sort by file date creation
     ui->listViewTemplates_tab3->setModel(fileSystemModel);
     ui->listViewTemplates_tab3->setRootIndex(fileSystemModel->index(filepath));
 
@@ -563,7 +564,28 @@ void MainWindow::on_resetForcesSandbox_clicked()
 
 void MainWindow::on_SaveTemplate_Tab3_clicked()
 {
-    simulation[SimulationType::SANDBOX]->saveState();
+    auto parentIndex = fileSystemModel->index(fileSystemModel->rootPath());
+    auto rowCount = fileSystemModel->rowCount(parentIndex);
+
+    QString filename = "NewTemplate";
+    int count {0};
+    bool isIncorrectName {true};
+
+    while( isIncorrectName )
+    {
+        isIncorrectName = false;
+        if( count>0 ) filename = "NewTemplate"+QString::number(count);
+        for( int index=0 ; index<rowCount ; ++index )
+        {
+            if( fileSystemModel->index(index,0,parentIndex).data(Qt::DisplayRole).toString() == filename+".json" )
+            {
+                ++count; isIncorrectName = true; break;
+            }
+        }
+    }
+
+    qDebug() << filename ;
+    simulation[SimulationType::SANDBOX]->saveState(filename);
 }
 
 void MainWindow::on_LoadTemplate_Tab3_clicked()
@@ -580,4 +602,9 @@ void MainWindow::changeListViewTemplates( const QModelIndex& current , const QMo
 void MainWindow::activateTemplateList( const QString& path )
 {    
     ui->listViewTemplates_tab3->setCurrentIndex(fileSystemModel->index(0,0,fileSystemModel->index(path)));
+}
+
+void MainWindow::on_DeleteTemplate_Tab3_clicked()
+{
+    fileSystemModel->remove( ui->listViewTemplates_tab3->selectionModel()->selectedIndexes().first() );
 }

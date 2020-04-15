@@ -129,7 +129,7 @@ void QParticlesPhysicsManager::saveState( QString filename )
 {
     if( filename.isEmpty() )
     {
-        filename = "save"+ QString::number(QRandomGenerator::global()->bounded(100));
+        filename = "NewTemplate";
     }
 
     QDir pathDir {qApp->applicationDirPath()+"/templates/"};

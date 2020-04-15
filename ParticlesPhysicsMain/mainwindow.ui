@@ -3950,7 +3950,7 @@ margin-top: 0.5em;</string>
          <rect>
           <x>130</x>
           <y>170</y>
-          <width>81</width>
+          <width>51</width>
           <height>41</height>
          </rect>
         </property>
@@ -3959,16 +3959,32 @@ margin-top: 0.5em;</string>
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="toolTip">
+         <string>Download template</string>
+        </property>
+        <property name="statusTip">
+         <string/>
+        </property>
         <property name="text">
-         <string>Load</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="graphics.qrc">
+          <normaloff>:/new/icons/images/downloadicon.png</normaloff>:/new/icons/images/downloadicon.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
         </property>
        </widget>
        <widget class="QPushButton" name="SaveTemplate_Tab3">
         <property name="geometry">
          <rect>
-          <x>220</x>
+          <x>510</x>
           <y>170</y>
-          <width>81</width>
+          <width>51</width>
           <height>41</height>
          </rect>
         </property>
@@ -3977,8 +3993,58 @@ margin-top: 0.5em;</string>
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="toolTip">
+         <string>Save current plane as template</string>
+        </property>
+        <property name="statusTip">
+         <string/>
+        </property>
         <property name="text">
-         <string>Save</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="graphics.qrc">
+          <normaloff>:/new/icons/images/saveicon.png</normaloff>:/new/icons/images/saveicon.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="DeleteTemplate_Tab3">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>170</y>
+          <width>51</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>Delete template</string>
+        </property>
+        <property name="statusTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="graphics.qrc">
+          <normaloff>:/new/icons/images/deleteicon.png</normaloff>:/new/icons/images/deleteicon.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
         </property>
        </widget>
       </widget>

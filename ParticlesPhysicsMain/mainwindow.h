@@ -137,6 +137,8 @@ private slots:
 
     void on_LoadTemplate_Tab3_clicked();    
 
+    void on_DeleteTemplate_Tab3_clicked();
+
 private:
 
     Ui::MainWindow *ui;
