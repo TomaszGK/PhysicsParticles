@@ -81,6 +81,8 @@ MainWindow::MainWindow(QWidget *parent) :
     fileSystemModel->sort(3); // sort by file date creation
     ui->listViewTemplates_tab3->setModel(fileSystemModel);
     ui->listViewTemplates_tab3->setRootIndex(fileSystemModel->index(filepath));
+    templateListViewItemDelegate = new QTemplateListViewItemDelegate(this);
+    ui->listViewTemplates_tab3->setItemDelegate( templateListViewItemDelegate );
 
     connect( fileSystemModel , &QFileSystemModel::directoryLoaded , this , &MainWindow::activateTemplateList );
     connect( ui->listViewTemplates_tab3->selectionModel(), &QItemSelectionModel::currentChanged, this, &MainWindow::changeListViewTemplates);
@@ -600,7 +602,7 @@ void MainWindow::changeListViewTemplates( const QModelIndex& current , const QMo
 }
 
 void MainWindow::activateTemplateList( const QString& path )
-{    
+{
     ui->listViewTemplates_tab3->setCurrentIndex(fileSystemModel->index(0,0,fileSystemModel->index(path)));
 }
 

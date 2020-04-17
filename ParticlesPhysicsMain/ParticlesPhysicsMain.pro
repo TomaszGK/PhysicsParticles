@@ -36,12 +36,13 @@ INCLUDEPATH += \
                qpart
 
 SOURCES += \
-    main.cpp \   
+    main.cpp \
     mainwindow.cpp \
-    extern/qcgaugewidget.cpp \
+    extern/qcgaugewidget.cpp \    
     qpart/qboxedit.cpp \
     qpart/qboxstyle.cpp \
-    qpart/qpaintermanager.cpp \    
+    qpart/qpaintermanager.cpp \
+    qpart/qtemplatelistviewitemdelegate.cpp \
     qpart/qbarchart.cpp \
     qpart/qhistogram1d.cpp \
     qpart/qbardisplay.cpp \    
@@ -65,14 +66,15 @@ SOURCES += \
     dialogabout.cpp
 
    
-HEADERS += \    
+HEADERS += \
     mainwindow.h \
     extern/random.hpp \
-    extern/qcgaugewidget.h \
+    extern/qcgaugewidget.h \    
     qpart/qboxedit.h \
     qpart/qboxstyle.h \
     qpart/qpaintermanager.h \
-    qpart/qbardisplay.h \    
+    qpart/qbardisplay.h \
+    qpart/qtemplatelistviewitemdelegate.h \
     qpart/qinfodisplay.h \
     qpart/qbarchart.h \
     qpart/qhistogram1d.h \
@@ -101,7 +103,7 @@ HEADERS += \
     
 FORMS += \
         mainwindow.ui \
-    dialogabout.ui
+        dialogabout.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

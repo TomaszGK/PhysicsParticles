@@ -4,8 +4,9 @@
 #include <QTimer>
 #include <QTranslator>
 #include <QFileSystemModel>
-#include <dialogabout.h>
-#include <qparticlesphysicsmanager.h>
+#include "dialogabout.h"
+#include "qparticlesphysicsmanager.h"
+#include "qtemplatelistviewitemdelegate.h"
 
 /** @file
  * @brief Class @ref MainWindow
@@ -150,6 +151,8 @@ private:
     QPointer<QParticlesPhysicsManager> sandboxPlanePreview;
 
     QPointer<QFileSystemModel> fileSystemModel;
+
+    QPointer<QTemplateListViewItemDelegate> templateListViewItemDelegate;
 
     std::map<int,SimulationType> simulationTab;
 
