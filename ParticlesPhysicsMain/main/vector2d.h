@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <boost/functional/hash.hpp>
 
 /** @file
  * @brief Template class @ref vector2D
@@ -19,6 +20,91 @@
 template<typename T>
 class vector2D
 {
+
+    /**
+     * @class DistanceProxy
+     * @brief Defines proxy for distance calculations between vectors.
+     *
+     * Provides optimalized distance calculation based on squared comparisons.
+     */
+    class DistanceProxy
+    {
+
+    public:
+
+      /**
+       * @brief Constructor
+       *
+       * Constructs proxy distance between two vectors.
+       * @param p1          first vector
+       * @param p2          second vector
+       */
+      DistanceProxy( const vector2D<T>& p1 , const vector2D<T>& p2 ): distance_sqrd_{ (p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y) } {}
+
+      /**
+       * @brief Compares (equal operator) two proxy distances.
+       *
+       * @param dp              a given proxy distance
+       * @return true if equals otherwise false
+       */
+      bool operator==( const DistanceProxy& dp ) const
+      {
+          return distance_sqrd_ == dp.distance_sqrd_;
+      }
+
+      /**
+       * @brief Compares (less then operator) two proxy distances.
+       *
+       * @param dp              a given proxy distance
+       * @return true if equals otherwise false
+       */
+      bool operator<( const DistanceProxy& dp ) const
+      {
+          return distance_sqrd_ < dp.distance_sqrd_;
+      }
+
+      /**
+       * @brief Compares (less then or equal operator) two proxy distances.
+       *
+       * @param dp              a given proxy distance
+       * @return true if equals otherwise false
+       */
+      bool operator<=( const DistanceProxy& dp ) const
+      {
+          return distance_sqrd_ <= dp.distance_sqrd_;
+      }
+
+      /**
+       * @brief Compares (less then operator) proxy distances with a specific distance.
+       *
+       * @param distance         a given distance
+       * @return true if equals otherwise false
+       */
+      bool operator<( T distance ) const
+      {
+          return distance_sqrd_ < distance*distance;
+      }
+
+      /**
+       * @brief Compares (less then or equal operator) proxy distances with a specific distance.
+       *
+       * @param distance         a given distance
+       * @return true if equals otherwise false
+       */
+      bool operator<=( T distance ) const
+      {
+          return distance_sqrd_ <= distance*distance;
+      }
+
+      /**< Implicit casts to T that returns true distance */
+      operator T() const { return std::sqrt(distance_sqrd_); }
+
+    private:
+
+      /**< squared distance value */
+      T distance_sqrd_ {};
+
+    };
 
 public:
 
@@ -51,6 +137,17 @@ public:
     T operator~() const { return (x*x+y*y); }
 
     /**
+     * @brief Gets distance from this vector to a given vector.
+     *
+     * @param vector         a given vector
+     * @return proxy distance
+     */
+    DistanceProxy getDistanceTo( const vector2D<T>& vector ) const
+    {
+        return {*this,vector};
+    }
+
+    /**
      * @brief Compares (equal operator) this vector to a given vector.
      *
      * @param v              a given vector
@@ -63,7 +160,7 @@ public:
      *
      * @return new created perpendicular vector
      */
-    vector2D<T> operator!() const { return vector2D<T>(y,-x); }    
+    vector2D<T> operator!() const { return {y,-x}; }
 
     /**
      * @brief Creates vector as result of multiplication of this vector by a given scalar.
@@ -71,7 +168,7 @@ public:
      * @param alpha          a given scalar
      * @return new created multiplied vector
      */
-    vector2D<T> operator*( const T& alpha ) const { return vector2D<T>(alpha*x,alpha*y); }
+    vector2D<T> operator*( const T& alpha ) const { return {alpha*x,alpha*y}; }
 
     /**
      * @brief Multiples this vector by a given vector.
@@ -116,7 +213,7 @@ public:
      * @param v              a given vector
      * @return new added vector
      */
-    vector2D<T> operator+( const vector2D<T>& v ) const { return vector2D<T>(x+v.x,y+v.y); }
+    vector2D<T> operator+( const vector2D<T>& v ) const { return {x+v.x,y+v.y}; }
 
     /**
      * @brief Creates vector as result of subtraction of this vector and a given vector.
@@ -124,7 +221,7 @@ public:
      * @param v              a given vector
      * @return new subtracted vector
      */
-    vector2D<T> operator-( const vector2D<T>& v ) const { return vector2D<T>(x-v.x,y-v.y); }
+    vector2D<T> operator-( const vector2D<T>& v ) const { return {x-v.x,y-v.y}; }
 
     /**
      * @brief Compares (less then operator) this vector to a given vector.
@@ -133,14 +230,20 @@ public:
      * @param v              a given vector
      * @return true if this vector less then a given one otherwise false
      */
-    bool operator<( const vector2D<T>& v ) const { return this->getHashNumber()<v.getHashNumber(); }
+    bool operator<( const vector2D<T>& v ) const { return getHashValue()<v.getHashValue(); }
 
     /**
-     * @brief Gets (produces) almost unique hash number.
+     * @brief Gets (produces) almost unique hash value.
      *
-     * @return hash number
+     * @return hash value
      */
-    int getHashNumber() const { return x*10000+y; }    
+    size_t getHashValue() const
+    {
+        std::size_t seed {0};
+        boost::hash_combine(seed,x);
+        boost::hash_combine(seed,y);
+        return seed;
+    }
 
     /**
      * @brief Creates new vector with the same direction as this but a given length.
@@ -174,8 +277,11 @@ public:
      */
     vector2D<T> setLength( T newLength ) { if( x!=T{} || y!=T{} ){ *this *= (newLength/(*this)()); } return *this; }
 
-    T x {}; /**< x vector value */
-    T y {}; /**< y vector value */
+    /**< x vector value */
+    T x {};
+
+    /**< y vector value */
+    T y {};
 
 };
 

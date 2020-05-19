@@ -327,14 +327,12 @@ void ParticlesPhysicsManager::disableTracking()
 
 bool ParticlesPhysicsManager::disjoint( const iterParticle particle )
 {
-    double distance {0};
-
     for( auto &cluster : *particle->cluster->getAdjoinClusters() )
     {
         for( auto &otherParticle : *cluster->getParticlesInCluster() )
         {
             if( otherParticle == particle ) continue ;
-            distance = (otherParticle->position - particle->position)();
+            auto distance = otherParticle->position.getDistanceTo(particle->position);
 
             if( distance < (particle->radius + otherParticle->radius - 1) )
             {                
@@ -373,7 +371,7 @@ void ParticlesPhysicsManager::disjointPositions( double impactFactor )
             {
                 if( otherParticle == particle ) continue ;
 
-                auto distance = (otherParticle->position - particle->position)();
+                auto distance = otherParticle->position.getDistanceTo(particle->position);
 
                 if( distance < impactFactor*(particle->radius + otherParticle->radius) )
                 {                    
@@ -653,9 +651,7 @@ void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle parti
 {
 
     double dotProductV1V2 {0.0};
-    double dotProductV2V1 {0.0};
-    double distance {0.0};
-    double minDistance {0.0};
+    double dotProductV2V1 {0.0};   
 
     for( auto &cluster : *particle->cluster->getAdjoinClusters() )
     {
@@ -663,10 +659,10 @@ void ParticlesPhysicsManager::handleParticleCollisions( const iterParticle parti
         {
             if( otherParticle == particle ) continue ;
 
-            distance = (otherParticle->position - particle->calculateNextPosition(timeContribution))();
-            minDistance = otherParticle->radius+particle->radius;
+            auto distance = otherParticle->position.getDistanceTo(particle->calculateNextPosition(timeContribution));
+            auto minDistance = otherParticle->radius+particle->radius;
 
-            if( (otherParticle->position - particle->position)() <= minDistance ) continue;
+            if( otherParticle->position.getDistanceTo(particle->position) <= minDistance ) continue;
 
             if( distance < minDistance )
             {                
@@ -821,15 +817,13 @@ double ParticlesPhysicsManager::handleParticleCollisionWithPlaneBoundries( const
 }
 
 bool ParticlesPhysicsManager::isParticlesOverlap( const vect2D& particlePosition, double radius )
-{    
-    double distance {0};
-
+{
     auto iterCluster = getClusterIter(static_cast<size_t>(particlePosition.x),static_cast<size_t>(particlePosition.y));
     for( auto &cluster : *iterCluster->getAdjoinClusters() )
     {
         for( auto &particle : *cluster->getParticlesInCluster() )
         {
-            distance = (particlePosition-particle->position)();
+            auto distance = particlePosition.getDistanceTo(particle->position);
             if( distance<(radius+particle->radius+2) ) return true;
         }
     }
@@ -838,15 +832,13 @@ bool ParticlesPhysicsManager::isParticlesOverlap( const vect2D& particlePosition
 }
 
 bool ParticlesPhysicsManager::isParticlesOverlap( const citerParticle particle , const vect2D& newPosition ) const
-{
-    double distance {0};
-
+{    
     for( auto &cluster : *particle->cluster->getAdjoinClusters() )
     {
         for( auto &otherParticle : *cluster->getParticlesInCluster() )
         {
             if( particle == otherParticle ) continue;
-            distance = (newPosition-otherParticle->position)();
+            auto distance = newPosition.getDistanceTo(otherParticle->position);
             if( distance<(particle->radius+otherParticle->radius) ) return true;
         }
     }

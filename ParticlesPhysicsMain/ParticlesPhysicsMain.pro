@@ -26,6 +26,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 INCLUDEPATH += C:/Qt/gsl
 
+INCLUDEPATH += C:/Qt/boost_1_68_0
+
 CONFIG += c++17
 
 TRANSLATIONS = lang/ParticlesPhysics_pl.ts
