@@ -4,6 +4,8 @@
 #include <QTimer>
 #include <QTranslator>
 #include <QFileSystemModel>
+#include <QMediaPlayer>
+#include <QSoundEffect>
 #include "dialogabout.h"
 #include "qparticlesphysicsmanager.h"
 #include "qtemplatelistviewitemdelegate.h"
@@ -23,6 +25,25 @@
 namespace Ui {
 class MainWindow;
 }
+
+struct SoundEffects
+{
+    QSoundEffect tabChanged;
+    QSoundEffect buttonClicked;
+
+    SoundEffects()
+    {
+        tabChanged.setSource( QUrl("qrc:/sounds/tab_changed") );
+        buttonClicked.setSource( QUrl("qrc:/sounds/button_clicked") );
+        setVolume(0.25);
+    }
+
+    void setVolume( qreal volume )
+    {
+        tabChanged.setVolume(volume);
+        buttonClicked.setVolume(volume);
+    }
+};
 
 class MainWindow : public QMainWindow
 {
@@ -159,6 +180,9 @@ private:
     QTimer paintTimer;
     QTimer updateTimer;
     QTimer animationTimer;
+
+    QMediaPlayer player;
+    SoundEffects soundEffects;
 
     QTranslator qtLanguageTranslator;
 

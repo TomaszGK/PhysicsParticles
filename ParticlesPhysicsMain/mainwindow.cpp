@@ -85,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->listViewTemplates_tab3->setItemDelegate( templateListViewItemDelegate );
 
     connect( fileSystemModel , &QFileSystemModel::directoryLoaded , this , &MainWindow::activateTemplateList );
-    connect( ui->listViewTemplates_tab3->selectionModel(), &QItemSelectionModel::currentChanged, this, &MainWindow::changeListViewTemplates);
+    connect( ui->listViewTemplates_tab3->selectionModel(), &QItemSelectionModel::currentChanged, this, &MainWindow::changeListViewTemplates );
 
     // plane preview
     sandboxPlanePreview = new QParticlesPhysicsManager(SimulationType::SANDBOX,ui->Layout4_Tab3);
@@ -103,11 +103,35 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&updateTimer, &QTimer::timeout, this, &MainWindow::update);
     connect(&animationTimer, &QTimer::timeout, this, &MainWindow::animate);
 
+    // connect player background music
+    connect( &dialogAboutWindow , &QDialog::finished , &player , &QMediaPlayer::pause );
+    connect( ui->actionAbout , &QAction::triggered , &player , &QMediaPlayer::play );
+
     paintTimer.start(2);
     updateTimer.start(100);
     animationTimer.start(10);
 
     calculationThread = simulation[current]->calculateNextPositionsInThread();
+
+    player.setMedia( QUrl("qrc:/music/soundtrack") );
+    player.setVolume(25);    
+
+    // connecting sound effects
+    connect( ui->tabWidget , &QTabWidget::currentChanged , &soundEffects.tabChanged , &QSoundEffect::play );
+    connect( ui->tabWidget_2 , &QTabWidget::currentChanged , &soundEffects.tabChanged , &QSoundEffect::play );
+    connect( ui->tabWidget_Particles_tab3 , &QTabWidget::currentChanged , &soundEffects.tabChanged , &QSoundEffect::play );
+    connect( ui->runButtonTab0 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->pauseButtonTab0 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->runButtonTab1 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->pauseButtonTab1 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->runButtonTab2 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->pauseButtonTab2 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->runButtonTab4 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->pauseButtonTab4 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->trackingOnButtonTab0 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->trackingOffButtonTab0 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->startButtonTab1 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+
 }
 
 MainWindow::~MainWindow()
@@ -247,7 +271,7 @@ void MainWindow::on_runButtonTab0_clicked()
     simulation[SimulationType::BASIC]->run(true);
     ui->pauseButtonTab0->setEnabled(true);
     ui->runButtonTab0->setEnabled(false);
-    ui->planeSizeDialTab0->setEnabled(true);
+    ui->planeSizeDialTab0->setEnabled(true);    
 }
 
 void MainWindow::on_pauseButtonTab0_clicked()
@@ -255,7 +279,7 @@ void MainWindow::on_pauseButtonTab0_clicked()
     simulation[SimulationType::BASIC]->pause(true);
     ui->pauseButtonTab0->setEnabled(false);
     ui->runButtonTab0->setEnabled(true);
-    ui->planeSizeDialTab0->setEnabled(false);
+    ui->planeSizeDialTab0->setEnabled(false);    
 }
 
 void MainWindow::on_trackingOnButtonTab0_clicked()
@@ -277,7 +301,7 @@ void MainWindow::on_runButtonTab1_clicked()
     simulation[SimulationType::DIFFUSION]->run(true);
     ui->pauseButtonTab1->setEnabled(true);
     ui->runButtonTab1->setEnabled(false);
-    ui->startButtonTab1->setEnabled(true);
+    ui->startButtonTab1->setEnabled(true);    
 }
 
 void MainWindow::on_pauseButtonTab1_clicked()
@@ -285,7 +309,7 @@ void MainWindow::on_pauseButtonTab1_clicked()
     simulation[SimulationType::DIFFUSION]->pause(true);
     ui->pauseButtonTab1->setEnabled(false);
     ui->runButtonTab1->setEnabled(true);
-    ui->startButtonTab1->setEnabled(false);
+    ui->startButtonTab1->setEnabled(false);    
 }
 
 void MainWindow::on_tabWidget_currentChanged( int index )
@@ -409,14 +433,14 @@ void MainWindow::on_runButtonTab2_clicked()
 {
     simulation[SimulationType::SANDBOX]->run(true);
     ui->pauseButtonTab2->setEnabled(true);
-    ui->runButtonTab2->setEnabled(false);
+    ui->runButtonTab2->setEnabled(false);    
 }
 
 void MainWindow::on_pauseButtonTab2_clicked()
 {
     simulation[SimulationType::SANDBOX]->pause(true);
     ui->pauseButtonTab2->setEnabled(false);
-    ui->runButtonTab2->setEnabled(true);    
+    ui->runButtonTab2->setEnabled(true);        
 }
 
 void MainWindow::on_blueParticlesSliderTab2_valueChanged( int value )
@@ -483,14 +507,14 @@ void MainWindow::on_runButtonTab4_clicked()
 {
     simulation[SimulationType::BROWNIAN_MOTION]->run(true);
     ui->pauseButtonTab4->setEnabled(true);
-    ui->runButtonTab4->setEnabled(false);
+    ui->runButtonTab4->setEnabled(false);    
 }
 
 void MainWindow::on_pauseButtonTab4_clicked()
 {
     simulation[SimulationType::BROWNIAN_MOTION]->pause(true);
     ui->pauseButtonTab4->setEnabled(false);
-    ui->runButtonTab4->setEnabled(true);    
+    ui->runButtonTab4->setEnabled(true);        
 }
 
 void MainWindow::on_massMoleculeSliderTab4_valueChanged( int value )
