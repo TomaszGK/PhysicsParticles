@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <thread>
 #include <QRandomGenerator>
+#include <QMediaPlaylist>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -113,13 +114,22 @@ MainWindow::MainWindow(QWidget *parent) :
 
     calculationThread = simulation[current]->calculateNextPositionsInThread();
 
-    player.setMedia( QUrl("qrc:/music/soundtrack") );
+    QMediaPlaylist *playlist = new QMediaPlaylist();
+    playlist->addMedia( QUrl("qrc:/music/soundtrack") );
+    playlist->setPlaybackMode( QMediaPlaylist::Loop );
+    player.setPlaylist(playlist);
     player.setVolume(25);    
 
     // connecting sound effects
     connect( ui->tabWidget , &QTabWidget::currentChanged , &soundEffects.tabChanged , &QSoundEffect::play );
     connect( ui->tabWidget_2 , &QTabWidget::currentChanged , &soundEffects.tabChanged , &QSoundEffect::play );
     connect( ui->tabWidget_Particles_tab3 , &QTabWidget::currentChanged , &soundEffects.tabChanged , &QSoundEffect::play );
+
+    connect( ui->visualizationTypeParticleRadioButtonTab1 , &QRadioButton::clicked , &soundEffects.radioButtonChanged , &QSoundEffect::play );
+    connect( ui->visualizationTypeVelocityRadioButtonTab1 , &QRadioButton::clicked , &soundEffects.radioButtonChanged , &QSoundEffect::play );
+    connect( ui->visualizationTypeParticleRadioButtonTab2 , &QRadioButton::clicked , &soundEffects.radioButtonChanged , &QSoundEffect::play );
+    connect( ui->visualizationTypeVelocityRadioButtonTab2 , &QRadioButton::clicked , &soundEffects.radioButtonChanged , &QSoundEffect::play );
+
     connect( ui->runButtonTab0 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
     connect( ui->pauseButtonTab0 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
     connect( ui->runButtonTab1 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
@@ -131,7 +141,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( ui->trackingOnButtonTab0 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
     connect( ui->trackingOffButtonTab0 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
     connect( ui->startButtonTab1 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
-
+    connect( ui->stopMoleculePushButtonTab4 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->clearTrackMoleculePushButtonTab4 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->resetForcesSandbox , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->randomPushButton_tab2 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
+    connect( ui->resetPushButton_tab2 , &QPushButton::clicked , &soundEffects.buttonClicked , &QSoundEffect::play );
 }
 
 MainWindow::~MainWindow()

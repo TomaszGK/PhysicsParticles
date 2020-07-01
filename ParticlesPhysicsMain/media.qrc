@@ -5,5 +5,6 @@
     <qresource prefix="/sounds">
         <file alias="tab_changed">media/sounds/tab_change.wav</file>
         <file alias="button_clicked">media/sounds/button_clik.wav</file>
+        <file alias="radio_button_changed">media/sounds/radio_button_change.wav</file>
     </qresource>
 </RCC>

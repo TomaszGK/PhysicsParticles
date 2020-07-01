@@ -30,11 +30,13 @@ struct SoundEffects
 {
     QSoundEffect tabChanged;
     QSoundEffect buttonClicked;
+    QSoundEffect radioButtonChanged;
 
     SoundEffects()
     {
         tabChanged.setSource( QUrl("qrc:/sounds/tab_changed") );
         buttonClicked.setSource( QUrl("qrc:/sounds/button_clicked") );
+        radioButtonChanged.setSource( QUrl("qrc:/sounds/radio_button_changed") );
         setVolume(0.25);
     }
 
@@ -42,6 +44,7 @@ struct SoundEffects
     {
         tabChanged.setVolume(volume);
         buttonClicked.setVolume(volume);
+        radioButtonChanged.setVolume(volume);
     }
 };
 

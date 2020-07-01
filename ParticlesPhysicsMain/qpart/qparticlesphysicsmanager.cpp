@@ -66,34 +66,49 @@ void QParticlesPhysicsManager::add( QHBoxLayout* layout, BoxType boxType, Action
 
 void QParticlesPhysicsManager::addQGauge( ActionType type, QHBoxLayout* layout )
 {
-    qGauges[type] = { nullptr , nullptr };
-
     int range {1000};
+    auto pQcGaugeWidget = new QcGaugeWidget {};
 
-    qGauges[type].first = new QcGaugeWidget();
-    qGauges[type].first->addArc(55);
-    QcDegreesItem* degreeItem = qGauges[type].first->addDegrees(65);
+    auto bkg1 = pQcGaugeWidget->addBackground(100);
+    bkg1->clearrColors();
+    bkg1->addColor(0.0,Qt::gray);
+    bkg1->addColor(1.0,Qt::gray);
+
+    auto bkg2 = pQcGaugeWidget->addBackground(99);
+    bkg2->clearrColors();
+    bkg2->addColor(0.0,Qt::white);
+    bkg2->addColor(1.0,{200,240,250});
+
+    auto bkg3 = pQcGaugeWidget->addBackground(92);
+    bkg3->clearrColors();
+    bkg3->addColor(0.0,{200,240,250});
+    bkg3->addColor(1.0,Qt::white);
+
+    pQcGaugeWidget->addArc(55);
+    QcDegreesItem* degreeItem = pQcGaugeWidget->addDegrees(65);
     degreeItem->setValueRange(0,range);
     degreeItem->setStep(range/10);
-    QcColorBand *clrBand =  qGauges[type].first->addColorBand(50);
+    QcColorBand *clrBand =  pQcGaugeWidget->addColorBand(50);
     clrBand->setValueRange(0,100);
-    QcValuesItem *valueItem = qGauges[type].first->addValues(80);
+    QcValuesItem *valueItem = pQcGaugeWidget->addValues(80);
     valueItem->setValueRange(0,range);
     valueItem->setStep(range/10);
-    gaugeNameLabel = qGauges[type].first->addLabel(70);
+    gaugeNameLabel = pQcGaugeWidget->addLabel(70);
     gaugeNameLabel->setText(LangManager::translate(QString("Pressure")));
-    QcLabelItem *lab = qGauges[type].first->addLabel(40);
+    QcLabelItem *lab = pQcGaugeWidget->addLabel(40);
     lab->setText("0");
-    qGauges[type].second = qGauges[type].first->addNeedle(60);
-    qGauges[type].second->setLabel(lab);
-    qGauges[type].second->setColor(Qt::blue);
-    qGauges[type].second->setValueRange(0,range);
-    qGauges[type].first->addBackground(7);
+
+    auto pQcNeedleItem = pQcGaugeWidget->addNeedle(60);
+    pQcNeedleItem->setLabel(lab);
+    pQcNeedleItem->setColor(Qt::blue);
+    pQcNeedleItem->setValueRange(0,range);
 
     // reset style sheet - needs default
-    qGauges[type].first->setStyleSheet("");
+    pQcGaugeWidget->setStyleSheet("");
 
-    layout->addWidget( qGauges[type].first );
+    layout->addWidget( pQcGaugeWidget );
+
+    qGauges[type] = { pQcGaugeWidget , pQcNeedleItem };
 }
 
 void QParticlesPhysicsManager::updateParticlesPlane()
