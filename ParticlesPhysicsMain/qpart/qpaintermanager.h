@@ -119,7 +119,7 @@ private:
      * @brief Paints the particle plane.
      *
      * Paint particles nad plane border but may paints also particle velocity vector, trace of tracking particle
-     * and particle hits to the plane which is depended on paintMode map.
+     * and particle hits to the plane which depends on paintMode map.
      */
     void paint() override;
 
@@ -173,6 +173,13 @@ private:
      *    
      */
     void paintTracking();
+
+    /**
+     * @brief Paints new position of particle in edit mode.
+     *
+     * Paints new position that coresponds to current mouse position.
+     */
+    void paintNewPositionOfParticle();
 
     /**
      * @brief Paints velocity vector and its text value for a given particle.

@@ -44,7 +44,8 @@ void QPainterManager::paint()
 
     if( paintMode[PaintMode::TRACKING] ) paintTracking();
 
-    for( auto particle = particles->cend() ; particle-- != particles->cbegin() ; )
+    //for( auto particle = particles->cend()-1 ; particle != particles->cbegin() ; --particle )
+    for( auto particle = particles->cbegin() ; particle != particles->cend() ; ++particle )
     {
         attachParticleColor(particle);
         paintParticle(particle,particleColor);
@@ -60,6 +61,7 @@ void QPainterManager::paint()
         if( paintMode[PaintMode::PARTICLE_VECTOR] ) paintParticleVelocityVector(selectedParticle.value());
         if( paintMode[PaintMode::EDIT] )
         {
+            paintNewPositionOfParticle();
             paintEditParticle();
             adjustBoxEditOrientation();
         }
@@ -183,7 +185,7 @@ void QPainterManager::paintTracking()
     int posy  {0};
     int alpha {0};
 
-    for( auto position = --trackingParticle.value()->particlePositionsTracking.cend() ; position != trackingParticle.value()->particlePositionsTracking.cbegin() ; --position )
+    for( auto position = trackingParticle.value()->particlePositionsTracking.rbegin() ; position != trackingParticle.value()->particlePositionsTracking.rend() ; ++position )
     {
         posx = static_cast<int>(position->x+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]);
         posy = static_cast<int>(position->y+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]);
@@ -191,6 +193,23 @@ void QPainterManager::paintTracking()
         painter.drawEllipse(posx-size/2,posy-size/2,size,size);                
         if( ++alpha>100 ) alpha = 100;
     }
+}
+
+void QPainterManager::paintNewPositionOfParticle()
+{
+    if( !selectedParticle ) return;
+
+    auto pos = mapFromGlobal(QCursor::pos());
+    QPointF posA {selectedParticle.value()->position.x+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH],selectedParticle.value()->position.y+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]};
+
+    QPen linePen(boxStyle.colors[BoxColors::AXES]);
+    painter.setBrush(QBrush(Qt::NoBrush));
+    linePen.setColor(boxStyle.colors[BoxColors::INNER_FRAME]);
+    linePen.setStyle(Qt::DashLine);
+    painter.setPen(linePen);
+    painter.drawLine(QLineF(posA,pos));
+
+    paintParticle( pos.x() , pos.y() , selectedParticle.value()->size , QColor{100,200,200} );
 }
 
 void QPainterManager::paintParticleVelocityVector( citerParticle particle )
@@ -275,14 +294,14 @@ void QPainterManager::adjustBoxEditOrientation()
 void QPainterManager::tryChangeParticlePosition( QPointF newPosition )
 {
     if( !selectedParticle ) return;
-    particlePositionChanged( selectedParticle.value() , {newPosition.x()-particleShift.x,newPosition.y()-particleShift.y} );
+    particlePositionChanged( selectedParticle.value() , {newPosition.x()-boxStyle.values[BoxValues::PLANE_BORDER_WIDTH],newPosition.y()-boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]} );
 }
 
 void QPainterManager::mouseMoveEvent( QMouseEvent *event )
 {
     if( paintMode[PaintMode::EDIT] )
     {        
-        if( event->buttons()&Qt::LeftButton ) tryChangeParticlePosition( event->localPos() );
+        if( event->buttons()&Qt::LeftButton ) tryChangeParticlePosition( event->localPos() );        
     }
     else paintMode[PaintMode::PARTICLE_VECTOR] = setOverlapParticle(event->localPos());
 }

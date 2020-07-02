@@ -343,28 +343,28 @@ struct ClustersInfo
 };
 
 // C++11 remove iterator constness
-template <typename Container, typename ConstIterator>
+template< typename Container, typename ConstIterator >
 typename Container::iterator remove_constness(Container& c, ConstIterator it)
 {
     return c.erase(it, it);
 }
 
 // C++14 make_unique
-template<typename T, typename... Args>
+template< typename T, typename... Args >
 std::unique_ptr<T> make_unique(Args&&... args)
 {
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
 // C++14 true future async
-template<typename F, typename... Args>
+template< typename F, typename... Args >
 auto trueAsync(F&& f, Args&&... args)
 {
     return std::async( std::launch::async, std::forward<F>(f), std::forward<Args>(args)... );
 }
 
 // C++14 generic timing
-template<typename F, typename... Args>
+template< typename F, typename... Args >
 auto timing(F&& f, Args&&... args)
 {
     auto start = std::chrono::steady_clock::now();
