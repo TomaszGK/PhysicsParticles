@@ -66,23 +66,29 @@ public:
 
 private:
 
-    /**< box for particle velocity vector edition */
+    /** box for particle velocity vector edition */
     QPointer<QBoxEdit> editBox;
 
-    /**< particle pen */
+    /** particle pen */
     QPen particlePen;
 
-    /**< particle color */
+    /** particle color */
     QColor particleColor;
 
-    /**< mouse current position */
+    /** mouse current position */
     QPoint mousePos;
 
-    /**< particle shift from the center */
+    /** particle shift from the center */
     vect2D particleShift;
+
+    /** states if current cursor is overlaped with some particle */
+    bool isParticleOverlapWithCursor {false};
 
     /** Stores constant iterator to selected particle. */
     std::optional<citerParticle> selectedParticle {std::nullopt};
+
+    /** Stores constant iterator to edited particle. */
+    std::optional<citerParticle> editedParticle {std::nullopt};
 
     /** Stores constant iterator to tracking particle. */
     std::optional<citerParticle> trackingParticle {std::nullopt};

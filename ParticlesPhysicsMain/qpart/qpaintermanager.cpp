@@ -61,7 +61,7 @@ void QPainterManager::paint()
         if( paintMode[PaintMode::PARTICLE_VECTOR] ) paintParticleVelocityVector(selectedParticle.value());
         if( paintMode[PaintMode::EDIT] )
         {
-            paintNewPositionOfParticle();
+            if( !isParticleOverlapWithCursor ) paintNewPositionOfParticle();
             paintEditParticle();
             adjustBoxEditOrientation();
         }
@@ -197,10 +197,10 @@ void QPainterManager::paintTracking()
 
 void QPainterManager::paintNewPositionOfParticle()
 {
-    if( !selectedParticle ) return;
+    if( !editedParticle ) return;
 
     auto pos = mapFromGlobal(QCursor::pos());
-    QPointF posA {selectedParticle.value()->position.x+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH],selectedParticle.value()->position.y+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]};
+    QPointF posA {editedParticle.value()->position.x+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH],editedParticle.value()->position.y+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]};
 
     QPen linePen(boxStyle.colors[BoxColors::AXES]);
     painter.setBrush(QBrush(Qt::NoBrush));
@@ -209,7 +209,7 @@ void QPainterManager::paintNewPositionOfParticle()
     painter.setPen(linePen);
     painter.drawLine(QLineF(posA,pos));
 
-    paintParticle( pos.x() , pos.y() , selectedParticle.value()->size , QColor{100,200,200} );
+    paintParticle( pos.x() , pos.y() , editedParticle.value()->size , QColor{100,200,200} );
 }
 
 void QPainterManager::paintParticleVelocityVector( citerParticle particle )
@@ -225,8 +225,8 @@ void QPainterManager::paintParticleVelocityVector( citerParticle particle )
 
 void QPainterManager::paintEditParticle()
 {
-    if( !selectedParticle ) return;
-    paintParticle( selectedParticle.value() , boxStyle.colors[BoxColors::EDIT_SELECTED_PARTICLE] );    
+    if( !editedParticle ) return;
+    paintParticle( editedParticle.value() , boxStyle.colors[BoxColors::EDIT_SELECTED_PARTICLE] );
 }
 
 void QPainterManager::attachParticleColor( citerParticle particle )
@@ -255,7 +255,7 @@ bool QPainterManager::setOverlapParticle( const QPointF& moseposition )
         if( abs(position.x-moseposition.x())<particle->radius && abs(position.y-moseposition.y())<particle->radius )
         {
             selectedParticle = particle;
-            particleShift.set( moseposition.x() - selectedParticle.value()->position.x , moseposition.y() - selectedParticle.value()->position.y );
+            particleShift.set( moseposition.x() - particle->position.x , moseposition.y() - particle->position.y );
             return true;
         }
     }
@@ -264,28 +264,30 @@ bool QPainterManager::setOverlapParticle( const QPointF& moseposition )
 
 void QPainterManager::adjustBoxEditOrientation()
 {
-    auto posx = static_cast<int>( selectedParticle.value()->position.x )+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH];
-    auto posy = static_cast<int>( selectedParticle.value()->position.y )+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH];
+    if( !editedParticle ) return;
 
-    auto fitRight = posx + selectedParticle.value()->size/2+boxStyle.values[BoxValues::BOX_EDIT_INDENT] + editBox->width() < planeArea->getWidth();
+    auto posx = static_cast<int>( editedParticle.value()->position.x )+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH];
+    auto posy = static_cast<int>( editedParticle.value()->position.y )+boxStyle.values[BoxValues::PLANE_BORDER_WIDTH];
+
+    auto fitRight = posx + editedParticle.value()->size/2+boxStyle.values[BoxValues::BOX_EDIT_INDENT] + editBox->width() < planeArea->getWidth();
     auto fitDown  = posy + editBox->height() < planeArea->getHeight();
 
     if( fitRight )
     {
-        posx += selectedParticle.value()->size/2+boxStyle.values[BoxValues::BOX_EDIT_INDENT];
+        posx += editedParticle.value()->size/2+boxStyle.values[BoxValues::BOX_EDIT_INDENT];
     }
     else
     {
-        posx -= (selectedParticle.value()->size/2+boxStyle.values[BoxValues::BOX_EDIT_INDENT]+editBox->width());
+        posx -= (editedParticle.value()->size/2+boxStyle.values[BoxValues::BOX_EDIT_INDENT]+editBox->width());
     }
 
     if( fitDown )
     {
-        posy -= selectedParticle.value()->size/2;
+        posy -= editedParticle.value()->size/2;
     }
     else
     {
-        posy -= (editBox->height()-selectedParticle.value()->size/2);
+        posy -= (editBox->height()-editedParticle.value()->size/2);
     }
 
     editBox->move(posx,posy);
@@ -293,17 +295,18 @@ void QPainterManager::adjustBoxEditOrientation()
 
 void QPainterManager::tryChangeParticlePosition( QPointF newPosition )
 {
-    if( !selectedParticle ) return;
-    particlePositionChanged( selectedParticle.value() , {newPosition.x()-boxStyle.values[BoxValues::PLANE_BORDER_WIDTH],newPosition.y()-boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]} );
+    if( !editedParticle ) return;
+    particlePositionChanged( editedParticle.value() , {newPosition.x()-boxStyle.values[BoxValues::PLANE_BORDER_WIDTH],newPosition.y()-boxStyle.values[BoxValues::PLANE_BORDER_WIDTH]} );
 }
 
 void QPainterManager::mouseMoveEvent( QMouseEvent *event )
 {
+    isParticleOverlapWithCursor = setOverlapParticle( event->localPos() );
     if( paintMode[PaintMode::EDIT] )
-    {        
+    {
         if( event->buttons()&Qt::LeftButton ) tryChangeParticlePosition( event->localPos() );        
     }
-    else paintMode[PaintMode::PARTICLE_VECTOR] = setOverlapParticle(event->localPos());
+    else paintMode[PaintMode::PARTICLE_VECTOR] = isParticleOverlapWithCursor;
 }
 
 void QPainterManager::mousePressEvent( QMouseEvent *event )
@@ -312,12 +315,13 @@ void QPainterManager::mousePressEvent( QMouseEvent *event )
 
     if( event->buttons()&Qt::LeftButton )
     {
-        if( setOverlapParticle(event->localPos()) )
+        if( isParticleOverlapWithCursor )
         {
+            editedParticle = selectedParticle;
             paintMode[PaintMode::EDIT] = true;
             paintMode[PaintMode::PARTICLE_VECTOR] = false;
-            editBox->setEditedParticle(selectedParticle);
-            editBox->show();
+            editBox->setEditedParticle(editedParticle);
+            editBox->show();           
         }
         else
         {
@@ -326,6 +330,7 @@ void QPainterManager::mousePressEvent( QMouseEvent *event )
     }
     if( event->buttons()&Qt::RightButton )
     {
+        editedParticle = std::nullopt;
         paintMode[PaintMode::EDIT] = false;
         paintMode[PaintMode::PARTICLE_VECTOR] = false;
         editBox->hide();
