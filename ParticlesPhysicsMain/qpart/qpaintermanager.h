@@ -17,7 +17,7 @@ enum class PaintMode
    PLANE_CONSTRAINT, /**< paint plane wall constraints */
    DIVIDER,          /**< paint plane divider */
    PLANE_HITS,       /**< paint plane hits */
-   PARTICLE_VECTOR,  /**< paint velocity vector of selected particle */
+   PARTICLE_VECTOR,  /**< paint velocity vector of selected particle */   
    EDIT              /**< paint selected particle in edit mode */
 };
 

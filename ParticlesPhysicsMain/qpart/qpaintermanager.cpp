@@ -61,9 +61,8 @@ void QPainterManager::paint()
         if( paintMode[PaintMode::PARTICLE_VECTOR] ) paintParticleVelocityVector(selectedParticle.value());
         if( paintMode[PaintMode::EDIT] )
         {
-            if( !isParticleOverlapWithCursor ) paintNewPositionOfParticle();
-            paintEditParticle();
-            adjustBoxEditOrientation();
+            if( !isParticleOverlapWithCursor && !editBox->isVisible() ) paintNewPositionOfParticle();
+            paintEditParticle();            
         }
     }
 
@@ -304,7 +303,7 @@ void QPainterManager::mouseMoveEvent( QMouseEvent *event )
     isParticleOverlapWithCursor = setOverlapParticle( event->localPos() );
     if( paintMode[PaintMode::EDIT] )
     {
-        if( event->buttons()&Qt::LeftButton ) tryChangeParticlePosition( event->localPos() );        
+        if( event->buttons()&Qt::LeftButton && !editBox->isVisible() ) tryChangeParticlePosition( event->localPos() );
     }
     else paintMode[PaintMode::PARTICLE_VECTOR] = isParticleOverlapWithCursor;
 }
@@ -313,27 +312,32 @@ void QPainterManager::mousePressEvent( QMouseEvent *event )
 {
     if( paintMode[PaintMode::TRACKING] ) return;
 
-    if( event->buttons()&Qt::LeftButton )
+    if( isParticleOverlapWithCursor )
+    {
+        editedParticle = selectedParticle;
+        paintMode[PaintMode::EDIT] = true;
+        paintMode[PaintMode::PARTICLE_VECTOR] = false;
+    }
+
+    if( event->buttons()&Qt::LeftButton || event->buttons()&Qt::MidButton )
     {
         if( isParticleOverlapWithCursor )
-        {
-            editedParticle = selectedParticle;
-            paintMode[PaintMode::EDIT] = true;
-            paintMode[PaintMode::PARTICLE_VECTOR] = false;
-            editBox->setEditedParticle(editedParticle);
-            editBox->show();           
+        {           
+            if( editBox->isVisible() ) editBox->hide();
         }
         else
         {
-            if( paintMode[PaintMode::EDIT] ) tryChangeParticlePosition( event->localPos() );
+            if( paintMode[PaintMode::EDIT] && !editBox->isVisible() ) tryChangeParticlePosition( event->localPos() );
         }
     }
     if( event->buttons()&Qt::RightButton )
     {
-        editedParticle = std::nullopt;
-        paintMode[PaintMode::EDIT] = false;
-        paintMode[PaintMode::PARTICLE_VECTOR] = false;
-        editBox->hide();
+        if( isParticleOverlapWithCursor )
+        {
+            editBox->setEditedParticle(editedParticle);
+            editBox->show();
+            adjustBoxEditOrientation();
+        }
     }
 }
 
